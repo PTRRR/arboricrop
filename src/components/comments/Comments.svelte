@@ -2,7 +2,6 @@
 	import { onMount } from 'svelte';
 	import { comment } from '../../db/schema';
 	import { getCss } from '../../utils/css';
-	import { json } from '@sveltejs/kit';
 	import { invalidateAll } from '$app/navigation';
 	import { useName } from '../../stores';
 
@@ -74,7 +73,6 @@
 	class:comments-add--open={open}
 	on:click={(event) => {
 		event.stopPropagation();
-		console.log('sdlkj');
 		addComment = true;
 	}}
 >
