@@ -2,14 +2,15 @@
 	import Spacer from '../../../components/Spacer.svelte';
 	import Button from '../../../components/wireframe/Button.svelte';
 	import Card from '../../../components/wireframe/Card.svelte';
-	import { useReturnButton } from '../../../stores';
-	import { getDevices } from '../../../utils/devices';
+	import { useDevices, useReturnButton } from '../../../stores';
 
 	let returnButton = useReturnButton();
 	returnButton.set({
 		label: 'Devices',
 		href: '/mobile-wireframe'
 	});
+
+	let devices = useDevices();
 </script>
 
 <div class="devices">
@@ -18,9 +19,10 @@
 		<Spacer size="1.5rem"></Spacer>
 	</div>
 	<div class="devices__list">
-		{#each getDevices(30) as device}
+		{#each $devices as device}
 			<Card href={`/mobile-wireframe/devices/${device.id}`}>
 				<h5 slot="title">{device.name}</h5>
+				<span slot="subTitle">Battery {device.battery}%</span>
 			</Card>
 		{/each}
 	</div>

@@ -4,7 +4,7 @@
 	import Chevron from '../../components/wireframe/Chevron.svelte';
 	import FooterMenu from '../../components/wireframe/FooterMenu.svelte';
 	import Menu from '../../components/wireframe/Menu.svelte';
-	import { useReturnButton } from '../../stores';
+	import { useDevices, useReturnButton } from '../../stores';
 	import { iphone } from '../../utils/phones';
 
 	const menuActions = [
@@ -30,6 +30,7 @@
 	];
 
 	let returnButton = useReturnButton();
+	useDevices();
 </script>
 
 <Mobile phone={iphone}>

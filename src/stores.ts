@@ -1,5 +1,6 @@
 import { readable, writable } from 'svelte/store';
 import { getContext, hasContext, setContext } from 'svelte';
+import { getDevices } from './utils/devices';
 
 export const useSharedStore = <T, A>(name: string, fn: (value?: A) => T, defaultValue?: A) => {
 	if (hasContext(name)) {
@@ -16,3 +17,4 @@ export const useReadable = <T>(name: string, value: T) => useSharedStore(name, r
 // Stores
 export const useReturnButton = () =>
 	useWritable<{ label: string; href?: string } | undefined>('return-button', undefined);
+export const useDevices = () => useWritable('devices', getDevices(30));

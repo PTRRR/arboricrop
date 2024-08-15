@@ -1,15 +1,15 @@
 <script lang="ts">
 	import Card from '../../components/wireframe/Card.svelte';
-	import { useReturnButton } from '../../stores';
+	import { useDevices, useReturnButton } from '../../stores';
 	import { shuffle } from '../../utils/arrays';
-	import { getDevices } from '../../utils/devices';
 
 	let returnButton = useReturnButton();
 	returnButton.set({
 		label: 'Arboricrop'
 	});
 
-	const devices = shuffle(getDevices(30)).splice(0, 5);
+	const devices = useDevices();
+	const randomDevices = shuffle($devices).splice(0, 5);
 
 	type Section = {
 		title: string;
@@ -43,7 +43,7 @@
 		},
 		{
 			title: 'Recent Devices',
-			cards: devices.map((it) => ({
+			cards: randomDevices.map((it) => ({
 				title: it.name,
 				href: `/mobile-wireframe/devices/${it.id}`
 			}))
