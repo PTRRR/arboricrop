@@ -13,6 +13,8 @@
 
 <style>
 	.button-inner {
+		color: black;
+		font-family: Arial, Helvetica, sans-serif;
 		cursor: pointer;
 		width: 100%;
 		height: 100%;
