@@ -2,6 +2,7 @@ import { error, json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { db } from '../../../../../db';
 import { comment } from '../../../../../db/schema';
+import { and, eq } from 'drizzle-orm';
 
 export const POST: RequestHandler = async ({ request, params }) => {
 	const { name, x, y, text, url } = await request.json();
@@ -41,7 +42,13 @@ export const POST: RequestHandler = async ({ request, params }) => {
 	return json(res);
 };
 
-export const GET: RequestHandler = async () => {
-	const res = await db.query.comment.findMany();
+export const GET: RequestHandler = async ({ url, params }) => {
+	const commentUrl = url.searchParams.get('url');
+	const res = await db.query.comment.findMany({
+		where: and(
+			eq(comment.projectId, params.projectId),
+			commentUrl ? eq(comment.url, commentUrl) : undefined
+		)
+	});
 	return json(res);
 };

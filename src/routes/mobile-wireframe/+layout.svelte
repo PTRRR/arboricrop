@@ -7,7 +7,7 @@
 	import Dropdown from '../../components/wireframe/Dropdown.svelte';
 	import FooterMenu from '../../components/wireframe/FooterMenu.svelte';
 	import Menu from '../../components/wireframe/Menu.svelte';
-	import { useBlurApp, useDevices, useName, useReturnButton } from '../../stores';
+	import { useBlurApp, useComments, useDevices, useName, useReturnButton } from '../../stores';
 	import { strategies } from '../../utils/pairing';
 	import { iphone } from '../../utils/phones';
 	import type { LayoutData } from './$types';
@@ -39,9 +39,10 @@
 	let returnButton = useReturnButton();
 	useDevices();
 	useName();
+	useComments();
 	let blurApp = useBlurApp();
 
-	navigating.subscribe((navigating) => {
+	navigating.subscribe(async (navigating) => {
 		if (Boolean(navigating)) {
 			blurApp.set(false);
 		}
