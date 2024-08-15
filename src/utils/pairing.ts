@@ -2,7 +2,7 @@ export const strategies = [
 	{
 		label: 'USB',
 		value: 'usb',
-		description: 'Connect your device'
+		description: 'Connect your device with a USB cable'
 	},
 	{
 		label: 'Bluetooth',
