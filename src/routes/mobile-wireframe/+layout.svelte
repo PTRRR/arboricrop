@@ -1,14 +1,18 @@
 <script lang="ts">
 	import { navigating } from '$app/stores';
+	import Comments from '../../components/comments/Comments.svelte';
 	import Mobile from '../../components/Mobile.svelte';
 	import Button from '../../components/wireframe/Button.svelte';
 	import Chevron from '../../components/wireframe/Chevron.svelte';
 	import Dropdown from '../../components/wireframe/Dropdown.svelte';
 	import FooterMenu from '../../components/wireframe/FooterMenu.svelte';
 	import Menu from '../../components/wireframe/Menu.svelte';
-	import { useBlurApp, useDevices, useReturnButton } from '../../stores';
+	import { useBlurApp, useDevices, useName, useReturnButton } from '../../stores';
 	import { strategies } from '../../utils/pairing';
 	import { iphone } from '../../utils/phones';
+	import type { LayoutData } from './$types';
+
+	export let data: LayoutData;
 
 	const menuActions = [
 		{
@@ -34,6 +38,7 @@
 
 	let returnButton = useReturnButton();
 	useDevices();
+	useName();
 	let blurApp = useBlurApp();
 
 	navigating.subscribe((navigating) => {
@@ -46,6 +51,8 @@
 <svelte:head>
 	<title>Arboricrop - Mobile Wireframe</title>
 </svelte:head>
+
+<Comments projectId={data.projectId} comments={data.comments} />
 
 <Mobile phone={iphone}>
 	<div class="mobile-wireframe">
