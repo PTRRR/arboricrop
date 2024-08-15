@@ -20,14 +20,14 @@
 		left: 0;
 		width: 100%;
 		display: flex;
-		align-items: flex-start;
+		align-items: center;
 		justify-content: space-between;
 		box-sizing: border-box;
 	}
 
 	.main-menu__actions {
 		display: flex;
-		align-items: flex-start;
+		align-items: center;
 		gap: 0.5rem;
 	}
 </style>

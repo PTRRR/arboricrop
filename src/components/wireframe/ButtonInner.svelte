@@ -1,12 +1,14 @@
 <script lang="ts">
 	export let disabled: boolean = false;
 	export let border: boolean = false;
+	export let minimal: boolean = false;
 </script>
 
 <div
 	class="button-inner"
 	class:button-inner--disabled={disabled}
 	class:button-inner--border={border}
+	class:button-inner--minimal={minimal}
 >
 	<slot />
 </div>
@@ -33,5 +35,16 @@
 	.button-inner--disabled {
 		pointer-events: none;
 		cursor: not-allowed;
+	}
+
+	.button-inner--minimal {
+		padding: 0;
+		border: none;
+		background-color: transparent;
+	}
+
+	.button-inner--minimal:hover {
+		background-color: transparent;
+		text-decoration: underline;
 	}
 </style>

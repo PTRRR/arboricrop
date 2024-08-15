@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Mobile from '../../components/Mobile.svelte';
 	import Button from '../../components/wireframe/Button.svelte';
+	import Chevron from '../../components/wireframe/Chevron.svelte';
 	import FooterMenu from '../../components/wireframe/FooterMenu.svelte';
 	import Menu from '../../components/wireframe/Menu.svelte';
 	import { useReturnButton } from '../../stores';
@@ -35,7 +36,14 @@
 	<div class="mobile-wireframe">
 		<Menu actions={menuActions}>
 			{#if $returnButton}
-				<Button href={$returnButton.href}>{$returnButton.label || 'Arboricrop'}</Button>
+				<Button minimal href={$returnButton.href}>
+					<div class="mobile-wireframe__return">
+						{#if $returnButton.href}
+							<Chevron direction="left" />
+						{/if}
+						{$returnButton.label || 'Arboricrop'}
+					</div>
+				</Button>
 			{:else}
 				<span></span>
 			{/if}
@@ -56,5 +64,10 @@
 		background-color: var(--light-gray);
 		padding: 7rem 1.5rem;
 		box-sizing: border-box;
+	}
+
+	.mobile-wireframe__return {
+		display: flex;
+		align-items: center;
 	}
 </style>
