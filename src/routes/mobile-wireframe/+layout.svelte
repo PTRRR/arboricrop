@@ -43,6 +43,10 @@
 	});
 </script>
 
+<svelte:head>
+	<title>Arboricrop - Mobile Wireframe</title>
+</svelte:head>
+
 <Mobile phone={iphone}>
 	<div class="mobile-wireframe">
 		<Menu actions={menuActions}>
