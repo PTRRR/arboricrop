@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { getCss } from '../../utils/css';
-	import { type Phone, iphone } from '../../utils/phones';
+	import { getCss } from '../utils/css';
+	import type { Phone } from '../utils/phones';
 
-	let phone: Phone = iphone;
+	export let phone: Phone;
 	let image: HTMLImageElement;
 	let aspectRatio: string | undefined = undefined;
 
@@ -61,7 +61,6 @@
 		width: 100%;
 		border-radius: 5.3vh;
 		overflow: hidden;
-		background-color: var(--light-gray);
 	}
 
 	img {
@@ -71,5 +70,6 @@
 		transform: translate(-50%, -50%);
 		height: 100%;
 		opacity: 1;
+		pointer-events: none;
 	}
 </style>
