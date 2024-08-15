@@ -150,7 +150,7 @@
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<div
-		class="comments-icon"
+		class="comments-icon comments-icon--highlight"
 		class:comments-icon--focus={comment === focusComment}
 		style={getCss({
 			top: `calc(50% + ${comment.y}px)`,
@@ -253,6 +253,10 @@
 
 	.comments-icon::after {
 		transform: translate(-50%, -50%) rotate(90deg);
+	}
+
+	.comments-icon--highlight {
+		background-color: rgb(255, 197, 127);
 	}
 
 	.comments-icon--focus {
