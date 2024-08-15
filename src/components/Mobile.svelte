@@ -14,9 +14,15 @@
 		height: `${phone.heightScale * 100}%`
 	});
 
-	onMount(() => {
+	const onLoad = () => {
 		const { width, height } = image;
 		aspectRatio = (width / height).toString();
+	};
+
+	onMount(() => {
+		if (image) {
+			onLoad();
+		}
 	});
 </script>
 
@@ -31,7 +37,7 @@
 				</div>
 			</div>
 		{/if}
-		<img bind:this={image} src={phone.src} alt="" />
+		<img bind:this={image} src={phone.src} on:load={() => onLoad()} alt="" />
 	</div>
 </div>
 

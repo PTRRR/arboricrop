@@ -1,85 +1,94 @@
 <script lang="ts">
-	import Button from '../../components/wireframe/Button.svelte';
-	import Menu from '../../components/wireframe/Menu.svelte';
+	import Card from '../../components/wireframe/Card.svelte';
 
-	let menuActions = [
+	type Section = {
+		title: string;
+		cards: {
+			title: string;
+			subTitle?: string;
+			href?: string;
+		}[];
+	};
+
+	let sections: Section[] = [
 		{
-			label: 'Home',
-			href: '/mobile-wireframe'
+			title: 'Getting Started',
+			cards: [
+				{
+					title: 'Devices Installation',
+					href: '/mobile-wireframe/getting-started/device-installation'
+				},
+				{
+					title: 'Throubleshooting'
+				}
+			]
 		},
 		{
-			label: 'User',
-			href: '/mobile-wireframe/user'
+			title: 'Notifications & Alerts',
+			cards: [
+				{
+					title: 'Notifications (3)'
+				}
+			]
+		},
+		{
+			title: 'Getting Started',
+			cards: [
+				{
+					title: 'Install device',
+					subTitle: 'hahah'
+				}
+			]
+		},
+		{
+			title: 'Getting Started',
+			cards: [
+				{
+					title: 'Install device',
+					subTitle: 'hahah'
+				}
+			]
 		}
 	];
 </script>
 
-<Menu actions={menuActions}>
-	<Button href="/mobile-wireframe/user">Hello</Button>
-	<Button slot="action" let:action href={action.href}>{action.label}</Button>
-</Menu>
+<div class="home">
+	{#each sections as section}
+		<div class="home__section">
+			<div class="home__section-title">
+				<h5>{section.title}</h5>
+			</div>
 
-<div class="home-page">
-	<h1>;laksd;lkj</h1>
-	<p>
-		Lorem ipsum dolor, sit amet consectetur adipisicing elit. Corrupti quo totam unde, adipisci
-		harum pariatur mollitia in? Quibusdam optio earum dolor. Distinctio dicta saepe quas
-		reprehenderit minus maiores ipsum aliquam!
-	</p>
-	<p>
-		Lorem ipsum dolor, sit amet consectetur adipisicing elit. Corrupti quo totam unde, adipisci
-		harum pariatur mollitia in? Quibusdam optio earum dolor. Distinctio dicta saepe quas
-		reprehenderit minus maiores ipsum aliquam!
-	</p>
-	<p>
-		Lorem ipsum dolor, sit amet consectetur adipisicing elit. Corrupti quo totam unde, adipisci
-		harum pariatur mollitia in? Quibusdam optio earum dolor. Distinctio dicta saepe quas
-		reprehenderit minus maiores ipsum aliquam!
-	</p>
-	<p>
-		Lorem ipsum dolor, sit amet consectetur adipisicing elit. Corrupti quo totam unde, adipisci
-		harum pariatur mollitia in? Quibusdam optio earum dolor. Distinctio dicta saepe quas
-		reprehenderit minus maiores ipsum aliquam!
-	</p>
-	<p>
-		Lorem ipsum dolor, sit amet consectetur adipisicing elit. Corrupti quo totam unde, adipisci
-		harum pariatur mollitia in? Quibusdam optio earum dolor. Distinctio dicta saepe quas
-		reprehenderit minus maiores ipsum aliquam!
-	</p>
-	<p>
-		Lorem ipsum dolor, sit amet consectetur adipisicing elit. Corrupti quo totam unde, adipisci
-		harum pariatur mollitia in? Quibusdam optio earum dolor. Distinctio dicta saepe quas
-		reprehenderit minus maiores ipsum aliquam!
-	</p>
-	<p>
-		Lorem ipsum dolor, sit amet consectetur adipisicing elit. Corrupti quo totam unde, adipisci
-		harum pariatur mollitia in? Quibusdam optio earum dolor. Distinctio dicta saepe quas
-		reprehenderit minus maiores ipsum aliquam!
-	</p>
-	<p>
-		Lorem ipsum dolor, sit amet consectetur adipisicing elit. Corrupti quo totam unde, adipisci
-		harum pariatur mollitia in? Quibusdam optio earum dolor. Distinctio dicta saepe quas
-		reprehenderit minus maiores ipsum aliquam!
-	</p>
-	<p>
-		Lorem ipsum dolor, sit amet consectetur adipisicing elit. Corrupti quo totam unde, adipisci
-		harum pariatur mollitia in? Quibusdam optio earum dolor. Distinctio dicta saepe quas
-		reprehenderit minus maiores ipsum aliquam!
-	</p>
-	<p>
-		Lorem ipsum dolor, sit amet consectetur adipisicing elit. Corrupti quo totam unde, adipisci
-		harum pariatur mollitia in? Quibusdam optio earum dolor. Distinctio dicta saepe quas
-		reprehenderit minus maiores ipsum aliquam!
-	</p>
-	<p>
-		Lorem ipsum dolor, sit amet consectetur adipisicing elit. Corrupti quo totam unde, adipisci
-		harum pariatur mollitia in? Quibusdam optio earum dolor. Distinctio dicta saepe quas
-		reprehenderit minus maiores ipsum aliquam!
-	</p>
+			{#each section.cards as card}
+				<Card href={card.href}>
+					<svelte:fragment slot="title">
+						{#if card.title}
+							<h1>{card.title}</h1>
+						{/if}
+					</svelte:fragment>
+					<svelte:fragment slot="subTitle">
+						{#if card.subTitle}
+							<p>{card.subTitle}</p>
+						{/if}
+					</svelte:fragment>
+				</Card>
+			{/each}
+		</div>
+	{/each}
 </div>
 
 <style>
-	.home-page {
-		padding: 5rem 1rem 0 1rem;
+	.home__section {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.home__section + .home__section {
+		margin-top: 1rem;
+	}
+
+	.home__section-title {
+		color: var(--dark-gray);
 	}
 </style>
