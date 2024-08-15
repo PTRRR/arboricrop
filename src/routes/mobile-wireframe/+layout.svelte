@@ -2,9 +2,11 @@
 	import Mobile from '../../components/Mobile.svelte';
 	import Button from '../../components/wireframe/Button.svelte';
 	import Chevron from '../../components/wireframe/Chevron.svelte';
+	import Dropdown from '../../components/wireframe/Dropdown.svelte';
 	import FooterMenu from '../../components/wireframe/FooterMenu.svelte';
 	import Menu from '../../components/wireframe/Menu.svelte';
 	import { useDevices, useReturnButton } from '../../stores';
+	import { strategies } from '../../utils/pairing';
 	import { iphone } from '../../utils/phones';
 
 	const menuActions = [
@@ -52,7 +54,17 @@
 		</Menu>
 		<slot />
 		<FooterMenu actions={footerActions}>
-			<Button slot="action" let:action href={action.href}>{action.label}</Button>
+			<svelte:fragment slot="action" let:action>
+				{#if action.label === 'Pair device'}
+					<Dropdown items={strategies} label={action.label} align="right" sameWidth>
+						<Button slot="item" let:item href={`${action.href}?strategy=${item.value}`}>
+							{item.label}
+						</Button>
+					</Dropdown>
+				{:else}
+					<Button href={action.href}>{action.label}</Button>
+				{/if}
+			</svelte:fragment>
 		</FooterMenu>
 	</div>
 </Mobile>
@@ -65,6 +77,8 @@
 		background-color: var(--light-gray);
 		padding: 7rem 1.5rem;
 		box-sizing: border-box;
+		display: flex;
+		flex-direction: column;
 	}
 
 	.mobile-wireframe__return {
