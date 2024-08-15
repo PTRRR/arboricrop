@@ -33,8 +33,8 @@
 				newComment = {
 					name: '',
 					text: '',
-					x: (mouseX / window.innerWidth) * 100,
-					y: (mouseY / window.innerHeight) * 100,
+					x: mouseX - window.innerWidth * 0.5,
+					y: mouseY - window.innerHeight * 0.5,
 					url: ''
 				};
 				addComment = false;
@@ -93,8 +93,8 @@
 	<div
 		class="comments-icon comments-icon--focus"
 		style={getCss({
-			top: `${newComment.y}%`,
-			left: `${newComment.x}%`
+			top: `calc(50% + ${newComment.y}px)`,
+			left: `calc(50% + ${newComment.x}px)`
 		})}
 	>
 		<div class="comment-content">
@@ -153,8 +153,8 @@
 		class="comments-icon"
 		class:comments-icon--focus={comment === focusComment}
 		style={getCss({
-			top: `${comment.y}%`,
-			left: `${comment.x}%`
+			top: `calc(50% + ${comment.y}px)`,
+			left: `calc(50% + ${comment.x}px)`
 		})}
 		on:click={(event) => {
 			event.stopPropagation();
@@ -235,7 +235,7 @@
 		border-radius: 0 50% 50% 50%;
 		background-color: lightgray;
 		box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
-		transform: translate(-90%, -90%);
+		transform: translate(-50%, -50%);
 		cursor: pointer;
 	}
 
@@ -280,5 +280,12 @@
 
 	.comment-content textarea {
 		min-height: 4rem;
+	}
+
+	.comment-content span {
+		display: block;
+		background-color: white;
+		width: 100%;
+		padding: 4px;
 	}
 </style>
