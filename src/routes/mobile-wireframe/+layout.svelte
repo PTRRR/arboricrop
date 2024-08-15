@@ -1,11 +1,12 @@
 <script lang="ts">
+	import { navigating } from '$app/stores';
 	import Mobile from '../../components/Mobile.svelte';
 	import Button from '../../components/wireframe/Button.svelte';
 	import Chevron from '../../components/wireframe/Chevron.svelte';
 	import Dropdown from '../../components/wireframe/Dropdown.svelte';
 	import FooterMenu from '../../components/wireframe/FooterMenu.svelte';
 	import Menu from '../../components/wireframe/Menu.svelte';
-	import { useDevices, useReturnButton } from '../../stores';
+	import { useBlurApp, useDevices, useReturnButton } from '../../stores';
 	import { strategies } from '../../utils/pairing';
 	import { iphone } from '../../utils/phones';
 
@@ -33,6 +34,13 @@
 
 	let returnButton = useReturnButton();
 	useDevices();
+	let blurApp = useBlurApp();
+
+	navigating.subscribe((navigating) => {
+		if (Boolean(navigating)) {
+			blurApp.set(false);
+		}
+	});
 </script>
 
 <Mobile phone={iphone}>
@@ -52,7 +60,9 @@
 			{/if}
 			<Button slot="action" let:action href={action.href}>{action.label}</Button>
 		</Menu>
-		<slot />
+		<div class="mobile-wireframe__app" class:mobile-wireframe--blur={$blurApp}>
+			<slot />
+		</div>
 		<FooterMenu actions={footerActions}>
 			<svelte:fragment slot="action" let:action>
 				{#if action.label === 'Pair device'}
@@ -84,5 +94,16 @@
 	.mobile-wireframe__return {
 		display: flex;
 		align-items: center;
+	}
+
+	.mobile-wireframe__app {
+		height: 100%;
+		flex: 1 1 auto;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.mobile-wireframe--blur {
+		opacity: 0.2;
 	}
 </style>

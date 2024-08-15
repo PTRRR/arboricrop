@@ -18,3 +18,4 @@ export const useReadable = <T>(name: string, value: T) => useSharedStore(name, r
 export const useReturnButton = () =>
 	useWritable<{ label: string; href?: string } | undefined>('return-button', undefined);
 export const useDevices = () => useWritable('devices', getDevices(30));
+export const useBlurApp = () => useWritable('blur-app', false);

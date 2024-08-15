@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { useBlurApp } from '../../stores';
+
 	import { DropdownMenu } from 'bits-ui';
 	import Button from './Button.svelte';
 
@@ -10,9 +12,15 @@
 
 	type T = $$Generic;
 	export let items: T[] = [];
+
+	let blurApp = useBlurApp();
 </script>
 
-<DropdownMenu.Root>
+<DropdownMenu.Root
+	onOpenChange={(open) => {
+		blurApp.set(open);
+	}}
+>
 	<DropdownMenu.Trigger asChild let:builder>
 		<Button builders={[builder]}>{label}</Button>
 	</DropdownMenu.Trigger>

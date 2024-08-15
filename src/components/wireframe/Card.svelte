@@ -41,6 +41,10 @@
 		background-color: var(--dark-gray);
 	}
 
+	:global(.card--clickable:hover .card__header-sub-title > *) {
+		color: var(--black);
+	}
+
 	.card__header {
 		display: flex;
 		flex-direction: column;
