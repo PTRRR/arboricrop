@@ -1,7 +1,13 @@
 <script lang="ts">
 	import Card from '../../components/wireframe/Card.svelte';
+	import { useReturnButton } from '../../stores';
 	import { shuffle } from '../../utils/arrays';
 	import { getDevices } from '../../utils/devices';
+
+	let returnButton = useReturnButton();
+	returnButton.set({
+		label: 'Arboricrop'
+	});
 
 	const devices = shuffle(getDevices(30)).splice(0, 5);
 
@@ -14,7 +20,7 @@
 		}[];
 	};
 
-	let sections: Section[] = [
+	const sections: Section[] = [
 		{
 			title: 'Getting Started',
 			cards: [

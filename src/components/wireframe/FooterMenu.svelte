@@ -12,7 +12,7 @@
 <style>
 	.footer-menu {
 		position: absolute;
-		padding: 1rem;
+		padding: 1.5rem;
 		bottom: 0;
 		left: 0;
 		width: 100%;

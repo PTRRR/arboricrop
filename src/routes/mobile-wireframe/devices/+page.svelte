@@ -2,7 +2,14 @@
 	import Spacer from '../../../components/Spacer.svelte';
 	import Button from '../../../components/wireframe/Button.svelte';
 	import Card from '../../../components/wireframe/Card.svelte';
+	import { useReturnButton } from '../../../stores';
 	import { getDevices } from '../../../utils/devices';
+
+	let returnButton = useReturnButton();
+	returnButton.set({
+		label: 'Devices',
+		href: '/mobile-wireframe'
+	});
 </script>
 
 <div class="devices">

@@ -26,7 +26,15 @@
 	});
 </script>
 
-<div class="mobile">
+<div
+	class="mobile"
+	style={getCss({
+		'--mobile-width': `calc((100vh - 2rem) * ${aspectRatio})`,
+		'--mobile-height': 'calc(100vh - 2rem)',
+		'--mobile-app-width': `calc(var(--mobile-width) * ${phone.widthScale})`,
+		'--mobile-app-height': `calc(var(--mobile-height) * ${phone.heightScale})`
+	})}
+>
 	<div class="mobile__content">
 		{#if aspectRatio}
 			<div class="mobile__app" style={appStyle}>

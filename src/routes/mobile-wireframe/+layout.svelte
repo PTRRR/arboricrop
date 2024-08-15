@@ -3,16 +3,17 @@
 	import Button from '../../components/wireframe/Button.svelte';
 	import FooterMenu from '../../components/wireframe/FooterMenu.svelte';
 	import Menu from '../../components/wireframe/Menu.svelte';
+	import { useReturnButton } from '../../stores';
 	import { iphone } from '../../utils/phones';
 
-	let menuActions = [
+	const menuActions = [
 		{
 			label: 'Settings',
 			href: '/mobile-wireframe/settings'
 		}
 	];
 
-	let footerActions = [
+	const footerActions = [
 		{
 			label: 'Home',
 			href: '/mobile-wireframe'
@@ -26,12 +27,18 @@
 			href: '/mobile-wireframe/devices/pairing'
 		}
 	];
+
+	let returnButton = useReturnButton();
 </script>
 
 <Mobile phone={iphone}>
 	<div class="mobile-wireframe">
 		<Menu actions={menuActions}>
-			<Button href="/mobile-wireframe">Hello</Button>
+			{#if $returnButton}
+				<Button href={$returnButton.href}>{$returnButton.label || 'Arboricrop'}</Button>
+			{:else}
+				<span></span>
+			{/if}
 			<Button slot="action" let:action href={action.href}>{action.label}</Button>
 		</Menu>
 		<slot />
@@ -45,8 +52,9 @@
 	.mobile-wireframe {
 		width: 100%;
 		height: 100%;
+		min-height: var(--mobile-app-height);
 		background-color: var(--light-gray);
-		padding: 7rem 1rem;
+		padding: 7rem 1.5rem;
 		box-sizing: border-box;
 	}
 </style>
