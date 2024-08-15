@@ -8,6 +8,10 @@
 
 <style>
 	.main-menu {
+		position: absolute;
 		padding: 1rem;
+		top: 2rem;
+		left: 0;
+		width: 100%;
 	}
 </style>

@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { getCss } from '../utils/css';
 	import type { Phone } from '../utils/phones';
+	import ScrollArea from './ScrollArea.svelte';
 
 	export let phone: Phone;
 	let image: HTMLImageElement;
@@ -24,7 +25,9 @@
 		{#if aspectRatio}
 			<div class="mobile__app" style={appStyle}>
 				<div class="mobile__app-inner" style={appInnerStyle}>
-					<slot />
+					<ScrollArea>
+						<slot />
+					</ScrollArea>
 				</div>
 			</div>
 		{/if}
