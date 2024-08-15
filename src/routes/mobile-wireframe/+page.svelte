@@ -1,5 +1,9 @@
 <script lang="ts">
 	import Card from '../../components/wireframe/Card.svelte';
+	import { shuffle } from '../../utils/arrays';
+	import { getDevices } from '../../utils/devices';
+
+	const devices = shuffle(getDevices(30)).splice(0, 5);
 
 	type Section = {
 		title: string;
@@ -32,13 +36,11 @@
 			]
 		},
 		{
-			title: 'Getting Started',
-			cards: [
-				{
-					title: 'Install device',
-					subTitle: 'hahah'
-				}
-			]
+			title: 'Recent Devices',
+			cards: devices.map((it) => ({
+				title: it.name,
+				href: `/mobile-wireframe/devices/${it.id}`
+			}))
 		},
 		{
 			title: 'Getting Started',

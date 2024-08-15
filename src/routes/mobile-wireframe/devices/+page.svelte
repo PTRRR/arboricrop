@@ -2,15 +2,7 @@
 	import Spacer from '../../../components/Spacer.svelte';
 	import Button from '../../../components/wireframe/Button.svelte';
 	import Card from '../../../components/wireframe/Card.svelte';
-
-	let devices = [];
-
-	for (let i = 0; i < 30; i++) {
-		devices.push({
-			name: `Device ${i.toString().padStart(3, '0')}`,
-			id: `device${i.toString().padStart(3, '0')}`
-		});
-	}
+	import { getDevices } from '../../../utils/devices';
 </script>
 
 <div class="devices">
@@ -19,7 +11,7 @@
 		<Spacer size="1.5rem"></Spacer>
 	</div>
 	<div class="devices__list">
-		{#each devices as device}
+		{#each getDevices(30) as device}
 			<Card href={`/mobile-wireframe/devices/${device.id}`}>
 				<h5 slot="title">{device.name}</h5>
 			</Card>

@@ -7,27 +7,23 @@
 
 	let menuActions = [
 		{
-			label: 'Home',
-			href: '/mobile-wireframe'
-		},
-		{
-			label: 'User',
-			href: '/mobile-wireframe/user'
+			label: 'Settings',
+			href: '/mobile-wireframe/settings'
 		}
 	];
 
 	let footerActions = [
 		{
+			label: 'Home',
+			href: '/mobile-wireframe'
+		},
+		{
 			label: 'Devices',
 			href: '/mobile-wireframe/devices'
 		},
 		{
-			label: 'Plantations',
-			href: '/mobile-wireframe/user'
-		},
-		{
-			label: 'Map',
-			href: '/mobile-wireframe/user'
+			label: 'Pair device',
+			href: '/mobile-wireframe/devices/pairing'
 		}
 	];
 </script>
@@ -35,7 +31,7 @@
 <Mobile phone={iphone}>
 	<div class="mobile-wireframe">
 		<Menu actions={menuActions}>
-			<Button href="/mobile-wireframe/user">Hello</Button>
+			<Button href="/mobile-wireframe">Hello</Button>
 			<Button slot="action" let:action href={action.href}>{action.label}</Button>
 		</Menu>
 		<slot />
