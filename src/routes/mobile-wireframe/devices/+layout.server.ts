@@ -1,6 +1,6 @@
-import type { PageServerLoad } from './$types';
+import type { LayoutServerLoad } from './$types';
 
-export const load: PageServerLoad = ({ url }) => {
+export const load: LayoutServerLoad = ({ url }) => {
 	const firmwareUpdate = url.searchParams.get('firmwareUpdate');
 	return { firmwareUpdate: firmwareUpdate === 'true' };
 };

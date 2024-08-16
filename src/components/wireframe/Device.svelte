@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import { useReturnButton } from '../../stores';
 	import Spacer from '../Spacer.svelte';
 	import Button from './Button.svelte';
@@ -16,12 +17,14 @@
 <div class="device">
 	{#if !id}
 		<DeviceForm />
-		<Spacer size="5rem" />
-		<div class="device__footer">
-			<p>New device detected</p>
-			<Button>Save new device to account</Button>
-			<Button href="/mobile-wireframe/devices">Cancel</Button>
-		</div>
+		{#if !$page.data.firmwareUpdate}
+			<Spacer size="5rem" />
+			<div class="device__footer">
+				<p>New device detected</p>
+				<Button>Save new device to account</Button>
+				<Button href="/mobile-wireframe/devices">Cancel</Button>
+			</div>
+		{/if}
 	{:else}
 		<DeviceForm />
 	{/if}
