@@ -50,5 +50,6 @@ export const GET: RequestHandler = async ({ url, params }) => {
 			commentUrl ? eq(comment.url, commentUrl) : undefined
 		)
 	});
+
 	return json(res);
 };

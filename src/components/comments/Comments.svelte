@@ -1,22 +1,32 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { comment } from '../../db/schema';
-	import { getCss } from '../../utils/css';
-	import { invalidateAll } from '$app/navigation';
-	import { useName } from '../../stores';
+	import { useUserName } from '../../stores';
+	import Icon from './Icon.svelte';
+	import Content from './Content.svelte';
+	import { navigating } from '$app/stores';
 
 	export let projectId: string;
-	export let comments: (typeof comment.$inferSelect)[];
 
 	let open = false;
 	let addComment = false;
 	let mouseX = 0;
 	let mouseY = 0;
 
+	let comments: (typeof comment.$inferSelect)[] = [];
 	let newComment: typeof comment.$inferInsert | undefined = undefined;
 	let focusComment: typeof comment.$inferSelect | undefined = undefined;
 
-	const name = useName();
+	const userName = useUserName();
+	const getCurrentUrl = () =>
+		typeof window !== 'undefined' ? window.location.pathname + window.location.search : undefined;
+
+	const refreshComments = async () => {
+		const res = await fetch(
+			`/api/projects/${projectId}/comments?url=${encodeURIComponent(getCurrentUrl() || '')}`
+		);
+		comments = (await res.json()) as (typeof comment.$inferSelect)[];
+	};
 
 	onMount(() => {
 		requestAnimationFrame(() => {
@@ -31,7 +41,7 @@
 		const handleMouseClick = () => {
 			if (addComment) {
 				newComment = {
-					name: '',
+					name: $userName,
 					text: '',
 					x: mouseX - window.innerWidth * 0.5,
 					y: mouseY - window.innerHeight * 0.5,
@@ -53,6 +63,15 @@
 				newComment = undefined;
 			}
 		};
+
+		refreshComments();
+		navigating.subscribe(async (navigating) => {
+			if (!navigating) {
+				refreshComments();
+			} else {
+				comments = [];
+			}
+		});
 
 		window.addEventListener('mousemove', handleMouseMove);
 		window.addEventListener('click', handleMouseClick);
@@ -80,106 +99,81 @@
 </div>
 
 {#if addComment}
-	<div
-		class="comments-icon"
-		style={getCss({
-			top: `${mouseY}px`,
-			left: `${mouseX}px`
-		})}
-	></div>
+	<Icon
+		comment={{
+			x: mouseX - window.innerWidth * 0.5,
+			y: mouseY - window.innerHeight * 0.5
+		}}
+		focus
+	/>
 {/if}
 
 {#if newComment}
-	<div
-		class="comments-icon comments-icon--focus"
-		style={getCss({
-			top: `calc(50% + ${newComment.y}px)`,
-			left: `calc(50% + ${newComment.x}px)`
-		})}
-	>
-		<div class="comment-content">
-			<form on:submit={(event) => event.preventDefault()}>
-				<input
-					type="text"
-					placeholder="Your name..."
-					value={$name}
-					on:input={(event) => {
-						if (newComment) {
-							newComment.name = event.currentTarget.value;
-						}
-					}}
-				/>
-				<textarea
-					placeholder="Comment..."
-					on:input={(event) => {
-						if (newComment) {
-							newComment.text = event.currentTarget.value;
-						}
-					}}
-				></textarea>
+	<Icon comment={newComment} focus>
+		<Content
+			comment={newComment}
+			onSubmit={async ({ name, text }) => {
+				if (!newComment) return;
 
-				<button
-					type="submit"
-					on:click={async () => {
-						if (newComment) {
-							if (!newComment.name) {
-								newComment.name = $name;
-							}
+				userName.set(name);
 
-							name.set(newComment.name);
-							newComment.url = window.location.pathname + window.location.search;
-							await fetch(`/api/projects/${projectId}/comments`, {
-								method: 'post',
-								body: JSON.stringify(newComment)
-							});
+				await fetch(`/api/projects/${projectId}/comments`, {
+					method: 'post',
+					body: JSON.stringify({
+						name,
+						text,
+						url: getCurrentUrl(),
+						x: newComment.x,
+						y: newComment.y
+					})
+				});
 
-							await invalidateAll();
-							newComment = undefined;
-						}
-					}}
-				>
-					Send
-				</button>
-				<button on:click={() => (newComment = undefined)}> Cancel </button>
-			</form>
-		</div>
-	</div>
+				await refreshComments();
+
+				newComment = undefined;
+			}}
+			onCancel={() => (newComment = undefined)}
+		/>
+	</Icon>
 {/if}
 
 {#each comments as comment}
-	<!-- svelte-ignore a11y-click-events-have-key-events -->
-	<!-- svelte-ignore a11y-no-static-element-interactions -->
-	<div
-		class="comments-icon comments-icon--highlight"
-		class:comments-icon--focus={comment === focusComment}
-		style={getCss({
-			top: `calc(50% + ${comment.y}px)`,
-			left: `calc(50% + ${comment.x}px)`
-		})}
+	<Icon
+		{comment}
+		highlight
+		focus={comment === focusComment}
 		on:click={(event) => {
 			event.stopPropagation();
 			focusComment = comment;
 		}}
 	>
 		{#if comment === focusComment}
-			<div class="comment-content">
-				<form on:submit={(event) => event.preventDefault()}>
-					<span>{comment.name}</span>
-					<textarea placeholder="Comment..." value={comment.text}></textarea>
-					<button
-						on:click={async () => {
-							const res = await fetch(`/api/projects/${projectId}/comments/${comment.id}`, {
-								method: 'delete'
-							});
-							await invalidateAll();
-						}}
-					>
-						Delete
-					</button>
-				</form>
-			</div>
+			<Content
+				mode="update"
+				{comment}
+				onSubmit={async ({ name, text }) => {
+					userName.set(name);
+
+					await fetch(`/api/projects/${projectId}/comments/${comment.id}`, {
+						method: 'put',
+						body: JSON.stringify({
+							name,
+							text
+						})
+					});
+
+					await refreshComments();
+				}}
+				onDelete={async () => {
+					await fetch(`/api/projects/${projectId}/comments/${comment.id}`, {
+						method: 'delete'
+					});
+					await refreshComments();
+					focusComment = undefined;
+				}}
+			/>
 		{/if}
-	</div>
+	</Icon>
 {/each}
 
 <style>
@@ -225,71 +219,5 @@
 
 	.comments-add--open span {
 		opacity: 1;
-	}
-
-	.comments-icon {
-		z-index: 20;
-		position: fixed;
-		width: 2rem;
-		height: 2rem;
-		border-radius: 0 50% 50% 50%;
-		background-color: lightgray;
-		box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
-		transform: translate(-50%, -50%);
-		cursor: pointer;
-	}
-
-	.comments-icon::before,
-	.comments-icon::after {
-		content: '';
-		width: 0;
-		height: 50%;
-		border-left: solid 2px black;
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-	}
-
-	.comments-icon::after {
-		transform: translate(-50%, -50%) rotate(90deg);
-	}
-
-	.comments-icon--highlight {
-		background-color: rgb(255, 197, 127);
-	}
-
-	.comments-icon--focus {
-		background-color: black;
-	}
-
-	.comments-icon--focus.comments-icon::before,
-	.comments-icon--focus.comments-icon::after {
-		border-left: solid 2px white;
-	}
-
-	.comment-content {
-		position: absolute;
-		left: 100%;
-		top: 100%;
-		width: 15rem;
-	}
-
-	.comment-content input,
-	.comment-content textarea {
-		width: 100%;
-		max-width: 15rem;
-		min-width: 15rem;
-	}
-
-	.comment-content textarea {
-		min-height: 4rem;
-	}
-
-	.comment-content span {
-		display: block;
-		background-color: white;
-		width: 100%;
-		padding: 4px;
 	}
 </style>

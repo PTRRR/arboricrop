@@ -7,7 +7,7 @@
 	import Dropdown from '../../components/wireframe/Dropdown.svelte';
 	import FooterMenu from '../../components/wireframe/FooterMenu.svelte';
 	import Menu from '../../components/wireframe/Menu.svelte';
-	import { useBlurApp, useComments, useDevices, useName, useReturnButton } from '../../stores';
+	import { useBlurApp, useComments, useDevices, useUserName, useReturnButton } from '../../stores';
 	import { strategies } from '../../utils/pairing';
 	import { iphone } from '../../utils/phones';
 	import type { LayoutData } from './$types';
@@ -38,7 +38,7 @@
 
 	let returnButton = useReturnButton();
 	useDevices();
-	useName();
+	useUserName();
 	useComments();
 	let blurApp = useBlurApp();
 
@@ -53,7 +53,7 @@
 	<title>Arboricrop - Mobile Wireframe</title>
 </svelte:head>
 
-<Comments projectId={data.projectId} comments={data.comments} />
+<Comments projectId={data.projectId} />
 
 <Mobile phone={iphone}>
 	<div class="mobile-wireframe">
