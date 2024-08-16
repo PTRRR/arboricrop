@@ -6,11 +6,20 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { createId } from '@paralleldrive/cuid2';
+	import Image from './Image.svelte';
 
 	let selectedGroup: string | undefined = undefined;
 	let upgradeTimer: NodeJS.Timeout | undefined = undefined;
 	let success = false;
-	let files: string[] = [];
+	type MediaType = 'image' | 'audio-note' | 'file';
+	let mediaOptions: { label: string; type: MediaType }[] = [
+		{ label: 'Image', type: 'image' },
+		{ label: 'Audio note', type: 'audio-note' },
+		{ label: 'File', type: 'file' }
+	];
+
+	let medias: { name: string; type: MediaType }[] = [];
+	$: currentMedia = medias.find((it) => it.name === $page.data.media);
 
 	const startUpgradeTimer = () => {
 		success = false;
@@ -46,6 +55,21 @@
 			{/if}
 		</Button>
 	</div>
+{:else if currentMedia}
+	<div class="device-file">
+		<Image placeholder="Media reader / player" ratio={1} />
+		<div class="device-file__actions">
+			<Button href={window.location.pathname}>Close</Button>
+			<Button
+				href={window.location.pathname}
+				on:click={() => {
+					medias = medias.filter((it) => it.name !== currentMedia?.name);
+				}}
+			>
+				Delete
+			</Button>
+		</div>
+	</div>
 {:else}
 	<div class="device-form">
 		<label for="">Device id:</label>
@@ -57,25 +81,27 @@
 		<label for="">Personal note:</label>
 		<textarea placeholder="Your note..." />
 		<Spacer size="2rem" />
-		<label for="">Files:</label>
-		<Dropdown label="Add media file" items={[{ label: 'Image' }, { label: 'Audio note' }]}>
+		<label for="">Medias:</label>
+		<Dropdown label="Add media" items={mediaOptions}>
 			<Button
 				slot="item"
 				let:item
 				on:click={() => {
-					files =
-						item.label === 'Image'
-							? [...files, `${createId()}.jpg`]
-							: [...files, `${createId()}.mp3`];
+					medias =
+						item.type === 'image'
+							? [...medias, { name: `${createId()}.jpg`, type: item.type }]
+							: item.type === 'audio-note'
+								? [...medias, { name: `${createId()}.mp3`, type: item.type }]
+								: [...medias, { name: `${createId()}.pdf`, type: item.type }];
 				}}
 			>
 				{item.label}
 			</Button>
 		</Dropdown>
 		<div class="device-form__files">
-			{#each files as file}
+			{#each medias as media}
 				<Spacer size="0.5rem" />
-				<Button minimal>{file}</Button>
+				<Button minimal href={`?media=${encodeURIComponent(media.name)}`}>{media.name}</Button>
 			{/each}
 		</div>
 
@@ -99,7 +125,8 @@
 {/if}
 
 <style>
-	.device-upgrade {
+	.device-upgrade,
+	.device-file {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
@@ -114,10 +141,22 @@
 		color: var(--dark-gray);
 	}
 
+	.device-file__actions {
+		display: flex;
+		gap: 1rem;
+		align-items: center;
+	}
+
 	.device-form {
 		display: flex;
 		flex-direction: column;
 		gap: 0.5rem;
+	}
+
+	.device-form__files {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
 	}
 
 	input,

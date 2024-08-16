@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { navigating } from '$app/stores';
+	import { onMount } from 'svelte';
 	import Comments from '../../components/comments/Comments.svelte';
 	import Mobile from '../../components/Mobile.svelte';
 	import Button from '../../components/wireframe/Button.svelte';
@@ -7,7 +8,7 @@
 	import Dropdown from '../../components/wireframe/Dropdown.svelte';
 	import FooterMenu from '../../components/wireframe/FooterMenu.svelte';
 	import Menu from '../../components/wireframe/Menu.svelte';
-	import { useBlurApp, useComments, useDevices, useUserName, useReturnButton } from '../../stores';
+	import { useBlurApp, useComments, useDevices, useReturnButton, useUserName } from '../../stores';
 	import { strategies } from '../../utils/pairing';
 	import { iphone } from '../../utils/phones';
 	import type { LayoutData } from './$types';
@@ -36,8 +37,8 @@
 		}
 	];
 
-	let returnButton = useReturnButton();
-	useDevices();
+	const returnButton = useReturnButton();
+	const devices = useDevices();
 	useUserName();
 	useComments();
 	let blurApp = useBlurApp();
@@ -46,6 +47,22 @@
 		if (Boolean(navigating)) {
 			blurApp.set(false);
 		}
+	});
+
+	onMount(() => {
+		let devicesStorageKey = 'devices-v1';
+		const storedDevices = window.localStorage.getItem(devicesStorageKey);
+		if (!storedDevices) {
+			window.localStorage.setItem(devicesStorageKey, JSON.stringify([]));
+		} else {
+			devices.set(JSON.parse(storedDevices));
+		}
+
+		devices.subscribe((devices) => {
+			if (devices.length > 0) {
+				window.localStorage.setItem(devicesStorageKey, JSON.stringify(devices));
+			}
+		});
 	});
 </script>
 

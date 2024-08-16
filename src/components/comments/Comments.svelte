@@ -84,6 +84,19 @@
 		window.addEventListener('click', handleMouseClick);
 		window.addEventListener('keydown', handleKeyDown);
 
+		const storedUserName = window.localStorage.getItem('user-name');
+		if (!storedUserName) {
+			window.localStorage.setItem('user-name', '');
+		} else {
+			userName.set(storedUserName);
+		}
+
+		userName.subscribe((userName) => {
+			if (userName) {
+				window.localStorage.setItem('user-name', userName);
+			}
+		});
+
 		return () => {
 			window.removeEventListener('mousemove', handleMouseMove);
 			window.removeEventListener('click', handleMouseClick);
