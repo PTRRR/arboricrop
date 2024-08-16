@@ -8,11 +8,11 @@
 
 	let selectedGroup: string | undefined = undefined;
 	let upgradeTimer: NodeJS.Timeout | undefined = undefined;
+	let success = false;
 
 	const startUpgradeTimer = () => {
-		upgradeTimer = setTimeout(() => {
-			goto(window.location.pathname);
-		}, 4000);
+		success = false;
+		upgradeTimer = setTimeout(() => (success = true), 3000);
 	};
 
 	onMount(() => {
@@ -24,15 +24,24 @@
 
 {#if $page.data.firmwareUpdate}
 	<div class="device-upgrade">
-		<p>Upgrade started...</p>
-		<span>Keep your mobile close to the device or do not disconnect it</span>
+		{#if success}
+			<p>Firware successfully upgraded!</p>
+		{:else}
+			<p>Upgrade started...</p>
+			<span>Keep your mobile close to the device or do not disconnect it</span>
+		{/if}
+
 		<Button
 			on:click={() => {
 				clearTimeout(upgradeTimer);
 				goto(window.location.pathname);
 			}}
 		>
-			Cancel
+			{#if success}
+				Done
+			{:else}
+				Cancel
+			{/if}
 		</Button>
 	</div>
 {:else}
