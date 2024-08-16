@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { navigating } from '$app/stores';
-	import { onMount } from 'svelte';
 	import Comments from '../../components/comments/Comments.svelte';
 	import Mobile from '../../components/Mobile.svelte';
 	import Button from '../../components/wireframe/Button.svelte';
@@ -55,7 +54,9 @@
 </svelte:head>
 
 {#if data.projectId}
-	<Comments projectId={data.projectId} />
+	<div class="comments">
+		<Comments projectId={data.projectId} />
+	</div>
 {/if}
 
 <Mobile phone={iphone}>
@@ -121,5 +122,11 @@
 	.mobile-wireframe--blur {
 		opacity: 0.2;
 		pointer-events: none;
+	}
+
+	@media screen and (max-width: 700px) {
+		.comments {
+			display: none;
+		}
 	}
 </style>

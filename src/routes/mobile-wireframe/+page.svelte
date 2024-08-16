@@ -45,7 +45,7 @@
 		{
 			title: 'Recent Devices',
 			cards: randomDevices.map((it) => ({
-				title: it.name,
+				title: it.name || '',
 				href: `/mobile-wireframe/devices/${it.id}`
 			}))
 		}

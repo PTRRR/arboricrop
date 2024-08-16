@@ -89,4 +89,23 @@
 		opacity: 1;
 		pointer-events: none;
 	}
+
+	@media screen and (max-width: 700px) {
+		img {
+			display: none;
+		}
+
+		.mobile {
+			padding: 0;
+			height: 100svh;
+			box-sizing: border-box;
+		}
+
+		.mobile__app,
+		.mobile__app-inner {
+			height: 100% !important;
+			width: 100% !important;
+			border-radius: 0;
+		}
+	}
 </style>
