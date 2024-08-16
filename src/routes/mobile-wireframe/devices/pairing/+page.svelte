@@ -5,6 +5,7 @@
 	import { useReturnButton } from '../../../../stores';
 	import { page } from '$app/stores';
 	import { strategies } from '../../../../utils/pairing';
+	import { goto } from '$app/navigation';
 
 	let returnButton = useReturnButton();
 	returnButton.set({
@@ -19,20 +20,35 @@
 
 <div class="pairing">
 	<div class="pairing__content">
-		<div class="pairing__image">
-			<Image ratio={1} placeholder="Pairing schema" />
-			<span class="pairing__description">{currentPairingStrategy.description}</span>
-		</div>
-		<Dropdown label="Use other pairing strategy" items={strategyOptions}>
-			<Button
-				slot="item"
-				let:item
-				minimal
-				href={`/mobile-wireframe/devices/pairing?strategy=${item.value}`}
-			>
-				{item.label}
-			</Button>
-		</Dropdown>
+		{#if !$page.data.success}
+			<div class="pairing__image">
+				<Image
+					ratio={1}
+					placeholder="Comprehensive schema or tutorial explaining how to proceed"
+					onClick={() => {
+						goto(`/mobile-wireframe/devices/pairing?success=true`);
+						setTimeout(() => {
+							goto('/mobile-wireframe/devices/new');
+						}, 2000);
+					}}
+				/>
+				<span class="pairing__description">{currentPairingStrategy.description}</span>
+			</div>
+			<Dropdown label="Use other pairing strategy" items={strategyOptions}>
+				<Button
+					slot="item"
+					let:item
+					href={`/mobile-wireframe/devices/pairing?strategy=${item.value}`}
+				>
+					{item.label}
+				</Button>
+			</Dropdown>
+		{:else}
+			<div class="pairing__success">
+				<p>Pairing successful</p>
+				<span>Loading device metadata...</span>
+			</div>
+		{/if}
 	</div>
 </div>
 
@@ -69,5 +85,16 @@
 		color: var(--dark-gray);
 		max-width: 14rem;
 		text-align: center;
+	}
+
+	.pairing__success {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.pairing__success span {
+		color: var(--dark-gray);
 	}
 </style>

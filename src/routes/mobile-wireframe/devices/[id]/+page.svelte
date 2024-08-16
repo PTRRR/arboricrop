@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import Device from '../../../../components/wireframe/Device.svelte';
 	import { useReturnButton } from '../../../../stores';
 
 	let returnButton = useReturnButton();
@@ -9,4 +10,4 @@
 	});
 </script>
 
-<h1>{$page.params.id}</h1>
+<Device id={$page.params.id} />

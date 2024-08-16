@@ -3,10 +3,15 @@
 
 	export let ratio: number | undefined = undefined;
 	export let placeholder: string | undefined = undefined;
+	export let onClick: (() => void) | undefined = undefined;
 </script>
 
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
+	on:click={() => onClick?.()}
 	class="image"
+	class:image--clickable={Boolean(onClick)}
 	style={getCss({
 		aspectRatio: ratio ? ratio.toString() : undefined
 	})}
@@ -34,7 +39,7 @@
 		left: 50%;
 		content: '';
 		height: 200%;
-		border-left: solid 1px var(--dark-gray);
+		border-left: dashed 1px var(--dark-gray);
 	}
 
 	.image::before {
@@ -44,12 +49,23 @@
 	.image::after {
 		transform: translate(-50%, -50%) rotate(-45deg);
 	}
+
+	.image--clickable {
+		cursor: pointer;
+	}
+
+	.image--clickable:hover,
+	.image--clickable:hover span {
+		background-color: var(--white);
+	}
+
 	span {
 		background-color: var(--light-gray);
 		position: relative;
 		z-index: 1;
-		display: block;
-		padding: 0.5rem;
+		display: inline-block;
+		padding: 1rem;
 		text-align: center;
+		max-width: 20rem;
 	}
 </style>

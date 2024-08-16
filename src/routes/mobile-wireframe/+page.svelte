@@ -47,15 +47,6 @@
 				title: it.name,
 				href: `/mobile-wireframe/devices/${it.id}`
 			}))
-		},
-		{
-			title: 'Getting Started',
-			cards: [
-				{
-					title: 'Install device',
-					subTitle: 'hahah'
-				}
-			]
 		}
 	];
 </script>

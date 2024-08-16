@@ -23,6 +23,24 @@
 		align-items: center;
 		justify-content: space-between;
 		box-sizing: border-box;
+		z-index: 5;
+	}
+
+	.main-menu::before {
+		z-index: -1;
+		content: '';
+		display: block;
+		position: absolute;
+		top: -2rem;
+		left: 0;
+		width: 100%;
+		height: calc(100% + 2rem);
+		background-image: linear-gradient(
+			var(--light-gray),
+			var(--light-gray),
+			var(--light-gray),
+			transparent
+		);
 	}
 
 	.main-menu__actions {
