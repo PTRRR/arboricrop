@@ -1,8 +1,10 @@
-<script>
+<script lang="ts">
 	import Spacer from '../Spacer.svelte';
 	import Button from './Button.svelte';
 
 	import Dropdown from './Dropdown.svelte';
+
+	let selectedGroup: string | undefined = undefined;
 </script>
 
 <div class="device-form">
@@ -20,10 +22,10 @@
 	</Dropdown>
 	<label for="">Device group:</label>
 	<Dropdown
-		label="Select group"
+		label={selectedGroup || 'Select group'}
 		items={[{ label: 'Tomatoes' }, { label: 'Vignard' }, { label: 'Fruits plantation' }]}
 	>
-		<Button slot="item" let:item>{item.label}</Button>
+		<Button slot="item" let:item on:click={() => (selectedGroup = item.label)}>{item.label}</Button>
 	</Dropdown>
 
 	<Spacer size="5rem" />
