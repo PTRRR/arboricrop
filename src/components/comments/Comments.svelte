@@ -26,6 +26,9 @@
 			`/api/projects/${projectId}/comments?url=${encodeURIComponent(getCurrentUrl() || '')}`
 		);
 		comments = (await res.json()) as (typeof comment.$inferSelect)[];
+		focusComment = undefined;
+		addComment = false;
+		newComment = undefined;
 	};
 
 	onMount(() => {
@@ -172,7 +175,6 @@
 						method: 'delete'
 					});
 					await refreshComments();
-					focusComment = undefined;
 				}}
 			/>
 		{/if}

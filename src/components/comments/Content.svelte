@@ -16,6 +16,8 @@
 	let text: HTMLTextAreaElement;
 </script>
 
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y-no-static-element-interactions -->
 <div class="comments-content">
 	<form
 		on:submit={async (event) => {
@@ -32,8 +34,19 @@
 			}
 		}}
 	>
-		<input type="text" placeholder="Your name..." bind:this={name} value={comment?.name} />
-		<textarea placeholder="Comment..." bind:this={text} value={comment?.text}></textarea>
+		<input
+			type="text"
+			placeholder="Your name..."
+			on:click={(e) => e.stopPropagation()}
+			bind:this={name}
+			value={comment?.name}
+		/>
+		<textarea
+			placeholder="Comment..."
+			on:click={(e) => e.stopPropagation()}
+			bind:this={text}
+			value={comment?.text}
+		></textarea>
 		{#if mode === 'create'}
 			{#if !submitting}
 				<button type="submit" on:click={(e) => e.stopPropagation()}> Send </button>
@@ -48,24 +61,26 @@
 			{:else}
 				<span>Sending...</span>
 			{/if}
-		{:else if !deleting}
-			<button type="submit" on:click={(e) => e.stopPropagation()}> Update </button>
-			<button
-				on:click={async (e) => {
-					e.stopPropagation();
+		{:else if mode === 'update'}
+			{#if !deleting && !submitting}
+				<button type="submit" on:click={(e) => e.stopPropagation()}> Update </button>
+				<button
+					on:click={async (e) => {
+						e.stopPropagation();
 
-					try {
-						deleting = true;
-						await onDelete?.();
-					} finally {
-						deleting = false;
-					}
-				}}
-			>
-				Delete
-			</button>
-		{:else}
-			<span>Deleting...</span>
+						try {
+							deleting = true;
+							await onDelete?.();
+						} finally {
+							deleting = false;
+						}
+					}}
+				>
+					Delete
+				</button>
+			{:else}
+				<span>{deleting ? 'Deleting...' : submitting ? 'Updating...' : ''}</span>
+			{/if}
 		{/if}
 	</form>
 </div>
