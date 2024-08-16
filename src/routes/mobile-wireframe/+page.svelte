@@ -26,10 +26,11 @@
 			cards: [
 				{
 					title: 'Devices Installation',
-					href: '/mobile-wireframe/getting-started/device-installation'
+					href: '/mobile-wireframe/getting-started'
 				},
 				{
-					title: 'Throubleshooting'
+					title: 'Throubleshooting',
+					href: '/mobile-wireframe/getting-started'
 				}
 			]
 		},
