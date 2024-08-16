@@ -5,10 +5,12 @@
 	import Dropdown from './Dropdown.svelte';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
+	import { createId } from '@paralleldrive/cuid2';
 
 	let selectedGroup: string | undefined = undefined;
 	let upgradeTimer: NodeJS.Timeout | undefined = undefined;
 	let success = false;
+	let files: string[] = [];
 
 	const startUpgradeTimer = () => {
 		success = false;
@@ -54,11 +56,31 @@
 		<input type="text" placeholder="Comprehensive device name..." />
 		<label for="">Personal note:</label>
 		<textarea placeholder="Your note..." />
+		<Spacer size="2rem" />
 		<label for="">Files:</label>
 		<Dropdown label="Add media file" items={[{ label: 'Image' }, { label: 'Audio note' }]}>
-			<Button slot="item" let:item>{item.label}</Button>
+			<Button
+				slot="item"
+				let:item
+				on:click={() => {
+					files =
+						item.label === 'Image'
+							? [...files, `${createId()}.jpg`]
+							: [...files, `${createId()}.mp3`];
+				}}
+			>
+				{item.label}
+			</Button>
 		</Dropdown>
-		<label for="">Device group:</label>
+		<div class="device-form__files">
+			{#each files as file}
+				<Spacer size="0.5rem" />
+				<Button minimal>{file}</Button>
+			{/each}
+		</div>
+
+		<Spacer size="2rem" />
+		<label for="">Group:</label>
 		<Dropdown
 			label={selectedGroup || 'Select group'}
 			items={[{ label: 'Tomatoes' }, { label: 'Vignard' }, { label: 'Fruits plantation' }]}
