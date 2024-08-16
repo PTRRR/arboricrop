@@ -104,7 +104,6 @@
 			x: mouseX - window.innerWidth * 0.5,
 			y: mouseY - window.innerHeight * 0.5
 		}}
-		focus
 	/>
 {/if}
 
@@ -144,7 +143,11 @@
 		focus={comment === focusComment}
 		on:click={(event) => {
 			event.stopPropagation();
-			focusComment = comment;
+			if (focusComment) {
+				focusComment = undefined;
+			} else {
+				focusComment = comment;
+			}
 		}}
 	>
 		{#if comment === focusComment}

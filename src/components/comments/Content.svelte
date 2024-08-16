@@ -4,46 +4,68 @@
 	export let mode: 'create' | 'update' = 'create';
 	export let comment: Pick<typeof commentType.$inferSelect, 'name' | 'text'> | undefined =
 		undefined;
-	export let onSubmit: ((params: { name: string; text: string }) => void) | undefined = undefined;
+	export let onSubmit:
+		| ((params: { name: string; text: string }) => void | Promise<void>)
+		| undefined = undefined;
 	export let onCancel: (() => void) | undefined = undefined;
-	export let onDelete: (() => void) | undefined = undefined;
+	export let onDelete: (() => void | Promise<void>) | undefined = undefined;
 
+	let submitting = false;
+	let deleting = false;
 	let name: HTMLInputElement;
 	let text: HTMLTextAreaElement;
 </script>
 
 <div class="comments-content">
 	<form
-		on:submit={(event) => {
+		on:submit={async (event) => {
 			event.preventDefault();
-			onSubmit?.({
-				name: name.value,
-				text: text.value
-			});
+
+			try {
+				submitting = true;
+				await onSubmit?.({
+					name: name.value,
+					text: text.value
+				});
+			} finally {
+				submitting = false;
+			}
 		}}
 	>
 		<input type="text" placeholder="Your name..." bind:this={name} value={comment?.name} />
 		<textarea placeholder="Comment..." bind:this={text} value={comment?.text}></textarea>
 		{#if mode === 'create'}
-			<button type="submit" on:click={(e) => e.stopPropagation()}> Send </button>
-			<button
-				on:click={(e) => {
-					e.stopPropagation();
-					onCancel?.();
-				}}
-			>
-				Cancel
-			</button>
-		{:else}
+			{#if !submitting}
+				<button type="submit" on:click={(e) => e.stopPropagation()}> Send </button>
+				<button
+					on:click={(e) => {
+						e.stopPropagation();
+						onCancel?.();
+					}}
+				>
+					Cancel
+				</button>
+			{:else}
+				<span>Sending...</span>
+			{/if}
+		{:else if !deleting}
 			<button type="submit" on:click={(e) => e.stopPropagation()}> Update </button>
 			<button
-				on:click={(e) => {
+				on:click={async (e) => {
 					e.stopPropagation();
-					onDelete?.();
+
+					try {
+						deleting = true;
+						await onDelete?.();
+					} finally {
+						deleting = false;
+					}
 				}}
 			>
 				Delete
 			</button>
+		{:else}
+			<span>Deleting...</span>
 		{/if}
 	</form>
 </div>

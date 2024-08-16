@@ -58,8 +58,11 @@
 		background-color: black;
 	}
 
-	.comments-icon--focus.comments-icon::before,
 	.comments-icon--focus.comments-icon::after {
 		border-left: solid 2px white;
+	}
+
+	.comments-icon--focus.comments-icon::before {
+		display: none;
 	}
 </style>
