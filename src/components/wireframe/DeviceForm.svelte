@@ -7,23 +7,45 @@
 	import { goto } from '$app/navigation';
 	import { createId } from '@paralleldrive/cuid2';
 	import Image from './Image.svelte';
+	import type { Device, Media, MediaType } from '../../utils/types';
 
+	export let device: Device | undefined = undefined;
+	export let onUpdate: ((device: Device) => void) | undefined = undefined;
+
+	let name: HTMLInputElement;
+	let note: HTMLTextAreaElement;
+	let firmwareVersion = device?.firmwareVersion || 'v1.0.9';
 	let selectedGroup: string | undefined = undefined;
 	let upgradeTimer: NodeJS.Timeout | undefined = undefined;
 	let success = false;
-	type MediaType = 'image' | 'audio-note' | 'file';
 	let mediaOptions: { label: string; type: MediaType }[] = [
 		{ label: 'Image', type: 'image' },
 		{ label: 'Audio note', type: 'audio-note' },
 		{ label: 'File', type: 'file' }
 	];
 
-	let medias: { name: string; type: MediaType }[] = [];
+	let medias: Media[] = device?.medias || [];
 	$: currentMedia = medias.find((it) => it.name === $page.data.media);
+
+	const updateDevice = () => {
+		device = {
+			...device,
+			id: device?.id || `dev-${createId()}`,
+			name: name.value,
+			note: note.value,
+			medias,
+			group: selectedGroup,
+			firmwareVersion
+		};
+
+		onUpdate?.(device);
+	};
 
 	const startUpgradeTimer = () => {
 		success = false;
-		upgradeTimer = setTimeout(() => (success = true), 3000);
+		upgradeTimer = setTimeout(() => {
+			success = true;
+		}, 3000);
 	};
 
 	onMount(() => {
@@ -46,6 +68,13 @@
 			on:click={() => {
 				clearTimeout(upgradeTimer);
 				goto(window.location.pathname);
+
+				if (success) {
+					setTimeout(() => {
+						firmwareVersion = 'v1.1.0';
+						updateDevice();
+					}, 100);
+				}
 			}}
 		>
 			{#if success}
@@ -64,6 +93,7 @@
 				href={window.location.pathname}
 				on:click={() => {
 					medias = medias.filter((it) => it.name !== currentMedia?.name);
+					updateDevice();
 				}}
 			>
 				Delete
@@ -73,13 +103,24 @@
 {:else}
 	<div class="device-form">
 		<label for="">Device id:</label>
-		<input type="text" value="dev-iros84fgka9mcka" />
+		<input type="text" value={device?.id || 'dev-iros84fgka9mcka'} />
 		<label for="">Firmware version:</label>
-		<input type="text" value="v1.0.9" />
+		<input type="text" value={device?.firmwareVersion || 'v1.0.9'} />
 		<label for="">Device name:</label>
-		<input type="text" placeholder="Comprehensive device name..." />
+		<input
+			type="text"
+			placeholder="Comprehensive device name..."
+			bind:this={name}
+			value={device?.name || ''}
+			on:input={() => updateDevice()}
+		/>
 		<label for="">Personal note:</label>
-		<textarea placeholder="Your note..." />
+		<textarea
+			placeholder="Your note..."
+			bind:this={note}
+			value={device?.note || ''}
+			on:input={() => updateDevice()}
+		/>
 		<Spacer size="2rem" />
 		<label for="">Medias:</label>
 		<Dropdown label="Add media" items={mediaOptions}>
@@ -93,6 +134,7 @@
 							: item.type === 'audio-note'
 								? [...medias, { name: `${createId()}.mp3`, type: item.type }]
 								: [...medias, { name: `${createId()}.pdf`, type: item.type }];
+					updateDevice();
 				}}
 			>
 				{item.label}
@@ -111,16 +153,25 @@
 			label={selectedGroup || 'Select group'}
 			items={[{ label: 'Tomatoes' }, { label: 'Vignard' }, { label: 'Fruits plantation' }]}
 		>
-			<Button slot="item" let:item on:click={() => (selectedGroup = item.label)}
-				>{item.label}</Button
+			<Button
+				slot="item"
+				let:item
+				on:click={() => {
+					selectedGroup = item.label;
+					updateDevice();
+				}}
 			>
+				{item.label}
+			</Button>
 		</Dropdown>
 
-		<Spacer size="5rem" />
-		<label for="">New firmware version available:</label>
-		<Button href="?firmwareUpdate=true" on:click={() => startUpgradeTimer()}>
-			Upgrade to v1.1.0
-		</Button>
+		{#if firmwareVersion !== 'v1.1.0'}
+			<Spacer size="5rem" />
+			<label for="">New firmware version available:</label>
+			<Button href="?firmwareUpdate=true" on:click={() => startUpgradeTimer()}>
+				Upgrade to v1.1.0
+			</Button>
+		{/if}
 	</div>
 {/if}
 
