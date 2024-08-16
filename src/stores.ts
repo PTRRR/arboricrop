@@ -1,4 +1,4 @@
-import { readable, writable } from 'svelte/store';
+import { readable, writable, type Writable } from 'svelte/store';
 import { getContext, hasContext, setContext } from 'svelte';
 import { getDevices } from './utils/devices';
 import type { comment } from './db/schema';
@@ -18,7 +18,27 @@ export const useReadable = <T>(name: string, value: T) => useSharedStore(name, r
 // Stores
 export const useReturnButton = () =>
 	useWritable<{ label: string; href?: string } | undefined>('return-button', undefined);
-export const useDevices = () => useWritable('devices', getDevices(30));
+export const useDevices = () => {
+	const devices = useWritable('devices', getDevices(30));
+
+	if (typeof window !== 'undefined') {
+		let devicesStorageKey = 'devices-v1';
+		const storedDevices = window.localStorage.getItem(devicesStorageKey);
+		if (!storedDevices) {
+			window.localStorage.setItem(devicesStorageKey, JSON.stringify([]));
+		} else {
+			devices.set(JSON.parse(storedDevices));
+		}
+
+		devices.subscribe((devices) => {
+			if (devices.length > 0) {
+				window.localStorage.setItem(devicesStorageKey, JSON.stringify(devices));
+			}
+		});
+	}
+
+	return devices;
+};
 export const useBlurApp = () => useWritable('blur-app', false);
 export const useUserName = () => useWritable('user-name', '');
 export const useComments = () => useWritable<(typeof comment.$inferSelect)[]>('comments', []);

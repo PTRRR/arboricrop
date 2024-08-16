@@ -38,7 +38,7 @@
 	];
 
 	const returnButton = useReturnButton();
-	const devices = useDevices();
+	useDevices();
 	useUserName();
 	useComments();
 	let blurApp = useBlurApp();
@@ -47,22 +47,6 @@
 		if (Boolean(navigating)) {
 			blurApp.set(false);
 		}
-	});
-
-	onMount(() => {
-		let devicesStorageKey = 'devices-v1';
-		const storedDevices = window.localStorage.getItem(devicesStorageKey);
-		if (!storedDevices) {
-			window.localStorage.setItem(devicesStorageKey, JSON.stringify([]));
-		} else {
-			devices.set(JSON.parse(storedDevices));
-		}
-
-		devices.subscribe((devices) => {
-			if (devices.length > 0) {
-				window.localStorage.setItem(devicesStorageKey, JSON.stringify(devices));
-			}
-		});
 	});
 </script>
 
@@ -134,5 +118,6 @@
 
 	.mobile-wireframe--blur {
 		opacity: 0.2;
+		pointer-events: none;
 	}
 </style>
