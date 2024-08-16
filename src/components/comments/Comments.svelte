@@ -5,6 +5,7 @@
 	import Icon from './Icon.svelte';
 	import Content from './Content.svelte';
 	import { navigating } from '$app/stores';
+	import { getCss } from '../../utils/css';
 
 	export let projectId: string;
 
@@ -16,6 +17,9 @@
 	let comments: (typeof comment.$inferSelect)[] = [];
 	let newComment: typeof comment.$inferInsert | undefined = undefined;
 	let focusComment: typeof comment.$inferSelect | undefined = undefined;
+	let showAll: boolean = false;
+
+	$: commentsToDisplay = showAll ? comments : comments.filter((it) => it.status === 'new');
 
 	const userName = useUserName();
 	const getCurrentUrl = () =>
@@ -90,15 +94,32 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
-<div
-	class="comments-add"
-	class:comments-add--open={open}
-	on:click={(event) => {
-		event.stopPropagation();
-		addComment = true;
-	}}
->
-	<span>Add comment</span>
+<div class="comments-nav">
+	<button
+		class="comments-button"
+		class:comments--closed={!open}
+		style={getCss({
+			width: '6rem',
+			backgroundColor: showAll ? 'black' : undefined,
+			color: showAll ? 'white' : undefined
+		})}
+		on:click={(event) => {
+			event.stopPropagation();
+			showAll = !showAll;
+		}}
+	>
+		<span>Show all</span>
+	</button>
+	<button
+		class="comments-button"
+		class:comments--closed={!open}
+		on:click={(event) => {
+			event.stopPropagation();
+			addComment = true;
+		}}
+	>
+		<span>Add comment</span>
+	</button>
 </div>
 
 {#if addComment}
@@ -139,7 +160,7 @@
 	</Icon>
 {/if}
 
-{#each comments as comment}
+{#each commentsToDisplay as comment}
 	<Icon
 		{comment}
 		highlight
@@ -170,6 +191,14 @@
 
 					await refreshComments();
 				}}
+				onArchive={async () => {
+					await fetch(`/api/projects/${projectId}/comments/${comment.id}`, {
+						method: 'put',
+						body: JSON.stringify({ status: 'archived' })
+					});
+
+					await refreshComments();
+				}}
 				onDelete={async () => {
 					await fetch(`/api/projects/${projectId}/comments/${comment.id}`, {
 						method: 'delete'
@@ -182,20 +211,28 @@
 {/each}
 
 <style>
-	.comments-add {
-		z-index: 10;
+	.comments-nav {
 		display: flex;
-		justify-content: center;
-		align-items: center;
+		flex-direction: column;
+		z-index: 10;
 		position: fixed;
 		bottom: 1rem;
 		left: 1rem;
+		gap: 0.5rem;
+	}
+
+	.comments-button {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		border: none;
 		height: 2rem;
-		width: 2rem;
+		width: 8.5rem;
+		opacity: 1;
+		transform: scale(1);
 		background-color: lightgray;
 		border-radius: 2rem;
-		opacity: 0;
-		transform: scale(0.5);
+
 		transition:
 			transform 0.3s,
 			opacity 0.3s,
@@ -205,24 +242,24 @@
 		user-select: none;
 	}
 
-	.comments-add:hover {
+	.comments-button:hover {
 		background-color: black;
 		color: white;
 	}
 
-	.comments-add span {
-		opacity: 0;
+	.comments-button span {
+		opacity: 1;
 		white-space: nowrap;
 		transition: opacity 0.4s 0.5s;
 	}
 
-	.comments-add--open {
-		opacity: 1;
-		transform: scale(1);
-		width: 9rem;
+	.comments--closed {
+		opacity: 0 !important;
+		transform: scale(0.5) !important;
+		width: 2rem !important;
 	}
 
-	.comments-add--open span {
-		opacity: 1;
+	.comments--closed span {
+		opacity: 0;
 	}
 </style>

@@ -9,6 +9,7 @@
 		| undefined = undefined;
 	export let onCancel: (() => void) | undefined = undefined;
 	export let onDelete: (() => void | Promise<void>) | undefined = undefined;
+	export let onArchive: (() => void | Promise<void>) | undefined = undefined;
 
 	let submitting = false;
 	let deleting = false;
@@ -64,6 +65,21 @@
 		{:else if mode === 'update'}
 			{#if !deleting && !submitting}
 				<button type="submit" on:click={(e) => e.stopPropagation()}> Update </button>
+				<button
+					on:click={(e) => e.stopPropagation()}
+					on:click={async (e) => {
+						e.stopPropagation();
+
+						try {
+							submitting = true;
+							await onArchive?.();
+						} finally {
+							submitting = false;
+						}
+					}}
+				>
+					Archive
+				</button>
 				<button
 					on:click={async (e) => {
 						e.stopPropagation();

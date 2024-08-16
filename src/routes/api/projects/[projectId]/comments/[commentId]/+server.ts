@@ -12,11 +12,11 @@ export const GET: RequestHandler = async ({ params }) => {
 };
 
 export const PUT: RequestHandler = async ({ params, request }) => {
-	const { name, x, y, text, url } = await request.json();
+	const { name, x, y, text, url, status } = await request.json();
 
 	const [res] = await db
 		.update(comment)
-		.set({ name, x, y, text, url })
+		.set({ name, x, y, text, url, status })
 		.where(eq(comment.id, params.commentId))
 		.returning();
 

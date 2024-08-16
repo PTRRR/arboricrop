@@ -23,5 +23,6 @@ export const comment = pgTable('comment', {
 	x: doublePrecision('x').notNull(),
 	y: doublePrecision('y').notNull(),
 	created: timestamp('created').defaultNow(),
+	status: text('status').default('new').$type<'new' | 'archived'>(),
 	projectId: text('projectId').references(() => project.id)
 });

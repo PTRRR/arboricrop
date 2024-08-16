@@ -8,6 +8,20 @@
       "when": 1723749294078,
       "tag": "0000_slim_white_tiger",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1723796870657,
+      "tag": "0001_cheerful_manta",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1723797344736,
+      "tag": "0002_grey_lightspeed",
+      "breakpoints": true
     }
   ]
 }
