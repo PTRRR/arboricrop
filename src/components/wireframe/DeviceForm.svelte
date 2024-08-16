@@ -35,7 +35,8 @@
 			note: note.value,
 			medias,
 			group: selectedGroup,
-			firmwareVersion
+			firmwareVersion,
+			battery: device?.battery || 100
 		};
 
 		onUpdate?.(device);
@@ -93,7 +94,9 @@
 				href={window.location.pathname}
 				on:click={() => {
 					medias = medias.filter((it) => it.name !== currentMedia?.name);
-					updateDevice();
+					setTimeout(() => {
+						updateDevice();
+					}, 100);
 				}}
 			>
 				Delete
