@@ -54,7 +54,9 @@
 	<title>Arboricrop - Mobile Wireframe</title>
 </svelte:head>
 
-<Comments projectId={data.projectId} />
+{#if data.projectId}
+	<Comments projectId={data.projectId} />
+{/if}
 
 <Mobile phone={iphone}>
 	<div class="mobile-wireframe">

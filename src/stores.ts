@@ -1,4 +1,4 @@
-import { readable, writable, type Writable } from 'svelte/store';
+import { readable, writable } from 'svelte/store';
 import { getContext, hasContext, setContext } from 'svelte';
 import { getDevices } from './utils/devices';
 import type { comment } from './db/schema';
@@ -22,7 +22,7 @@ export const useDevices = () => {
 	const devices = useWritable('devices', getDevices(30));
 
 	if (typeof window !== 'undefined') {
-		let devicesStorageKey = 'devices-v1';
+		const devicesStorageKey = 'devices-v1';
 		const storedDevices = window.localStorage.getItem(devicesStorageKey);
 		if (!storedDevices) {
 			window.localStorage.setItem(devicesStorageKey, JSON.stringify([]));

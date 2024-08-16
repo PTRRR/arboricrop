@@ -1,7 +1,8 @@
 import type { LayoutServerLoad } from './$types';
+import { config } from 'dotenv';
 
-const PROJECT_ID = 'rknbb7gt8syva91n8rejknqz';
+config();
 
-export const load: LayoutServerLoad = async ({ url }) => {
-	return { projectId: PROJECT_ID };
+export const load: LayoutServerLoad = async () => {
+	return { projectId: process.env.WIREFRAME_PROJECT_ID || '' };
 };
