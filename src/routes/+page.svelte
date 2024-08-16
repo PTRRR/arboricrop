@@ -13,7 +13,7 @@
 <style>
 	.nav {
 		width: 100%;
-		height: 100vh;
+		height: 100svh;
 		display: flex;
 		justify-content: center;
 		align-items: center;

@@ -29,8 +29,8 @@
 <div
 	class="mobile"
 	style={getCss({
-		'--mobile-width': `calc((100vh - 2rem) * ${aspectRatio})`,
-		'--mobile-height': 'calc(100vh - 2rem)',
+		'--mobile-width': `calc((100svh - 2rem) * ${aspectRatio})`,
+		'--mobile-height': 'calc(100svh - 2rem)',
 		'--mobile-app-width': `calc(var(--mobile-width) * ${phone.widthScale})`,
 		'--mobile-app-height': `calc(var(--mobile-height) * ${phone.heightScale})`
 	})}
@@ -52,7 +52,7 @@
 <style>
 	.mobile {
 		padding: 1em;
-		height: 100vh;
+		height: 100svh;
 		box-sizing: border-box;
 	}
 
@@ -76,7 +76,7 @@
 		transform: translate(-50%, -50%);
 		height: 100%;
 		width: 100%;
-		border-radius: 5.3vh;
+		border-radius: 5.3svh;
 		overflow: hidden;
 	}
 
