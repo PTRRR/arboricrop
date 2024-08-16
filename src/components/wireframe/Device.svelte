@@ -31,6 +31,7 @@
 	.device {
 		display: flex;
 		flex-direction: column;
+		flex: 1 1 auto;
 	}
 
 	.device__footer {

@@ -15,7 +15,7 @@
 </script>
 
 {#if href}
-	<a class="button" data-sveltekit-preload-data="false" {style} {href}>
+	<a class="button" data-sveltekit-preload-data="false" {style} {href} on:click>
 		<ButtonInner {disabled} {border} {minimal}>
 			<slot />
 		</ButtonInner>
