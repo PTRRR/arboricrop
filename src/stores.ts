@@ -3,7 +3,7 @@ import { getContext, hasContext, setContext } from 'svelte';
 import { getDevices, getFields } from './utils/dummyData';
 import type { comment } from './db/schema';
 
-const STORE_VERSION = 'v2';
+const STORE_VERSION = 'v3';
 
 export const useSharedStore = <T, A>(name: string, fn: (value?: A) => T, defaultValue?: A) => {
 	if (hasContext(name)) {
