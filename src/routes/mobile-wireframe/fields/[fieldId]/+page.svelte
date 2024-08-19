@@ -8,7 +8,8 @@
 	import Line from '../../../../components/wireframe/Line.svelte';
 	import { useDevices, useFields, useReturnButton } from '../../../../stores';
 	import { getDevicesByFieldId } from '../../../../utils/dummyData';
-	import type { Device } from '../../../../utils/types';
+	import type { Device, Location } from '../../../../utils/types';
+	import Map from '../../../../components/wireframe/Map.svelte';
 
 	const fields = useFields();
 	const devices = useDevices();
@@ -17,6 +18,7 @@
 
 	$: field = $fields.find((it) => it.id === $page.params.fieldId);
 	$: fieldDevices = getDevicesByFieldId($devices, field?.id);
+	$: deviceLocations = fieldDevices.map((it) => it.location).filter((it) => it) as Location[];
 
 	$: {
 		if (field) {
@@ -134,6 +136,11 @@
 
 			{#if fieldDevices.length === 0}
 				<span>No devices</span>
+			{/if}
+
+			{#if deviceLocations.length > 0}
+				<Spacer size="1rem" />
+				<Map locations={deviceLocations} />
 			{/if}
 
 			<Spacer size="1rem" />

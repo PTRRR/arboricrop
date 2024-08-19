@@ -40,7 +40,8 @@
 			title: 'Notifications & Alerts',
 			cards: [
 				{
-					title: 'Notifications (3)'
+					title: 'Notifications (3)',
+					href: '/mobile-wireframe/notifications'
 				}
 			]
 		},

@@ -21,6 +21,7 @@ export type Device = {
 	fieldId?: string;
 	battery?: number;
 	status?: Status;
+	location?: Location;
 };
 
 export type Field = {

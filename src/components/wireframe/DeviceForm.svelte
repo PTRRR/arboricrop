@@ -32,7 +32,7 @@
 
 	let fieldId: string | undefined = device?.fieldId;
 	let currentMapLocation: Location = { x: -50, y: -50 };
-	let location: Location = {
+	let location: Location = device?.location || {
 		x: 40 + Math.random() * 20,
 		y: 40 + Math.random() * 20
 	};
@@ -50,7 +50,8 @@
 			medias,
 			fieldId,
 			firmwareVersion,
-			battery: device?.battery || 100
+			battery: device?.battery || 100,
+			location
 		};
 
 		onUpdate?.(device);
@@ -151,7 +152,14 @@
 			locations={[location]}
 			onChange={(location) => (currentMapLocation = location)}
 		/>
-		<Button on:click={() => (location = currentMapLocation)}>Set manual location</Button>
+		<Button
+			on:click={() => {
+				location = currentMapLocation;
+				updateDevice();
+			}}
+		>
+			Set manual location
+		</Button>
 
 		<label for="">Personal note:</label>
 		<textarea
