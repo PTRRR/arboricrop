@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { useDevices, useReturnButton } from '../../stores';
 	import type { Device } from '../../utils/types';
 	import Spacer from '../Spacer.svelte';
@@ -13,12 +14,16 @@
 
 	let returnButton = useReturnButton();
 
-	devices.subscribe((devices) => {
+	const unsubscribe = devices.subscribe((devices) => {
 		device = devices.find((it) => it.id === id);
 		returnButton.set({
 			label: device ? `${device?.name || ''}` : 'New device',
 			href: '/mobile-wireframe/devices'
 		});
+	});
+
+	onMount(() => {
+		return () => unsubscribe();
 	});
 </script>
 

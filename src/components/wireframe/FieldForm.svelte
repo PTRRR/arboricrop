@@ -1,5 +1,4 @@
 <script lang="ts">
-	import Spacer from '../Spacer.svelte';
 	import Button from './Button.svelte';
 	import { createId } from '@paralleldrive/cuid2';
 	import type { Field } from '../../utils/types';

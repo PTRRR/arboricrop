@@ -55,6 +55,10 @@
 
 				x = event.clientX;
 				y = event.clientY;
+
+				event.stopPropagation();
+				event.preventDefault();
+				event.stopImmediatePropagation();
 			}
 		};
 

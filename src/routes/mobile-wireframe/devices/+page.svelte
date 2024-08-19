@@ -7,8 +7,8 @@
 	let devices = useDevices();
 	let returnButton = useReturnButton();
 	returnButton.set({
-		label: 'Fields',
-		href: '/mobile-wireframe'
+		label: 'Devices',
+		href: '/mobile-wireframe/fields'
 	});
 </script>
 
