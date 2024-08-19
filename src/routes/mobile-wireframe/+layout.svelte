@@ -27,7 +27,7 @@
 			href: '/mobile-wireframe'
 		},
 		{
-			label: 'Devices',
+			label: 'Fields',
 			href: '/mobile-wireframe/devices'
 		},
 		{
@@ -43,7 +43,7 @@
 	let blurApp = useBlurApp();
 
 	navigating.subscribe(async (navigating) => {
-		if (Boolean(navigating)) {
+		if (navigating) {
 			blurApp.set(false);
 		}
 	});
