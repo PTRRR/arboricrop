@@ -1,6 +1,6 @@
 import { readable, writable } from 'svelte/store';
 import { getContext, hasContext, setContext } from 'svelte';
-import { getDevices } from './utils/devices';
+import { getDevices, getFields } from './utils/dummyData';
 import type { comment } from './db/schema';
 
 const STORE_VERSION = 'v2';
@@ -40,7 +40,7 @@ export const useReadable = <T>(name: string, value: T) => useSharedStore(name, r
 // Stores
 
 export const useDevices = () => useWritable('devices', getDevices(30), true);
-export const useFields = () => useWritable('fields', getDevices(30), true);
+export const useFields = () => useWritable('fields', getFields(), true);
 export const useBlurApp = () => useWritable('blur-app', false);
 export const useUserName = () => useWritable('user-name', '', true);
 export const useComments = () => useWritable<(typeof comment.$inferSelect)[]>('comments', []);

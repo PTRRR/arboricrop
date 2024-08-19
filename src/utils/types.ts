@@ -22,3 +22,9 @@ export type Device = {
 	battery?: number;
 	status?: Status;
 };
+
+export type Field = {
+	id: string;
+	name: string;
+	type: string;
+};

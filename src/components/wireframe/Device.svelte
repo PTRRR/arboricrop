@@ -27,7 +27,6 @@
 		<DeviceForm
 			{device}
 			{isNewDevice}
-			locations
 			onUpdate={(device) => {
 				const deviceIndex = $devices.findIndex((it) => it.id === device.id);
 

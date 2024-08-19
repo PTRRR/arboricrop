@@ -7,7 +7,14 @@
 	import Dropdown from '../../components/wireframe/Dropdown.svelte';
 	import FooterMenu from '../../components/wireframe/FooterMenu.svelte';
 	import Menu from '../../components/wireframe/Menu.svelte';
-	import { useBlurApp, useComments, useDevices, useReturnButton, useUserName } from '../../stores';
+	import {
+		useBlurApp,
+		useComments,
+		useDevices,
+		useFields,
+		useReturnButton,
+		useUserName
+	} from '../../stores';
 	import { strategies } from '../../utils/pairing';
 	import { iphone } from '../../utils/phones';
 	import type { LayoutData } from './$types';
@@ -28,7 +35,7 @@
 		},
 		{
 			label: 'Fields',
-			href: '/mobile-wireframe/devices'
+			href: '/mobile-wireframe/fields'
 		},
 		{
 			label: 'Pair device',
@@ -37,6 +44,7 @@
 	];
 
 	const returnButton = useReturnButton();
+	useFields();
 	useDevices();
 	useUserName();
 	useComments();
