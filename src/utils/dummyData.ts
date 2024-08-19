@@ -5,20 +5,17 @@ export const getFields = (): Field[] => [
 	{
 		id: createId(),
 		name: 'Fruit plantation',
-		type: 'Fruits',
-		devices: []
+		type: 'Fruits'
 	},
 	{
 		id: createId(),
 		name: 'Vignard',
-		type: 'Wine',
-		devices: []
+		type: 'Wine'
 	},
 	{
 		id: createId(),
 		name: 'Apples',
-		type: 'Apples',
-		devices: []
+		type: 'Apples'
 	}
 ];
 
@@ -31,3 +28,7 @@ export const getDevices = (count: number = 30): Device[] =>
 		firmwareVersion: 'v1.0.9',
 		status: 'active'
 	}));
+
+export const getDevicesByFieldId = (devices: Device[], fieldId?: string) => {
+	return devices.filter((it) => it.fieldId === fieldId);
+};

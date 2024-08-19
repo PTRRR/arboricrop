@@ -29,8 +29,7 @@
 			onSave?.({
 				id: id.value,
 				name: name.value,
-				type: type.value,
-				devices: field?.devices || []
+				type: type.value
 			})}
 	>
 		Save

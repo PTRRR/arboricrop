@@ -2,6 +2,7 @@
 	import Card from '../../components/wireframe/Card.svelte';
 	import { useDevices, useFields, useReturnButton } from '../../stores';
 	import { shuffle } from '../../utils/arrays';
+	import { getDevicesByFieldId } from '../../utils/dummyData';
 
 	let returnButton = useReturnButton();
 	returnButton.set({
@@ -47,7 +48,7 @@
 			title: 'Recent Fields',
 			cards: randomFields.map((it) => ({
 				title: it.name || '',
-				subTitle: `${it.type} [${it.devices.length} devices]`,
+				subTitle: `${it.type} [${getDevicesByFieldId($devices, it.id).length} devices]`,
 				href: `/mobile-wireframe/fields/${it.id}`
 			}))
 		}

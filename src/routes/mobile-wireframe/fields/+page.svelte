@@ -3,7 +3,8 @@
 	import Button from '../../../components/wireframe/Button.svelte';
 	import Card from '../../../components/wireframe/Card.svelte';
 	import Line from '../../../components/wireframe/Line.svelte';
-	import { useFields, useReturnButton } from '../../../stores';
+	import { useDevices, useFields, useReturnButton } from '../../../stores';
+	import { getDevicesByFieldId } from '../../../utils/dummyData';
 
 	let returnButton = useReturnButton();
 	returnButton.set({
@@ -12,6 +13,7 @@
 	});
 
 	const fields = useFields();
+	const devices = useDevices();
 </script>
 
 <div class="fields">
@@ -23,7 +25,9 @@
 		{#each $fields as field}
 			<Card href={`/mobile-wireframe/fields/${field.id}`}>
 				<h5 slot="title">{field.name}</h5>
-				<span slot="subTitle">{field.type} [{field.devices.length} devices]</span>
+				<span slot="subTitle">
+					{field.type} [{getDevicesByFieldId($devices, field.id).length} devices]
+				</span>
 			</Card>
 		{/each}
 	</div>

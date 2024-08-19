@@ -7,15 +7,16 @@
 	import FieldForm from '../../../../components/wireframe/FieldForm.svelte';
 	import Line from '../../../../components/wireframe/Line.svelte';
 	import { useDevices, useFields, useReturnButton } from '../../../../stores';
+	import { getDevicesByFieldId } from '../../../../utils/dummyData';
 	import type { Device } from '../../../../utils/types';
 
 	const fields = useFields();
 	const devices = useDevices();
 	const returnButton = useReturnButton();
-
-	$: fieldIndex = $fields.findIndex((it) => it.id === $page.params.fieldId);
-	$: field = $fields.find((it) => it.id === $page.params.fieldId);
 	let selectedDevices: Device[] = [];
+
+	$: field = $fields.find((it) => it.id === $page.params.fieldId);
+	$: fieldDevices = getDevicesByFieldId($devices, field?.id);
 
 	$: {
 		if (field) {
@@ -27,21 +28,9 @@
 	}
 
 	$: isSelected = (device: Device) => selectedDevices.some((it) => it.id === device.id);
-	$: getDeviceById = (id: string) => $devices.find((it) => it.id === id);
-
-	$: {
-		if ($page.data.devices) {
-			updateSelectedDevices();
-		}
-	}
-
-	const updateSelectedDevices = () =>
-		(selectedDevices = field?.devices
-			.map((id) => $devices.find((it) => it.id === id))
-			.filter((it) => it) as Device[]);
 
 	onMount(() => {
-		updateSelectedDevices();
+		selectedDevices = fieldDevices;
 	});
 </script>
 
@@ -73,17 +62,35 @@
 			<Button
 				href={window.location.pathname}
 				on:click={() => {
-					if (fieldIndex > -1 && field) {
-						let newFields = [...$fields];
-						newFields[fieldIndex] = {
-							...field,
-							devices: selectedDevices.map((it) => it.id)
-						};
-						fields.set(newFields);
+					const fieldDevicesIds = fieldDevices.map((it) => it.id);
+					const selectedIds = selectedDevices.map((it) => it.id);
+
+					const newDevices = [...$devices];
+
+					for (let i = 0; i < newDevices.length; i++) {
+						if (
+							fieldDevicesIds.includes(newDevices[i].id) &&
+							!selectedIds.includes(newDevices[i].id)
+						) {
+							newDevices[i] = {
+								...newDevices[i],
+								fieldId: undefined
+							};
+						}
+
+						if (selectedIds.includes(newDevices[i].id)) {
+							newDevices[i] = {
+								...newDevices[i],
+								fieldId: field?.id
+							};
+						}
 					}
-					selectedDevices = [];
-				}}>Save</Button
+
+					devices.set(newDevices);
+				}}
 			>
+				Save
+			</Button>
 			<Spacer size="0.5rem" />
 			<Button href={window.location.pathname} on:click={() => (selectedDevices = [])}>
 				Cancel
@@ -114,18 +121,18 @@
 			<Line />
 			<Spacer size="1rem" />
 
-			{#each field?.devices || [] as device}
-				{#if getDeviceById(device)}
-					<Button minimal href={`/mobile-wireframe/devices/${getDeviceById(device)?.id}`}>
+			{#each fieldDevices as device}
+				{#if device}
+					<Button minimal href={`/mobile-wireframe/devices/${device.id}`}>
 						<div class="device">
-							<span class="device-name">{getDeviceById(device)?.name}</span>
-							<span class="device-id">{getDeviceById(device)?.id}</span>
+							<span class="device-name">{device.name}</span>
+							<span class="device-id">{device.id}</span>
 						</div>
 					</Button>
 				{/if}
 			{/each}
 
-			{#if (field?.devices || []).length === 0}
+			{#if fieldDevices.length === 0}
 				<span>No devices</span>
 			{/if}
 

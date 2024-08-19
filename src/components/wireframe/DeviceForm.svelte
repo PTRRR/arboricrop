@@ -17,7 +17,7 @@
 	export let isNewDevice: boolean | undefined = undefined;
 
 	const fields = useFields();
-	$: selectedField = $fields.find((it) => it.devices.includes(device?.id || ''));
+	$: selectedField = $fields.find((it) => it.id === device?.fieldId);
 
 	let name: HTMLInputElement;
 	let note: HTMLTextAreaElement;
@@ -30,6 +30,7 @@
 		{ label: 'File', type: 'file' }
 	];
 
+	let fieldId: string | undefined = device?.fieldId;
 	let currentMapLocation: Location = { x: -50, y: -50 };
 	let location: Location = {
 		x: 40 + Math.random() * 20,
@@ -47,6 +48,7 @@
 			name: name.value,
 			note: note.value,
 			medias,
+			fieldId,
 			firmwareVersion,
 			battery: device?.battery || 100
 		};
@@ -194,13 +196,7 @@
 				slot="item"
 				let:item
 				on:click={() => {
-					const fieldIndex = $fields.findIndex((it) => it.id === item.id);
-					if (fieldIndex > -1 && device?.id) {
-						const newFields = [...$fields];
-						newFields[fieldIndex].devices = [...newFields[fieldIndex].devices, device.id];
-						fields.set(newFields);
-						console.log(newFields);
-					}
+					fieldId = item.id;
 					updateDevice();
 				}}
 			>

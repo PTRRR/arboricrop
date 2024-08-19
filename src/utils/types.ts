@@ -18,7 +18,7 @@ export type Device = {
 	note?: string;
 	firmwareVersion?: string;
 	medias: Media[];
-	group?: string;
+	fieldId?: string;
 	battery?: number;
 	status?: Status;
 };
@@ -27,5 +27,4 @@ export type Field = {
 	id: string;
 	name: string;
 	type: string;
-	devices: string[];
 };
