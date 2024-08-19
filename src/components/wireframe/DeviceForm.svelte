@@ -10,15 +10,18 @@
 	import type { Device, Media, MediaType, Location } from '../../utils/types';
 	import Line from './Line.svelte';
 	import Map from './Map.svelte';
+	import { useFields } from '../../stores';
 
 	export let device: Device | undefined = undefined;
 	export let onUpdate: ((device: Device) => void) | undefined = undefined;
 	export let isNewDevice: boolean | undefined = undefined;
 
+	const fields = useFields();
+	$: selectedField = $fields.find((it) => it.devices.includes(device?.id || ''));
+
 	let name: HTMLInputElement;
 	let note: HTMLTextAreaElement;
 	let firmwareVersion = device?.firmwareVersion || 'v1.0.9';
-	let selectedGroup: string | undefined = undefined;
 	let upgradeTimer: NodeJS.Timeout | undefined = undefined;
 	let success = false;
 	let mediaOptions: { label: string; type: MediaType }[] = [
@@ -44,7 +47,6 @@
 			name: name.value,
 			note: note.value,
 			medias,
-			group: selectedGroup,
 			firmwareVersion,
 			battery: device?.battery || 100
 		};
@@ -183,16 +185,22 @@
 			</div>
 			<Spacer size="1rem" />
 		{/if}
-		<label for="">Group:</label>
+		<label for="">Field:</label>
 		<Dropdown
-			label={selectedGroup || 'Select group'}
-			items={[{ label: 'Tomatoes' }, { label: 'Vignard' }, { label: 'Fruits plantation' }]}
+			label={selectedField?.name || 'Select a field'}
+			items={$fields.map((it) => ({ label: it.name, id: it.id }))}
 		>
 			<Button
 				slot="item"
 				let:item
 				on:click={() => {
-					selectedGroup = item.label;
+					const fieldIndex = $fields.findIndex((it) => it.id === item.id);
+					if (fieldIndex > -1 && device?.id) {
+						const newFields = [...$fields];
+						newFields[fieldIndex].devices = [...newFields[fieldIndex].devices, device.id];
+						fields.set(newFields);
+						console.log(newFields);
+					}
 					updateDevice();
 				}}
 			>
