@@ -198,7 +198,10 @@
 		<label for="">Field:</label>
 		<Dropdown
 			label={selectedField?.name || 'Select a field'}
-			items={$fields.map((it) => ({ label: it.name, id: it.id }))}
+			items={[
+				...$fields.map((it) => ({ label: it.name, id: it.id })),
+				{ id: undefined, label: 'Clear' }
+			]}
 		>
 			<Button
 				slot="item"

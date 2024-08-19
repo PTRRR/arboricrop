@@ -123,6 +123,11 @@
 			<Line />
 			<Spacer size="1rem" />
 
+			{#if deviceLocations.length > 0}
+				<Map locations={deviceLocations} />
+				<Spacer size="1rem" />
+			{/if}
+
 			{#each fieldDevices as device}
 				{#if device}
 					<Button minimal href={`/mobile-wireframe/devices/${device.id}`}>
@@ -136,11 +141,6 @@
 
 			{#if fieldDevices.length === 0}
 				<span>No devices</span>
-			{/if}
-
-			{#if deviceLocations.length > 0}
-				<Spacer size="1rem" />
-				<Map locations={deviceLocations} />
 			{/if}
 
 			<Spacer size="1rem" />
