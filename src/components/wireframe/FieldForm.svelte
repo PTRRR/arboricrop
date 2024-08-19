@@ -7,6 +7,7 @@
 	export let field: Field | undefined = undefined;
 	export let onSave: ((field: Field) => void) | undefined = undefined;
 	export let onDelete: ((id: string) => void) | undefined = undefined;
+	export let onCancel: (() => void) | undefined = undefined;
 
 	let id: HTMLInputElement;
 	let name: HTMLInputElement;
@@ -23,17 +24,18 @@
 
 	<slot />
 
-	<Spacer size="2rem" />
 	<Button
 		on:click={() =>
 			onSave?.({
 				id: id.value,
 				name: name.value,
-				type: type.value
+				type: type.value,
+				devices: field?.devices || []
 			})}
 	>
 		Save
 	</Button>
+	<Button on:click={() => onCancel?.()}>Cancel</Button>
 
 	{#if field}
 		<Button on:click={() => onDelete?.(id.value)}>Delete</Button>
@@ -47,8 +49,7 @@
 		gap: 0.5rem;
 	}
 
-	input,
-	textarea {
+	input {
 		font-family: inherit;
 		font-size: inherit;
 		padding: 1rem;

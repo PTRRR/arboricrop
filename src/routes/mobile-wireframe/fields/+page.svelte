@@ -2,6 +2,7 @@
 	import Spacer from '../../../components/Spacer.svelte';
 	import Button from '../../../components/wireframe/Button.svelte';
 	import Card from '../../../components/wireframe/Card.svelte';
+	import Line from '../../../components/wireframe/Line.svelte';
 	import { useFields, useReturnButton } from '../../../stores';
 
 	let returnButton = useReturnButton();
@@ -22,13 +23,20 @@
 		{#each $fields as field}
 			<Card href={`/mobile-wireframe/fields/${field.id}`}>
 				<h5 slot="title">{field.name}</h5>
-				<span slot="subTitle">{field.type}</span>
+				<span slot="subTitle">{field.type} [{field.devices.length} devices]</span>
 			</Card>
 		{/each}
 	</div>
+	<Spacer size="1.5rem" />
+	<Button href="/mobile-wireframe/devices">See all devices</Button>
 </div>
 
 <style>
+	.fields {
+		display: flex;
+		flex-direction: column;
+	}
+
 	.fields__pair-button {
 		position: sticky;
 		top: 7rem;

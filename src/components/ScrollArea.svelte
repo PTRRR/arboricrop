@@ -20,9 +20,11 @@
 <style>
 	:global(.scroll-area__root) {
 		height: 100%;
+		width: 100%;
 	}
 
 	:global(.scroll-area__viewport) {
 		height: 100%;
+		width: 100%;
 	}
 </style>

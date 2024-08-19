@@ -5,17 +5,20 @@ export const getFields = (): Field[] => [
 	{
 		id: createId(),
 		name: 'Fruit plantation',
-		type: 'Fruits'
+		type: 'Fruits',
+		devices: []
 	},
 	{
 		id: createId(),
 		name: 'Vignard',
-		type: 'Wine'
+		type: 'Wine',
+		devices: []
 	},
 	{
 		id: createId(),
 		name: 'Apples',
-		type: 'Apples'
+		type: 'Apples',
+		devices: []
 	}
 ];
 

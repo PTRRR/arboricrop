@@ -16,4 +16,5 @@
 		fields.set([...$fields, field]);
 		goto(`/mobile-wireframe/fields/${field.id}`);
 	}}
+	onCancel={() => goto('/mobile-wireframe/fields')}
 />

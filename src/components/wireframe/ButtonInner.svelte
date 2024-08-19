@@ -2,6 +2,7 @@
 	export let disabled: boolean = false;
 	export let border: boolean = false;
 	export let minimal: boolean = false;
+	export let selected: boolean = false;
 </script>
 
 <div
@@ -9,6 +10,7 @@
 	class:button-inner--disabled={disabled}
 	class:button-inner--border={border}
 	class:button-inner--minimal={minimal}
+	class:button-inner--selected={selected}
 >
 	<slot />
 </div>
@@ -41,6 +43,11 @@
 		padding: 0;
 		border: none;
 		background-color: transparent;
+	}
+
+	.button-inner--selected {
+		background-color: var(--black);
+		color: var(--light-gray);
 	}
 
 	.button-inner--minimal:hover {

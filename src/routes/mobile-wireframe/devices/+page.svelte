@@ -14,7 +14,7 @@
 
 <div class="devices">
 	<div class="devices__pair-button">
-		<Button href="/mobile-wireframe/devices/pairing">Create new field</Button>
+		<Button href="/mobile-wireframe/devices/pairing">Pair device</Button>
 		<Spacer size="1.5rem"></Spacer>
 	</div>
 	<div class="devices__list">

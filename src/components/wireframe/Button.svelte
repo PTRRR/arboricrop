@@ -12,11 +12,12 @@
 	export let builders: Builder[] = [];
 	export let href: string | undefined = undefined;
 	export let minimal: boolean = false;
+	export let selected: boolean = false;
 </script>
 
 {#if href}
 	<a class="button" data-sveltekit-preload-data="false" {style} {href} on:click>
-		<ButtonInner {disabled} {border} {minimal}>
+		<ButtonInner {disabled} {border} {minimal} {selected}>
 			<slot />
 		</ButtonInner>
 	</a>
@@ -32,7 +33,7 @@
 		formaction={formAction}
 		on:click
 	>
-		<ButtonInner {disabled} {border} {minimal}>
+		<ButtonInner {disabled} {border} {minimal} {selected}>
 			<slot />
 		</ButtonInner>
 	</Button.Root>
