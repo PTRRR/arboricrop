@@ -220,7 +220,11 @@
 				</Button>
 			{/if}
 
+			<label for="">Networking:</label>
+			<Button>Configure LoRa</Button>
+
 			{#if !isNewDevice}
+				<label for="">Devices:</label>
 				<Button href="/mobile-wireframe/devices">Remove device</Button>
 			{/if}
 		{/if}
