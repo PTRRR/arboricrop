@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Card from '../../components/wireframe/Card.svelte';
-	import { useDevices, useReturnButton } from '../../stores';
+	import { useDevices, useFields, useReturnButton } from '../../stores';
 	import { shuffle } from '../../utils/arrays';
 
 	let returnButton = useReturnButton();
@@ -9,7 +9,8 @@
 	});
 
 	const devices = useDevices();
-	const randomDevices = shuffle($devices).splice(0, 5);
+	const fields = useFields();
+	const randomFields = shuffle($fields).splice(0, 5);
 
 	type Section = {
 		title: string;
@@ -43,10 +44,11 @@
 			]
 		},
 		{
-			title: 'Recent Devices',
-			cards: randomDevices.map((it) => ({
+			title: 'Recent Fields',
+			cards: randomFields.map((it) => ({
 				title: it.name || '',
-				href: `/mobile-wireframe/devices/${it.id}`
+				subTitle: `${it.type} [${it.devices.length} devices]`,
+				href: `/mobile-wireframe/fields/${it.id}`
 			}))
 		}
 	];
