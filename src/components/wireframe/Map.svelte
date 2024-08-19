@@ -2,8 +2,11 @@
 	import { onMount } from 'svelte';
 	import { getCss } from '../../utils/css';
 	import { clamp } from '../../utils/math';
+	import type { Location } from '../../utils/types';
 
+	export let locations: Location[] = [];
 	export let showTarget: boolean = false;
+	export let onChange: ((location: Location) => void) | undefined = undefined;
 
 	const lineCount = 20;
 	let map: HTMLDivElement;
@@ -11,10 +14,14 @@
 	let currentY = -50;
 
 	onMount(() => {
-		console.log(map);
 		let lock = false;
 		let x = 0;
 		let y = 0;
+
+		onChange?.({
+			x: Math.abs(currentX),
+			y: Math.abs(currentY)
+		});
 
 		const handlePointerDown = (event: MouseEvent) => {
 			lock = true;
@@ -40,6 +47,11 @@
 
 				currentX = clamp(currentX, -100 + (box.width / width) * 50, -(box.width / width) * 50);
 				currentY = clamp(currentY, -100 + (box.height / height) * 50, -(box.height / height) * 50);
+
+				onChange?.({
+					x: Math.abs(currentX),
+					y: Math.abs(currentY)
+				});
 
 				x = event.clientX;
 				y = event.clientY;
@@ -79,6 +91,15 @@
 				class="map__line map__line-vertical"
 				style={getCss({
 					left: `${index * (100 / lineCount)}%`
+				})}
+			></div>
+		{/each}
+		{#each locations as location}
+			<div
+				class="map__location"
+				style={getCss({
+					left: `${location.x}%`,
+					top: `${location.y}%`
 				})}
 			></div>
 		{/each}
@@ -150,5 +171,14 @@
 		width: 100%;
 		height: 0;
 		border-top: dashed 1px var(--dark-gray);
+	}
+
+	.map__location {
+		position: absolute;
+		transform: translate(-50%, -50%);
+		width: 10px;
+		height: 10px;
+		background-color: var(--black);
+		border-radius: 100%;
 	}
 </style>

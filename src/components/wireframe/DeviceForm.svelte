@@ -7,7 +7,7 @@
 	import { goto } from '$app/navigation';
 	import { createId } from '@paralleldrive/cuid2';
 	import Image from './Image.svelte';
-	import type { Device, Media, MediaType } from '../../utils/types';
+	import type { Device, Media, MediaType, Location } from '../../utils/types';
 	import Line from './Line.svelte';
 	import Map from './Map.svelte';
 
@@ -26,6 +26,12 @@
 		{ label: 'Audio note', type: 'audio-note' },
 		{ label: 'File', type: 'file' }
 	];
+
+	let currentMapLocation: Location = { x: -50, y: -50 };
+	let location: Location = {
+		x: 40 + Math.random() * 20,
+		y: 40 + Math.random() * 20
+	};
 
 	let medias: Media[] = device?.medias || [];
 	$: currentMedia = medias.find((it) => it.name === $page.data.media);
@@ -136,8 +142,12 @@
 		<Spacer size="1rem" />
 
 		<label for="">Location:</label>
-		<Map showTarget />
-		<Button>Set location</Button>
+		<Map
+			showTarget
+			locations={[location]}
+			onChange={(location) => (currentMapLocation = location)}
+		/>
+		<Button on:click={() => (location = currentMapLocation)}>Set manual location</Button>
 
 		<label for="">Personal note:</label>
 		<textarea

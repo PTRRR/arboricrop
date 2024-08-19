@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { page } from '$app/stores';
 	import { useDevices, useReturnButton } from '../../stores';
 	import type { Device } from '../../utils/types';
 	import Spacer from '../Spacer.svelte';
@@ -28,6 +27,7 @@
 		<DeviceForm
 			{device}
 			{isNewDevice}
+			locations
 			onUpdate={(device) => {
 				const deviceIndex = $devices.findIndex((it) => it.id === device.id);
 
