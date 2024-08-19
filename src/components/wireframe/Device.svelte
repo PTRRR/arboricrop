@@ -5,7 +5,9 @@
 	import Spacer from '../Spacer.svelte';
 	import Button from './Button.svelte';
 	import DeviceForm from './DeviceForm.svelte';
+	import Line from './Line.svelte';
 
+	export let isNewDevice: boolean | undefined = undefined;
 	export let id: string | undefined = undefined;
 	let device: Device | undefined = undefined;
 	const devices = useDevices();
@@ -25,6 +27,7 @@
 	{#if !id}
 		<DeviceForm
 			{device}
+			{isNewDevice}
 			onUpdate={(device) => {
 				const deviceIndex = $devices.findIndex((it) => it.id === device.id);
 
@@ -38,10 +41,13 @@
 				}
 			}}
 		/>
-		{#if !$page.data.firmwareUpdate}
-			<Spacer size="5rem" />
+		{#if isNewDevice}
+			<Spacer size="1rem" />
+			<span>New device detected:</span>
+			<Line />
+			<Spacer size="1rem" />
+
 			<div class="device__footer">
-				<p>New device detected</p>
 				<Button href="/mobile-wireframe/devices">Save new device to account</Button>
 				<Button href="/mobile-wireframe/devices">Cancel</Button>
 			</div>
@@ -49,6 +55,7 @@
 	{:else}
 		<DeviceForm
 			{device}
+			{isNewDevice}
 			onUpdate={(device) => {
 				const deviceIndex = $devices.findIndex((it) => it.id === device.id);
 
@@ -67,6 +74,7 @@
 		display: flex;
 		flex-direction: column;
 		flex: 1 1 auto;
+		gap: 0.5rem;
 	}
 
 	.device__footer {

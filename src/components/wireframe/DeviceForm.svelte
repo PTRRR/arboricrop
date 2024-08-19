@@ -8,9 +8,12 @@
 	import { createId } from '@paralleldrive/cuid2';
 	import Image from './Image.svelte';
 	import type { Device, Media, MediaType } from '../../utils/types';
+	import Line from './Line.svelte';
+	import Map from './Map.svelte';
 
 	export let device: Device | undefined = undefined;
 	export let onUpdate: ((device: Device) => void) | undefined = undefined;
+	export let isNewDevice: boolean | undefined = undefined;
 
 	let name: HTMLInputElement;
 	let note: HTMLTextAreaElement;
@@ -26,6 +29,7 @@
 
 	let medias: Media[] = device?.medias || [];
 	$: currentMedia = medias.find((it) => it.name === $page.data.media);
+	$: showAdvancedSettings = isNewDevice || firmwareVersion !== 'v1.1.0';
 
 	const updateDevice = () => {
 		device = {
@@ -103,8 +107,16 @@
 			</Button>
 		</div>
 	</div>
+{:else if $page.data.liveData}
+	<div class="device-live-data">
+		<Image placeholder="Console showing a stream of data coming from the device" ratio={1} />
+		<Button href={window.location.pathname}>Close</Button>
+	</div>
 {:else}
 	<div class="device-form">
+		<span>Global settings:</span>
+		<Line />
+		<Spacer size="1rem" />
 		<label for="">Device id:</label>
 		<input type="text" value={device?.id || 'dev-iros84fgka9mcka'} />
 		<label for="">Firmware version:</label>
@@ -117,6 +129,16 @@
 			value={device?.name || ''}
 			on:input={() => updateDevice()}
 		/>
+
+		<Spacer size="1rem" />
+		<span>Device metadata:</span>
+		<Line />
+		<Spacer size="1rem" />
+
+		<label for="">Location:</label>
+		<Map showTarget />
+		<Button>Set location</Button>
+
 		<label for="">Personal note:</label>
 		<textarea
 			placeholder="Your note..."
@@ -124,7 +146,6 @@
 			value={device?.note || ''}
 			on:input={() => updateDevice()}
 		/>
-		<Spacer size="2rem" />
 		<label for="">Medias:</label>
 		<Dropdown label="Add media" items={mediaOptions}>
 			<Button
@@ -143,14 +164,15 @@
 				{item.label}
 			</Button>
 		</Dropdown>
-		<div class="device-form__files">
-			{#each medias as media}
-				<Spacer size="0.5rem" />
-				<Button minimal href={`?media=${encodeURIComponent(media.name)}`}>{media.name}</Button>
-			{/each}
-		</div>
-
-		<Spacer size="2rem" />
+		{#if medias.length > 0}
+			<div class="device-form__files">
+				{#each medias as media}
+					<Spacer size="0.5rem" />
+					<Button minimal href={`?media=${encodeURIComponent(media.name)}`}>{media.name}</Button>
+				{/each}
+			</div>
+			<Spacer size="1rem" />
+		{/if}
 		<label for="">Group:</label>
 		<Dropdown
 			label={selectedGroup || 'Select group'}
@@ -168,19 +190,37 @@
 			</Button>
 		</Dropdown>
 
-		{#if firmwareVersion !== 'v1.1.0'}
-			<Spacer size="5rem" />
-			<label for="">New firmware version available:</label>
-			<Button href="?firmwareUpdate=true" on:click={() => startUpgradeTimer()}>
-				Upgrade to v1.1.0
-			</Button>
+		<Spacer size="1rem" />
+		<span>Troubleshooting:</span>
+		<Line />
+		<Spacer size="1rem" />
+
+		<Button href="?liveData=true">Show live data</Button>
+
+		{#if showAdvancedSettings}
+			<Spacer size="1rem" />
+			<span>Advanced settings:</span>
+			<Line />
+			<Spacer size="1rem" />
+
+			{#if firmwareVersion !== 'v1.1.0'}
+				<label for="">New firmware version available:</label>
+				<Button href="?firmwareUpdate=true" on:click={() => startUpgradeTimer()}>
+					Upgrade to v1.1.0
+				</Button>
+			{/if}
+
+			{#if !isNewDevice}
+				<Button href="/mobile-wireframe/devices">Remove device</Button>
+			{/if}
 		{/if}
 	</div>
 {/if}
 
 <style>
 	.device-upgrade,
-	.device-file {
+	.device-file,
+	.device-live-data {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;

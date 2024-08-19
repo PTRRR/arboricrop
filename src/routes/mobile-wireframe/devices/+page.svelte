@@ -4,13 +4,12 @@
 	import Card from '../../../components/wireframe/Card.svelte';
 	import { useDevices, useReturnButton } from '../../../stores';
 
+	let devices = useDevices();
 	let returnButton = useReturnButton();
 	returnButton.set({
 		label: 'Devices',
 		href: '/mobile-wireframe'
 	});
-
-	let devices = useDevices();
 </script>
 
 <div class="devices">
