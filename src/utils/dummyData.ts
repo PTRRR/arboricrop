@@ -26,7 +26,11 @@ export const getDevices = (count: number = 30): Device[] =>
 		battery: Math.floor(Math.random() * 100),
 		medias: [],
 		firmwareVersion: 'v1.0.9',
-		status: 'active'
+		status: 'active',
+		location: {
+			x: 40 + 20 * Math.random(),
+			y: 40 + 20 * Math.random()
+		}
 	}));
 
 export const getDevicesByFieldId = (devices: Device[], fieldId?: string) => {
