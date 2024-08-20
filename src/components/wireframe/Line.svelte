@@ -3,6 +3,7 @@
 
 	export let direction: 'horizontal' | 'vertical' = 'horizontal';
 	export let size: string | undefined = undefined;
+	export let color: string | undefined = undefined;
 </script>
 
 <div
@@ -11,16 +12,17 @@
 	class:line--vertical={direction === 'vertical'}
 	style={getCss({
 		...(direction === 'horizontal' && { height: size || '' }),
-		...(direction === 'vertical' && { width: size || '' })
+		...(direction === 'vertical' && { width: size || '' }),
+		...(color && { color })
 	})}
 ></div>
 
 <style>
 	.line--horizontal {
-		border-top: solid black 1px;
+		border-top: solid 1px;
 	}
 
 	.line--vertical {
-		border-top: solid black 1px;
+		border-top: solid 1px;
 	}
 </style>

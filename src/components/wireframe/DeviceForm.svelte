@@ -11,6 +11,7 @@
 	import Line from './Line.svelte';
 	import Map from './Map.svelte';
 	import { useFields } from '../../stores';
+	import Separation from './Separation.svelte';
 
 	export let device: Device | undefined = undefined;
 	export let onUpdate: ((device: Device) => void) | undefined = undefined;
@@ -125,9 +126,7 @@
 	</div>
 {:else}
 	<div class="device-form">
-		<span>Global settings:</span>
-		<Line />
-		<Spacer size="1rem" />
+		<Separation title="Global settings:" />
 		<label for="">Device id:</label>
 		<input type="text" value={device?.id || 'dev-iros84fgka9mcka'} />
 		<label for="">Firmware version:</label>
@@ -141,12 +140,9 @@
 			on:input={() => updateDevice()}
 		/>
 
-		<Spacer size="1rem" />
-		<span>Device metadata:</span>
-		<Line />
-		<Spacer size="1rem" />
+		<Spacer size="var(--gap)" />
+		<Separation title="Device metadata:" />
 
-		<label for="">Location:</label>
 		<Map
 			showTarget
 			locations={[location]}
@@ -161,6 +157,8 @@
 			Set manual location
 		</Button>
 
+		<Spacer size="var(--gap)" />
+
 		<label for="">Personal note:</label>
 		<textarea
 			placeholder="Your note..."
@@ -168,6 +166,9 @@
 			value={device?.note || ''}
 			on:input={() => updateDevice()}
 		/>
+
+		<Spacer size="var(--gap)" />
+
 		<label for="">Medias:</label>
 		<Dropdown label="Add media" items={mediaOptions}>
 			<Button
@@ -186,6 +187,7 @@
 				{item.label}
 			</Button>
 		</Dropdown>
+
 		{#if medias.length > 0}
 			<div class="device-form__files">
 				{#each medias as media}
@@ -193,8 +195,11 @@
 					<Button minimal href={`?media=${encodeURIComponent(media.name)}`}>{media.name}</Button>
 				{/each}
 			</div>
-			<Spacer size="1rem" />
+			<Spacer size="var(--gap)" />
 		{/if}
+
+		<Spacer size="var(--gap)" />
+
 		<label for="">Field:</label>
 		<Dropdown
 			label={selectedField?.name || 'Select a field'}
@@ -215,18 +220,14 @@
 			</Button>
 		</Dropdown>
 
-		<Spacer size="1rem" />
-		<span>Troubleshooting:</span>
-		<Line />
-		<Spacer size="1rem" />
+		<Spacer size="var(--gap)" />
+		<Separation title="Troubleshooting:" />
 
 		<Button href="?liveData=true">Show live data</Button>
 
 		{#if showAdvancedSettings}
-			<Spacer size="1rem" />
-			<span>Advanced settings:</span>
-			<Line />
-			<Spacer size="1rem" />
+			<Spacer size="var(--gap)" />
+			<Separation title="Advanced settings:" />
 
 			{#if firmwareVersion !== 'v1.1.0'}
 				<label for="">New firmware version available:</label>

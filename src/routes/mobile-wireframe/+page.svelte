@@ -1,5 +1,9 @@
 <script lang="ts">
+	import Spacer from '../../components/Spacer.svelte';
+	import Button from '../../components/wireframe/Button.svelte';
 	import Card from '../../components/wireframe/Card.svelte';
+	import Line from '../../components/wireframe/Line.svelte';
+	import Separation from '../../components/wireframe/Separation.svelte';
 	import { useDevices, useFields, useReturnButton } from '../../stores';
 	import { shuffle } from '../../utils/arrays';
 	import { getDevicesByFieldId } from '../../utils/dummyData';
@@ -59,9 +63,7 @@
 <div class="home">
 	{#each sections as section}
 		<div class="home__section">
-			<div class="home__section-title">
-				<h5>{section.title}</h5>
-			</div>
+			<Separation title={section.title} />
 
 			{#each section.cards as card}
 				<Card href={card.href}>
@@ -77,6 +79,10 @@
 					</svelte:fragment>
 				</Card>
 			{/each}
+
+			{#if section.title === 'Recent Fields'}
+				<Button>See all fields</Button>
+			{/if}
 		</div>
 	{/each}
 </div>
@@ -89,10 +95,6 @@
 	}
 
 	.home__section + .home__section {
-		margin-top: 1rem;
-	}
-
-	.home__section-title {
-		color: var(--dark-gray);
+		margin-top: calc(var(--gap) * 4);
 	}
 </style>

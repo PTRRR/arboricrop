@@ -10,6 +10,7 @@
 	import { getDevicesByFieldId } from '../../../../utils/dummyData';
 	import type { Device, Location } from '../../../../utils/types';
 	import Map from '../../../../components/wireframe/Map.svelte';
+	import Separation from '../../../../components/wireframe/Separation.svelte';
 
 	const fields = useFields();
 	const devices = useDevices();
@@ -118,14 +119,12 @@
 				goto('/mobile-wireframe/fields');
 			}}
 		>
-			<Spacer size="1rem" />
-			<span>Devices:</span>
-			<Line />
-			<Spacer size="1rem" />
+			<Spacer size="var(--gap)" />
+			<Separation title="Devices:" />
 
 			{#if deviceLocations.length > 0}
 				<Map locations={deviceLocations} />
-				<Spacer size="1rem" />
+				<Spacer size="var(--gap)" />
 			{/if}
 
 			{#each fieldDevices as device}
@@ -143,12 +142,12 @@
 				<span>No devices</span>
 			{/if}
 
-			<Spacer size="1rem" />
+			<Spacer size="var(--gap)" />
 			<Button href={`${window.location.pathname}?devices=true`}>Add devices</Button>
 
-			<Spacer size="1rem" />
-			<Line />
-			<Spacer size="1rem" />
+			<Spacer size="var(--gap)" />
+			<Separation />
+			<Spacer size="var(--gap)" />
 		</FieldForm>
 	{/if}
 </div>
