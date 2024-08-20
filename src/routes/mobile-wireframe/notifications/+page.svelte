@@ -1,31 +1,58 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import Spacer from '../../../components/Spacer.svelte';
 	import Button from '../../../components/wireframe/Button.svelte';
 	import Card from '../../../components/wireframe/Card.svelte';
 	import Separation from '../../../components/wireframe/Separation.svelte';
 	import { useNotifications, useReturnButton } from '../../../stores';
-	import type { Notification, NotificationType } from '../../../utils/types';
+	import type { NotificationType } from '../../../utils/types';
 
 	const returnButton = useReturnButton();
 	const notifications = useNotifications();
+
+	$: filter = $page.data.filter as NotificationType;
+	$: aknowledgedNotifications = $notifications.filter((it) => it.status !== 'acknowledged');
+
+	$: filteredNotifications = filter
+		? aknowledgedNotifications.filter((it) => it.type === filter)
+		: aknowledgedNotifications;
 
 	returnButton.set({
 		label: 'Notifications',
 		href: '/mobile-wireframe'
 	});
-
-	let filter: NotificationType | undefined = undefined;
 </script>
 
 <div class="notifications">
 	<div class="notifications_filters">
-		<Button>Alerts</Button>
-		<Button>Warnings</Button>
-		<Button>Notifications</Button>
+		<Button
+			selected={filter === 'alert'}
+			href={filter === 'alert'
+				? window.location.pathname
+				: `${window.location.pathname}?filter=alert`}
+		>
+			Alerts
+		</Button>
+		<Button
+			selected={filter === 'warning'}
+			href={filter === 'warning'
+				? window.location.pathname
+				: `${window.location.pathname}?filter=warning`}
+		>
+			Warnings
+		</Button>
+		<Button
+			selected={filter === 'notification'}
+			href={filter === 'notification'
+				? window.location.pathname
+				: `${window.location.pathname}?filter=notification`}
+		>
+			Notifications
+		</Button>
 	</div>
 	<Spacer size="calc(var(--gap) * 2)" />
 	<Separation title="Notifications & Alerts:" />
-	{#each $notifications.filter((it) => it.status !== 'acknowledged') as notification}
+	{#each filteredNotifications as notification}
 		<div class="notifications__item">
 			<Card href={`/mobile-wireframe/notifications/${notification.id}`}>
 				<h4 slot="title">

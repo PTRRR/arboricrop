@@ -35,6 +35,7 @@ export type NotificationStatus = 'pending' | 'acknowledged';
 
 export type Notification = {
 	id: string;
+	date: string;
 	title: string;
 	text: string;
 	type: NotificationType;

@@ -3,7 +3,7 @@ import { getContext, hasContext, setContext } from 'svelte';
 import { getDevices, getFields, getNotifications } from './utils/dummyData';
 import type { comment } from './db/schema';
 
-const STORE_VERSION = 'v4';
+const STORE_VERSION = 'v5';
 const dummyDevices = getDevices(30);
 const dummyNotifications = getNotifications(dummyDevices);
 

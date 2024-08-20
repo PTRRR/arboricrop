@@ -1,6 +1,7 @@
 import { createId } from '@paralleldrive/cuid2';
 import type { Device, Field, Notification } from './types';
 import { shuffle } from './arrays';
+import { getRandomDate } from './dates';
 
 export const getFields = (): Field[] => [
 	{
@@ -38,7 +39,7 @@ export const getDevicesByFieldId = (devices: Device[], fieldId?: string) => {
 	return devices.filter((it) => it.fieldId === fieldId);
 };
 
-export const dummyNotificationContents: Omit<Notification, 'id' | 'deviceId'>[] = [
+export const dummyNotificationContents: Omit<Notification, 'id' | 'deviceId' | 'date'>[] = [
 	{
 		title: 'Low Battery Alert',
 		text: "Your device's battery is low. Please recharge soon.",
@@ -190,6 +191,7 @@ export const getNotifications = (devices: Device[]): Notification[] => {
 		return {
 			id: `not-${createId()}`,
 			deviceId: it.id,
+			date: getRandomDate(new Date('2024-08-01'), new Date('2024-08-30')),
 			...randomContent
 		};
 	});
