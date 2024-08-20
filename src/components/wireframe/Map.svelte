@@ -3,15 +3,27 @@
 	import { getCss } from '../../utils/css';
 	import { clamp } from '../../utils/math';
 	import type { Location } from '../../utils/types';
+	import { useScrollLock } from '../../stores';
 
 	export let locations: Location[] = [];
 	export let showTarget: boolean = false;
 	export let onChange: ((location: Location) => void) | undefined = undefined;
 
+	const scrollLock = useScrollLock();
+
 	const lineCount = 20;
 	let map: HTMLDivElement;
 	let currentX = -50;
 	let currentY = -50;
+
+	let unlockTmeout: NodeJS.Timeout | undefined = undefined;
+	const resetUnlockTimeout = () => {
+		scrollLock.set(true);
+		clearTimeout(unlockTmeout);
+		unlockTmeout = setTimeout(() => {
+			scrollLock.set(false);
+		}, 500);
+	};
 
 	onMount(() => {
 		let lock = false;
@@ -27,10 +39,13 @@
 			lock = true;
 			x = event.clientX;
 			y = event.clientY;
+			scrollLock.set(true);
+			resetUnlockTimeout();
 		};
 
 		const handlePointerUp = () => {
 			lock = false;
+			scrollLock.set(false);
 		};
 
 		const handlePointerMove = (event: MouseEvent) => {
@@ -56,9 +71,7 @@
 				x = event.clientX;
 				y = event.clientY;
 
-				event.stopPropagation();
-				event.preventDefault();
-				event.stopImmediatePropagation();
+				resetUnlockTimeout();
 			}
 		};
 

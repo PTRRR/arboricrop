@@ -15,6 +15,7 @@
 		useNetwork,
 		useNotifications,
 		useReturnButton,
+		useScrollLock,
 		useUserName
 	} from '../../stores';
 	import { strategies } from '../../utils/pairing';
@@ -38,6 +39,7 @@
 	];
 
 	const returnButton = useReturnButton();
+	useScrollLock();
 	useNetwork();
 	useNotifications();
 	useFields();

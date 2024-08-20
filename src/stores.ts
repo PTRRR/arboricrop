@@ -50,3 +50,4 @@ export const useComments = () => useWritable<(typeof comment.$inferSelect)[]>('c
 export const useReturnButton = () =>
 	useWritable<{ label: string; href?: string } | undefined>('return-button', undefined);
 export const useNetwork = () => useWritable('network', loraNetworks[0], true);
+export const useScrollLock = () => useWritable('scroll-lock', false);

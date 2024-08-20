@@ -1,8 +1,15 @@
 <script lang="ts">
 	import { ScrollArea } from 'bits-ui';
+	import { useScrollLock } from '../stores';
+
+	const scrollLock = useScrollLock();
+
+	$: rootClasses = ['scroll-area__root', $scrollLock ? 'scroll-area--locked' : undefined]
+		.filter((it) => it)
+		.join(' ');
 </script>
 
-<ScrollArea.Root class="scroll-area__root">
+<ScrollArea.Root class={rootClasses}>
 	<ScrollArea.Viewport class="scroll-area__viewport">
 		<ScrollArea.Content>
 			<slot />
@@ -26,5 +33,9 @@
 	:global(.scroll-area__viewport) {
 		height: 100%;
 		width: 100%;
+	}
+
+	:global(.scroll-area--locked .scroll-area__viewport) {
+		overflow: hidden !important;
 	}
 </style>
