@@ -36,19 +36,21 @@
 		});
 
 		const handlePointerDown = (event: MouseEvent) => {
+			event.preventDefault();
 			lock = true;
 			x = event.clientX;
 			y = event.clientY;
 			scrollLock.set(true);
-			resetUnlockTimeout();
 		};
 
-		const handlePointerUp = () => {
+		const handlePointerUp = (event: MouseEvent) => {
+			event.preventDefault();
 			lock = false;
 			scrollLock.set(false);
 		};
 
 		const handlePointerMove = (event: MouseEvent) => {
+			event.preventDefault();
 			if (lock) {
 				const box = map.getBoundingClientRect();
 				const width = box.width * 4;
@@ -68,10 +70,10 @@
 					y: Math.abs(currentY)
 				});
 
+				resetUnlockTimeout();
+
 				x = event.clientX;
 				y = event.clientY;
-
-				resetUnlockTimeout();
 			}
 		};
 
@@ -80,7 +82,7 @@
 		window.addEventListener('pointermove', handlePointerMove);
 
 		return () => {
-			map.removeEventListener('mousedown', handlePointerDown);
+			map.removeEventListener('pointerdown', handlePointerDown);
 			window.removeEventListener('pointerup', handlePointerUp);
 			window.removeEventListener('pointermove', handlePointerMove);
 		};

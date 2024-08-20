@@ -23,6 +23,11 @@
 		box-sizing: border-box;
 		gap: var(--gap);
 		z-index: 5;
+		pointer-events: none;
+	}
+
+	.footer-menu * {
+		pointer-events: all;
 	}
 
 	/* .footer-menu::before {
