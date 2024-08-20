@@ -42,6 +42,7 @@
 		<div class="devices">
 			{#each $devices as device}
 				<Button
+					minimal
 					selected={isSelected(device)}
 					on:click={() => {
 						let selected = selectedDevices.some((it) => it.id === device.id);
@@ -55,7 +56,7 @@
 						<span class="device-id">{device.id}</span>
 					</div>
 				</Button>
-				<Spacer size="0.5rem" />
+				<Spacer size="1rem" />
 			{/each}
 		</div>
 		<Spacer size="1.5rem" />

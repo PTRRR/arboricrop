@@ -50,6 +50,12 @@
 		color: var(--light-gray);
 	}
 
+	.button-inner--minimal.button-inner--selected {
+		background-color: transparent;
+		color: var(--dark-gray);
+		text-decoration: underline;
+	}
+
 	.button-inner--minimal:hover {
 		background-color: transparent;
 		text-decoration: underline;
