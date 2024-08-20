@@ -273,7 +273,7 @@
 	.device-form {
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
+		gap: var(--gap);
 	}
 
 	.device-form__files {

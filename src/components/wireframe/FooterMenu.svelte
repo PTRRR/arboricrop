@@ -12,7 +12,7 @@
 <style>
 	.footer-menu {
 		position: absolute;
-		padding: 1.5rem;
+		padding: var(--main-padding);
 		bottom: 0;
 		left: 0;
 		width: 100%;
@@ -20,7 +20,7 @@
 		align-items: flex-start;
 		justify-content: space-between;
 		box-sizing: border-box;
-		gap: 0.5rem;
+		gap: var(--gap);
 		z-index: 5;
 	}
 

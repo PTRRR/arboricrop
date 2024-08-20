@@ -46,7 +46,7 @@
 	.dropdown__content--align-center {
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
+		gap: var(--gap);
 		align-items: center;
 	}
 

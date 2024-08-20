@@ -85,7 +85,7 @@
 	.home__section {
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
+		gap: var(--gap);
 	}
 
 	.home__section + .home__section {

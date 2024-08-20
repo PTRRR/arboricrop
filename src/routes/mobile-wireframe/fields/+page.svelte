@@ -42,7 +42,7 @@
 
 	.fields__pair-button {
 		position: sticky;
-		top: 7rem;
+		top: var(--layout-vertical-padding);
 		width: 100%;
 		display: flex;
 		flex-direction: column;
@@ -51,6 +51,6 @@
 	.fields__list {
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
+		gap: var(--gap);
 	}
 </style>

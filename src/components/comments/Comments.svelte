@@ -218,7 +218,7 @@
 		position: fixed;
 		bottom: 1rem;
 		left: 1rem;
-		gap: 0.5rem;
+		gap: var(--gap);
 	}
 
 	.comments-button {

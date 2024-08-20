@@ -78,7 +78,7 @@
 		display: flex;
 		flex-direction: column;
 		flex: 1 1 auto;
-		gap: 0.5rem;
+		gap: var(--gap);
 	}
 
 	.device__footer {
@@ -86,6 +86,6 @@
 		display: flex;
 		flex-direction: column;
 		text-align: center;
-		gap: 1rem;
+		gap: var(--gap);
 	}
 </style>
