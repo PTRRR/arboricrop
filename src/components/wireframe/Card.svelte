@@ -24,7 +24,7 @@
 		padding: 0.8rem 1rem;
 		box-sizing: border-box;
 		border: solid 1px var(--black);
-		border-radius: 1.5rem;
+		border-radius: 0.5rem;
 		display: block;
 	}
 

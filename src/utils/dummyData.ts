@@ -191,7 +191,7 @@ export const getNotifications = (devices: Device[]): Notification[] => {
 		return {
 			id: `not-${createId()}`,
 			deviceId: it.id,
-			date: getRandomDate(new Date('2024-08-01'), new Date('2024-08-30')),
+			date: getRandomDate(new Date('2024-08-01'), new Date('2024-08-30')).toISOString(),
 			...randomContent
 		};
 	});
