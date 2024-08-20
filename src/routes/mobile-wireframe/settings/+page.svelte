@@ -21,6 +21,7 @@
 
 {#if $page.data.network}
 	<div class="network-settings">
+		<Separation title="Available networks:" />
 		<div class="networks">
 			{#each loraNetworks as network}
 				<Button selected={selectedNetwork === network} on:click={() => (selectedNetwork = network)}>
