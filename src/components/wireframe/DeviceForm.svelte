@@ -8,15 +8,15 @@
 	import { createId } from '@paralleldrive/cuid2';
 	import Image from './Image.svelte';
 	import type { Device, Media, MediaType, Location } from '../../utils/types';
-	import Line from './Line.svelte';
 	import Map from './Map.svelte';
-	import { useFields } from '../../stores';
+	import { useFields, useNetwork } from '../../stores';
 	import Separation from './Separation.svelte';
 
 	export let device: Device | undefined = undefined;
 	export let onUpdate: ((device: Device) => void) | undefined = undefined;
 	export let isNewDevice: boolean | undefined = undefined;
 
+	const network = useNetwork();
 	const fields = useFields();
 	$: selectedField = $fields.find((it) => it.id === device?.fieldId);
 
@@ -236,8 +236,10 @@
 				</Button>
 			{/if}
 
-			<label for="">Networking:</label>
-			<Button>Configure LoRa</Button>
+			<Spacer />
+			<label for="">Current network gateway:</label>
+			<input type="text" value={$network} />
+			<Button href="/mobile-wireframe/settings?network=true">Configure LoRa gateway</Button>
 		{/if}
 
 		{#if !isNewDevice}
