@@ -15,8 +15,8 @@
 <style>
 	.main-menu {
 		position: absolute;
-		padding: 1.5rem;
-		top: 2rem;
+		padding: var(--main-padding);
+		top: var(--main-padding);
 		left: 0;
 		width: 100%;
 		display: flex;
@@ -31,10 +31,10 @@
 		content: '';
 		display: block;
 		position: absolute;
-		top: -2rem;
+		top: calc(var(--main-padding) * -1);
 		left: 0;
 		width: 100%;
-		height: calc(100% + 2rem);
+		height: calc(100% + var(--main-padding));
 		background-image: linear-gradient(
 			var(--light-gray),
 			var(--light-gray),
@@ -46,6 +46,6 @@
 	.main-menu__actions {
 		display: flex;
 		align-items: center;
-		gap: 0.5rem;
+		gap: var(--gap);
 	}
 </style>

@@ -109,7 +109,7 @@
 		height: 100%;
 		min-height: var(--mobile-app-height);
 		background-color: var(--light-gray);
-		padding: 7rem 1.5rem;
+		padding: 6svh var(--main-padding);
 		box-sizing: border-box;
 		display: flex;
 		flex-direction: column;
