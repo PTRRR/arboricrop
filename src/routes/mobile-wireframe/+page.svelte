@@ -81,7 +81,7 @@
 			{/each}
 
 			{#if section.title === 'Recent Fields'}
-				<Button>See all fields</Button>
+				<Button href="/mobile-wireframe/fields">See all fields</Button>
 			{/if}
 		</div>
 	{/each}

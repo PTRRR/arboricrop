@@ -6,6 +6,7 @@
 	import Button from './Button.svelte';
 	import DeviceForm from './DeviceForm.svelte';
 	import Line from './Line.svelte';
+	import Separation from './Separation.svelte';
 
 	export let isNewDevice: boolean | undefined = undefined;
 	export let id: string | undefined = undefined;
@@ -47,9 +48,7 @@
 		/>
 		{#if isNewDevice}
 			<Spacer size="1rem" />
-			<span>New device detected:</span>
-			<Line />
-			<Spacer size="1rem" />
+			<Separation title="New device detected:" />
 
 			<div class="device__footer">
 				<Button href="/mobile-wireframe/devices">Save new device to account</Button>

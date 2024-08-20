@@ -238,11 +238,13 @@
 
 			<label for="">Networking:</label>
 			<Button>Configure LoRa</Button>
+		{/if}
 
-			{#if !isNewDevice}
-				<label for="">Devices:</label>
-				<Button href="/mobile-wireframe/devices">Remove device</Button>
-			{/if}
+		{#if !isNewDevice}
+			<Spacer size="var(--gap)" />
+			<Separation />
+			<Spacer size="0" />
+			<Button href="/mobile-wireframe/devices">Remove device</Button>
 		{/if}
 	</div>
 {/if}

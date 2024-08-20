@@ -2,6 +2,7 @@
 	import Button from './Button.svelte';
 	import { createId } from '@paralleldrive/cuid2';
 	import type { Field } from '../../utils/types';
+	import Separation from './Separation.svelte';
 
 	export let field: Field | undefined = undefined;
 	export let onSave: ((field: Field) => void) | undefined = undefined;
@@ -14,6 +15,7 @@
 </script>
 
 <div class="field-form">
+	<Separation title="General settings:" />
 	<label for="">Id:</label>
 	<input bind:this={id} type="text" value={field?.id || `fie-${createId()}`} />
 	<label for="">Name:</label>

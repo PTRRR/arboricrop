@@ -30,14 +30,6 @@
 
 	const footerActions = [
 		{
-			label: 'Home',
-			href: '/mobile-wireframe'
-		},
-		{
-			label: 'Fields',
-			href: '/mobile-wireframe/fields'
-		},
-		{
 			label: 'Pair device',
 			href: '/mobile-wireframe/devices/pairing'
 		}
@@ -133,6 +125,10 @@
 	}
 
 	@media screen and (max-width: 700px) {
+		.mobile-wireframe {
+			min-height: 100vh;
+		}
+
 		.comments {
 			display: none;
 		}

@@ -2,6 +2,7 @@
 	import Spacer from '../../../components/Spacer.svelte';
 	import Button from '../../../components/wireframe/Button.svelte';
 	import Card from '../../../components/wireframe/Card.svelte';
+	import Separation from '../../../components/wireframe/Separation.svelte';
 	import { useDevices, useReturnButton } from '../../../stores';
 
 	let devices = useDevices();
@@ -15,8 +16,11 @@
 <div class="devices">
 	<div class="devices__pair-button">
 		<Button href="/mobile-wireframe/devices/pairing">Pair device</Button>
-		<Spacer size="1.5rem"></Spacer>
+		<Spacer size="var(--gap)"></Spacer>
 	</div>
+
+	<Separation title="Devices:" />
+
 	<div class="devices__list">
 		{#each $devices as device}
 			<Card href={`/mobile-wireframe/devices/${device.id}`}>
@@ -28,6 +32,12 @@
 </div>
 
 <style>
+	.devices {
+		display: flex;
+		flex-direction: column;
+		gap: var(--gap);
+	}
+
 	.devices__pair-button {
 		position: sticky;
 		top: var(--layout-vertical-padding);

@@ -2,6 +2,7 @@
 	import Spacer from '../../../components/Spacer.svelte';
 	import Button from '../../../components/wireframe/Button.svelte';
 	import Card from '../../../components/wireframe/Card.svelte';
+	import Separation from '../../../components/wireframe/Separation.svelte';
 	import { useDevices, useFields, useReturnButton } from '../../../stores';
 	import { getDevicesByFieldId } from '../../../utils/dummyData';
 
@@ -18,8 +19,11 @@
 <div class="fields">
 	<div class="fields__pair-button">
 		<Button href="/mobile-wireframe/fields/new">Create new field</Button>
-		<Spacer size="1.5rem"></Spacer>
+		<Spacer size="var(--gap)"></Spacer>
 	</div>
+
+	<Separation title="Fields:" />
+
 	<div class="fields__list">
 		{#each $fields as field}
 			<Card href={`/mobile-wireframe/fields/${field.id}`}>
@@ -30,7 +34,6 @@
 			</Card>
 		{/each}
 	</div>
-	<Spacer size="1.5rem" />
 	<Button href="/mobile-wireframe/devices">See all devices</Button>
 </div>
 
@@ -38,6 +41,7 @@
 	.fields {
 		display: flex;
 		flex-direction: column;
+		gap: var(--gap);
 	}
 
 	.fields__pair-button {
