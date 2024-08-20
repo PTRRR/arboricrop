@@ -3,6 +3,7 @@
 	import Spacer from '../../../../components/Spacer.svelte';
 	import Button from '../../../../components/wireframe/Button.svelte';
 	import Image from '../../../../components/wireframe/Image.svelte';
+	import Info from '../../../../components/wireframe/Info.svelte';
 	import Separation from '../../../../components/wireframe/Separation.svelte';
 	import { useNotifications, useReturnButton } from '../../../../stores';
 	import { formatDateToDDMMYYYY } from '../../../../utils/dates';
@@ -51,17 +52,13 @@
 	</div>
 {:else}
 	<Separation title="General information:" />
-	<label for="">Date:</label>
-	<span>{formatDateToDDMMYYYY(new Date(notification?.date || ''))}</span>
+	<Info label="Date:" value={formatDateToDDMMYYYY(new Date(notification?.date || ''))} />
 	<Spacer />
-	<label for="">Status:</label>
-	<span>{notification?.status}</span>
+	<Info label="Status:" value={notification?.status} />
 	<Spacer />
-	<label for="">Type:</label>
-	<span>{notification?.type}</span>
+	<Info label="Type:" value={notification?.type} />
 	<Spacer />
-	<label for="">Description:</label>
-	<span>{notification?.text}</span>
+	<Info label="Description:" value={notification?.text} />
 	<Spacer />
 	<Spacer />
 	<Spacer />
