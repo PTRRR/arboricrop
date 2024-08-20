@@ -5,13 +5,15 @@
 	import Button from '../../../components/wireframe/Button.svelte';
 	import SaveSection from '../../../components/wireframe/SaveSection.svelte';
 	import Separation from '../../../components/wireframe/Separation.svelte';
-	import { useNetwork, useReturnButton } from '../../../stores';
-	import { loraNetworks } from '../../../utils/dummyData';
+	import { useNetwork, useOrganisation, useReturnButton } from '../../../stores';
+	import { loraNetworks, organisations } from '../../../utils/dummyData';
 
 	const usedNetwork = useNetwork();
 	const returnButton = useReturnButton();
+	const organisation = useOrganisation();
 
 	let selectedNetwork = $usedNetwork;
+	let selectedOrganisation = $organisation;
 
 	returnButton.set({
 		label: 'Settings',
@@ -39,6 +41,30 @@
 			onCancel={() => goto(window.location.pathname)}
 		/>
 	</div>
+{:else if $page.data.organisation}
+	<div class="network-settings">
+		<Separation title="Organisations:" />
+		<div class="organisations">
+			{#each organisations as organisation}
+				<Button
+					selected={selectedOrganisation === organisation}
+					on:click={() => (selectedOrganisation = organisation)}
+				>
+					{organisation}
+				</Button>
+			{/each}
+		</div>
+		<Spacer />
+		<Separation />
+		<SaveSection
+			onSave={() => {
+				usedNetwork.set(selectedNetwork);
+				organisation.set(selectedOrganisation);
+				goto(window.location.pathname);
+			}}
+			onCancel={() => goto(window.location.pathname)}
+		/>
+	</div>
 {:else}
 	<Separation title="User settings:" />
 	<label for="">First name:</label>
@@ -54,9 +80,9 @@
 	<Separation title="Account settings:" />
 	<label for="">Organisation:</label>
 	<Spacer />
-	<input type="text" placeholder="Organisation" value="Vivent" />
+	<input type="text" placeholder="Organisation" value={$organisation} />
 	<Spacer />
-	<Button>Set organisation</Button>
+	<Button href={`${window.location.pathname}?organisation=true`}>Switch organisation</Button>
 	<Spacer />
 	<Spacer />
 
@@ -98,7 +124,8 @@
 		flex: 1 1 auto;
 	}
 
-	.networks {
+	.networks,
+	.organisations {
 		width: 100%;
 		display: flex;
 		flex-direction: column;

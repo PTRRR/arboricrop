@@ -1,6 +1,12 @@
 import { readable, writable } from 'svelte/store';
 import { getContext, hasContext, setContext } from 'svelte';
-import { getDevices, getFields, getNotifications, loraNetworks } from './utils/dummyData';
+import {
+	getDevices,
+	getFields,
+	getNotifications,
+	loraNetworks,
+	organisations
+} from './utils/dummyData';
 import type { comment } from './db/schema';
 
 const STORE_VERSION = 'v5';
@@ -51,3 +57,4 @@ export const useReturnButton = () =>
 	useWritable<{ label: string; href?: string } | undefined>('return-button', undefined);
 export const useNetwork = () => useWritable('network', loraNetworks[0], true);
 export const useScrollLock = () => useWritable('scroll-lock', false);
+export const useOrganisation = () => useWritable('organisation', organisations[0], true);

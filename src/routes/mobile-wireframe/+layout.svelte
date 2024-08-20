@@ -14,6 +14,7 @@
 		useFields,
 		useNetwork,
 		useNotifications,
+		useOrganisation,
 		useReturnButton,
 		useScrollLock,
 		useUserName
@@ -39,6 +40,7 @@
 	];
 
 	const returnButton = useReturnButton();
+	useOrganisation();
 	useScrollLock();
 	useNetwork();
 	useNotifications();

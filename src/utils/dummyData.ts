@@ -207,3 +207,5 @@ export const loraNetworks: string[] = [
 	'MachineQ (Comcast)',
 	'Packetworx'
 ];
+
+export const organisations: string[] = ['Vivent', 'Changin', 'ECAL'];
