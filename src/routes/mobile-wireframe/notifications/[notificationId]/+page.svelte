@@ -71,7 +71,7 @@
 	<Spacer />
 	<Image ratio={1} placeholder="Comprehensive schema / animation explaining how to proceed" />
 	<Spacer />
-	<Button href={`/mobile-wireframe/devices/${notification?.deviceId}`}>Open device</Button>
+	<Button href={`/mobile-wireframe/devices/${notification?.deviceId}`}>See device</Button>
 	<Spacer />
 	<Button href={`${window.location.pathname}?acknowledge=true`}>Acknowledge</Button>
 {/if}
