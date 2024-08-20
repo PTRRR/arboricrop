@@ -56,6 +56,8 @@
 	<Spacer />
 	<input type="text" placeholder="Organisation" value="Vivent" />
 	<Spacer />
+	<Button>Set organisation</Button>
+	<Spacer />
 	<Spacer />
 
 	<Separation title="Notification settings:" />
