@@ -2,7 +2,7 @@
 	import { getCss } from '../utils/css';
 
 	export let direction: 'horizontal' | 'vertical' = 'horizontal';
-	export let size: string | undefined = undefined;
+	export let size: string | undefined = 'var(--gap)';
 </script>
 
 <div

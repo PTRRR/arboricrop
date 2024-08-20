@@ -12,6 +12,7 @@
 		useComments,
 		useDevices,
 		useFields,
+		useNotifications,
 		useReturnButton,
 		useUserName
 	} from '../../stores';
@@ -36,6 +37,7 @@
 	];
 
 	const returnButton = useReturnButton();
+	useNotifications();
 	useFields();
 	useDevices();
 	useUserName();

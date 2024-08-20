@@ -4,7 +4,7 @@
 	import Card from '../../components/wireframe/Card.svelte';
 	import Line from '../../components/wireframe/Line.svelte';
 	import Separation from '../../components/wireframe/Separation.svelte';
-	import { useDevices, useFields, useReturnButton } from '../../stores';
+	import { useDevices, useFields, useNotifications, useReturnButton } from '../../stores';
 	import { shuffle } from '../../utils/arrays';
 	import { getDevicesByFieldId } from '../../utils/dummyData';
 
@@ -14,6 +14,7 @@
 	});
 
 	const devices = useDevices();
+	const notifications = useNotifications();
 	const fields = useFields();
 	const randomFields = shuffle($fields).splice(0, 5);
 
@@ -44,7 +45,7 @@
 			title: 'Notifications & Alerts',
 			cards: [
 				{
-					title: 'Notifications (3)',
+					title: `Notifications [${$notifications.filter((it) => it.status !== 'acknowledged').length}]`,
 					href: '/mobile-wireframe/notifications'
 				}
 			]

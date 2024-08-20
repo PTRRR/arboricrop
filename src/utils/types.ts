@@ -29,3 +29,16 @@ export type Field = {
 	name: string;
 	type: string;
 };
+
+export type NotificationType = 'notification' | 'warning' | 'alert';
+export type NotificationStatus = 'pending' | 'acknowledged';
+
+export type Notification = {
+	id: string;
+	title: string;
+	text: string;
+	type: NotificationType;
+	deviceId?: string;
+	status: NotificationStatus;
+	actionableInsight?: string;
+};

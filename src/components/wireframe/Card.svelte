@@ -52,13 +52,23 @@
 		align-items: center;
 	}
 
+	.card__header-title {
+		text-align: center;
+	}
+
 	:global(.card__header-title > *) {
 		font-size: 1.2rem;
 		font-family: inherit;
+		text-align: center;
+	}
+
+	.card__header-sub-title {
+		text-align: center;
 	}
 
 	:global(.card__header-sub-title > *) {
 		font-size: 0.9rem;
 		color: var(--dark-gray);
+		text-align: center;
 	}
 </style>

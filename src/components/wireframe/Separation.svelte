@@ -10,7 +10,7 @@
 		<span class="separation__title">{title}</span>
 	{/if}
 	<Line color="var(--dark-gray)" />
-	<Spacer size="calc(var(--gap) * 0.5)" />
+	<Spacer />
 </div>
 
 <style>

@@ -1,9 +1,11 @@
 import { readable, writable } from 'svelte/store';
 import { getContext, hasContext, setContext } from 'svelte';
-import { getDevices, getFields } from './utils/dummyData';
+import { getDevices, getFields, getNotifications } from './utils/dummyData';
 import type { comment } from './db/schema';
 
-const STORE_VERSION = 'v3';
+const STORE_VERSION = 'v4';
+const dummyDevices = getDevices(30);
+const dummyNotifications = getNotifications(dummyDevices);
 
 export const useSharedStore = <T, A>(name: string, fn: (value?: A) => T, defaultValue?: A) => {
 	if (hasContext(name)) {
@@ -39,7 +41,8 @@ export const useReadable = <T>(name: string, value: T) => useSharedStore(name, r
 
 // Stores
 
-export const useDevices = () => useWritable('devices', getDevices(30), true);
+export const useDevices = () => useWritable('devices', dummyDevices, true);
+export const useNotifications = () => useWritable('notifications', dummyNotifications, true);
 export const useFields = () => useWritable('fields', getFields(), true);
 export const useBlurApp = () => useWritable('blur-app', false);
 export const useUserName = () => useWritable('user-name', '', true);
