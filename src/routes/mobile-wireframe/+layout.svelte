@@ -126,7 +126,7 @@
 
 	@media screen and (max-width: 700px) {
 		.mobile-wireframe {
-			min-height: 100vh;
+			min-height: 100svh;
 		}
 
 		.comments {
