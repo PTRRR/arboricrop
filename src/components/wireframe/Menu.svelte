@@ -48,4 +48,10 @@
 		align-items: center;
 		gap: var(--gap);
 	}
+
+	@media screen and (max-width: 700px) {
+		.main-menu {
+			top: 0;
+		}
+	}
 </style>

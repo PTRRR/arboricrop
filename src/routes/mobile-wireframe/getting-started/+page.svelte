@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Spacer from '../../../components/Spacer.svelte';
-	import Button from '../../../components/wireframe/Button.svelte';
 	import Image from '../../../components/wireframe/Image.svelte';
 	import Pagination from '../../../components/wireframe/Pagination.svelte';
 	import { useReturnButton } from '../../../stores';

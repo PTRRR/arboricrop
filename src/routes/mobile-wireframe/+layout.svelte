@@ -129,6 +129,7 @@
 	@media screen and (max-width: 700px) {
 		.mobile-wireframe {
 			min-height: 100svh;
+			padding: calc(var(--main-padding) * 3.5) var(--main-padding);
 		}
 
 		.comments {
