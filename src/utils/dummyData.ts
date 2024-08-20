@@ -196,3 +196,14 @@ export const getNotifications = (devices: Device[]): Notification[] => {
 		};
 	});
 };
+
+export const loraNetworks: string[] = [
+	'The Things Network (TTN)',
+	'Helium Network',
+	'LORIOT',
+	'Everynet',
+	'Actility (ThingPark)',
+	'Senet',
+	'MachineQ (Comcast)',
+	'Packetworx'
+];

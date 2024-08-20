@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { navigating } from '$app/stores';
+	import { navigating, page } from '$app/stores';
 	import Comments from '../../components/comments/Comments.svelte';
 	import Mobile from '../../components/Mobile.svelte';
 	import Button from '../../components/wireframe/Button.svelte';
@@ -12,6 +12,7 @@
 		useComments,
 		useDevices,
 		useFields,
+		useNetwork,
 		useNotifications,
 		useReturnButton,
 		useUserName
@@ -37,6 +38,7 @@
 	];
 
 	const returnButton = useReturnButton();
+	useNetwork();
 	useNotifications();
 	useFields();
 	useDevices();
@@ -81,19 +83,21 @@
 		<div class="mobile-wireframe__app" class:mobile-wireframe--blur={$blurApp}>
 			<slot />
 		</div>
-		<FooterMenu actions={footerActions}>
-			<svelte:fragment slot="action" let:action>
-				{#if action.label === 'Pair device'}
-					<Dropdown items={strategies} label={action.label} align="right" sameWidth>
-						<Button slot="item" let:item href={`${action.href}?strategy=${item.value}`}>
-							{item.label}
-						</Button>
-					</Dropdown>
-				{:else}
-					<Button href={action.href}>{action.label}</Button>
-				{/if}
-			</svelte:fragment>
-		</FooterMenu>
+		{#if $page.route.id !== '/mobile-wireframe/settings'}
+			<FooterMenu actions={footerActions}>
+				<svelte:fragment slot="action" let:action>
+					{#if action.label === 'Pair device'}
+						<Dropdown items={strategies} label={action.label} align="right" sameWidth>
+							<Button slot="item" let:item href={`${action.href}?strategy=${item.value}`}>
+								{item.label}
+							</Button>
+						</Dropdown>
+					{:else}
+						<Button href={action.href}>{action.label}</Button>
+					{/if}
+				</svelte:fragment>
+			</FooterMenu>
+		{/if}
 	</div>
 </Mobile>
 
@@ -129,7 +133,6 @@
 	@media screen and (max-width: 700px) {
 		.mobile-wireframe {
 			min-height: 100svh;
-			padding: calc(var(--main-padding) * 3.5) var(--main-padding);
 		}
 
 		.comments {

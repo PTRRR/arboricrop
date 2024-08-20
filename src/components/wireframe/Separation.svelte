@@ -14,6 +14,10 @@
 </div>
 
 <style>
+	.separation {
+		width: 100%;
+	}
+
 	.separation__title {
 		display: block;
 		color: var(--dark-gray);

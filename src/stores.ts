@@ -1,6 +1,6 @@
 import { readable, writable } from 'svelte/store';
 import { getContext, hasContext, setContext } from 'svelte';
-import { getDevices, getFields, getNotifications } from './utils/dummyData';
+import { getDevices, getFields, getNotifications, loraNetworks } from './utils/dummyData';
 import type { comment } from './db/schema';
 
 const STORE_VERSION = 'v5';
@@ -49,3 +49,4 @@ export const useUserName = () => useWritable('user-name', '', true);
 export const useComments = () => useWritable<(typeof comment.$inferSelect)[]>('comments', []);
 export const useReturnButton = () =>
 	useWritable<{ label: string; href?: string } | undefined>('return-button', undefined);
+export const useNetwork = () => useWritable('network', loraNetworks[0], true);
