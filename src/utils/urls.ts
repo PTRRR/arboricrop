@@ -52,7 +52,7 @@ export const createUrlBuilder = (baseUrl?: string) => {
 			if (!window) return '';
 
 			const url = baseUrl || window.location.pathname;
-			const queries = parseQueries(window.location.search);
+			const queries = parseQueries(window.location.search).filter((it) => it.name !== query.name);
 			queries.push(query);
 
 			const formattedQueries = formatQueries(queries);
@@ -62,9 +62,7 @@ export const createUrlBuilder = (baseUrl?: string) => {
 			if (!window) return '';
 
 			const url = baseUrl || window.location.pathname;
-			const queries = parseQueries(window.location.search);
-			const queryIndex = queries.findIndex((it) => it.name === query.name);
-			queries.splice(queryIndex, 1);
+			const queries = parseQueries(window.location.search).filter((it) => it.name !== query.name);
 
 			const formattedQueries = formatQueries(queries);
 			return `${url}${queries.length > 0 ? `?${formattedQueries}` : ''}`;

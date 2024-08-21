@@ -8,12 +8,15 @@
 	import { createId } from '@paralleldrive/cuid2';
 	import { useFields } from '../../stores';
 	import Info from './Info.svelte';
+	import ButtonList from './ButtonList.svelte';
 
 	export let device: Device;
 	export let onLocation: ((location: Location) => void) | undefined = undefined;
 	export let onSetManualLocation: (() => void) | undefined = undefined;
 	export let onMedias: ((medias: Media[]) => void) | undefined = undefined;
+	export let onMedia: ((media: Media) => void) | undefined = undefined;
 	export let onChangeField: (() => void) | undefined = undefined;
+	export let onNote: ((note: string) => void) | undefined = undefined;
 
 	let note: HTMLTextAreaElement;
 
@@ -43,7 +46,12 @@
 
 	<Info label="Note:" />
 	<Spacer />
-	<textarea placeholder="Your note..." bind:this={note} value={device?.note || ''} />
+	<textarea
+		placeholder="Your note..."
+		bind:this={note}
+		value={device?.note || ''}
+		on:input={() => onNote?.(note.value)}
+	/>
 	<Spacer />
 
 	<Info label="Medias:" />
@@ -68,12 +76,15 @@
 	</Dropdown>
 
 	{#if device.medias.length > 0}
-		<div class="device-form__files">
-			{#each device.medias as media}
-				<Spacer size="0.5rem" />
-				<Button minimal href={`?media=${encodeURIComponent(media.name)}`}>{media.name}</Button>
-			{/each}
-		</div>
+		<Spacer />
+		<ButtonList items={device.medias} let:item>
+			<!-- svelte-ignore a11y-click-events-have-key-events -->
+			<!-- svelte-ignore a11y-no-static-element-interactions -->
+			<div class="device-metadata__media" on:click={() => onMedia?.(item)}>
+				<span>{item.name}</span>
+				<span>{item.type}</span>
+			</div>
+		</ButtonList>
 	{/if}
 </div>
 
@@ -81,6 +92,12 @@
 	.device-metadata {
 		display: flex;
 		flex-direction: column;
+	}
+
+	.device-metadata__media {
+		display: flex;
+		justify-content: space-between;
+		width: 100%;
 	}
 
 	textarea {

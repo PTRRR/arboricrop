@@ -7,7 +7,7 @@
 	import { goto } from '$app/navigation';
 	import { createId } from '@paralleldrive/cuid2';
 	import Image from './Image.svelte';
-	import type { Device, Media, MediaType, Location } from '../../utils/types';
+	import type { Device, Location } from '../../utils/types';
 	import { useFields, useNetwork } from '../../stores';
 	import Separation from './Separation.svelte';
 	import Info from './Info.svelte';
@@ -47,7 +47,7 @@
 		y: 40 + Math.random() * 20
 	};
 
-	let medias: Media[] = device?.medias || [];
+	$: medias = device?.medias || [];
 	$: currentMedia = medias.find((it) => it.name === $page.data.media);
 
 	const startUpgradeTimer = () => {
@@ -98,18 +98,20 @@
 {:else if currentMedia}
 	<CenteredWrapper>
 		<Image placeholder="Media reader / player" ratio={1} />
-		<div class="device-file__actions">
-			<Button href={window.location.pathname}>Close</Button>
-			<Button
-				href={window.location.pathname}
-				on:click={() => {
-					medias = medias.filter((it) => it.name !== currentMedia?.name);
-					setTimeout(() => {}, 100);
-				}}
-			>
-				Delete
-			</Button>
-		</div>
+		<Spacer />
+		<Button href={url.removeQuery({ name: 'media' })}>Close</Button>
+		<Spacer />
+		<Button
+			href={url.removeQuery({ name: 'media' })}
+			on:click={() => {
+				onSave?.({
+					...device,
+					medias: medias.filter((it) => it.name !== currentMedia?.name)
+				});
+			}}
+		>
+			Delete
+		</Button>
 	</CenteredWrapper>
 {:else if $page.data.field}
 	<CenteredWrapper>
@@ -146,6 +148,9 @@
 			onLocation={(location) => (currentMapLocation = location)}
 			onSetManualLocation={() => onSave?.({ ...device, location: currentMapLocation })}
 			onChangeField={() => goto(url.addQuery({ name: 'field', value: true }))}
+			onNote={(note) => onSave?.({ ...device, note })}
+			onMedias={(medias) => onSave?.({ ...device, medias })}
+			onMedia={(media) => goto(url.addQuery({ name: 'media', value: media.name }))}
 		/>
 		<Spacer />
 		<Spacer />
@@ -237,11 +242,15 @@
 			<Spacer />
 			<Spacer />
 			<Spacer />
+
 			<DeviceMetadata
 				{device}
 				onLocation={(location) => (currentMapLocation = location)}
 				onSetManualLocation={() => onSave?.({ ...device, location: currentMapLocation })}
 				onChangeField={() => goto(url.addQuery({ name: 'field', value: true }))}
+				onNote={(note) => onSave?.({ ...device, note })}
+				onMedias={(medias) => onSave?.({ ...device, medias })}
+				onMedia={(media) => goto(url.addQuery({ name: 'media', value: media.name }))}
 			/>
 		{/if}
 
@@ -249,8 +258,10 @@
 			<Spacer />
 			<Spacer />
 			<Spacer />
+
 			<Separation title="Advanced settings:" />
 			<Info label="Current network gateway:" value={$network} />
+
 			<Spacer />
 			<Button href="/mobile-wireframe/settings?network=true">Change network gateway</Button>
 
@@ -306,12 +317,6 @@
 {/if}
 
 <style>
-	.device-file__actions {
-		display: flex;
-		gap: 1rem;
-		align-items: center;
-	}
-
 	.device-form {
 		display: flex;
 		flex-direction: column;
