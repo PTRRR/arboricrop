@@ -11,6 +11,7 @@
 	import type { Device, Location } from '../../../../utils/types';
 	import Map from '../../../../components/wireframe/Map.svelte';
 	import Separation from '../../../../components/wireframe/Separation.svelte';
+	import ButtonList from '../../../../components/wireframe/ButtonList.svelte';
 
 	const fields = useFields();
 	const devices = useDevices();
@@ -39,26 +40,22 @@
 
 <div class="field">
 	{#if $page.data.devices}
-		<div class="devices">
-			{#each $devices as device}
-				<Button
-					minimal
-					selected={isSelected(device)}
-					on:click={() => {
-						let selected = selectedDevices.some((it) => it.id === device.id);
-						selectedDevices = selected
-							? selectedDevices.filter((it) => it.id !== device.id)
-							: [...selectedDevices, device];
-					}}
-				>
-					<div class="device">
-						<span class="device-name">{device.name}</span>
-						<span class="device-id">{device.id}</span>
-					</div>
-				</Button>
-				<Spacer size="1rem" />
-			{/each}
-		</div>
+		<ButtonList items={$devices} selectedItems={selectedDevices} let:item>
+			<!-- svelte-ignore a11y-click-events-have-key-events -->
+			<!-- svelte-ignore a11y-no-static-element-interactions -->
+			<div
+				class="device"
+				on:click={() => {
+					let selected = selectedDevices.some((it) => it.id === item.id);
+					selectedDevices = selected
+						? selectedDevices.filter((it) => it.id !== item.id)
+						: [...selectedDevices, item];
+				}}
+			>
+				<span class="device-name">{item.name}</span>
+				<span class="device-id">{item.status}</span>
+			</div>
+		</ButtonList>
 		<Spacer size="1.5rem" />
 		<Line />
 		<div class="cancel">
@@ -133,7 +130,7 @@
 					<Button minimal href={`/mobile-wireframe/devices/${device.id}`}>
 						<div class="device">
 							<span class="device-name">{device.name}</span>
-							<span class="device-id">{device.id}</span>
+							<span class="device-id">{device.status}</span>
 						</div>
 					</Button>
 				{/if}
@@ -177,9 +174,10 @@
 		text-align: right;
 	}
 
-	.devices {
+	.device {
 		display: flex;
-		flex-direction: column;
+		justify-content: space-between;
+		width: 100%;
 	}
 
 	.cancel {
