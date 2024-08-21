@@ -26,7 +26,7 @@
 		pointer-events: none;
 	}
 
-	.footer-menu * {
+	:global(.footer-menu .button) {
 		pointer-events: all;
 	}
 

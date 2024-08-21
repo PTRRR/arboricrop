@@ -22,5 +22,6 @@
 		display: block;
 		color: var(--dark-gray);
 		margin-bottom: var(--gap);
+		text-align: left;
 	}
 </style>

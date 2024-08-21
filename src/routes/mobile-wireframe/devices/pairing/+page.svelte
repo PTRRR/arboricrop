@@ -6,12 +6,16 @@
 	import { page } from '$app/stores';
 	import { strategies } from '../../../../utils/pairing';
 	import { goto } from '$app/navigation';
+	import { createUrlBuilder } from '../../../../utils/urls';
 
-	let returnButton = useReturnButton();
+	const returnButton = useReturnButton();
 	returnButton.set({
 		label: 'Pair device',
 		href: '/mobile-wireframe/devices'
 	});
+
+	const url = createUrlBuilder();
+	const newDeviceUrl = createUrlBuilder('/mobile-wireframe/devices/new');
 
 	$: currentPairingStrategy =
 		strategies.find((it) => it.value === $page.data.strategy) || strategies[0];
@@ -26,20 +30,21 @@
 					ratio={1}
 					placeholder="Comprehensive schema or tutorial explaining how to proceed"
 					onClick={() => {
-						goto(`/mobile-wireframe/devices/pairing?success=true`);
+						goto(url.addQuery({ name: 'success', value: true }));
 						setTimeout(() => {
-							goto('/mobile-wireframe/devices/new');
+							if ($page.data.deviceId) {
+								const url = createUrlBuilder(`/mobile-wireframe/devices/${$page.data.deviceId}`);
+								goto(url.resetQueries([{ name: 'connected', value: true }]));
+							} else {
+								goto(newDeviceUrl.resetQueries([{ name: 'connected', value: true }]));
+							}
 						}, 2000);
 					}}
 				/>
 				<span class="pairing__description">{currentPairingStrategy.description}</span>
 			</div>
 			<Dropdown label="Use other pairing strategy" items={strategyOptions}>
-				<Button
-					slot="item"
-					let:item
-					href={`/mobile-wireframe/devices/pairing?strategy=${item.value}`}
-				>
+				<Button slot="item" let:item href={url.addQuery({ name: 'strategy', value: item.value })}>
 					{item.label}
 				</Button>
 			</Dropdown>

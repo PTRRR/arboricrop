@@ -10,7 +10,7 @@ export type Location = {
 	y: number;
 };
 
-export type Status = 'active' | 'offline';
+export type Status = 'active' | 'unactive';
 
 export type Device = {
 	id: string;
@@ -20,7 +20,7 @@ export type Device = {
 	medias: Media[];
 	fieldId?: string;
 	battery?: number;
-	status?: Status;
+	status: Status;
 	location?: Location;
 };
 
