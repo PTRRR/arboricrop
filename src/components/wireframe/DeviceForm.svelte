@@ -18,7 +18,6 @@
 	import Legend from './Legend.svelte';
 
 	export let device: Device;
-
 	export let isNewDevice: boolean | undefined = undefined;
 	export let onSave: ((device: Device) => void) | undefined = undefined;
 	export let onDelete: ((device: Device) => void) | undefined = undefined;
@@ -224,7 +223,7 @@
 			<Spacer />
 		{/if}
 
-		{#if device.firmwareVersion}
+		{#if device?.firmwareVersion}
 			<Info label="Firmware version:" value={device.firmwareVersion} />
 			<Spacer />
 
@@ -277,7 +276,10 @@
 			<Spacer />
 			<Spacer />
 			<SaveSection
-				onSave={() => goto('/mobile-wireframe/devices')}
+				onSave={() => {
+					onSave?.({ ...device, name: name?.value });
+					goto('/mobile-wireframe/devices');
+				}}
 				onCancel={() => goto('/mobile-wireframe/devices')}
 				onDelete={() => {
 					if (device) {
@@ -287,6 +289,9 @@
 				}}
 			/>
 		{:else if isNewDevice}
+			<Spacer />
+			<Spacer />
+			<Spacer />
 			<Separation title="New device detected:" />
 
 			<div class="device__footer">
