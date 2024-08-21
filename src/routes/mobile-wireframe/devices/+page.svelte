@@ -25,7 +25,7 @@
 		{#each $devices as device}
 			<Card href={`/mobile-wireframe/devices/${device.id}`}>
 				<h5 slot="title">{device.name}</h5>
-				<span slot="subTitle">Battery {device.battery}%</span>
+				<span slot="subTitle">Battery: {device.battery}% - {device.status}</span>
 			</Card>
 		{/each}
 	</div>
