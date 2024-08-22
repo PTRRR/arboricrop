@@ -3,7 +3,7 @@
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 	import Spacer from '../../../../components/Spacer.svelte';
-	import Button from '../../../../components/wireframe/Button.svelte';
+	import Button from '../../../../components/Button.svelte';
 	import FieldForm from '../../../../components/wireframe/FieldForm.svelte';
 	import Line from '../../../../components/wireframe/Line.svelte';
 	import { useDevices, useFields, useReturnButton } from '../../../../stores';

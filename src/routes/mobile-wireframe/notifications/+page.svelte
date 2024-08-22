@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import Spacer from '../../../components/Spacer.svelte';
-	import Button from '../../../components/wireframe/Button.svelte';
+	import Button from '../../../components/Button.svelte';
 	import Card from '../../../components/wireframe/Card.svelte';
 	import Separation from '../../../components/wireframe/Separation.svelte';
 	import { useNotifications, useReturnButton } from '../../../stores';

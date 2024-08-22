@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Spacer from '../Spacer.svelte';
-	import Button from './Button.svelte';
+	import Button from '../Button.svelte';
 	import SaveSection from './SaveSection.svelte';
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';

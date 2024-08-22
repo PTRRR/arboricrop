@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Button from './Button.svelte';
+	import Button from '../Button.svelte';
 
 	type T = $$Generic;
 	export let items: T[] = [];

@@ -2,7 +2,7 @@
 	import { navigating, page } from '$app/stores';
 	import Comments from '../../components/comments/Comments.svelte';
 	import Mobile from '../../components/Mobile.svelte';
-	import Button from '../../components/wireframe/Button.svelte';
+	import Button from '../../components/Button.svelte';
 	import Chevron from '../../components/wireframe/Chevron.svelte';
 	import Dropdown from '../../components/wireframe/Dropdown.svelte';
 	import FooterMenu from '../../components/wireframe/FooterMenu.svelte';

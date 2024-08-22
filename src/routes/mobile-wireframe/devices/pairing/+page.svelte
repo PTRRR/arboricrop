@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Button from '../../../../components/wireframe/Button.svelte';
+	import Button from '../../../../components/Button.svelte';
 	import Dropdown from '../../../../components/wireframe/Dropdown.svelte';
 	import Image from '../../../../components/wireframe/Image.svelte';
 	import { useReturnButton } from '../../../../stores';

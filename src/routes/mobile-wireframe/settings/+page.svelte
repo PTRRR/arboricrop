@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import Spacer from '../../../components/Spacer.svelte';
-	import Button from '../../../components/wireframe/Button.svelte';
+	import Button from '../../../components/Button.svelte';
 	import ButtonList from '../../../components/wireframe/ButtonList.svelte';
 	import CenteredWrapper from '../../../components/wireframe/CenteredWrapper.svelte';
 	import Info from '../../../components/wireframe/Info.svelte';
