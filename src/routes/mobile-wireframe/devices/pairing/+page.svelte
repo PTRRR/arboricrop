@@ -25,9 +25,9 @@
 </script>
 
 <CenteredWrapper>
-	<Separation title={`${currentPairingStrategy.label} pairing:`} />
 	<div class="pairing__content">
 		{#if !$page.data.success}
+			<Separation title={`${currentPairingStrategy.label} pairing:`} />
 			<div class="pairing__image">
 				<Image
 					ratio={1}
