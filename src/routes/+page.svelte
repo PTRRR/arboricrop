@@ -3,6 +3,7 @@
 
 	<div class="links">
 		<a href="/mobile-wireframe">Mobile Wireframe</a>
+		<a href="/desktop-wireframe">Desktop Wireframe</a>
 	</div>
 </div>
 
@@ -24,10 +25,15 @@
 	.links {
 		display: flex;
 		flex-direction: column;
+		text-align: center;
 	}
 
 	a {
 		font-size: 1.5rem;
 		color: black;
+	}
+
+	a + a {
+		margin-top: 0.5rem;
 	}
 </style>
