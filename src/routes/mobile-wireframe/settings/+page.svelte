@@ -3,6 +3,8 @@
 	import { page } from '$app/stores';
 	import Spacer from '../../../components/Spacer.svelte';
 	import Button from '../../../components/wireframe/Button.svelte';
+	import ButtonList from '../../../components/wireframe/ButtonList.svelte';
+	import CenteredWrapper from '../../../components/wireframe/CenteredWrapper.svelte';
 	import Info from '../../../components/wireframe/Info.svelte';
 	import SaveSection from '../../../components/wireframe/SaveSection.svelte';
 	import Separation from '../../../components/wireframe/Separation.svelte';
@@ -23,15 +25,16 @@
 </script>
 
 {#if $page.data.network}
-	<div class="network-settings">
+	<CenteredWrapper>
 		<Separation title="Available networks:" />
-		<div class="networks">
-			{#each loraNetworks as network}
-				<Button selected={selectedNetwork === network} on:click={() => (selectedNetwork = network)}>
-					{network}
-				</Button>
-			{/each}
-		</div>
+		<ButtonList
+			items={loraNetworks}
+			let:item
+			selectedItems={[selectedNetwork]}
+			onSelect={(network) => (selectedNetwork = network)}
+		>
+			{item}
+		</ButtonList>
 		<Spacer />
 		<Separation />
 		<SaveSection
@@ -41,20 +44,18 @@
 			}}
 			onCancel={() => goto(window.location.pathname)}
 		/>
-	</div>
+	</CenteredWrapper>
 {:else if $page.data.organisation}
-	<div class="network-settings">
+	<CenteredWrapper>
 		<Separation title="Organisations:" />
-		<div class="organisations">
-			{#each organisations as organisation}
-				<Button
-					selected={selectedOrganisation === organisation}
-					on:click={() => (selectedOrganisation = organisation)}
-				>
-					{organisation}
-				</Button>
-			{/each}
-		</div>
+		<ButtonList
+			items={organisations}
+			let:item
+			selectedItems={[selectedOrganisation]}
+			onSelect={(organisation) => (selectedOrganisation = organisation)}
+		>
+			{item}
+		</ButtonList>
 		<Spacer />
 		<Separation />
 		<SaveSection
@@ -65,7 +66,7 @@
 			}}
 			onCancel={() => goto(window.location.pathname)}
 		/>
-	</div>
+	</CenteredWrapper>
 {:else}
 	<Separation title="User settings:" />
 	<label for="">First name:</label>
@@ -112,25 +113,6 @@
 {/if}
 
 <style>
-	.network-settings {
-		width: 100%;
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		gap: 1rem;
-		flex: 1 1 auto;
-	}
-
-	.networks,
-	.organisations {
-		width: 100%;
-		display: flex;
-		flex-direction: column;
-		gap: var(--gap);
-	}
-
 	input {
 		font-family: inherit;
 		font-size: inherit;
