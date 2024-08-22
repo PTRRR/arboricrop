@@ -11,7 +11,8 @@
 			label="Settings"
 			items={[
 				{ label: 'Profile', href: '/desktop-wireframe/profile' },
-				{ label: 'Account', href: '/desktop-wireframe/account' }
+				{ label: 'Account', href: '/desktop-wireframe/account' },
+				{ label: 'Notifications', href: '/desktop-wireframe/notifications' }
 			]}
 			align="right"
 		>
