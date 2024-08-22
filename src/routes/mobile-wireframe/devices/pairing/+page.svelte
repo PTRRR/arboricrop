@@ -7,6 +7,8 @@
 	import { strategies } from '../../../../utils/pairing';
 	import { goto } from '$app/navigation';
 	import { createUrlBuilder } from '../../../../utils/urls';
+	import CenteredWrapper from '../../../../components/wireframe/CenteredWrapper.svelte';
+	import Separation from '../../../../components/wireframe/Separation.svelte';
 
 	const returnButton = useReturnButton();
 	returnButton.set({
@@ -22,7 +24,8 @@
 	$: strategyOptions = strategies.filter((it) => it.value !== currentPairingStrategy.value);
 </script>
 
-<div class="pairing">
+<CenteredWrapper>
+	<Separation title={`${currentPairingStrategy.label} pairing:`} />
 	<div class="pairing__content">
 		{#if !$page.data.success}
 			<div class="pairing__image">
@@ -55,19 +58,9 @@
 			</div>
 		{/if}
 	</div>
-</div>
+</CenteredWrapper>
 
 <style>
-	.pairing {
-		width: 100%;
-		height: 100%;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		gap: 1rem;
-		flex: 1 1 auto;
-	}
-
 	.pairing__content {
 		width: 100%;
 		display: flex;
