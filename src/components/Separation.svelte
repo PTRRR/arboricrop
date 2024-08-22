@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Spacer from '../Spacer.svelte';
+	import Spacer from './Spacer.svelte';
 	import Line from './Line.svelte';
 
 	export let title: string | undefined = undefined;

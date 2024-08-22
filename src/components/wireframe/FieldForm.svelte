@@ -2,7 +2,7 @@
 	import Button from '../Button.svelte';
 	import { createId } from '@paralleldrive/cuid2';
 	import type { Field } from '../../utils/types';
-	import Separation from './Separation.svelte';
+	import Separation from '../Separation.svelte';
 
 	export let field: Field | undefined = undefined;
 	export let onSave: ((field: Field) => void) | undefined = undefined;

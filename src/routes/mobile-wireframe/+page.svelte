@@ -1,9 +1,7 @@
 <script lang="ts">
-	import Spacer from '../../components/Spacer.svelte';
 	import Button from '../../components/Button.svelte';
 	import Card from '../../components/wireframe/Card.svelte';
-	import Line from '../../components/wireframe/Line.svelte';
-	import Separation from '../../components/wireframe/Separation.svelte';
+	import Separation from '../../components/Separation.svelte';
 	import { useDevices, useFields, useNotifications, useReturnButton } from '../../stores';
 	import { shuffle } from '../../utils/arrays';
 	import { getDevicesByFieldId } from '../../utils/dummyData';

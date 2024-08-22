@@ -2,7 +2,7 @@
 	import Spacer from '../../../components/Spacer.svelte';
 	import Button from '../../../components/Button.svelte';
 	import Card from '../../../components/wireframe/Card.svelte';
-	import Separation from '../../../components/wireframe/Separation.svelte';
+	import Separation from '../../../components/Separation.svelte';
 	import { useDevices, useReturnButton } from '../../../stores';
 
 	let devices = useDevices();

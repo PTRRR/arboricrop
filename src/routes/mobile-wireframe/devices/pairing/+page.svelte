@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Button from '../../../../components/Button.svelte';
-	import Dropdown from '../../../../components/wireframe/Dropdown.svelte';
+	import Dropdown from '../../../../components/Dropdown.svelte';
 	import Image from '../../../../components/wireframe/Image.svelte';
 	import { useReturnButton } from '../../../../stores';
 	import { page } from '$app/stores';
@@ -8,7 +8,7 @@
 	import { goto } from '$app/navigation';
 	import { createUrlBuilder } from '../../../../utils/urls';
 	import CenteredWrapper from '../../../../components/wireframe/CenteredWrapper.svelte';
-	import Separation from '../../../../components/wireframe/Separation.svelte';
+	import Separation from '../../../../components/Separation.svelte';
 
 	const returnButton = useReturnButton();
 	returnButton.set({

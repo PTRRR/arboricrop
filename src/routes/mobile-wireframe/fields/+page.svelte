@@ -2,7 +2,7 @@
 	import Spacer from '../../../components/Spacer.svelte';
 	import Button from '../../../components/Button.svelte';
 	import Card from '../../../components/wireframe/Card.svelte';
-	import Separation from '../../../components/wireframe/Separation.svelte';
+	import Separation from '../../../components/Separation.svelte';
 	import { useDevices, useFields, useReturnButton } from '../../../stores';
 	import { getDevicesByFieldId } from '../../../utils/dummyData';
 

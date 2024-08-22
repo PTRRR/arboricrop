@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { useBlurApp } from '../../stores';
+	import { useBlurApp } from '../stores';
 
 	import { DropdownMenu } from 'bits-ui';
-	import Button from '../Button.svelte';
+	import Button from './Button.svelte';
 
 	export let label: string;
 	export let side: 'top' | 'bottom' | 'left' | 'right' | undefined = undefined;

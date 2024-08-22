@@ -4,7 +4,7 @@
 	import Mobile from '../../components/Mobile.svelte';
 	import Button from '../../components/Button.svelte';
 	import Chevron from '../../components/wireframe/Chevron.svelte';
-	import Dropdown from '../../components/wireframe/Dropdown.svelte';
+	import Dropdown from '../../components/Dropdown.svelte';
 	import FooterMenu from '../../components/wireframe/FooterMenu.svelte';
 	import Menu from '../../components/wireframe/Menu.svelte';
 	import {

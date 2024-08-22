@@ -1,12 +1,21 @@
 <script>
 	import Button from '../Button.svelte';
+	import Dropdown from '../Dropdown.svelte';
 </script>
 
 <div class="main-menu">
 	<span>Arboricrop</span>
 	<div class="main-menu-section main-menu__right-section">
-		<Button>Settings</Button>
-		<Button>Profile</Button>
+		<Dropdown
+			label="Settings"
+			items={[
+				{ label: 'Profile', href: '/desktop-wireframe/profile' },
+				{ label: 'Account', href: '/desktop-wireframe/account' }
+			]}
+			align="right"
+		>
+			<Button slot="item" let:item href={item.href}>{item.label}</Button>
+		</Dropdown>
 	</div>
 </div>
 

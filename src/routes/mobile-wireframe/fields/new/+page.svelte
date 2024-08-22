@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 	import Spacer from '../../../../components/Spacer.svelte';
 	import FieldForm from '../../../../components/wireframe/FieldForm.svelte';
-	import Separation from '../../../../components/wireframe/Separation.svelte';
+	import Separation from '../../../../components/Separation.svelte';
 	import { useFields, useReturnButton } from '../../../../stores';
 
 	const fields = useFields();

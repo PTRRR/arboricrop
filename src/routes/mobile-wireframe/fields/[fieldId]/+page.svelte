@@ -5,12 +5,12 @@
 	import Spacer from '../../../../components/Spacer.svelte';
 	import Button from '../../../../components/Button.svelte';
 	import FieldForm from '../../../../components/wireframe/FieldForm.svelte';
-	import Line from '../../../../components/wireframe/Line.svelte';
+	import Line from '../../../../components/Line.svelte';
 	import { useDevices, useFields, useReturnButton } from '../../../../stores';
 	import { getDevicesByFieldId } from '../../../../utils/dummyData';
 	import type { Device, Location } from '../../../../utils/types';
 	import Map from '../../../../components/wireframe/Map.svelte';
-	import Separation from '../../../../components/wireframe/Separation.svelte';
+	import Separation from '../../../../components/Separation.svelte';
 	import ButtonList from '../../../../components/wireframe/ButtonList.svelte';
 
 	const fields = useFields();

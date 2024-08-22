@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getCss } from '../../utils/css';
+	import { getCss } from '../utils/css';
 
 	export let direction: 'horizontal' | 'vertical' = 'horizontal';
 	export let size: string | undefined = undefined;
