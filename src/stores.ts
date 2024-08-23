@@ -52,9 +52,22 @@ export const useNotifications = () => useWritable('notifications', dummyNotifica
 export const useFields = () => useWritable('fields', getFields(), true);
 export const useBlurApp = () => useWritable('blur-app', false);
 export const useUserName = () => useWritable('user-name', '', true);
+export const useProfile = () =>
+	useWritable(
+		'profile',
+		{
+			firstName: 'Jon',
+			lastName: 'Doe',
+			role: 'Grower'
+		},
+		true
+	);
 export const useComments = () => useWritable<(typeof comment.$inferSelect)[]>('comments', []);
 export const useReturnButton = () =>
 	useWritable<{ label: string; href?: string } | undefined>('return-button', undefined);
 export const useNetwork = () => useWritable('network', loraNetworks[0], true);
 export const useScrollLock = () => useWritable('scroll-lock', false);
 export const useOrganisation = () => useWritable('organisation', organisations[0], true);
+export const useIsOrganisation = () => useWritable('is-organisation', false, true);
+export const useOrganisationName = () => useWritable('organisation-name', '', true);
+export const useInvitedUsers = () => useWritable<string[]>('invited-users', [], true);

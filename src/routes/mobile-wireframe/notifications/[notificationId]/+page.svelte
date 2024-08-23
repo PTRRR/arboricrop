@@ -3,7 +3,7 @@
 	import Spacer from '../../../../components/Spacer.svelte';
 	import Button from '../../../../components/Button.svelte';
 	import Image from '../../../../components/wireframe/Image.svelte';
-	import Info from '../../../../components/wireframe/Info.svelte';
+	import Info from '../../../../components/Info.svelte';
 	import Separation from '../../../../components/Separation.svelte';
 	import { useNotifications, useReturnButton } from '../../../../stores';
 	import { formatDateToDDMMYYYY } from '../../../../utils/dates';

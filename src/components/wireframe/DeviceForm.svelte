@@ -10,7 +10,7 @@
 	import type { Device, Location } from '../../utils/types';
 	import { useFields, useNetwork } from '../../stores';
 	import Separation from '../Separation.svelte';
-	import Info from './Info.svelte';
+	import Info from '../Info.svelte';
 	import { createUrlBuilder } from '../../utils/urls';
 	import DeviceMetadata from './DeviceMetadata.svelte';
 	import CenteredWrapper from './CenteredWrapper.svelte';

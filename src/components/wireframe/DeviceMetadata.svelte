@@ -7,7 +7,7 @@
 	import Map from './Map.svelte';
 	import { createId } from '@paralleldrive/cuid2';
 	import { useFields } from '../../stores';
-	import Info from './Info.svelte';
+	import Info from '../Info.svelte';
 	import ButtonList from './ButtonList.svelte';
 
 	export let device: Device;

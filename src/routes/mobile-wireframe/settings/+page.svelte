@@ -5,7 +5,7 @@
 	import Button from '../../../components/Button.svelte';
 	import ButtonList from '../../../components/wireframe/ButtonList.svelte';
 	import CenteredWrapper from '../../../components/wireframe/CenteredWrapper.svelte';
-	import Info from '../../../components/wireframe/Info.svelte';
+	import Info from '../../../components/Info.svelte';
 	import SaveSection from '../../../components/wireframe/SaveSection.svelte';
 	import Separation from '../../../components/Separation.svelte';
 	import { useNetwork, useOrganisation, useReturnButton } from '../../../stores';
