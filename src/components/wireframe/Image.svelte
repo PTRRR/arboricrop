@@ -17,6 +17,10 @@
 	})}
 >
 	<span>{placeholder || 'image'}</span>
+	<svg class="cross" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+		<line x1="0" y1="0" x2="100%" y2="100%" />
+		<line x1="100%" y1="0" x2="0" y2="100%" />
+	</svg>
 </div>
 
 <style>
@@ -32,22 +36,15 @@
 		overflow: hidden;
 	}
 
-	.image::before,
-	.image::after {
+	.cross {
 		position: absolute;
-		top: 50%;
-		left: 50%;
-		content: '';
-		height: 200%;
-		border-left: dashed 1px var(--dark-gray);
-	}
-
-	.image::before {
-		transform: translate(-50%, -50%) rotate(45deg);
-	}
-
-	.image::after {
-		transform: translate(-50%, -50%) rotate(-45deg);
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		stroke: var(--dark-gray);
+		stroke-width: 1;
+		stroke-dasharray: 3, 3;
 	}
 
 	.image--clickable {
