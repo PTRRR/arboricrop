@@ -5,8 +5,14 @@
 	import Image from '../../components/wireframe/Image.svelte';
 	import { useFields } from '../../stores';
 	import { goto } from '$app/navigation';
+	import AlertDialog from '../../components/AlertDialog.svelte';
+	import Input from '../../components/Input.svelte';
+	import { createId } from '@paralleldrive/cuid2';
 
 	const fields = useFields();
+
+	let newFieldName: string | undefined = undefined;
+	let newFieldType: string | undefined = undefined;
 </script>
 
 <Separation title="Fields:" />
@@ -22,7 +28,36 @@
 	{/each}
 </div>
 <Spacer />
-<Button>Create new field</Button>
+<AlertDialog
+	triggerLabel="Create new field"
+	cancelLabel="Cancel"
+	actionLabel="Create"
+	onCancel={() => {
+		newFieldName = undefined;
+		newFieldType = undefined;
+	}}
+	onAction={() => {
+		if (newFieldName && newFieldType) {
+			fields.set([
+				...$fields,
+				{
+					id: `fie-${createId()}`,
+					name: newFieldName,
+					type: newFieldType
+				}
+			]);
+		}
+
+		newFieldName = undefined;
+		newFieldType = undefined;
+	}}
+>
+	<div class="dashboard__new-field">
+		<Separation title="New field:" />
+		<Input placeholder="Field name" onValue={(value) => (newFieldName = value)} />
+		<Input placeholder="Field type" onValue={(value) => (newFieldType = value)} />
+	</div>
+</AlertDialog>
 
 <style>
 	.dashboard {
@@ -33,5 +68,12 @@
 
 	.dashboard__item {
 		height: 30svh;
+	}
+
+	.dashboard__new-field {
+		display: flex;
+		flex-direction: column;
+		min-width: 30rem;
+		gap: var(--gap);
 	}
 </style>
