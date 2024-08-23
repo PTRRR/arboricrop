@@ -4,6 +4,7 @@
 	import Spacer from '../../components/Spacer.svelte';
 	import Image from '../../components/wireframe/Image.svelte';
 	import { useFields } from '../../stores';
+	import { goto } from '$app/navigation';
 
 	const fields = useFields();
 </script>
@@ -12,7 +13,11 @@
 <div class="dashboard">
 	{#each $fields as field}
 		<div class="dashboard__item">
-			<Image ratio={0.1} placeholder={`Infographic: ${field.name}`} />
+			<Image
+				ratio={0.1}
+				placeholder={`Infographic: ${field.name}`}
+				onClick={() => goto(`/desktop-wireframe/fields/${field.id}`)}
+			/>
 		</div>
 	{/each}
 </div>
