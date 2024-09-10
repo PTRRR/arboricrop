@@ -1,4 +1,4 @@
-import { readable, writable } from 'svelte/store';
+import { readable, writable, type Writable } from 'svelte/store';
 import { getContext, hasContext, setContext } from 'svelte';
 import {
 	getDevices,
@@ -23,7 +23,7 @@ export const useSharedStore = <T, A>(name: string, fn: (value?: A) => T, default
 };
 
 export const useWritable = <T>(name: string, value: T, persist: boolean = false) => {
-	const sharedStore = useSharedStore(name, writable, value);
+	const sharedStore = useSharedStore(name, writable, value) as Writable<T>;
 
 	if (typeof window !== 'undefined' && persist) {
 		const storageValueKey = `${name}-${STORE_VERSION}`;

@@ -18,6 +18,8 @@
 	let newComment: typeof comment.$inferInsert | undefined = undefined;
 	let focusComment: typeof comment.$inferSelect | undefined = undefined;
 	let showAll: boolean = false;
+	let showList: boolean = false;
+	let allComments: (typeof comment.$inferSelect)[] = [];
 
 	$: commentsToDisplay = showAll ? comments : comments.filter((it) => it.status === 'new');
 
@@ -33,6 +35,12 @@
 		focusComment = undefined;
 		addComment = false;
 		newComment = undefined;
+	};
+
+	const fetchAllComments = async () => {
+		const res = await fetch(`/api/projects/${projectId}/comments`);
+		const json = await res.json();
+		return json as (typeof comment.$inferSelect)[];
 	};
 
 	onMount(() => {
@@ -99,6 +107,22 @@
 		class="comments-button"
 		class:comments--closed={!open}
 		style={getCss({
+			width: '4rem',
+			backgroundColor: showList ? 'black' : undefined,
+			color: showList ? 'white' : undefined
+		})}
+		on:click={async (event) => {
+			event.stopPropagation();
+			showList = !showList;
+			allComments = await fetchAllComments();
+		}}
+	>
+		<span>List</span>
+	</button>
+	<button
+		class="comments-button"
+		class:comments--closed={!open}
+		style={getCss({
 			width: '6rem',
 			backgroundColor: showAll ? 'black' : undefined,
 			color: showAll ? 'white' : undefined
@@ -121,6 +145,27 @@
 		<span>Add comment</span>
 	</button>
 </div>
+
+{#if showList}
+	<div class="comments-list">
+		<div class="comments-list__items">
+			{#each allComments as comment}
+				<div class="comments-list__comment">
+					<span class="comments-list__name">{comment.name}</span>
+					<span class="comments-list__text">{comment.text}</span>
+					<a
+						href={comment.url}
+						on:click={(event) => {
+							event.stopPropagation();
+							showList = false;
+						}}
+						>See
+					</a>
+				</div>
+			{/each}
+		</div>
+	</div>
+{/if}
 
 {#if addComment}
 	<Icon
@@ -214,7 +259,7 @@
 	.comments-nav {
 		display: flex;
 		flex-direction: column;
-		z-index: 10;
+		z-index: 30;
 		position: fixed;
 		bottom: 1rem;
 		left: 1rem;
@@ -261,5 +306,41 @@
 
 	.comments--closed span {
 		opacity: 0;
+	}
+
+	.comments-list {
+		position: fixed;
+		z-index: 29;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(240, 240, 240, 0.9);
+		display: flex;
+		justify-content: center;
+	}
+
+	.comments-list__items {
+		display: flex;
+		flex-direction: column;
+		background-color: rgba(255, 255, 255, 0.9);
+		padding: 1rem;
+	}
+
+	.comments-list__comment {
+		display: flex;
+		flex-direction: column;
+		max-width: 35rem;
+		align-items: start;
+		border-top: solid 1px black;
+		padding-top: 1rem;
+	}
+
+	.comments-list__comment + .comments-list__comment {
+		margin-top: 1rem;
+	}
+
+	.comments-list__name {
+		color: gray;
 	}
 </style>
