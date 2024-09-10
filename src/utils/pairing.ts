@@ -7,7 +7,7 @@ export const strategies = [
 	{
 		label: 'Bluetooth',
 		value: 'bluetooth',
-		description: 'Bring your mobile close to the device'
+		description: 'Click on the wake up button and bring your mobile close to the device'
 	},
 	{
 		label: 'QR Code',

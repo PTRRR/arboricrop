@@ -169,6 +169,7 @@
 {:else if $page.data.liveData}
 	<CenteredWrapper>
 		<Image placeholder="Console showing a stream of data coming from the device" ratio={1} />
+		<Spacer />
 		<Button href={url.removeQuery({ name: 'liveData' })}>Close</Button>
 	</CenteredWrapper>
 {:else}
