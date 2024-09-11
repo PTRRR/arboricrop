@@ -16,6 +16,8 @@
 	import CenteredWrapper from './CenteredWrapper.svelte';
 	import ButtonList from './ButtonList.svelte';
 	import Legend from './Legend.svelte';
+	import Checklist from '../Checklist.svelte';
+	import Pagination from './Pagination.svelte';
 
 	export let device: Device;
 	export let isNewDevice: boolean | undefined = undefined;
@@ -139,6 +141,38 @@
 			onCancel={() => goto(url.removeQuery({ name: 'field' }))}
 		/>
 	</CenteredWrapper>
+{:else if $page.data.installationCheck}
+	<div>
+		<Separation title="Device Installation:" />
+		<Info
+			value="It appears that your device is not installed correctly. Please follow these steps to install
+    it properly."
+		/>
+		<Spacer />
+		<Image placeholder="Schemas of installation steps" ratio={1} />
+		<!-- <Pagination count={3} /> -->
+		<Spacer />
+		<Info label="Checklist:" />
+		<Spacer />
+		<Checklist
+			points={[
+				{ label: 'connect probes', checked: true },
+				{ label: 'attach device', checked: true },
+				{ label: 'install sensors', checked: true }
+			]}
+		/>
+		<Spacer />
+		<Button
+			href={url.resetQueries([
+				{ name: 'connected', value: true },
+				{ name: 'activation', value: true }
+			])}>Done</Button
+		>
+		<Spacer />
+		<Separation title="Advanced users:" />
+		<Spacer />
+		<Button href="#">View live data</Button>
+	</div>
 {:else if $page.data.activation}
 	<CenteredWrapper>
 		<Separation title="Device activation:" />
@@ -205,7 +239,7 @@
 			{#if device?.status === 'unactive'}
 				<Button
 					href={$page.data.connected
-						? url.addQuery({ name: 'activation', value: true })
+						? url.addQuery({ name: 'installationCheck', value: true })
 						: pairUrl.resetQueries([{ name: 'deviceId', value: device.id }])}
 				>
 					Activate device

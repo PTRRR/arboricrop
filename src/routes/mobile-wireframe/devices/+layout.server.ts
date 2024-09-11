@@ -8,10 +8,12 @@ export const load: LayoutServerLoad = ({ url }) => {
 	const activation = url.searchParams.get('activation');
 	const field = url.searchParams.get('field');
 	const deviceId = url.searchParams.get('deviceId');
+	const installationCheck = url.searchParams.get('installationCheck');
 	return {
 		firmwareUpdate: firmwareUpdate === 'true',
 		connected: connected === 'true',
 		activation: activation === 'true',
+		installationCheck: installationCheck === 'true',
 		media,
 		liveData,
 		deviceId,
