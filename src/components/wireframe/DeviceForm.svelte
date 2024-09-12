@@ -191,7 +191,7 @@
 					{ name: 'activation', value: true }
 				])}
 			>
-				Done
+				Activate
 			</Button>
 		{/if}
 	</CenteredWrapper>
