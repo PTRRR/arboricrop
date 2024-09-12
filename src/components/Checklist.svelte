@@ -45,4 +45,8 @@
 		background-color: var(--light-gray);
 		z-index: 10;
 	}
+
+	.checklist--checked {
+		background-color: var(--dark-gray);
+	}
 </style>

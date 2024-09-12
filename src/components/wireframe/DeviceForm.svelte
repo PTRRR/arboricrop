@@ -41,6 +41,13 @@
 	let upgradeTimer: NodeJS.Timeout | undefined = undefined;
 	let success = false;
 
+	const installationSteps = ['connect', 'attach', 'install', 'success'];
+	$: isStepActive = (step: string) => {
+		const stepIndex = installationSteps.indexOf(step);
+		const currentStep = Math.max(0, installationSteps.indexOf($page.data.installationCheck));
+		return currentStep > stepIndex;
+	};
+
 	let fieldId: string | undefined = device?.fieldId;
 	let currentMapLocation: Location = { x: -50, y: -50 };
 	let location: Location = device?.location || {
@@ -142,37 +149,52 @@
 		/>
 	</CenteredWrapper>
 {:else if $page.data.installationCheck}
-	<div>
+	<CenteredWrapper>
 		<Separation title="Device Installation:" />
-		<Info
-			value="It appears that your device is not installed correctly. Please follow these steps to install
-    it properly."
-		/>
-		<Spacer />
-		<Image placeholder="Schemas of installation steps" ratio={1} />
-		<!-- <Pagination count={3} /> -->
-		<Spacer />
-		<Info label="Checklist:" />
-		<Spacer />
 		<Checklist
 			points={[
-				{ label: 'connect probes', checked: true },
-				{ label: 'attach device', checked: true },
-				{ label: 'install sensors', checked: true }
+				{ label: 'connect probes', checked: isStepActive('connect') },
+				{ label: 'attach device', checked: isStepActive('attach') },
+				{ label: 'install sensors', checked: isStepActive('install') }
 			]}
 		/>
 		<Spacer />
-		<Button
-			href={url.resetQueries([
-				{ name: 'connected', value: true },
-				{ name: 'activation', value: true }
-			])}>Done</Button
-		>
-		<Spacer />
-		<Separation title="Advanced users:" />
-		<Spacer />
-		<Button href="#">View live data</Button>
-	</div>
+
+		{#if $page.data.installationCheck !== 'success'}
+			<Button href="#">View live data</Button>
+			<Spacer />
+		{/if}
+
+		{#if $page.data.installationCheck === 'connect'}
+			<Separation title="Probes connection:" />
+			<Image placeholder="Schema showing how to plug the probes in the device" ratio={1} />
+			<Spacer />
+			<Button href={url.addQuery({ name: 'installationCheck', value: 'attach' })}>Next</Button>
+		{:else if $page.data.installationCheck === 'attach'}
+			<Separation title="Attach device:" />
+			<Image placeholder="Schema showing how to attach the device on a plant" ratio={1} />
+			<Spacer />
+			<Button href={url.addQuery({ name: 'installationCheck', value: 'install' })}>Next</Button>
+		{:else if $page.data.installationCheck === 'install'}
+			<Separation title="Install Sensor:" />
+			<Image placeholder="Schema showing how to install the probes on a plant" ratio={1} />
+			<Spacer />
+			<Button href={url.addQuery({ name: 'installationCheck', value: 'success' })}>Next</Button>
+		{:else if $page.data.installationCheck === 'success'}
+			<Spacer />
+			<Spacer />
+			<Info value="Device installed successfully!" />
+			<Spacer />
+			<Button
+				href={url.resetQueries([
+					{ name: 'connected', value: true },
+					{ name: 'activation', value: true }
+				])}
+			>
+				Done
+			</Button>
+		{/if}
+	</CenteredWrapper>
 {:else if $page.data.activation}
 	<CenteredWrapper>
 		<Separation title="Device activation:" />
@@ -239,7 +261,7 @@
 			{#if device?.status === 'unactive'}
 				<Button
 					href={$page.data.connected
-						? url.addQuery({ name: 'installationCheck', value: true })
+						? url.addQuery({ name: 'installationCheck', value: 'connect' })
 						: pairUrl.resetQueries([{ name: 'deviceId', value: device.id }])}
 				>
 					Activate device

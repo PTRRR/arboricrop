@@ -13,7 +13,7 @@ export const load: LayoutServerLoad = ({ url }) => {
 		firmwareUpdate: firmwareUpdate === 'true',
 		connected: connected === 'true',
 		activation: activation === 'true',
-		installationCheck: installationCheck === 'true',
+		installationCheck,
 		media,
 		liveData,
 		deviceId,
