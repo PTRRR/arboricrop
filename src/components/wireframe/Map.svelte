@@ -8,6 +8,7 @@
 	export let locations: Location[] = [];
 	export let showTarget: boolean = false;
 	export let onChange: ((location: Location) => void) | undefined = undefined;
+	export let ratio: number = 1;
 
 	const scrollLock = useScrollLock();
 
@@ -89,7 +90,13 @@
 	});
 </script>
 
-<div class="map" bind:this={map}>
+<div
+	class="map"
+	bind:this={map}
+	style={getCss({
+		'--ratio': ratio.toString()
+	})}
+>
 	{#if showTarget}
 		<div class="map__target"></div>
 	{/if}
@@ -128,7 +135,7 @@
 <style>
 	.map {
 		width: 100%;
-		aspect-ratio: 1;
+		aspect-ratio: var(--ratio);
 		border: solid 1px var(--black);
 		position: relative;
 		overflow: hidden;

@@ -7,6 +7,7 @@
 	<span>Arboricrop</span>
 	<div class="main-menu-section main-menu__right-section">
 		<Button href="/desktop-wireframe">Dashboard</Button>
+		<Button href="/desktop-wireframe">Fields</Button>
 		<Dropdown
 			label="Settings"
 			items={[
