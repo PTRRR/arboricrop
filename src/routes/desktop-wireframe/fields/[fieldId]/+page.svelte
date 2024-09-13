@@ -21,6 +21,16 @@
 	<Separation title="Map:" />
 	<Map ratio={3} locations={deviceLocations} />
 	<Spacer />
+	<Info label="Metrics filters:" />
+	<Spacer />
+	<div class="filters">
+		<Button>Water</Button>
+		<Button>Light</Button>
+		<Button>Temperature</Button>
+		<Button>Soil Moisture</Button>
+		<Button>Soil Nutriment</Button>
+	</div>
+	<Spacer />
 
 	<Separation title="Devices:" />
 	{#each fieldDevices as device}
@@ -80,5 +90,11 @@
 		display: flex;
 		justify-content: space-between;
 		width: 100%;
+	}
+
+	.filters {
+		display: flex;
+		gap: 1rem;
+		align-items: center;
 	}
 </style>
