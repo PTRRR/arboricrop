@@ -35,7 +35,7 @@
 	<Separation title="Devices:" />
 	{#each fieldDevices as device}
 		{#if device}
-			<Button minimal href={`/mobile-wireframe/devices/${device.id}`}>
+			<Button minimal href={`/desktop-wireframe/devices/${device.id}`}>
 				<div class="device">
 					<span class="device-name">{device.name}</span>
 					<span class="device-id">{device.status}</span>
