@@ -26,6 +26,7 @@
 	.main-menu {
 		display: flex;
 		position: sticky;
+		z-index: 10;
 		top: 0;
 		width: 100%;
 		align-items: center;

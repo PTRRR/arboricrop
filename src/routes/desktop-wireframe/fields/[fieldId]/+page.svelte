@@ -35,7 +35,7 @@
 	{/each}
 	<Spacer />
 
-	<Separation title="Metadata:" />
+	<Separation title="Metadata:" buttons={[{ label: 'edit' }]} />
 	<Info label="Name:" value={field.name} />
 	<Spacer />
 	<Info label="Type:" value={field.type} />
