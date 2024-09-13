@@ -27,8 +27,8 @@
 		<Button>Water</Button>
 		<Button>Light</Button>
 		<Button>Temperature</Button>
-		<Button>Soil Moisture</Button>
-		<Button>Soil Nutriment</Button>
+		<Button>Humidity</Button>
+		<Button>Soil pH</Button>
 	</div>
 	<Spacer />
 
