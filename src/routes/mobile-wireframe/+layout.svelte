@@ -12,7 +12,7 @@
 		useComments,
 		useDevices,
 		useFields,
-		useLayers,
+		useGeoJSONFeatures,
 		useNetwork,
 		useNotifications,
 		useOrganisation,
@@ -49,7 +49,7 @@
 	useDevices();
 	useUserName();
 	useComments();
-	useLayers();
+	useGeoJSONFeatures();
 	let blurApp = useBlurApp();
 
 	navigating.subscribe(async (navigating) => {

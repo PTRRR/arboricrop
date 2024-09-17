@@ -5,6 +5,7 @@ import { shuffle } from './arrays';
 import { getRandomDate } from './dates';
 import type { LngLatLike } from 'svelte-maplibre';
 import { mapValue } from './math';
+import { getGeoJSONFeatures } from './geoJSON';
 
 export const changinCenter: LngLatLike = [6.231351138336578, 46.398638192299046];
 
@@ -32,6 +33,50 @@ export const getFields = (): Field[] => [
 	}
 ];
 
+const coords = [
+	[6.231022451215551, 46.39905478450942],
+	[6.231183970206132, 46.39895308179612],
+	[6.231345489196656, 46.39888043688481],
+	[6.231380602020721, 46.398492995723814],
+	[6.231549143577183, 46.398420350199984],
+	[6.231485940492831, 46.398183040814445],
+	[6.231837068734308, 46.398725460750484],
+	[6.232082858502565, 46.39853173996366],
+	[6.230896045049036, 46.398434879312504],
+	[6.230783684011016, 46.39888043688481],
+	[6.230938180437818, 46.3987787338462],
+	[6.23107160916922, 46.39870608870277],
+	[6.231155879946897, 46.398609228360755],
+	[6.230355307557744, 46.39780528088784],
+	[6.230537894242701, 46.39793120115371],
+	[6.230200811131965, 46.39795057347692],
+	[6.230341262428112, 46.39802321962617],
+	[6.229962043927429, 46.39810070874543],
+	[6.230102495223605, 46.39822178527439],
+	[6.229744344418435, 46.39825568665421],
+	[6.229933953668194, 46.398386448922054],
+	[6.230341262428112, 46.39861407138193],
+	[6.2304887362890895, 46.398483309659554],
+	[6.230594074761143, 46.398386448922054],
+	[6.230720480927772, 46.39827505886183],
+	[6.231029473780353, 46.39803774884439],
+	[6.231148857382067, 46.39794573039683],
+	[6.230924135308243, 46.397994161178076],
+	[6.230973293261883, 46.39782949634616],
+	[6.230783684011016, 46.3976745172269],
+	[6.230706435798112, 46.397858554881964],
+	[6.230207833696824, 46.3975679688273],
+	[6.230313172168877, 46.39747110646496],
+	[6.230011201881069, 46.39747110646496],
+	[6.2301516531772165, 46.397335498869325],
+	[6.229266810010415, 46.397296753780125],
+	[6.229519622343474, 46.397214420373814],
+	[6.2296179382518915, 46.397069125825],
+	[6.229442374130599, 46.39787792723055],
+	[6.229688163899937, 46.397737477547395],
+	[6.2293019228344235, 46.397630929270406]
+];
+
 export const getDevices = (count: number = 30): Device[] =>
 	new Array(count).fill({}).map((_, index) => ({
 		name: `Device ${index.toString().padStart(3, '0')}`,
@@ -40,10 +85,7 @@ export const getDevices = (count: number = 30): Device[] =>
 		medias: [],
 		firmwareVersion: 'v1.0.9',
 		status: 'unactive',
-		location: [
-			changinCenter[0] + mapValue(Math.random(), 0, 1, -0.002, 0.002),
-			changinCenter[1] + mapValue(Math.random(), 0, 1, -0.002, 0.002)
-		]
+		location: coords[index % coords.length] as [number, number]
 	}));
 
 export const getDevicesByFieldId = (devices: Device[], fieldId?: string) => {
@@ -224,7 +266,7 @@ export const organisations: string[] = ['Vivent', 'Changin', 'ECAL'];
 const defaultFeature: Feature<Geometry, GeoJsonProperties> = {
 	type: 'Feature',
 	properties: {
-		name: 'fruits'
+		layerName: 'Greenhouse Changin'
 	},
 	geometry: {
 		coordinates: [
@@ -247,7 +289,7 @@ export const changinGeoJson: GeoJSONType = {
 		{
 			type: 'Feature',
 			properties: {
-				name: 'fruits'
+				layerName: 'Greenhouse Changin'
 			},
 			geometry: {
 				coordinates: [
@@ -266,7 +308,7 @@ export const changinGeoJson: GeoJSONType = {
 		{
 			type: 'Feature',
 			properties: {
-				name: 'tomatoes'
+				layerName: 'Barn Westfield'
 			},
 			geometry: {
 				coordinates: [
@@ -285,7 +327,7 @@ export const changinGeoJson: GeoJSONType = {
 		{
 			type: 'Feature',
 			properties: {
-				name: 'floor1'
+				layerName: 'Water Tower'
 			},
 			geometry: {
 				coordinates: [
@@ -308,7 +350,7 @@ export const changinGeoJson: GeoJSONType = {
 		{
 			type: 'Feature',
 			properties: {
-				name: 'floor2'
+				layerName: 'Farmhouse East'
 			},
 			geometry: {
 				coordinates: [
@@ -332,7 +374,9 @@ export const changinGeoJson: GeoJSONType = {
 		},
 		{
 			type: 'Feature',
-			properties: {},
+			properties: {
+				layerName: 'Irrigation Control Center'
+			},
 			geometry: {
 				coordinates: [
 					[
@@ -348,7 +392,9 @@ export const changinGeoJson: GeoJSONType = {
 		},
 		{
 			type: 'Feature',
-			properties: {},
+			properties: {
+				layerName: 'Storage Silo'
+			},
 			geometry: {
 				coordinates: [
 					[
@@ -364,7 +410,9 @@ export const changinGeoJson: GeoJSONType = {
 		},
 		{
 			type: 'Feature',
-			properties: {},
+			properties: {
+				layerName: 'Machinery Garage'
+			},
 			geometry: {
 				coordinates: [
 					[
@@ -384,7 +432,9 @@ export const changinGeoJson: GeoJSONType = {
 		},
 		{
 			type: 'Feature',
-			properties: {},
+			properties: {
+				layerName: 'Solar Panel Array'
+			},
 			geometry: {
 				coordinates: [
 					[
@@ -404,7 +454,9 @@ export const changinGeoJson: GeoJSONType = {
 		},
 		{
 			type: 'Feature',
-			properties: {},
+			properties: {
+				layerName: 'Grain Processing Unit'
+			},
 			geometry: {
 				coordinates: [
 					[
@@ -423,59 +475,4 @@ export const changinGeoJson: GeoJSONType = {
 	]
 };
 
-export const mapLayers: MapLayer[] = [
-	{
-		id: createId(),
-		name: 'Greenhouse Changin',
-		feature:
-			changinGeoJson.type === 'FeatureCollection' ? changinGeoJson.features[0] : defaultFeature
-	},
-	{
-		id: createId(),
-		name: 'Barn Westfield',
-		feature:
-			changinGeoJson.type === 'FeatureCollection' ? changinGeoJson.features[1] : defaultFeature
-	},
-	{
-		id: createId(),
-		name: 'Water Tower',
-		feature:
-			changinGeoJson.type === 'FeatureCollection' ? changinGeoJson.features[2] : defaultFeature
-	},
-	{
-		id: createId(),
-		name: 'Farmhouse East',
-		feature:
-			changinGeoJson.type === 'FeatureCollection' ? changinGeoJson.features[3] : defaultFeature
-	},
-	{
-		id: createId(),
-		name: 'Irrigation Control Center',
-		feature:
-			changinGeoJson.type === 'FeatureCollection' ? changinGeoJson.features[4] : defaultFeature
-	},
-	{
-		id: createId(),
-		name: 'Storage Silo',
-		feature:
-			changinGeoJson.type === 'FeatureCollection' ? changinGeoJson.features[5] : defaultFeature
-	},
-	{
-		id: createId(),
-		name: 'Machinery Garage',
-		feature:
-			changinGeoJson.type === 'FeatureCollection' ? changinGeoJson.features[6] : defaultFeature
-	},
-	{
-		id: createId(),
-		name: 'Solar Panel Array',
-		feature:
-			changinGeoJson.type === 'FeatureCollection' ? changinGeoJson.features[7] : defaultFeature
-	},
-	{
-		id: createId(),
-		name: 'Grain Processing Unit',
-		feature:
-			changinGeoJson.type === 'FeatureCollection' ? changinGeoJson.features[8] : defaultFeature
-	}
-];
+export const features = getGeoJSONFeatures(changinGeoJson);

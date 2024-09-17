@@ -1,5 +1,5 @@
 import type { LngLatLike } from 'svelte-maplibre';
-import type { Feature } from 'geojson';
+import type { Feature, GeoJsonProperties, Geometry } from 'geojson';
 
 export type MediaType = 'image' | 'audio-note' | 'file';
 
@@ -16,7 +16,7 @@ export type Location = {
 export type MapLayer = {
 	id: string;
 	name: string;
-	feature: Feature;
+	feature: GeoJSONFeature;
 };
 
 export type Status = 'active' | 'unactive';
@@ -38,7 +38,7 @@ export type Field = {
 	name: string;
 	type: string;
 	center: LngLatLike;
-	layers: Feature[];
+	layers: GeoJSONFeature[];
 };
 
 export type NotificationType = 'notification' | 'warning' | 'alert';
@@ -56,3 +56,4 @@ export type Notification = {
 };
 
 export type Marker = { lngLat: LngLatLike; label?: string };
+export type GeoJSONFeature = Feature<Geometry, GeoJsonProperties>;

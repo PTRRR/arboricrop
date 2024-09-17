@@ -5,13 +5,13 @@ import {
 	getFields,
 	getNotifications,
 	loraNetworks,
-	mapLayers,
+	features,
 	organisations
 } from './utils/dummyData';
 import type { comment } from './db/schema';
-import type { MapLayer } from './utils/types';
+import type { GeoJSONFeature } from './utils/types';
 
-const STORE_VERSION = 'v10';
+const STORE_VERSION = 'v12';
 const dummyDevices = getDevices(30);
 const dummyNotifications = getNotifications(dummyDevices);
 
@@ -73,4 +73,4 @@ export const useOrganisation = () => useWritable('organisation', organisations[0
 export const useIsOrganisation = () => useWritable('is-organisation', false, true);
 export const useOrganisationName = () => useWritable('organisation-name', '', true);
 export const useInvitedUsers = () => useWritable<string[]>('invited-users', [], true);
-export const useLayers = () => useWritable<MapLayer[]>('layers', mapLayers, false);
+export const useGeoJSONFeatures = () => useWritable<GeoJSONFeature[]>('features', features, false);

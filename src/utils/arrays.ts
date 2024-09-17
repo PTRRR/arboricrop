@@ -14,3 +14,7 @@ export const shuffle = <T>(array: T[]) => {
 
 	return clone;
 };
+
+export const filterNotEmpty = <TValue>(value: TValue | null | undefined): value is TValue => {
+	return value !== null && value !== undefined;
+};

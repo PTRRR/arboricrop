@@ -120,9 +120,7 @@
 				goto('/mobile-wireframe/fields');
 			}}
 		>
-			<Spacer />
 			<Separation title="Devices:" />
-
 			{#each fieldDevices as device}
 				{#if device}
 					<Button minimal href={`/mobile-wireframe/devices/${device.id}`}>

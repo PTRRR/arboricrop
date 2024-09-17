@@ -4,7 +4,7 @@
 	import type { Field, MapLayer, Marker } from '../../utils/types';
 	import Separation from '../Separation.svelte';
 	import Spacer from '../Spacer.svelte';
-	import { useLayers } from '../../stores';
+	import { useGeoJSONFeatures } from '../../stores';
 	import MapV2 from '../MapV2.svelte';
 	import { changinCenter, changinGeoJson } from '../../utils/dummyData';
 
@@ -14,9 +14,7 @@
 	export let onCancel: (() => void) | undefined = undefined;
 	export let markers: Marker[] = [];
 
-	const layers = useLayers();
-	// $: fieldLayers =
-	// 	field?.layers.map((it) => $layers.find((layer) => layer.id === it) as MapLayer) || [];
+	const features = useGeoJSONFeatures();
 
 	let id: HTMLInputElement;
 	let name: HTMLInputElement;
@@ -42,7 +40,7 @@
 				[10.476417711659073, 47.881756658719695]
 			]}
 			zoom={16}
-			geoJSONs={[changinGeoJson]}
+			geoJSONs={field?.layers}
 			{markers}
 		/>
 	</div>

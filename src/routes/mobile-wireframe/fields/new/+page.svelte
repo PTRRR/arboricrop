@@ -3,29 +3,31 @@
 	import Spacer from '../../../../components/Spacer.svelte';
 	import FieldForm from '../../../../components/wireframe/FieldForm.svelte';
 	import Separation from '../../../../components/Separation.svelte';
-	import { useFields, useLayers, useReturnButton } from '../../../../stores';
+	import { useFields, useGeoJSONFeatures, useReturnButton } from '../../../../stores';
 	import Button from '../../../../components/Button.svelte';
-	import type { Field, MapLayer } from '../../../../utils/types';
+	import type { Field, GeoJSONFeature, MapLayer } from '../../../../utils/types';
 	import { createUrlBuilder } from '../../../../utils/urls';
 	import { page } from '$app/stores';
 	import CenteredWrapper from '../../../../components/wireframe/CenteredWrapper.svelte';
 	import ButtonList from '../../../../components/wireframe/ButtonList.svelte';
 	import { createId } from '@paralleldrive/cuid2';
 	import { getCss } from '../../../../utils/css';
+	import { changinCenter } from '../../../../utils/dummyData';
+	import { getFeatureLayerName } from '../../../../utils/geoJSON';
 
 	const fields = useFields();
-	const layers = useLayers();
+	const features = useGeoJSONFeatures();
 	const returnButton = useReturnButton();
 	const url = createUrlBuilder();
 	const initialField: Field = {
 		id: createId(),
 		name: '',
 		type: '',
-		location: { x: 0, y: 0 },
+		center: changinCenter,
 		layers: []
 	};
 
-	let selectedLayerIds: string[] = [];
+	let selectedFeatures: GeoJSONFeature[] = [];
 
 	returnButton.set({
 		label: `New field`,
@@ -35,20 +37,22 @@
 
 {#if $page.data.addLayer}
 	<CenteredWrapper>
-		<ButtonList items={$layers} let:item>
-			<div class="layer__button">
-				<Button
-					minimal
-					selected={selectedLayerIds.includes(item.id)}
-					on:click={() =>
-						selectedLayerIds.includes(item.id)
-							? (selectedLayerIds = selectedLayerIds.filter((it) => it !== item.id))
-							: (selectedLayerIds = [...selectedLayerIds, item.id])}
-				>
-					{item.name}
-				</Button>
-				<div>GeoJSON</div>
-			</div>
+		<ButtonList items={$features} let:item>
+			{#if getFeatureLayerName(item)}
+				<div class="layer__button">
+					<Button
+						minimal
+						selected={selectedFeatures.includes(item)}
+						on:click={() =>
+							selectedFeatures.includes(item)
+								? (selectedFeatures = selectedFeatures.filter((it) => it !== item))
+								: (selectedFeatures = [...selectedFeatures, item])}
+					>
+						{getFeatureLayerName(item)}
+					</Button>
+					<div>GeoJSON</div>
+				</div>
+			{/if}
 		</ButtonList>
 		<Spacer />
 		<Button>Upload file</Button>
@@ -69,7 +73,7 @@
 	})}
 >
 	<FieldForm
-		field={{ ...initialField, layers: selectedLayerIds }}
+		field={{ ...initialField, layers: selectedFeatures }}
 		onSave={(field) => {
 			fields.set([...$fields, field]);
 			goto(`/mobile-wireframe/fields/${field.id}`);
