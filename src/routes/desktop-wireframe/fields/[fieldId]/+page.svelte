@@ -4,7 +4,7 @@
 	import Info from '../../../../components/Info.svelte';
 	import Separation from '../../../../components/Separation.svelte';
 	import Spacer from '../../../../components/Spacer.svelte';
-	import Map from '../../../../components/wireframe/Map.svelte';
+	import Map from '../../../../components/Map.svelte';
 	import { useDevices, useFields } from '../../../../stores';
 	import { getDevicesByFieldId } from '../../../../utils/dummyData';
 	import type { Location } from '../../../../utils/types';

@@ -4,7 +4,7 @@
 	import Spacer from '../Spacer.svelte';
 	import Button from '../Button.svelte';
 	import Dropdown from '../Dropdown.svelte';
-	import Map from './Map.svelte';
+	import Map from '../Map.svelte';
 	import { createId } from '@paralleldrive/cuid2';
 	import { useFields } from '../../stores';
 	import Info from '../Info.svelte';

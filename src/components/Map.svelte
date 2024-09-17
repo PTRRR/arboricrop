@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { getCss } from '../../utils/css';
-	import { clamp } from '../../utils/math';
-	import type { Location } from '../../utils/types';
-	import { useScrollLock } from '../../stores';
+	import { getCss } from '../utils/css';
+	import { clamp } from '../utils/math';
+	import type { Location, MapLayer } from '../utils/types';
+	import { useScrollLock } from '../stores';
 
 	export let locations: Location[] = [];
+	export let layers: MapLayer[] = [];
 	export let showTarget: boolean = false;
 	export let onChange: ((location: Location) => void) | undefined = undefined;
 	export let ratio: number = 1;
@@ -120,6 +121,14 @@
 				})}
 			></div>
 		{/each}
+		{#each layers as layer}
+			<svg class="map__polygon" viewBox="0 0 100 100" preserveAspectRatio="none">
+				<path
+					d={`M ${layer.polygon.map((it) => `${it.x} ${it.y}`).join(' L ')} Z`}
+					vector-effect="non-scaling-stroke"
+				/>
+			</svg>
+		{/each}
 		{#each locations as location}
 			<div
 				class="map__location"
@@ -206,5 +215,17 @@
 		height: 10px;
 		background-color: var(--black);
 		border-radius: 100%;
+	}
+
+	.map__polygon {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+	}
+
+	.map__polygon path {
+		fill: rgba(200, 200, 200, 0.5);
+		stroke-width: 2px;
+		stroke: black;
 	}
 </style>

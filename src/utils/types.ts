@@ -10,6 +10,11 @@ export type Location = {
 	y: number;
 };
 
+export type MapLayer = {
+	name: string;
+	polygon: Location[];
+};
+
 export type Status = 'active' | 'unactive';
 
 export type Device = {
@@ -28,6 +33,8 @@ export type Field = {
 	id: string;
 	name: string;
 	type: string;
+	location: Location;
+	layers: MapLayer[];
 };
 
 export type NotificationType = 'notification' | 'warning' | 'alert';

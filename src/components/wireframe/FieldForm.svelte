@@ -1,13 +1,16 @@
 <script lang="ts">
 	import Button from '../Button.svelte';
 	import { createId } from '@paralleldrive/cuid2';
-	import type { Field } from '../../utils/types';
+	import type { Field, Location } from '../../utils/types';
 	import Separation from '../Separation.svelte';
+	import Map from '../Map.svelte';
+	import Spacer from '../Spacer.svelte';
 
 	export let field: Field | undefined = undefined;
 	export let onSave: ((field: Field) => void) | undefined = undefined;
 	export let onDelete: ((id: string) => void) | undefined = undefined;
 	export let onCancel: (() => void) | undefined = undefined;
+	export let mapLocations: Location[] = [];
 
 	let id: HTMLInputElement;
 	let name: HTMLInputElement;
@@ -23,6 +26,10 @@
 	<label for="">Type:</label>
 	<input bind:this={type} type="text" placeholder="Field type" value={field?.type || ''} />
 
+	<Spacer />
+	<Separation title="Map:" />
+	<Map locations={mapLocations} layers={field?.layers} />
+
 	<slot />
 
 	<Button
@@ -30,7 +37,9 @@
 			onSave?.({
 				id: id.value,
 				name: name.value,
-				type: type.value
+				type: type.value,
+				location: field?.location || { x: 0, y: 0 },
+				layers: field?.layers || []
 			})}
 	>
 		Save

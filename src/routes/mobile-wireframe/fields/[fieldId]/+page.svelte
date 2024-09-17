@@ -9,7 +9,7 @@
 	import { useDevices, useFields, useReturnButton } from '../../../../stores';
 	import { getDevicesByFieldId } from '../../../../utils/dummyData';
 	import type { Device, Location } from '../../../../utils/types';
-	import Map from '../../../../components/wireframe/Map.svelte';
+	import Map from '../../../../components/Map.svelte';
 	import Separation from '../../../../components/Separation.svelte';
 	import ButtonList from '../../../../components/wireframe/ButtonList.svelte';
 
@@ -100,6 +100,7 @@
 	{:else}
 		<FieldForm
 			{field}
+			mapLocations={deviceLocations}
 			onSave={(field) => {
 				const fieldIndex = $fields.findIndex((it) => it.id === field.id);
 
@@ -117,13 +118,8 @@
 				goto('/mobile-wireframe/fields');
 			}}
 		>
-			<Spacer size="var(--gap)" />
+			<Spacer />
 			<Separation title="Devices:" />
-
-			{#if deviceLocations.length > 0}
-				<Map locations={deviceLocations} />
-				<Spacer size="var(--gap)" />
-			{/if}
 
 			{#each fieldDevices as device}
 				{#if device}
