@@ -1,5 +1,6 @@
 import { createId } from '@paralleldrive/cuid2';
 import type { Device, Field, MapLayer, Notification } from './types';
+import type { GeoJSON as GeoJSONType } from 'geojson';
 import { shuffle } from './arrays';
 import { getRandomDate } from './dates';
 
@@ -392,7 +393,7 @@ export const mapLayers: MapLayer[] = [
 	}
 ];
 
-export const changinGeoJson = {
+export const changinGeoJson: GeoJSONType = {
 	type: 'FeatureCollection',
 	features: [
 		{
