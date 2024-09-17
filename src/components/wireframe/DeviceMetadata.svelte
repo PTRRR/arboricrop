@@ -4,14 +4,16 @@
 	import Spacer from '../Spacer.svelte';
 	import Button from '../Button.svelte';
 	import Dropdown from '../Dropdown.svelte';
-	import Map from '../Map.svelte';
 	import { createId } from '@paralleldrive/cuid2';
 	import { useFields } from '../../stores';
 	import Info from '../Info.svelte';
 	import ButtonList from './ButtonList.svelte';
+	import MapV2 from '../MapV2.svelte';
+	import { changinCenter } from '../../utils/dummyData';
+	import type { LngLatLike } from 'svelte-maplibre';
 
 	export let device: Device;
-	export let onLocation: ((location: Location) => void) | undefined = undefined;
+	export let onLocation: ((location: LngLatLike) => void) | undefined = undefined;
 	export let onSetManualLocation: (() => void) | undefined = undefined;
 	export let onMedias: ((medias: Media[]) => void) | undefined = undefined;
 	export let onMedia: ((media: Media) => void) | undefined = undefined;
@@ -34,7 +36,13 @@
 <div class="device-metadata">
 	<Info label="Location:" />
 	<Spacer />
-	<Map showTarget locations={[device.location || { x: 0, y: 0 }]} onChange={onLocation} />
+	<MapV2
+		showTarget
+		center={changinCenter}
+		zoom={15.5}
+		markers={device.location ? [{ lngLat: device.location }] : []}
+		onChange={onLocation}
+	/>
 	<Spacer />
 	<Button on:click={() => onSetManualLocation?.()}>Set manual location</Button>
 	<Spacer />

@@ -10,6 +10,7 @@
 	import Spacer from './Spacer.svelte';
 	import ButtonList from './wireframe/ButtonList.svelte';
 
+	export let showTarget: boolean = false;
 	export let ratio: number = 1;
 	export let center: LngLatLike | undefined = undefined;
 	export let maxBounds: LngLatBoundsLike | undefined = undefined;
@@ -18,12 +19,13 @@
 	export let markers: { lngLat: LngLatLike; label?: string }[] = [];
 	export let mapStyle: string =
 		'https://api.maptiler.com/maps/ch-swisstopo-lbm-grey/style.json?key=epJVqnAFN0DeOXvikzSB';
+	export let onChange: ((location: LngLatLike) => void) | undefined = undefined;
 
 	$: features = geoJSONs.map(getGeoJSONFeatures).flat();
-	let selectedFeature: Feature<Geometry, GeoJsonProperties> | undefined = undefined;
+	let selectedFeature: Feature<Geometry, GeoJsonProperties> | undefined | null = undefined;
 
 	$: {
-		if (features.length && !selectedFeature) {
+		if (features.length && selectedFeature === undefined) {
 			selectedFeature = features[0];
 		}
 	}
@@ -36,6 +38,9 @@
 	})}
 >
 	<div class="map__wrapper">
+		{#if showTarget}
+			<div class="map__target"></div>
+		{/if}
 		<MapLibre
 			{center}
 			{maxBounds}
@@ -44,9 +49,13 @@
 			minZoom={zoom - 2}
 			style={mapStyle}
 			class="map__inner"
+			on:moveend={(event) => {
+				const center = event.detail.map.getCenter();
+				onChange?.([center.lng, center.lat]);
+			}}
 		>
 			{#each features as feature}
-				{#if feature === selectedFeature}
+				{#if feature === selectedFeature || selectedFeature === null}
 					<GeoJSON data={feature}>
 						<FillLayer
 							paint={{
@@ -89,7 +98,8 @@
 				<Button
 					minimal
 					selected={selectedFeature === item}
-					on:click={() => (selectedFeature = item)}
+					on:click={() =>
+						selectedFeature === item ? (selectedFeature = null) : (selectedFeature = item)}
 				>
 					{item.properties['layerName']}
 				</Button>
@@ -107,6 +117,38 @@
 		overflow: hidden;
 		cursor: move;
 		box-sizing: border-box;
+	}
+
+	.map__target {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: 30px;
+		height: 30px;
+		border: solid 1px var(--black);
+		border-radius: 100%;
+		z-index: 1;
+	}
+
+	.map__target::before,
+	.map__target::after {
+		content: '';
+		display: block;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
+
+	.map__target::before {
+		width: 150%;
+		border-top: solid 1px var(--black);
+	}
+
+	.map__target::after {
+		height: 150%;
+		border-left: solid 1px var(--black);
 	}
 
 	:global(.map__inner) {

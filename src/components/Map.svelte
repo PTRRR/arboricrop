@@ -133,14 +133,6 @@
 					})}
 				></div>
 			{/each}
-			{#each selectedLayers as layer}
-				<svg class="map__polygon" viewBox="0 0 100 100" preserveAspectRatio="none">
-					<path
-						d={`M ${layer.polygon.map((it) => `${it.x} ${it.y}`).join(' L ')} Z`}
-						vector-effect="non-scaling-stroke"
-					/>
-				</svg>
-			{/each}
 			{#each locations as location}
 				<div
 					class="map__location"
@@ -255,18 +247,6 @@
 		height: 10px;
 		background-color: var(--black);
 		border-radius: 100%;
-	}
-
-	.map__polygon {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-	}
-
-	.map__polygon path {
-		fill: rgba(200, 200, 200, 0.5);
-		stroke-width: 2px;
-		stroke: black;
 	}
 
 	.map__buttons {
