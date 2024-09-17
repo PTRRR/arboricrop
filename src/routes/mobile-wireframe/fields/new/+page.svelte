@@ -3,9 +3,9 @@
 	import Spacer from '../../../../components/Spacer.svelte';
 	import FieldForm from '../../../../components/wireframe/FieldForm.svelte';
 	import Separation from '../../../../components/Separation.svelte';
-	import { useFields, useReturnButton } from '../../../../stores';
+	import { useFields, useLayers, useReturnButton } from '../../../../stores';
 	import Button from '../../../../components/Button.svelte';
-	import type { Field, Location, MapLayer } from '../../../../utils/types';
+	import type { Field, MapLayer } from '../../../../utils/types';
 	import { createUrlBuilder } from '../../../../utils/urls';
 	import { page } from '$app/stores';
 	import CenteredWrapper from '../../../../components/wireframe/CenteredWrapper.svelte';
@@ -14,6 +14,7 @@
 	import { getCss } from '../../../../utils/css';
 
 	const fields = useFields();
+	const layers = useLayers();
 	const returnButton = useReturnButton();
 	const url = createUrlBuilder();
 	const initialField: Field = {
@@ -24,68 +25,7 @@
 		layers: []
 	};
 
-	const layers: { id: string; name: string; polygon: Location[] }[] = [
-		{
-			id: createId(),
-			name: 'Greenhouse Changin',
-			polygon: [
-				{ x: 50, y: 50 },
-				{ x: 55, y: 55 },
-				{ x: 50, y: 60 }
-			]
-		},
-		{
-			id: createId(),
-			name: 'Vertical Farm Floor 1',
-			polygon: [
-				{ x: 50, y: 50 },
-				{ x: 55, y: 55 },
-				{ x: 50, y: 60 }
-			]
-		},
-		{
-			id: createId(),
-			name: 'Vertical Farm Floor 2',
-			polygon: [
-				{ x: 50, y: 50 },
-				{ x: 55, y: 55 },
-				{ x: 50, y: 60 }
-			]
-		},
-		{
-			id: createId(),
-			name: 'Vertical Farm Floor 3',
-			polygon: [
-				{ x: 50, y: 50 },
-				{ x: 55, y: 55 },
-				{ x: 50, y: 60 }
-			]
-		},
-		{
-			id: createId(),
-			name: 'Vertical Farm Floor 4',
-			polygon: [
-				{ x: 50, y: 50 },
-				{ x: 55, y: 55 },
-				{ x: 50, y: 60 }
-			]
-		},
-		{
-			id: createId(),
-			name: 'Vertical Farm Floor 5',
-			polygon: [
-				{ x: 50, y: 50 },
-				{ x: 55, y: 55 },
-				{ x: 50, y: 60 }
-			]
-		}
-	];
-
 	let selectedLayerIds: string[] = [];
-
-	$: selectedLayers = selectedLayerIds.map((it) =>
-		layers.find(({ id }) => id === it)
-	) as MapLayer[];
 
 	returnButton.set({
 		label: `New field`,
@@ -95,7 +35,7 @@
 
 {#if $page.data.addLayer}
 	<CenteredWrapper>
-		<ButtonList items={layers} let:item>
+		<ButtonList items={$layers} let:item>
 			<div class="layer__button">
 				<Button
 					minimal
@@ -129,7 +69,7 @@
 	})}
 >
 	<FieldForm
-		field={{ ...initialField, layers: selectedLayers }}
+		field={{ ...initialField, layers: selectedLayerIds }}
 		onSave={(field) => {
 			fields.set([...$fields, field]);
 			goto(`/mobile-wireframe/fields/${field.id}`);

@@ -12,6 +12,7 @@
 		useComments,
 		useDevices,
 		useFields,
+		useLayers,
 		useNetwork,
 		useNotifications,
 		useOrganisation,
@@ -48,6 +49,7 @@
 	useDevices();
 	useUserName();
 	useComments();
+	useLayers();
 	let blurApp = useBlurApp();
 
 	navigating.subscribe(async (navigating) => {

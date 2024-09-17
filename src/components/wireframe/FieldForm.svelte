@@ -1,16 +1,21 @@
 <script lang="ts">
 	import Button from '../Button.svelte';
 	import { createId } from '@paralleldrive/cuid2';
-	import type { Field, Location } from '../../utils/types';
+	import type { Field, Location, MapLayer } from '../../utils/types';
 	import Separation from '../Separation.svelte';
 	import Map from '../Map.svelte';
 	import Spacer from '../Spacer.svelte';
+	import { useLayers } from '../../stores';
 
 	export let field: Field | undefined = undefined;
 	export let onSave: ((field: Field) => void) | undefined = undefined;
 	export let onDelete: ((id: string) => void) | undefined = undefined;
 	export let onCancel: (() => void) | undefined = undefined;
 	export let mapLocations: Location[] = [];
+
+	const layers = useLayers();
+	$: fieldLayers =
+		field?.layers.map((it) => $layers.find((layer) => layer.id === it) as MapLayer) || [];
 
 	let id: HTMLInputElement;
 	let name: HTMLInputElement;
@@ -28,7 +33,9 @@
 
 	<Spacer />
 	<Separation title="Map:" />
-	<Map locations={mapLocations} layers={field?.layers} />
+	<div class="field-form__map">
+		<Map locations={mapLocations} layers={fieldLayers} />
+	</div>
 
 	<slot />
 
@@ -56,6 +63,10 @@
 		display: flex;
 		flex-direction: column;
 		gap: var(--gap);
+	}
+
+	.field-form__map {
+		width: calc(var(--mobile-app-width) - 2 * var(--main-padding));
 	}
 
 	input {

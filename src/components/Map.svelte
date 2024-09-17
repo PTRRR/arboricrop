@@ -4,6 +4,8 @@
 	import { clamp } from '../utils/math';
 	import type { Location, MapLayer } from '../utils/types';
 	import { useScrollLock } from '../stores';
+	import Button from './Button.svelte';
+	import Spacer from './Spacer.svelte';
 
 	export let locations: Location[] = [];
 	export let layers: MapLayer[] = [];
@@ -12,6 +14,16 @@
 	export let ratio: number = 1;
 
 	const scrollLock = useScrollLock();
+	let selectedLayerId: string | undefined = (layers || [])[0]?.id;
+	export const setSelectedLayerId = (id: string) => (selectedLayerId = id);
+
+	$: {
+		if (layers.length > 0 && typeof selectedLayerId === 'undefined') {
+			selectedLayerId = layers[0].id;
+		}
+	}
+
+	$: selectedLayers = layers.filter((it) => it.id === selectedLayerId);
 
 	const lineCount = 20;
 	let map: HTMLDivElement;
@@ -93,62 +105,90 @@
 
 <div
 	class="map"
-	bind:this={map}
 	style={getCss({
 		'--ratio': ratio.toString()
 	})}
 >
-	{#if showTarget}
-		<div class="map__target"></div>
-	{/if}
-	<div
-		class="map__content"
-		style={getCss({
-			transform: `translate(${currentX}%, ${currentY}%)`
-		})}
-	>
-		{#each { length: lineCount } as _, index}
-			<div
-				class="map__line map__line-horizontal"
-				style={getCss({
-					top: `${index * (100 / lineCount)}%`
-				})}
-			></div>
-			<div
-				class="map__line map__line-vertical"
-				style={getCss({
-					left: `${index * (100 / lineCount)}%`
-				})}
-			></div>
-		{/each}
-		{#each layers as layer}
-			<svg class="map__polygon" viewBox="0 0 100 100" preserveAspectRatio="none">
-				<path
-					d={`M ${layer.polygon.map((it) => `${it.x} ${it.y}`).join(' L ')} Z`}
-					vector-effect="non-scaling-stroke"
-				/>
-			</svg>
-		{/each}
-		{#each locations as location}
-			<div
-				class="map__location"
-				style={getCss({
-					left: `${location.x}%`,
-					top: `${location.y}%`
-				})}
-			></div>
-		{/each}
+	<div class="map__inner" bind:this={map}>
+		{#if showTarget}
+			<div class="map__target"></div>
+		{/if}
+		<div
+			class="map__content"
+			style={getCss({
+				transform: `translate(${currentX}%, ${currentY}%)`
+			})}
+		>
+			{#each { length: lineCount } as _, index}
+				<div
+					class="map__line map__line-horizontal"
+					style={getCss({
+						top: `${index * (100 / lineCount)}%`
+					})}
+				></div>
+				<div
+					class="map__line map__line-vertical"
+					style={getCss({
+						left: `${index * (100 / lineCount)}%`
+					})}
+				></div>
+			{/each}
+			{#each selectedLayers as layer}
+				<svg class="map__polygon" viewBox="0 0 100 100" preserveAspectRatio="none">
+					<path
+						d={`M ${layer.polygon.map((it) => `${it.x} ${it.y}`).join(' L ')} Z`}
+						vector-effect="non-scaling-stroke"
+					/>
+				</svg>
+			{/each}
+			{#each locations as location}
+				<div
+					class="map__location"
+					style={getCss({
+						left: `${location.x}%`,
+						top: `${location.y}%`
+					})}
+				></div>
+			{/each}
+		</div>
+	</div>
+	<Spacer />
+	<div class="map__buttons">
+		<div class="map__buttons-inner">
+			{#each layers as layer}
+				<Button
+					selected={selectedLayerId === layer.id}
+					on:click={() =>
+						selectedLayerId === layer.id
+							? (selectedLayerId = undefined)
+							: (selectedLayerId = layer.id)}
+				>
+					{layer.name}
+				</Button>
+			{/each}
+		</div>
 	</div>
 </div>
 
 <style>
 	.map {
+		display: flex;
+		flex-direction: column;
+		/* justify-items: stretch; */
+		width: 100%;
+		max-width: 100%;
+		position: relative;
+		overflow: hidden;
+	}
+
+	.map__inner {
 		width: 100%;
 		aspect-ratio: var(--ratio);
 		border: solid 1px var(--black);
 		position: relative;
 		overflow: hidden;
 		cursor: move;
+		box-sizing: border-box;
 	}
 
 	.map__target {
@@ -227,5 +267,22 @@
 		fill: rgba(200, 200, 200, 0.5);
 		stroke-width: 2px;
 		stroke: black;
+	}
+
+	.map__buttons {
+		width: 100%;
+		overflow: auto;
+		box-sizing: border-box;
+		padding-bottom: 1rem;
+		margin-bottom: -1rem;
+	}
+
+	.map__buttons-inner {
+		align-items: center;
+		display: flex;
+		gap: 0.5rem;
+		overflow: hidden;
+		white-space: nowrap;
+		width: fit-content;
 	}
 </style>

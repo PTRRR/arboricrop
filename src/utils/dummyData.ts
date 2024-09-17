@@ -1,5 +1,5 @@
 import { createId } from '@paralleldrive/cuid2';
-import type { Device, Field, Notification } from './types';
+import type { Device, Field, MapLayer, Notification } from './types';
 import { shuffle } from './arrays';
 import { getRandomDate } from './dates';
 
@@ -7,17 +7,23 @@ export const getFields = (): Field[] => [
 	{
 		id: `fie-${createId()}`,
 		name: 'Fruit plantation',
-		type: 'Fruits'
+		type: 'Fruits',
+		layers: [],
+		location: { x: 0, y: 0 }
 	},
 	{
 		id: `fie-${createId()}`,
 		name: 'Vignard',
-		type: 'Wine'
+		type: 'Wine',
+		layers: [],
+		location: { x: 0, y: 0 }
 	},
 	{
 		id: `fie-${createId()}`,
 		name: 'Apples',
-		type: 'Apples'
+		type: 'Apples',
+		layers: [],
+		location: { x: 0, y: 0 }
 	}
 ];
 
@@ -209,3 +215,179 @@ export const loraNetworks: string[] = [
 ];
 
 export const organisations: string[] = ['Vivent', 'Changin', 'ECAL'];
+
+export const mapLayers: MapLayer[] = [
+	{
+		id: createId(),
+		name: 'Greenhouse Changin',
+		polygon: [
+			{ x: 45, y: 40 },
+			{ x: 50, y: 40 },
+			{ x: 55, y: 45 },
+			{ x: 55, y: 55 },
+			{ x: 50, y: 60 },
+			{ x: 45, y: 60 },
+			{ x: 40, y: 55 },
+			{ x: 40, y: 45 }
+		]
+	},
+	{
+		id: createId(),
+		name: 'Barn Westfield',
+		polygon: [
+			{ x: 48, y: 42 },
+			{ x: 52, y: 42 },
+			{ x: 53, y: 46 },
+			{ x: 53, y: 50 },
+			{ x: 50, y: 52 },
+			{ x: 47, y: 50 },
+			{ x: 47, y: 46 }
+		]
+	},
+	{
+		id: createId(),
+		name: 'Water Tower',
+		polygon: [
+			{ x: 49, y: 48 },
+			{ x: 50, y: 46 },
+			{ x: 52, y: 46 },
+			{ x: 53, y: 48 },
+			{ x: 52, y: 50 },
+			{ x: 50, y: 50 }
+		]
+	},
+	{
+		id: createId(),
+		name: 'Farmhouse East',
+		polygon: [
+			{ x: 45, y: 50 },
+			{ x: 48, y: 50 },
+			{ x: 50, y: 53 },
+			{ x: 48, y: 56 },
+			{ x: 45, y: 56 },
+			{ x: 42, y: 53 }
+		]
+	},
+	{
+		id: createId(),
+		name: 'Irrigation Control Center',
+		polygon: [
+			{ x: 47, y: 47 },
+			{ x: 50, y: 47 },
+			{ x: 52, y: 49 },
+			{ x: 52, y: 52 },
+			{ x: 50, y: 54 },
+			{ x: 47, y: 54 },
+			{ x: 45, y: 52 },
+			{ x: 45, y: 49 }
+		]
+	},
+	{
+		id: createId(),
+		name: 'Storage Silo',
+		polygon: [
+			{ x: 48, y: 44 },
+			{ x: 51, y: 44 },
+			{ x: 52, y: 47 },
+			{ x: 51, y: 50 },
+			{ x: 48, y: 50 },
+			{ x: 47, y: 47 }
+		]
+	},
+	{
+		id: createId(),
+		name: 'Machinery Garage',
+		polygon: [
+			{ x: 46, y: 48 },
+			{ x: 50, y: 48 },
+			{ x: 51, y: 50 },
+			{ x: 50, y: 53 },
+			{ x: 46, y: 53 },
+			{ x: 45, y: 50 }
+		]
+	},
+	{
+		id: createId(),
+		name: 'Solar Panel Array',
+		polygon: [
+			{ x: 44, y: 43 },
+			{ x: 50, y: 43 },
+			{ x: 51, y: 45 },
+			{ x: 51, y: 47 },
+			{ x: 50, y: 49 },
+			{ x: 44, y: 49 },
+			{ x: 43, y: 47 },
+			{ x: 43, y: 45 }
+		]
+	},
+	{
+		id: createId(),
+		name: 'Grain Processing Unit',
+		polygon: [
+			{ x: 45, y: 42 },
+			{ x: 48, y: 42 },
+			{ x: 50, y: 45 },
+			{ x: 50, y: 48 },
+			{ x: 48, y: 50 },
+			{ x: 45, y: 50 },
+			{ x: 43, y: 48 },
+			{ x: 43, y: 45 }
+		]
+	},
+	{
+		id: createId(),
+		name: 'Compost Facility',
+		polygon: [
+			{ x: 47, y: 44 },
+			{ x: 51, y: 44 },
+			{ x: 53, y: 47 },
+			{ x: 53, y: 51 },
+			{ x: 51, y: 54 },
+			{ x: 47, y: 54 },
+			{ x: 45, y: 51 },
+			{ x: 45, y: 47 }
+		]
+	},
+	{
+		id: createId(),
+		name: 'Main Office - Floor 1',
+		polygon: [
+			{ x: 40, y: 40 },
+			{ x: 62, y: 40 },
+			{ x: 62, y: 58 },
+			{ x: 57, y: 58 },
+			{ x: 57, y: 50 },
+			{ x: 48, y: 50 },
+			{ x: 48, y: 58 },
+			{ x: 40, y: 58 }
+		]
+	},
+	{
+		id: createId(),
+		name: 'Main Office - Floor 2',
+		polygon: [
+			{ x: 42, y: 42 },
+			{ x: 60, y: 42 },
+			{ x: 60, y: 56 },
+			{ x: 56, y: 56 },
+			{ x: 56, y: 48 },
+			{ x: 50, y: 48 },
+			{ x: 50, y: 56 },
+			{ x: 42, y: 56 }
+		]
+	},
+	{
+		id: createId(),
+		name: 'Main Office - Floor 3',
+		polygon: [
+			{ x: 43, y: 43 },
+			{ x: 58, y: 43 },
+			{ x: 58, y: 55 },
+			{ x: 54, y: 55 },
+			{ x: 54, y: 49 },
+			{ x: 49, y: 49 },
+			{ x: 49, y: 55 },
+			{ x: 43, y: 55 }
+		]
+	}
+];

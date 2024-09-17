@@ -11,6 +11,7 @@ export type Location = {
 };
 
 export type MapLayer = {
+	id: string;
 	name: string;
 	polygon: Location[];
 };
@@ -34,7 +35,7 @@ export type Field = {
 	name: string;
 	type: string;
 	location: Location;
-	layers: MapLayer[];
+	layers: string[];
 };
 
 export type NotificationType = 'notification' | 'warning' | 'alert';
