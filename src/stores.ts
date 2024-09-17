@@ -11,7 +11,7 @@ import {
 import type { comment } from './db/schema';
 import type { MapLayer } from './utils/types';
 
-const STORE_VERSION = 'v7';
+const STORE_VERSION = 'v10';
 const dummyDevices = getDevices(30);
 const dummyNotifications = getNotifications(dummyDevices);
 

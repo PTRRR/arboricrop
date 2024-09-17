@@ -25,8 +25,8 @@
 			{center}
 			{maxBounds}
 			{zoom}
-			maxZoom={zoom}
-			minZoom={zoom}
+			maxZoom={zoom + 2}
+			minZoom={zoom - 2}
 			style={mapStyle}
 			class="map__inner"
 		>
@@ -81,11 +81,15 @@
 		height: 100%;
 	}
 
+	:global(.maplibregl-ctrl-attrib) {
+		display: none;
+	}
+
 	.map__point {
 		position: relative;
 		display: block;
-		width: 15px;
-		height: 15px;
+		width: 8px;
+		height: 8px;
 		background-color: black;
 		border-radius: 100%;
 	}

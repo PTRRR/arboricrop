@@ -1,21 +1,22 @@
 <script lang="ts">
 	import Button from '../Button.svelte';
 	import { createId } from '@paralleldrive/cuid2';
-	import type { Field, Location, MapLayer } from '../../utils/types';
+	import type { Field, MapLayer, Marker } from '../../utils/types';
 	import Separation from '../Separation.svelte';
-	import Map from '../Map.svelte';
 	import Spacer from '../Spacer.svelte';
 	import { useLayers } from '../../stores';
+	import MapV2 from '../MapV2.svelte';
+	import { changinCenter, changinGeoJson } from '../../utils/dummyData';
 
 	export let field: Field | undefined = undefined;
 	export let onSave: ((field: Field) => void) | undefined = undefined;
 	export let onDelete: ((id: string) => void) | undefined = undefined;
 	export let onCancel: (() => void) | undefined = undefined;
-	export let mapLocations: Location[] = [];
+	export let markers: Marker[] = [];
 
 	const layers = useLayers();
-	$: fieldLayers =
-		field?.layers.map((it) => $layers.find((layer) => layer.id === it) as MapLayer) || [];
+	// $: fieldLayers =
+	// 	field?.layers.map((it) => $layers.find((layer) => layer.id === it) as MapLayer) || [];
 
 	let id: HTMLInputElement;
 	let name: HTMLInputElement;
@@ -34,7 +35,16 @@
 	<Spacer />
 	<Separation title="Map:" />
 	<div class="field-form__map">
-		<Map locations={mapLocations} layers={fieldLayers} />
+		<MapV2
+			center={[6.231351138336578, 46.398638192299046]}
+			maxBounds={[
+				[6.02197061006523, 45.84425061226135],
+				[10.476417711659073, 47.881756658719695]
+			]}
+			zoom={16}
+			geoJSONs={[changinGeoJson]}
+			{markers}
+		/>
 	</div>
 
 	<slot />
@@ -45,7 +55,7 @@
 				id: id.value,
 				name: name.value,
 				type: type.value,
-				location: field?.location || { x: 0, y: 0 },
+				center: field?.center || changinCenter,
 				layers: field?.layers || []
 			})}
 	>
@@ -66,7 +76,7 @@
 	}
 
 	.field-form__map {
-		width: calc(var(--mobile-app-width) - 2 * var(--main-padding));
+		width: 100%;
 	}
 
 	input {

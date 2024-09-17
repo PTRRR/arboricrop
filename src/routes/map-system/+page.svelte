@@ -34,6 +34,6 @@
 	}
 
 	.map-system__map {
-		width: 50%;
+		width: min(calc(100svw - 1rem), calc(100svh - 1rem));
 	}
 </style>

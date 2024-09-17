@@ -1,8 +1,12 @@
 import { createId } from '@paralleldrive/cuid2';
 import type { Device, Field, MapLayer, Notification } from './types';
-import type { GeoJSON as GeoJSONType } from 'geojson';
+import type { GeoJSON as GeoJSONType, Feature, Geometry, GeoJsonProperties } from 'geojson';
 import { shuffle } from './arrays';
 import { getRandomDate } from './dates';
+import type { LngLatLike } from 'svelte-maplibre';
+import { mapValue } from './math';
+
+export const changinCenter: LngLatLike = [6.231351138336578, 46.398638192299046];
 
 export const getFields = (): Field[] => [
 	{
@@ -10,21 +14,21 @@ export const getFields = (): Field[] => [
 		name: 'Fruit plantation',
 		type: 'Fruits',
 		layers: [],
-		location: { x: 0, y: 0 }
+		center: changinCenter
 	},
 	{
 		id: `fie-${createId()}`,
 		name: 'Vignard',
 		type: 'Wine',
 		layers: [],
-		location: { x: 0, y: 0 }
+		center: changinCenter
 	},
 	{
 		id: `fie-${createId()}`,
 		name: 'Apples',
 		type: 'Apples',
 		layers: [],
-		location: { x: 0, y: 0 }
+		center: changinCenter
 	}
 ];
 
@@ -36,10 +40,10 @@ export const getDevices = (count: number = 30): Device[] =>
 		medias: [],
 		firmwareVersion: 'v1.0.9',
 		status: 'unactive',
-		location: {
-			x: 40 + 20 * Math.random(),
-			y: 40 + 20 * Math.random()
-		}
+		location: [
+			changinCenter[0] + mapValue(Math.random(), 0, 1, -0.002, 0.002),
+			changinCenter[1] + mapValue(Math.random(), 0, 1, -0.002, 0.002)
+		]
 	}));
 
 export const getDevicesByFieldId = (devices: Device[], fieldId?: string) => {
@@ -217,181 +221,25 @@ export const loraNetworks: string[] = [
 
 export const organisations: string[] = ['Vivent', 'Changin', 'ECAL'];
 
-export const mapLayers: MapLayer[] = [
-	{
-		id: createId(),
-		name: 'Greenhouse Changin',
-		polygon: [
-			{ x: 45, y: 40 },
-			{ x: 50, y: 40 },
-			{ x: 55, y: 45 },
-			{ x: 55, y: 55 },
-			{ x: 50, y: 60 },
-			{ x: 45, y: 60 },
-			{ x: 40, y: 55 },
-			{ x: 40, y: 45 }
-		]
+const defaultFeature: Feature<Geometry, GeoJsonProperties> = {
+	type: 'Feature',
+	properties: {
+		name: 'fruits'
 	},
-	{
-		id: createId(),
-		name: 'Barn Westfield',
-		polygon: [
-			{ x: 48, y: 42 },
-			{ x: 52, y: 42 },
-			{ x: 53, y: 46 },
-			{ x: 53, y: 50 },
-			{ x: 50, y: 52 },
-			{ x: 47, y: 50 },
-			{ x: 47, y: 46 }
-		]
+	geometry: {
+		coordinates: [
+			[
+				[6.231019204069696, 46.399165917526574],
+				[6.230814420900174, 46.39901738796689],
+				[6.231382870732972, 46.398635105110515],
+				[6.231601776880154, 46.39878120078612],
+				[6.231019204069696, 46.399165917526574]
+			]
+		],
+		type: 'Polygon'
 	},
-	{
-		id: createId(),
-		name: 'Water Tower',
-		polygon: [
-			{ x: 49, y: 48 },
-			{ x: 50, y: 46 },
-			{ x: 52, y: 46 },
-			{ x: 53, y: 48 },
-			{ x: 52, y: 50 },
-			{ x: 50, y: 50 }
-		]
-	},
-	{
-		id: createId(),
-		name: 'Farmhouse East',
-		polygon: [
-			{ x: 45, y: 50 },
-			{ x: 48, y: 50 },
-			{ x: 50, y: 53 },
-			{ x: 48, y: 56 },
-			{ x: 45, y: 56 },
-			{ x: 42, y: 53 }
-		]
-	},
-	{
-		id: createId(),
-		name: 'Irrigation Control Center',
-		polygon: [
-			{ x: 47, y: 47 },
-			{ x: 50, y: 47 },
-			{ x: 52, y: 49 },
-			{ x: 52, y: 52 },
-			{ x: 50, y: 54 },
-			{ x: 47, y: 54 },
-			{ x: 45, y: 52 },
-			{ x: 45, y: 49 }
-		]
-	},
-	{
-		id: createId(),
-		name: 'Storage Silo',
-		polygon: [
-			{ x: 48, y: 44 },
-			{ x: 51, y: 44 },
-			{ x: 52, y: 47 },
-			{ x: 51, y: 50 },
-			{ x: 48, y: 50 },
-			{ x: 47, y: 47 }
-		]
-	},
-	{
-		id: createId(),
-		name: 'Machinery Garage',
-		polygon: [
-			{ x: 46, y: 48 },
-			{ x: 50, y: 48 },
-			{ x: 51, y: 50 },
-			{ x: 50, y: 53 },
-			{ x: 46, y: 53 },
-			{ x: 45, y: 50 }
-		]
-	},
-	{
-		id: createId(),
-		name: 'Solar Panel Array',
-		polygon: [
-			{ x: 44, y: 43 },
-			{ x: 50, y: 43 },
-			{ x: 51, y: 45 },
-			{ x: 51, y: 47 },
-			{ x: 50, y: 49 },
-			{ x: 44, y: 49 },
-			{ x: 43, y: 47 },
-			{ x: 43, y: 45 }
-		]
-	},
-	{
-		id: createId(),
-		name: 'Grain Processing Unit',
-		polygon: [
-			{ x: 45, y: 42 },
-			{ x: 48, y: 42 },
-			{ x: 50, y: 45 },
-			{ x: 50, y: 48 },
-			{ x: 48, y: 50 },
-			{ x: 45, y: 50 },
-			{ x: 43, y: 48 },
-			{ x: 43, y: 45 }
-		]
-	},
-	{
-		id: createId(),
-		name: 'Compost Facility',
-		polygon: [
-			{ x: 47, y: 44 },
-			{ x: 51, y: 44 },
-			{ x: 53, y: 47 },
-			{ x: 53, y: 51 },
-			{ x: 51, y: 54 },
-			{ x: 47, y: 54 },
-			{ x: 45, y: 51 },
-			{ x: 45, y: 47 }
-		]
-	},
-	{
-		id: createId(),
-		name: 'Main Office - Floor 1',
-		polygon: [
-			{ x: 40, y: 40 },
-			{ x: 62, y: 40 },
-			{ x: 62, y: 58 },
-			{ x: 57, y: 58 },
-			{ x: 57, y: 50 },
-			{ x: 48, y: 50 },
-			{ x: 48, y: 58 },
-			{ x: 40, y: 58 }
-		]
-	},
-	{
-		id: createId(),
-		name: 'Main Office - Floor 2',
-		polygon: [
-			{ x: 42, y: 42 },
-			{ x: 60, y: 42 },
-			{ x: 60, y: 56 },
-			{ x: 56, y: 56 },
-			{ x: 56, y: 48 },
-			{ x: 50, y: 48 },
-			{ x: 50, y: 56 },
-			{ x: 42, y: 56 }
-		]
-	},
-	{
-		id: createId(),
-		name: 'Main Office - Floor 3',
-		polygon: [
-			{ x: 43, y: 43 },
-			{ x: 58, y: 43 },
-			{ x: 58, y: 55 },
-			{ x: 54, y: 55 },
-			{ x: 54, y: 49 },
-			{ x: 49, y: 49 },
-			{ x: 49, y: 55 },
-			{ x: 43, y: 55 }
-		]
-	}
-];
+	id: 0
+};
 
 export const changinGeoJson: GeoJSONType = {
 	type: 'FeatureCollection',
@@ -481,6 +329,153 @@ export const changinGeoJson: GeoJSONType = {
 				type: 'Polygon'
 			},
 			id: 3
+		},
+		{
+			type: 'Feature',
+			properties: {},
+			geometry: {
+				coordinates: [
+					[
+						[6.231049095862517, 46.39815921645487],
+						[6.230361865806174, 46.39770945211407],
+						[6.230649380421767, 46.39748215044571],
+						[6.231333104200672, 46.39794642518581],
+						[6.231049095862517, 46.39815921645487]
+					]
+				],
+				type: 'Polygon'
+			}
+		},
+		{
+			type: 'Feature',
+			properties: {},
+			geometry: {
+				coordinates: [
+					[
+						[6.23029875284206, 46.39867910072397],
+						[6.230074351191689, 46.398534017240024],
+						[6.230789631453234, 46.39802864009255],
+						[6.231014033103577, 46.398178561074474],
+						[6.23029875284206, 46.39867910072397]
+					]
+				],
+				type: 'Polygon'
+			}
+		},
+		{
+			type: 'Feature',
+			properties: {},
+			geometry: {
+				coordinates: [
+					[
+						[6.230046300985464, 46.39852192693229],
+						[6.229632560441473, 46.398265611778044],
+						[6.230337321876249, 46.39773363308689],
+						[6.23076859379853, 46.39801896775697],
+						[6.230670418076471, 46.39807458366292],
+						[6.230523154493454, 46.39798269648344],
+						[6.230021757054317, 46.39837442496247],
+						[6.230144476707409, 46.39845180309473],
+						[6.230046300985464, 46.39852192693229]
+					]
+				],
+				type: 'Polygon'
+			}
+		},
+		{
+			type: 'Feature',
+			properties: {},
+			geometry: {
+				coordinates: [
+					[
+						[6.229601003959999, 46.39745555125245],
+						[6.229832418161919, 46.39759096519214],
+						[6.229867480919779, 46.397825520685785],
+						[6.229653598096235, 46.39801413158858],
+						[6.229320501895955, 46.398004459250444],
+						[6.229064543764082, 46.39785695588182],
+						[6.2290014307988315, 46.397588547089015],
+						[6.229176744589239, 46.3974313701564],
+						[6.229601003959999, 46.39745555125245]
+					]
+				],
+				type: 'Polygon'
+			}
+		},
+		{
+			type: 'Feature',
+			properties: {},
+			geometry: {
+				coordinates: [
+					[
+						[6.230232133576237, 46.397690107323996],
+						[6.229699179655569, 46.39737575359035],
+						[6.229201288493925, 46.397363663026],
+						[6.229099606495538, 46.397320136972155],
+						[6.229622041588328, 46.396860693174375],
+						[6.230509129363867, 46.39747973233361],
+						[6.230232133576237, 46.397690107323996]
+					]
+				],
+				type: 'Polygon'
+			}
 		}
 	]
 };
+
+export const mapLayers: MapLayer[] = [
+	{
+		id: createId(),
+		name: 'Greenhouse Changin',
+		feature:
+			changinGeoJson.type === 'FeatureCollection' ? changinGeoJson.features[0] : defaultFeature
+	},
+	{
+		id: createId(),
+		name: 'Barn Westfield',
+		feature:
+			changinGeoJson.type === 'FeatureCollection' ? changinGeoJson.features[1] : defaultFeature
+	},
+	{
+		id: createId(),
+		name: 'Water Tower',
+		feature:
+			changinGeoJson.type === 'FeatureCollection' ? changinGeoJson.features[2] : defaultFeature
+	},
+	{
+		id: createId(),
+		name: 'Farmhouse East',
+		feature:
+			changinGeoJson.type === 'FeatureCollection' ? changinGeoJson.features[3] : defaultFeature
+	},
+	{
+		id: createId(),
+		name: 'Irrigation Control Center',
+		feature:
+			changinGeoJson.type === 'FeatureCollection' ? changinGeoJson.features[4] : defaultFeature
+	},
+	{
+		id: createId(),
+		name: 'Storage Silo',
+		feature:
+			changinGeoJson.type === 'FeatureCollection' ? changinGeoJson.features[5] : defaultFeature
+	},
+	{
+		id: createId(),
+		name: 'Machinery Garage',
+		feature:
+			changinGeoJson.type === 'FeatureCollection' ? changinGeoJson.features[6] : defaultFeature
+	},
+	{
+		id: createId(),
+		name: 'Solar Panel Array',
+		feature:
+			changinGeoJson.type === 'FeatureCollection' ? changinGeoJson.features[7] : defaultFeature
+	},
+	{
+		id: createId(),
+		name: 'Grain Processing Unit',
+		feature:
+			changinGeoJson.type === 'FeatureCollection' ? changinGeoJson.features[8] : defaultFeature
+	}
+];

@@ -8,10 +8,10 @@
 	import Line from '../../../../components/Line.svelte';
 	import { useDevices, useFields, useReturnButton } from '../../../../stores';
 	import { getDevicesByFieldId } from '../../../../utils/dummyData';
-	import type { Device, Location } from '../../../../utils/types';
-	import Map from '../../../../components/Map.svelte';
+	import type { Device, Marker } from '../../../../utils/types';
 	import Separation from '../../../../components/Separation.svelte';
 	import ButtonList from '../../../../components/wireframe/ButtonList.svelte';
+	import type { LngLatLike } from 'svelte-maplibre';
 
 	const fields = useFields();
 	const devices = useDevices();
@@ -20,7 +20,9 @@
 
 	$: field = $fields.find((it) => it.id === $page.params.fieldId);
 	$: fieldDevices = getDevicesByFieldId($devices, field?.id);
-	$: deviceLocations = fieldDevices.map((it) => it.location).filter((it) => it) as Location[];
+	$: deviceMarkers = fieldDevices
+		.map((it) => ({ lngLat: it.location as LngLatLike }))
+		.filter((it) => it.lngLat) as Marker[];
 
 	$: {
 		if (field) {
@@ -100,7 +102,7 @@
 	{:else}
 		<FieldForm
 			{field}
-			mapLocations={deviceLocations}
+			markers={deviceMarkers}
 			onSave={(field) => {
 				const fieldIndex = $fields.findIndex((it) => it.id === field.id);
 
