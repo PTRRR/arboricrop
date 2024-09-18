@@ -1,10 +1,10 @@
 <script lang="ts">
 	import Button from '../../components/Button.svelte';
 	import Card from '../../components/wireframe/Card.svelte';
-	import Separation from '../../components/Separation.svelte';
 	import { useDevices, useFields, useNotifications, useReturnButton } from '../../stores';
 	import { shuffle } from '../../utils/arrays';
 	import { getDevicesByFieldId } from '../../utils/dummyData';
+	import Section from '../../components/wireframe/Section.svelte';
 
 	let returnButton = useReturnButton();
 	returnButton.set({
@@ -53,7 +53,7 @@
 			title: 'Recent Fields',
 			buttons: [
 				{
-					label: 'Create new',
+					label: 'Create new field',
 					href: '/mobile-wireframe/fields/new'
 				}
 			],
@@ -68,28 +68,28 @@
 
 <div class="home">
 	{#each sections as section}
-		<div class="home__section">
-			<Separation title={section.title} buttons={section.buttons} />
+		<Section title={section.title} buttons={section.buttons}>
+			<div class="home__section">
+				{#each section.cards as card}
+					<Card href={card.href}>
+						<svelte:fragment slot="title">
+							{#if card.title}
+								<h1>{card.title}</h1>
+							{/if}
+						</svelte:fragment>
+						<svelte:fragment slot="subTitle">
+							{#if card.subTitle}
+								<p>{card.subTitle}</p>
+							{/if}
+						</svelte:fragment>
+					</Card>
+				{/each}
 
-			{#each section.cards as card}
-				<Card href={card.href}>
-					<svelte:fragment slot="title">
-						{#if card.title}
-							<h1>{card.title}</h1>
-						{/if}
-					</svelte:fragment>
-					<svelte:fragment slot="subTitle">
-						{#if card.subTitle}
-							<p>{card.subTitle}</p>
-						{/if}
-					</svelte:fragment>
-				</Card>
-			{/each}
-
-			{#if section.title === 'Recent Fields'}
-				<Button href="/mobile-wireframe/fields">See all fields</Button>
-			{/if}
-		</div>
+				{#if section.title === 'Recent Fields'}
+					<Button href="/mobile-wireframe/fields">See all fields</Button>
+				{/if}
+			</div>
+		</Section>
 	{/each}
 </div>
 
@@ -98,9 +98,5 @@
 		display: flex;
 		flex-direction: column;
 		gap: var(--gap);
-	}
-
-	.home__section + .home__section {
-		margin-top: calc(var(--gap) * 4);
 	}
 </style>

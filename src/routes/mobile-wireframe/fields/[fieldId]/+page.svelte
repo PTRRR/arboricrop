@@ -28,7 +28,7 @@
 	$: field = $fields.find((it) => it.id === $page.params.fieldId);
 	$: fieldDevices = getDevicesByFieldId($devices, field?.id);
 	$: deviceMarkers = fieldDevices
-		.map((it) => ({ lngLat: it.location as LngLatLike }))
+		.map((it) => ({ lngLat: it.location as LngLatLike, label: it.name }))
 		.filter((it) => it.lngLat) as Marker[];
 
 	$: {
@@ -126,7 +126,7 @@
 				maxBounds={swissBounds}
 				zoom={15}
 				minZoom={3}
-				maxZoom={18}
+				maxZoom={18.5}
 				center={field.center}
 				showTarget={editMap}
 				markers={editMap ? [{ lngLat: field.center }] : deviceMarkers}

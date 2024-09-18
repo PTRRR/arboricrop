@@ -5,6 +5,7 @@
 	import Separation from '../../../components/Separation.svelte';
 	import { useDevices, useFields, useReturnButton } from '../../../stores';
 	import { getDevicesByFieldId } from '../../../utils/dummyData';
+	import Section from '../../../components/wireframe/Section.svelte';
 
 	let returnButton = useReturnButton();
 	returnButton.set({
@@ -17,22 +18,25 @@
 </script>
 
 <div class="fields">
-	<Separation
+	<Section
 		title="Fields:"
 		buttons={[{ label: 'Create new field', href: '/mobile-wireframe/fields/new' }]}
-	/>
+	>
+		<div class="fields__list">
+			{#each $fields as field}
+				<Card href={`/mobile-wireframe/fields/${field.id}`}>
+					<h5 slot="title">{field.name}</h5>
+					<span slot="subTitle">
+						{field.type} [{getDevicesByFieldId($devices, field.id).length} devices]
+					</span>
+				</Card>
+			{/each}
+		</div>
+	</Section>
 
-	<div class="fields__list">
-		{#each $fields as field}
-			<Card href={`/mobile-wireframe/fields/${field.id}`}>
-				<h5 slot="title">{field.name}</h5>
-				<span slot="subTitle">
-					{field.type} [{getDevicesByFieldId($devices, field.id).length} devices]
-				</span>
-			</Card>
-		{/each}
-	</div>
-	<Button href="/mobile-wireframe/devices">See all devices</Button>
+	<Section title="All devices:">
+		<Button href="/mobile-wireframe/devices">See all devices</Button>
+	</Section>
 </div>
 
 <style>

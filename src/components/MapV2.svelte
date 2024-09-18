@@ -34,6 +34,9 @@
 			selectedFeature = features[0];
 		}
 	}
+
+	let zoomLevel: number = zoom;
+	$: showMarkerLabels = zoomLevel >= 18;
 </script>
 
 <div
@@ -60,6 +63,7 @@
 				const center = event.detail.map.getCenter();
 				onChange?.([center.lng, center.lat]);
 			}}
+			on:zoom={(event) => (zoomLevel = event.detail.map.getZoom())}
 		>
 			{#each features as feature}
 				{#if feature === selectedFeature || selectedFeature === null}
@@ -88,7 +92,7 @@
 			{#each markers as marker}
 				<Marker lngLat={marker.lngLat}>
 					<div class="map__point">
-						{#if marker.label}
+						{#if marker.label && showMarkerLabels}
 							<span class="map__label">{marker.label}</span>
 						{/if}
 					</div>
