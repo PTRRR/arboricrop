@@ -1,8 +1,5 @@
 <script lang="ts">
-	import Spacer from '../../../components/Spacer.svelte';
-	import Button from '../../../components/Button.svelte';
 	import Card from '../../../components/wireframe/Card.svelte';
-	import Separation from '../../../components/Separation.svelte';
 	import { useDevices, useReturnButton } from '../../../stores';
 	import Section from '../../../components/wireframe/Section.svelte';
 

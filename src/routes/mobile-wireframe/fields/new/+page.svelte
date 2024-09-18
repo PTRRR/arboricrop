@@ -1,11 +1,10 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import Spacer from '../../../../components/Spacer.svelte';
-	import FieldForm from '../../../../components/wireframe/FieldForm.svelte';
 	import Separation from '../../../../components/Separation.svelte';
 	import { useFields, useGeoJSONFeatures, useReturnButton } from '../../../../stores';
 	import Button from '../../../../components/Button.svelte';
-	import type { Field, GeoJSONFeature, MapLayer } from '../../../../utils/types';
+	import type { Field, GeoJSONFeature } from '../../../../utils/types';
 	import { createUrlBuilder } from '../../../../utils/urls';
 	import { page } from '$app/stores';
 	import CenteredWrapper from '../../../../components/wireframe/CenteredWrapper.svelte';
@@ -28,7 +27,7 @@
 	const url = createUrlBuilder();
 
 	let field: Field = {
-		id: createId(),
+		id: `fie-${createId()}`,
 		name: '',
 		type: '',
 		center: changinCenter,
@@ -37,14 +36,16 @@
 
 	let selectedFeatures: GeoJSONFeature[] = [];
 
-	returnButton.set({
-		label: `New field`,
-		href: '/mobile-wireframe/fields'
-	});
+	$: {
+		returnButton.set({
+			label: `New field`,
+			href: $page.data.addLayer ? url.resetQueries([]) : '/mobile-wireframe/fields'
+		});
+	}
 </script>
 
 {#if $page.data.addLayer}
-	<CenteredWrapper>
+	<Section title="Available layers:" buttons={[{ label: 'Create new layer' }]}>
 		<ButtonList items={$features} let:item>
 			{#if getFeatureLayerName(item)}
 				<div class="layer__button">
@@ -62,16 +63,17 @@
 				</div>
 			{/if}
 		</ButtonList>
-		<Spacer />
-		<Button>Upload file</Button>
-		<Spacer />
-		<Spacer />
-		<Separation />
-		<Spacer />
-		<Button href={url.resetQueries([])}>Add</Button>
-		<Spacer />
-		<Button href={url.resetQueries([])}>Cancel</Button>
-	</CenteredWrapper>
+	</Section>
+	<Section title="Confirm Changes:">
+		<SaveSection
+			saveLabel="Save"
+			onSave={() => goto(url.resetQueries([]))}
+			onCancel={() => {
+				selectedFeatures = [];
+				goto(url.resetQueries([]));
+			}}
+		/>
+	</Section>
 {/if}
 
 <div
@@ -94,7 +96,10 @@
 			center={field.center}
 			showTarget
 			markers={[{ lngLat: field.center }]}
+			geoJSONs={selectedFeatures}
 		/>
+		<Spacer />
+		<Button href={url.addQuery({ name: 'addLayer', value: true })}>Add layer</Button>
 		<Spacer />
 		<Button
 			on:click={() => {
@@ -107,8 +112,6 @@
 		>
 			Set field location
 		</Button>
-		<Spacer />
-		<Button>Add layer</Button>
 	</Section>
 
 	<Section title="Confirm Changes:">
@@ -116,7 +119,8 @@
 			onSave={() => {
 				field = {
 					...field,
-					...generalSettings.getValues()
+					...generalSettings.getValues(),
+					layers: selectedFeatures
 				};
 				fields.set([...$fields, field]);
 				goto(`/mobile-wireframe/fields/${field.id}`);

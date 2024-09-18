@@ -7,7 +7,7 @@
 	import Line from '../../../../components/Line.svelte';
 	import { useDevices, useFields, useReturnButton } from '../../../../stores';
 	import { getDevicesByFieldId, swissBounds } from '../../../../utils/dummyData';
-	import type { Device, Field, Marker } from '../../../../utils/types';
+	import type { Device, Marker } from '../../../../utils/types';
 	import ButtonList from '../../../../components/wireframe/ButtonList.svelte';
 	import type { LngLatLike } from 'svelte-maplibre';
 	import FieldGeneralSettings from '../../../../components/wireframe/FieldGeneralSettings.svelte';
@@ -130,6 +130,7 @@
 				center={field.center}
 				showTarget={editMap}
 				markers={editMap ? [{ lngLat: field.center }] : deviceMarkers}
+				geoJSONs={field.layers}
 			/>
 			{#if editMap}
 				<Spacer />
