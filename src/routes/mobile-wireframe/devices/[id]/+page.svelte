@@ -3,21 +3,27 @@
 	import { page } from '$app/stores';
 	import Button from '../../../../components/Button.svelte';
 	import Info from '../../../../components/Info.svelte';
+	import MapV2 from '../../../../components/MapV2.svelte';
 	import Spacer from '../../../../components/Spacer.svelte';
-	import Device from '../../../../components/wireframe/Device.svelte';
+	import ButtonList from '../../../../components/wireframe/ButtonList.svelte';
 	import DeviceGeneralSettings from '../../../../components/wireframe/DeviceGeneralSettings.svelte';
 	import SaveSection from '../../../../components/wireframe/SaveSection.svelte';
 	import Section from '../../../../components/wireframe/Section.svelte';
 	import { useDevices, useFields, useReturnButton } from '../../../../stores';
+	import { swissBounds } from '../../../../utils/dummyData';
+	import type { Device } from '../../../../utils/types';
 
-	let devices = useDevices();
-	let fields = useFields();
-	let returnButton = useReturnButton();
+	const devices = useDevices();
+	const fields = useFields();
+	const returnButton = useReturnButton();
 
+	let map: MapV2 | undefined = undefined;
 	let editMetadata: boolean = false;
 	let editField: boolean = false;
+	let editLocation: boolean = false;
 
 	$: device = $devices.find((it) => it.id === $page.params.id);
+	$: field = $fields.find((it) => it.id === device?.fieldId);
 
 	$: {
 		returnButton.set({
@@ -25,6 +31,16 @@
 			href: '/mobile-wireframe/devices'
 		});
 	}
+
+	$: updateDevice = (device: Device) => {
+		const deviceIndex = $devices.findIndex((it) => it.id === device?.id);
+		const newDevices = [...$devices];
+		newDevices[deviceIndex] = {
+			...newDevices[deviceIndex],
+			...device
+		};
+		devices.set(newDevices);
+	};
 </script>
 
 {#if device}
@@ -39,25 +55,118 @@
 		<Info label="Status:" value={device.status} />
 
 		{#if $page.data.connected}
-			<Spacer />
-			<Button href={`/mobile-wireframe/devices/${device.id}/activation?connected=true`}>
-				Activate
-			</Button>
+			{#if device.status === 'unactive'}
+				<Spacer />
+				<Button href={`/mobile-wireframe/devices/${device.id}/activation?connected=true`}>
+					Activate
+				</Button>
+			{:else if editMetadata}
+				<Spacer />
+				<Button
+					on:click={() => {
+						updateDevice({ ...device, status: 'unactive' });
+						editMetadata = false;
+					}}
+				>
+					Disactivate
+				</Button>
+			{/if}
 		{:else}
 			<Spacer />
 			<Button href={`/mobile-wireframe/devices/pairing?deviceId=${device.id}`}>Pair device</Button>
 		{/if}
 	</Section>
-	<!-- <Section title="Location:" buttons={[{ label: 'Edit' }]}>
-		<Info label="Field:" value={device.fieldId || '-'} />
-	</Section> -->
-	<!-- <Section title="Status:">
-		<Info label="Health check:" value="healthy" />
-		<Spacer />
-		<Info label="Activity:" value={device.status} />
-		<Spacer />
-		<Button>Activate</Button>
-	</Section> -->
+	{#if device.status === 'active'}
+		<Section
+			title="Location:"
+			buttons={[
+				{ label: editLocation ? 'Cancel' : 'Edit', onClick: () => (editLocation = !editLocation) }
+			]}
+		>
+			<MapV2
+				bind:this={map}
+				maxBounds={swissBounds}
+				zoom={15}
+				minZoom={8}
+				maxZoom={18.5}
+				center={device?.location || field?.center}
+				markers={device?.location ? [{ lngLat: device.location }] : []}
+				showTarget={editLocation}
+			/>
+
+			{#if editLocation}
+				<Spacer />
+				<Button
+					on:click={() => {
+						if (map && device) {
+							const { lng, lat } = map.getCenter();
+							updateDevice({ ...device, location: [lng, lat] });
+						}
+						editLocation = false;
+					}}
+				>
+					Validate location
+				</Button>
+			{/if}
+		</Section>
+
+		<Section
+			title="Field:"
+			buttons={[{ label: editField ? 'Cancel' : 'Edit', onClick: () => (editField = !editField) }]}
+		>
+			{#if editField}
+				<ButtonList
+					items={$fields}
+					let:item
+					onSelect={(field) => {
+						updateDevice({ ...device, fieldId: field.id });
+						editField = false;
+					}}
+				>
+					{item.name}
+				</ButtonList>
+			{:else}
+				<Info label="Selected field:" value={field?.name || '-'} />
+			{/if}
+		</Section>
+	{/if}
+
+	<Section title="Metadata:" buttons={[{ label: 'Edit' }]}>
+		<textarea
+			placeholder="Your note..."
+			value={device?.note || ''}
+			on:input={(event) => {
+				if (device) {
+					updateDevice({
+						...device,
+						note: event.currentTarget.value
+					});
+				}
+			}}
+		/>
+		{#if device.medias.length > 0}
+			<Spacer />
+			<ButtonList
+				items={device.medias}
+				let:item
+				onSelect={(media) => {
+					if (device) {
+						updateDevice({
+							...device,
+							medias: (device.medias || []).filter((it) => it !== media)
+						});
+					}
+				}}
+			>
+				<span>{item.name}</span>
+				<span>{item.type}</span>
+			</ButtonList>
+		{:else}
+			<Spacer />
+			<span>No medias</span>
+		{/if}
+	</Section>
+
 	{#if $page.data.connected}
 		<Section title="Advanced settings:">
 			<Info label="Firmware version:" value={device.firmwareVersion} />
@@ -86,3 +195,16 @@
 {/if}
 
 <!-- <Device id={$page.params.id} /> -->
+
+<style>
+	textarea {
+		font-family: inherit;
+		font-size: inherit;
+		padding: 1rem;
+		border: solid 1px var(--black);
+		background-color: var(--white);
+		outline: none;
+		max-width: 100%;
+		resize: vertical;
+	}
+</style>

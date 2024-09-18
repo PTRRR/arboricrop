@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { createId } from '@paralleldrive/cuid2';
-	import DeviceMetadataV2 from '../../../../components/wireframe/DeviceMetadataV2.svelte';
+	import DeviceMetadataV2 from '../../../../components/wireframe/DeviceGeneralSettings.svelte';
 	import SaveSection from '../../../../components/wireframe/SaveSection.svelte';
 	import Section from '../../../../components/wireframe/Section.svelte';
 	import { useDevices, useReturnButton } from '../../../../stores';
@@ -21,7 +21,8 @@
 		medias: [],
 		status: 'unactive',
 		firmwareVersion: 'v1.0.0',
-		fieldId: undefined
+		fieldId: undefined,
+		battery: Math.floor(Math.random() * 50 + 50)
 	};
 </script>
 
@@ -36,16 +37,6 @@
 			})}
 	/>
 </Section>
-<!-- <Section title="Location:">
-	<Info label="Selected field:" value={device.fieldId || '-'} />
-	<Spacer />
-	<Button>Select field</Button>
-</Section> -->
-<!-- <Section title="Advanced settings:">
-	<Info label="Firmware version:" value={device.firmwareVersion} />
-	<Spacer />
-	<Button>Upgrate firmware</Button>
-</Section> -->
 <Section title="Create new device:">
 	<SaveSection
 		saveLabel="Save new device to account"
