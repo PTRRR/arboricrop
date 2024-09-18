@@ -90,7 +90,9 @@
 			>
 				{item?.name}
 			</ButtonList>
-			<Spacer />
+		</Section>
+
+		<Section title="Confirm changes:">
 			<SaveSection
 				saveDisabled={!selectedField}
 				onSave={() => {
