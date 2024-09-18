@@ -99,7 +99,7 @@
 			geoJSONs={selectedFeatures}
 		/>
 		<Spacer />
-		<Button href={url.addQuery({ name: 'addLayer', value: true })}>Add layer</Button>
+		<Button href={url.addQuery({ name: 'addLayer', value: true })}>Manage layers</Button>
 		<Spacer />
 		<Button
 			on:click={() => {

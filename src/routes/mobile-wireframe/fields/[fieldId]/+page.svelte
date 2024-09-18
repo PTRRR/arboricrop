@@ -14,6 +14,8 @@
 	import Section from '../../../../components/wireframe/Section.svelte';
 	import MapV2 from '../../../../components/MapV2.svelte';
 	import SaveSection from '../../../../components/wireframe/SaveSection.svelte';
+	import MapLayers from '../../../../components/wireframe/MapLayers.svelte';
+	import type { GeoJSON as GeoJSONType, Feature, Geometry, GeoJsonProperties } from 'geojson';
 
 	const fields = useFields();
 	const devices = useDevices();
@@ -24,6 +26,8 @@
 	let selectedDevices: Device[] = [];
 	let editGeneralSettings: boolean = false;
 	let editMap: boolean = false;
+	let editLayers: boolean = false;
+	let selectedFeature: Feature<Geometry, GeoJsonProperties> | undefined | null = undefined;
 
 	$: field = $fields.find((it) => it.id === $page.params.fieldId);
 	$: fieldDevices = getDevicesByFieldId($devices, field?.id);
@@ -130,11 +134,9 @@
 				center={field.center}
 				showTarget={editMap}
 				markers={editMap ? [{ lngLat: field.center }] : deviceMarkers}
-				geoJSONs={field.layers}
+				geoJSONs={selectedFeature ? [selectedFeature] : field.layers}
 			/>
 			{#if editMap}
-				<Spacer />
-				<Button>Manage Layers</Button>
 				<Spacer />
 				<Button
 					on:click={() => {
@@ -152,7 +154,23 @@
 			{/if}
 		</Section>
 
-		<Section title="Devices:">
+		<Section
+			title="Layers:"
+			buttons={[
+				{ label: editLayers ? 'Cancel' : 'Edit', onClick: () => (editLayers = !editLayers) }
+			]}
+		>
+			{#if field.layers.length > 0}
+				<MapLayers geoJSONs={field.layers} onSelect={(feature) => (selectedFeature = feature)} />
+			{:else}
+				<span>No layers</span>
+			{/if}
+		</Section>
+
+		<Section
+			title="Devices:"
+			buttons={[{ label: 'See all devices', href: '/mobile-wireframe/devices' }]}
+		>
 			{#if fieldDevices.length > 0}
 				<ButtonList
 					items={fieldDevices}

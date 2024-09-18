@@ -8,6 +8,7 @@
 	import Separation from './Separation.svelte';
 	import Spacer from './Spacer.svelte';
 	import ButtonList from './wireframe/ButtonList.svelte';
+	import Section from './wireframe/Section.svelte';
 
 	let map: maplibregl.Map;
 
@@ -27,13 +28,6 @@
 	export const getCenter = () => map.getCenter();
 
 	$: features = geoJSONs.map(getGeoJSONFeatures).flat();
-	let selectedFeature: Feature<Geometry, GeoJsonProperties> | undefined | null = undefined;
-
-	$: {
-		if (features.length && selectedFeature === undefined) {
-			selectedFeature = features[0];
-		}
-	}
 
 	let zoomLevel: number = zoom;
 	$: showMarkerLabels = zoomLevel >= 18;
@@ -66,27 +60,25 @@
 			on:zoom={(event) => (zoomLevel = event.detail.map.getZoom())}
 		>
 			{#each features as feature}
-				{#if feature === selectedFeature || selectedFeature === null}
-					<GeoJSON data={feature}>
-						<FillLayer
-							paint={{
-								'fill-color': 'black',
-								'fill-opacity': 0.3
-							}}
-						/>
+				<GeoJSON data={feature}>
+					<FillLayer
+						paint={{
+							'fill-color': 'black',
+							'fill-opacity': 0.3
+						}}
+					/>
 
-						<LineLayer
-							layout={{
-								'line-join': 'round',
-								'line-cap': 'round'
-							}}
-							paint={{
-								'line-color': 'black',
-								'line-width': 1.5
-							}}
-						/>
-					</GeoJSON>
-				{/if}
+					<LineLayer
+						layout={{
+							'line-join': 'round',
+							'line-cap': 'round'
+						}}
+						paint={{
+							'line-color': 'black',
+							'line-width': 1.5
+						}}
+					/>
+				</GeoJSON>
 			{/each}
 
 			{#each markers as marker}
@@ -100,23 +92,6 @@
 			{/each}
 		</MapLibre>
 	</div>
-
-	{#if features.length > 0}
-		<Spacer />
-		<Separation title="Layers: " />
-		<ButtonList items={features} let:item>
-			{#if item.properties && item.properties['layerName']}
-				<Button
-					minimal
-					selected={selectedFeature === item}
-					on:click={() =>
-						selectedFeature === item ? (selectedFeature = null) : (selectedFeature = item)}
-				>
-					{item.properties['layerName']}
-				</Button>
-			{/if}
-		</ButtonList>
-	{/if}
 </div>
 
 <style>
@@ -140,6 +115,7 @@
 		border: solid 1px var(--black);
 		border-radius: 100%;
 		z-index: 1;
+		pointer-events: none;
 	}
 
 	.map__target::before,
