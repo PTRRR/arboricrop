@@ -18,6 +18,7 @@
 	import Legend from './Legend.svelte';
 	import Checklist from '../Checklist.svelte';
 	import Pagination from './Pagination.svelte';
+	import type { LngLatLike } from 'svelte-maplibre';
 
 	export let device: Device;
 	export let isNewDevice: boolean | undefined = undefined;
@@ -49,11 +50,8 @@
 	};
 
 	let fieldId: string | undefined = device?.fieldId;
-	let currentMapLocation: Location = { x: -50, y: -50 };
-	let location: Location = device?.location || {
-		x: 40 + Math.random() * 20,
-		y: 40 + Math.random() * 20
-	};
+	let currentMapLocation: LngLatLike = [0, 0];
+	let location: LngLatLike = device?.location || [0, 0];
 
 	$: medias = device?.medias || [];
 	$: currentMedia = medias.find((it) => it.name === $page.data.media);

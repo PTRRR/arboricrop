@@ -12,14 +12,22 @@
 	import ButtonList from '../../../../components/wireframe/ButtonList.svelte';
 	import { createId } from '@paralleldrive/cuid2';
 	import { getCss } from '../../../../utils/css';
-	import { changinCenter } from '../../../../utils/dummyData';
+	import { changinCenter, swissBounds } from '../../../../utils/dummyData';
 	import { getFeatureLayerName } from '../../../../utils/geoJSON';
+	import FieldGeneralSettings from '../../../../components/wireframe/FieldGeneralSettings.svelte';
+	import MapV2 from '../../../../components/MapV2.svelte';
+	import SaveSection from '../../../../components/wireframe/SaveSection.svelte';
+	import Section from '../../../../components/wireframe/Section.svelte';
+
+	let map: MapV2;
+	let generalSettings: FieldGeneralSettings;
 
 	const fields = useFields();
 	const features = useGeoJSONFeatures();
 	const returnButton = useReturnButton();
 	const url = createUrlBuilder();
-	const initialField: Field = {
+
+	let field: Field = {
 		id: createId(),
 		name: '',
 		type: '',
@@ -72,19 +80,50 @@
 		display: $page.data.addLayer ? 'none' : undefined
 	})}
 >
-	<FieldForm
-		field={{ ...initialField, layers: selectedFeatures }}
-		onSave={(field) => {
-			fields.set([...$fields, field]);
-			goto(`/mobile-wireframe/fields/${field.id}`);
-		}}
-		onCancel={() => goto('/mobile-wireframe/fields')}
-	>
-		<Button href={url.addQuery({ name: 'addLayer', value: true })}>Add layer</Button>
-		<Spacer size="var(--gap)" />
-		<Separation />
-		<Spacer size="0" />
-	</FieldForm>
+	<Section title="General settings:">
+		<FieldGeneralSettings bind:this={generalSettings} {field} editable />
+	</Section>
+
+	<Section title="Map:">
+		<MapV2
+			bind:this={map}
+			maxBounds={swissBounds}
+			zoom={9}
+			minZoom={3}
+			maxZoom={18}
+			center={field.center}
+			showTarget
+			markers={[{ lngLat: field.center }]}
+		/>
+		<Spacer />
+		<Button
+			on:click={() => {
+				const { lng, lat } = map.getCenter();
+				field = {
+					...field,
+					center: [lng, lat]
+				};
+			}}
+		>
+			Set field location
+		</Button>
+		<Spacer />
+		<Button>Add layer</Button>
+	</Section>
+
+	<Section title="Confirm Changes:">
+		<SaveSection
+			onSave={() => {
+				field = {
+					...field,
+					...generalSettings.getValues()
+				};
+				fields.set([...$fields, field]);
+				goto(`/mobile-wireframe/fields/${field.id}`);
+			}}
+			onCancel={() => goto('/mobile-wireframe/fields')}
+		/>
+	</Section>
 </div>
 
 <style>

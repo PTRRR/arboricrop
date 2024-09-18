@@ -18,6 +18,7 @@
 
 	type Section = {
 		title: string;
+		buttons?: { label: string; href?: string; onClick?: () => void }[];
 		cards: {
 			title: string;
 			subTitle?: string;
@@ -50,6 +51,12 @@
 		},
 		{
 			title: 'Recent Fields',
+			buttons: [
+				{
+					label: 'Create new',
+					href: '/mobile-wireframe/fields/new'
+				}
+			],
 			cards: randomFields.map((it) => ({
 				title: it.name || '',
 				subTitle: `${it.type} [${getDevicesByFieldId($devices, it.id).length} devices]`,
@@ -62,7 +69,7 @@
 <div class="home">
 	{#each sections as section}
 		<div class="home__section">
-			<Separation title={section.title} />
+			<Separation title={section.title} buttons={section.buttons} />
 
 			{#each section.cards as card}
 				<Card href={card.href}>

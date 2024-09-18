@@ -4,19 +4,26 @@
 	import { onMount } from 'svelte';
 	import Spacer from '../../../../components/Spacer.svelte';
 	import Button from '../../../../components/Button.svelte';
-	import FieldForm from '../../../../components/wireframe/FieldForm.svelte';
 	import Line from '../../../../components/Line.svelte';
 	import { useDevices, useFields, useReturnButton } from '../../../../stores';
-	import { getDevicesByFieldId } from '../../../../utils/dummyData';
-	import type { Device, Marker } from '../../../../utils/types';
-	import Separation from '../../../../components/Separation.svelte';
+	import { getDevicesByFieldId, swissBounds } from '../../../../utils/dummyData';
+	import type { Device, Field, Marker } from '../../../../utils/types';
 	import ButtonList from '../../../../components/wireframe/ButtonList.svelte';
 	import type { LngLatLike } from 'svelte-maplibre';
+	import FieldGeneralSettings from '../../../../components/wireframe/FieldGeneralSettings.svelte';
+	import Section from '../../../../components/wireframe/Section.svelte';
+	import MapV2 from '../../../../components/MapV2.svelte';
+	import SaveSection from '../../../../components/wireframe/SaveSection.svelte';
 
 	const fields = useFields();
 	const devices = useDevices();
 	const returnButton = useReturnButton();
+
+	let map: MapV2;
+	let generalSettings: FieldGeneralSettings;
 	let selectedDevices: Device[] = [];
+	let editGeneralSettings: boolean = false;
+	let editMap: boolean = false;
 
 	$: field = $fields.find((it) => it.id === $page.params.fieldId);
 	$: fieldDevices = getDevicesByFieldId($devices, field?.id);
@@ -32,8 +39,6 @@
 			});
 		}
 	}
-
-	$: isSelected = (device: Device) => selectedDevices.some((it) => it.id === device.id);
 
 	onMount(() => {
 		selectedDevices = fieldDevices;
@@ -99,50 +104,105 @@
 				Cancel
 			</Button>
 		</div>
-	{:else}
-		<FieldForm
-			{field}
-			markers={deviceMarkers}
-			onSave={(field) => {
-				const fieldIndex = $fields.findIndex((it) => it.id === field.id);
-
-				if (fieldIndex > -1) {
-					let newFields = [...$fields];
-					newFields[fieldIndex] = field;
-					fields.set(newFields);
+	{:else if typeof field !== 'undefined'}
+		<Section
+			title="General settings:"
+			buttons={[
+				{
+					label: editGeneralSettings ? 'Cancel' : 'Edit',
+					onClick: () => (editGeneralSettings = !editGeneralSettings)
 				}
-
-				goto('/mobile-wireframe/fields');
-			}}
-			onCancel={() => goto('/mobile-wireframe/fields')}
-			onDelete={(id) => {
-				fields.set($fields.filter((it) => it.id !== id));
-				goto('/mobile-wireframe/fields');
-			}}
+			]}
 		>
-			<Separation title="Devices:" />
-			{#each fieldDevices as device}
-				{#if device}
-					<Button minimal href={`/mobile-wireframe/devices/${device.id}`}>
-						<div class="device">
-							<span class="device-name">{device.name}</span>
-							<span class="device-id">{device.status}</span>
-						</div>
-					</Button>
-				{/if}
-			{/each}
+			<FieldGeneralSettings bind:this={generalSettings} {field} editable={editGeneralSettings} />
+		</Section>
 
-			{#if fieldDevices.length === 0}
-				<span>No devices</span>
+		<Section
+			title="Map:"
+			buttons={[{ label: editMap ? 'Cancel' : 'Edit', onClick: () => (editMap = !editMap) }]}
+		>
+			<MapV2
+				bind:this={map}
+				maxBounds={swissBounds}
+				zoom={15}
+				minZoom={3}
+				maxZoom={18}
+				center={field.center}
+				showTarget={editMap}
+				markers={editMap ? [{ lngLat: field.center }] : deviceMarkers}
+			/>
+			{#if editMap}
+				<Spacer />
+				<Button>Manage Layers</Button>
+				<Spacer />
+				<Button
+					on:click={() => {
+						const center = map.getCenter();
+						if (field) {
+							field = {
+								...field,
+								center
+							};
+						}
+					}}
+				>
+					Reset Location
+				</Button>
 			{/if}
+		</Section>
 
-			<Spacer size="var(--gap)" />
-			<Button href={`${window.location.pathname}?devices=true`}>Add devices</Button>
+		<Section title="Devices:">
+			{#if fieldDevices.length > 0}
+				<ButtonList
+					items={fieldDevices}
+					onSelect={(item) => {
+						goto(`/mobile-wireframe/devices/${item.id}`);
+					}}
+					let:item
+				>
+					<div class="device">
+						<span class="device-name">{item.name}</span>
+						<span class="device-id">{item.status}</span>
+					</div>
+				</ButtonList>
+			{:else}
+				<span>No devices in this field</span>
+			{/if}
+		</Section>
 
-			<Spacer size="var(--gap)" />
-			<Separation />
-			<Spacer size="var(--gap)" />
-		</FieldForm>
+		{#if editGeneralSettings || editMap}
+			<Section title="Confirm Changes:">
+				<SaveSection
+					onSave={() => {
+						if (editGeneralSettings && field) {
+							field = {
+								...field,
+								...generalSettings.getValues()
+							};
+						}
+
+						const newFields = $fields.map((it) => (it.id === field?.id ? field : it));
+						fields.set(newFields);
+						editGeneralSettings = false;
+						editMap = false;
+					}}
+					onCancel={() => {
+						editGeneralSettings = false;
+						editMap = false;
+					}}
+				/>
+			</Section>
+		{/if}
+
+		<Section title={'Danger zone:'}>
+			<SaveSection
+				deleteLabel="Permanently delete field"
+				onDelete={() => {
+					fields.set($fields.filter((it) => it.id !== field?.id));
+					goto('/mobile-wireframe/fields');
+				}}
+			/>
+		</Section>
 	{/if}
 </div>
 

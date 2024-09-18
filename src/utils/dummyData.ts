@@ -1,13 +1,16 @@
 import { createId } from '@paralleldrive/cuid2';
-import type { Device, Field, MapLayer, Notification } from './types';
+import type { Device, Field, Notification } from './types';
 import type { GeoJSON as GeoJSONType, Feature, Geometry, GeoJsonProperties } from 'geojson';
 import { shuffle } from './arrays';
 import { getRandomDate } from './dates';
-import type { LngLatLike } from 'svelte-maplibre';
-import { mapValue } from './math';
+import type { LngLatBoundsLike, LngLatLike } from 'svelte-maplibre';
 import { getGeoJSONFeatures } from './geoJSON';
 
 export const changinCenter: LngLatLike = [6.231351138336578, 46.398638192299046];
+export const swissBounds: LngLatBoundsLike = [
+	[5.79962242885633, 45.750539855343845],
+	[10.644593011831521, 47.93683935427566]
+];
 
 export const getFields = (): Field[] => [
 	{

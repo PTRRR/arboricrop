@@ -15,7 +15,7 @@
 <style>
 	.main-menu {
 		position: absolute;
-		padding: var(--main-padding);
+		padding: 0.5rem var(--main-padding);
 		top: var(--main-padding);
 		left: 0;
 		width: 100%;

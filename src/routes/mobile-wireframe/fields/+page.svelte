@@ -17,12 +17,10 @@
 </script>
 
 <div class="fields">
-	<div class="fields__pair-button">
-		<Button href="/mobile-wireframe/fields/new">Create new field</Button>
-		<Spacer size="var(--gap)"></Spacer>
-	</div>
-
-	<Separation title="Fields:" />
+	<Separation
+		title="Fields:"
+		buttons={[{ label: 'Create new field', href: '/mobile-wireframe/fields/new' }]}
+	/>
 
 	<div class="fields__list">
 		{#each $fields as field}
@@ -42,14 +40,6 @@
 		display: flex;
 		flex-direction: column;
 		gap: var(--gap);
-	}
-
-	.fields__pair-button {
-		position: sticky;
-		top: var(--layout-vertical-padding);
-		width: 100%;
-		display: flex;
-		flex-direction: column;
 	}
 
 	.fields__list {

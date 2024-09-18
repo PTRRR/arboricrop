@@ -3,23 +3,28 @@
 	import type { LngLatLike, LngLatBoundsLike } from 'maplibre-gl';
 	import type { GeoJSON as GeoJSONType, Feature, Geometry, GeoJsonProperties } from 'geojson';
 	import { getCss } from '../utils/css';
-	import { onMount } from 'svelte';
 	import Button from './Button.svelte';
 	import { getGeoJSONFeatures } from '../utils/geoJSON';
 	import Separation from './Separation.svelte';
 	import Spacer from './Spacer.svelte';
 	import ButtonList from './wireframe/ButtonList.svelte';
 
+	let map: maplibregl.Map;
+
 	export let showTarget: boolean = false;
 	export let ratio: number = 1;
 	export let center: LngLatLike | undefined = undefined;
+	export let bounds: LngLatBoundsLike | undefined = undefined;
 	export let maxBounds: LngLatBoundsLike | undefined = undefined;
 	export let zoom: number = 1;
+	export let maxZoom: number = zoom;
+	export let minZoom: number = zoom;
 	export let geoJSONs: GeoJSONType[] = [];
 	export let markers: { lngLat: LngLatLike; label?: string }[] = [];
 	export let mapStyle: string =
 		'https://api.maptiler.com/maps/ch-swisstopo-lbm-grey/style.json?key=epJVqnAFN0DeOXvikzSB';
 	export let onChange: ((location: LngLatLike) => void) | undefined = undefined;
+	export const getCenter = () => map.getCenter();
 
 	$: features = geoJSONs.map(getGeoJSONFeatures).flat();
 	let selectedFeature: Feature<Geometry, GeoJsonProperties> | undefined | null = undefined;
@@ -42,11 +47,13 @@
 			<div class="map__target"></div>
 		{/if}
 		<MapLibre
+			bind:map
 			{center}
+			{bounds}
 			{maxBounds}
 			{zoom}
-			maxZoom={zoom + 2}
-			minZoom={zoom - 2}
+			{maxZoom}
+			{minZoom}
 			style={mapStyle}
 			class="map__inner"
 			on:moveend={(event) => {
