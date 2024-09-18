@@ -37,6 +37,7 @@
 	.button-inner--disabled {
 		pointer-events: none;
 		cursor: not-allowed;
+		opacity: 0.3;
 	}
 
 	.button-inner--minimal {

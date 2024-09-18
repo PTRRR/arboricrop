@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Device, Field, Location, Media, MediaType } from '../../utils/types';
+	import type { Device, Field, Media, MediaType } from '../../utils/types';
 	import { createUrlBuilder } from '../../utils/urls';
 	import Spacer from '../Spacer.svelte';
 	import Button from '../Button.svelte';
@@ -8,16 +8,10 @@
 	import { useFields } from '../../stores';
 	import Info from '../Info.svelte';
 	import ButtonList from './ButtonList.svelte';
-	import MapV2 from '../MapV2.svelte';
-	import { changinCenter } from '../../utils/dummyData';
-	import type { LngLatLike } from 'svelte-maplibre';
 
 	export let device: Device;
-	export let onLocation: ((location: LngLatLike) => void) | undefined = undefined;
-	export let onSetManualLocation: (() => void) | undefined = undefined;
 	export let onMedias: ((medias: Media[]) => void) | undefined = undefined;
 	export let onMedia: ((media: Media) => void) | undefined = undefined;
-	export let onChangeField: (() => void) | undefined = undefined;
 	export let onNote: ((note: string) => void) | undefined = undefined;
 
 	let note: HTMLTextAreaElement;
@@ -34,24 +28,6 @@
 </script>
 
 <div class="device-metadata">
-	<Info label="Location:" />
-	<Spacer />
-	<MapV2
-		showTarget
-		center={changinCenter}
-		zoom={15.5}
-		markers={device.location ? [{ lngLat: device.location }] : []}
-		onChange={onLocation}
-	/>
-	<Spacer />
-	<Button on:click={() => onSetManualLocation?.()}>Set manual location</Button>
-	<Spacer />
-
-	<Info label="Field:" value={selectedField?.name} />
-	<Spacer />
-	<Button on:click={() => onChangeField?.()}>Change field</Button>
-	<Spacer />
-
 	<Info label="Note:" />
 	<Spacer />
 	<textarea
@@ -61,7 +37,6 @@
 		on:input={() => onNote?.(note.value)}
 	/>
 	<Spacer />
-
 	<Info label="Medias:" />
 	<Spacer />
 	<Dropdown label="Add media" items={mediaOptions}>
