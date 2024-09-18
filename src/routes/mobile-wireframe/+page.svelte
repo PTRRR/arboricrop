@@ -1,10 +1,18 @@
 <script lang="ts">
 	import Button from '../../components/Button.svelte';
 	import Card from '../../components/wireframe/Card.svelte';
-	import { useDevices, useFields, useNotifications, useReturnButton } from '../../stores';
+	import {
+		useDevices,
+		useFields,
+		useNotifications,
+		useOrganisation,
+		useReturnButton,
+		useUserName
+	} from '../../stores';
 	import { shuffle } from '../../utils/arrays';
 	import { getDevicesByFieldId } from '../../utils/dummyData';
 	import Section from '../../components/wireframe/Section.svelte';
+	import Info from '../../components/Info.svelte';
 
 	let returnButton = useReturnButton();
 	returnButton.set({
@@ -14,12 +22,14 @@
 	const devices = useDevices();
 	const notifications = useNotifications();
 	const fields = useFields();
+	const organisation = useOrganisation();
 	const randomFields = shuffle($fields).splice(0, 5);
 
 	type Section = {
 		title: string;
 		buttons?: { label: string; href?: string; onClick?: () => void }[];
-		cards: {
+		infos?: { label: string; value: string }[];
+		cards?: {
 			title: string;
 			subTitle?: string;
 			href?: string;
@@ -27,6 +37,25 @@
 	};
 
 	const sections: Section[] = [
+		{
+			title: 'General informations:',
+			infos: [
+				{
+					label: 'Selected account:',
+					value: 'Jon Doe'
+				},
+				{
+					label: 'Selected organisation:',
+					value: $organisation
+				}
+			],
+			buttons: [
+				{
+					label: 'Edit',
+					href: '/mobile-wireframe/settings'
+				}
+			]
+		},
 		{
 			title: 'Getting Started',
 			cards: [
@@ -38,7 +67,8 @@
 					title: 'Throubleshooting',
 					href: '/mobile-wireframe/getting-started'
 				}
-			]
+			],
+			buttons: [{ label: 'Hide' }]
 		},
 		{
 			title: 'Notifications & Alerts',
@@ -70,7 +100,11 @@
 	{#each sections as section}
 		<Section title={section.title} buttons={section.buttons}>
 			<div class="home__section">
-				{#each section.cards as card}
+				{#each section.infos || [] as info}
+					<Info label={info.label} value={info.value} />
+				{/each}
+
+				{#each section.cards || [] as card}
 					<Card href={card.href}>
 						<svelte:fragment slot="title">
 							{#if card.title}
