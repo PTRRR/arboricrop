@@ -92,6 +92,7 @@
 				center={device?.location || field?.center}
 				markers={device?.location ? [{ lngLat: device.location }] : []}
 				showTarget={editLocation}
+				geoJSONs={field?.layers}
 			/>
 
 			{#if editLocation}

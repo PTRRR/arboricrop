@@ -182,6 +182,7 @@
 					center={device?.location || field?.center}
 					showTarget
 					markers={device?.location ? [{ lngLat: device.location }] : []}
+					geoJSONs={field?.layers}
 				/>
 				<Spacer />
 				<Button
