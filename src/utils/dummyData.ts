@@ -1,6 +1,6 @@
 import { createId } from '@paralleldrive/cuid2';
 import type { Device, Field, Notification } from './types';
-import type { GeoJSON as GeoJSONType, Feature, Geometry, GeoJsonProperties } from 'geojson';
+import type { GeoJSON as GeoJSONType } from 'geojson';
 import { shuffle } from './arrays';
 import { getRandomDate } from './dates';
 import type { LngLatBoundsLike, LngLatLike } from 'svelte-maplibre';
@@ -265,26 +265,6 @@ export const loraNetworks: string[] = [
 ];
 
 export const organisations: string[] = ['Vivent', 'Changin', 'ECAL'];
-
-const defaultFeature: Feature<Geometry, GeoJsonProperties> = {
-	type: 'Feature',
-	properties: {
-		layerName: 'Greenhouse Changin'
-	},
-	geometry: {
-		coordinates: [
-			[
-				[6.231019204069696, 46.399165917526574],
-				[6.230814420900174, 46.39901738796689],
-				[6.231382870732972, 46.398635105110515],
-				[6.231601776880154, 46.39878120078612],
-				[6.231019204069696, 46.399165917526574]
-			]
-		],
-		type: 'Polygon'
-	},
-	id: 0
-};
 
 export const changinGeoJson: GeoJSONType = {
 	type: 'FeatureCollection',

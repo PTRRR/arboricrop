@@ -10,6 +10,7 @@
 	import SaveSection from '../../../../components/wireframe/SaveSection.svelte';
 	import Section from '../../../../components/wireframe/Section.svelte';
 	import { useDevices, useFields, useReturnButton } from '../../../../stores';
+	import { getCss } from '../../../../utils/css';
 	import { swissBounds } from '../../../../utils/dummyData';
 	import type { Device } from '../../../../utils/types';
 
@@ -127,7 +128,11 @@
 					{item.name}
 				</ButtonList>
 			{:else}
-				<Info label="Selected field:" value={field?.name || '-'} />
+				<div style={getCss({ display: 'flex', justifyContent: 'flex-start' })}>
+					<Button minimal href={`/mobile-wireframe/fields/${field?.id}`}>
+						{field?.name || '-'}
+					</Button>
+				</div>
 			{/if}
 		</Section>
 	{/if}
@@ -169,6 +174,10 @@
 	</Section>
 
 	{#if $page.data.connected}
+		<Section title="Troubleshooting:">
+			<Button>See live data</Button>
+		</Section>
+
 		<Section title="Advanced settings:">
 			<Info label="Firmware version:" value={device.firmwareVersion} />
 			<Spacer />
