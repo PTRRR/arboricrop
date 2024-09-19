@@ -7,6 +7,8 @@
 	import AlertDialog from '../../components/AlertDialog.svelte';
 	import Input from '../../components/Input.svelte';
 	import { createId } from '@paralleldrive/cuid2';
+	import { changinCenter } from '../../utils/dummyData';
+	import MapV2 from '../../components/MapV2.svelte';
 
 	const fields = useFields();
 	const devices = useDevices();
@@ -37,7 +39,9 @@
 				{
 					id: `fie-${createId()}`,
 					name: newFieldName,
-					type: newFieldType
+					type: newFieldType,
+					layers: [],
+					center: changinCenter
 				}
 			]);
 		}
@@ -56,7 +60,8 @@
 <div class="dashboard">
 	{#each $fields as field}
 		<div class="dashboard__item">
-			<Image ratio={0.1} placeholder={`Infographic: ${field.name}`} />
+			<MapV2 ratio={1.5} center={field.center} zoom={15} interactive={false} />
+			<!-- <Image ratio={0.1} placeholder={`Infographic: ${field.name}`} /> -->
 			<Spacer />
 			<span>Devices count: {getFieldDeviceCount(field.id)}</span>
 			<Button minimal href={`/desktop-wireframe/fields/${field.id}`}>See field</Button>

@@ -1,14 +1,9 @@
 <script lang="ts">
 	import { MapLibre, GeoJSON, FillLayer, LineLayer, Marker } from 'svelte-maplibre';
 	import type { LngLatLike, LngLatBoundsLike } from 'maplibre-gl';
-	import type { GeoJSON as GeoJSONType, Feature, Geometry, GeoJsonProperties } from 'geojson';
+	import type { GeoJSON as GeoJSONType } from 'geojson';
 	import { getCss } from '../utils/css';
-	import Button from './Button.svelte';
 	import { getGeoJSONFeatures } from '../utils/geoJSON';
-	import Separation from './Separation.svelte';
-	import Spacer from './Spacer.svelte';
-	import ButtonList from './wireframe/ButtonList.svelte';
-	import Section from './wireframe/Section.svelte';
 
 	let map: maplibregl.Map;
 
@@ -20,6 +15,7 @@
 	export let zoom: number = 1;
 	export let maxZoom: number = zoom;
 	export let minZoom: number = zoom;
+	export let interactive: boolean = true;
 	export let geoJSONs: GeoJSONType[] = [];
 	export let markers: { lngLat: LngLatLike; label?: string }[] = [];
 	export let mapStyle: string =
@@ -51,6 +47,7 @@
 			{zoom}
 			{maxZoom}
 			{minZoom}
+			{interactive}
 			style={mapStyle}
 			class="map__inner"
 			on:moveend={(event) => {
@@ -95,6 +92,10 @@
 </div>
 
 <style>
+	.map {
+		width: 100%;
+	}
+
 	.map__wrapper {
 		width: 100%;
 		aspect-ratio: var(--ratio);
