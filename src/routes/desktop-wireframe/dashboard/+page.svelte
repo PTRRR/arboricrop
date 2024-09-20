@@ -25,28 +25,32 @@
 
 <Section title="Fields:" buttons={[{ label: 'Create new field' }]}>
 	<div class="dashboard">
-		{#each $fields as field}
-			<!-- svelte-ignore a11y-click-events-have-key-events -->
-			<!-- svelte-ignore a11y-no-static-element-interactions -->
-			<a class="dashboard__item" href={`/desktop-wireframe/fields/${field.id}`}>
-				<MapV2
-					ratio={1.5}
-					center={field.center}
-					zoom={15}
-					interactive={false}
-					geoJSONs={field.layers}
-					markers={getFieldMarkers(field.id)}
-				/>
-				<Spacer />
-				<div class="dashboard__info">
-					<Info label="Name:" value={field.name || '-'} />
-					<div class="dashboard__field-data">
-						<span>Devices count: {getFieldDeviceCount(field.id)}</span>
-						<Button minimal href={`/desktop-wireframe/fields/${field.id}`}>See field</Button>
+		{#if $fields.length > 0}
+			{#each $fields as field}
+				<!-- svelte-ignore a11y-click-events-have-key-events -->
+				<!-- svelte-ignore a11y-no-static-element-interactions -->
+				<a class="dashboard__item" href={`/desktop-wireframe/fields/${field.id}`}>
+					<MapV2
+						ratio={1.5}
+						center={field.center}
+						zoom={15}
+						interactive={false}
+						geoJSONs={field.layers}
+						markers={getFieldMarkers(field.id)}
+					/>
+					<Spacer />
+					<div class="dashboard__info">
+						<Info label="Name:" value={field.name || '-'} />
+						<div class="dashboard__field-data">
+							<span>Devices count: {getFieldDeviceCount(field.id)}</span>
+							<Button minimal href={`/desktop-wireframe/fields/${field.id}`}>See field</Button>
+						</div>
 					</div>
-				</div>
-			</a>
-		{/each}
+				</a>
+			{/each}
+		{:else}
+			No fields
+		{/if}
 	</div>
 </Section>
 
