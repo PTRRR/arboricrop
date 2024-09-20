@@ -9,7 +9,7 @@ import {
 	organisations
 } from './utils/dummyData';
 import type { comment } from './db/schema';
-import type { GeoJSONFeature, Metric, PartialBy } from './utils/types';
+import type { Field, GeoJSONFeature, Metric, PartialBy } from './utils/types';
 
 const STORE_VERSION = 'v12';
 const dummyDevices = getDevices(30);
@@ -51,7 +51,25 @@ export const useReadable = <T>(name: string, value: T) => useSharedStore(name, r
 
 export const useDevices = () => useWritable('devices', dummyDevices, true);
 export const useNotifications = () => useWritable('notifications', dummyNotifications, true);
-export const useFields = () => useWritable('fields', getFields(), true);
+export const useFields = () => {
+	const fields = useWritable('fields', getFields(), true);
+	return {
+		fields,
+		updateField: (field: PartialBy<Field, 'center' | 'layers' | 'name' | 'type'>) => {
+			fields.update((fields) => {
+				const fieldIndex = fields.findIndex((it) => it.id === field.id);
+
+				if (fieldIndex > -1) {
+					const newFields = [...fields];
+					newFields[fieldIndex] = { ...newFields[fieldIndex], ...field };
+					return newFields;
+				}
+
+				return fields;
+			});
+		}
+	};
+};
 export const useBlurApp = () => useWritable('blur-app', false);
 export const useUserName = () => useWritable('user-name', '', true);
 export const useProfile = () =>

@@ -3,7 +3,7 @@
 	import Button from '../../../../components/Button.svelte';
 	import Info from '../../../../components/Info.svelte';
 	import Spacer from '../../../../components/Spacer.svelte';
-	import { useDevices, useFields, useMetrics } from '../../../../stores';
+	import { useDevices, useFields, useGeoJSONFeatures, useMetrics } from '../../../../stores';
 	import { getDevicesByFieldId, plantationMetrics } from '../../../../utils/dummyData';
 	import MapV2 from '../../../../components/MapV2.svelte';
 	import type { LngLatLike } from 'svelte-maplibre';
@@ -13,13 +13,15 @@
 	import AlertDialog from '../../../../components/AlertDialog.svelte';
 	import { createId } from '@paralleldrive/cuid2';
 	import ButtonList from '../../../../components/wireframe/ButtonList.svelte';
-	import type { Metric, Tab } from '../../../../utils/types';
+	import type { GeoJSONFeature, Metric, Tab } from '../../../../utils/types';
 	import { createUrlBuilder } from '../../../../utils/urls';
 	import { goto } from '$app/navigation';
 	import Grid from '../../../../components/Grid.svelte';
+	import { getFeatureLayerName } from '../../../../utils/geoJSON';
 
-	const fields = useFields();
+	const { fields, updateField } = useFields();
 	const devices = useDevices();
+	const features = useGeoJSONFeatures();
 	const { metrics, addMetric, deleteMetric, getMetricsByFieldId } = useMetrics();
 
 	const url = createUrlBuilder();
@@ -34,12 +36,13 @@
 		.filter((it) => it.location)
 		.map((it) => ({ lngLat: it.location as LngLatLike, label: it.name }));
 	$: fieldMetrics = field && $metrics ? getMetricsByFieldId(field.id) : [];
-
 	$: selectedTab = tabs.find((it) => it.value === $page.data.tab) || tabs[0];
 
+	let editLayers: boolean = false;
 	let editMetric: boolean = false;
 	let metricType: string | undefined = undefined;
 	let selectedMetricFilter: Metric | undefined = undefined;
+	let selectedFeatures: GeoJSONFeature[] = [];
 </script>
 
 {#if field}
@@ -118,15 +121,66 @@
 				</Section>
 			{:else if selectedTab?.value === 'settings'}
 				<Section title="Metadata:" buttons={[{ label: 'Edit' }]}>
+					<Info label="Id:" value={field.id} />
+					<Spacer />
 					<Info label="Name:" value={field.name} />
 					<Spacer />
 					<Info label="Type:" value={field.type} />
-					<Spacer />
-					<Info label="Id:" value={field.id} />
 				</Section>
 
-				<Section title="Layers" buttons={[{ label: 'Add layer' }]}>
-					<span>No layers</span>
+				<Section
+					title="Layers"
+					buttons={[
+						{
+							label: editLayers ? 'Cancel' : 'Add layer',
+							onClick: () => {
+								editLayers = !editLayers;
+								selectedFeatures = field.layers;
+							}
+						}
+					]}
+				>
+					{#if field.layers.length > 0}
+						<ButtonList items={field.layers} let:item>
+							{item.properties?.layerName}
+						</ButtonList>
+					{:else}
+						<span>No layers</span>
+					{/if}
+					<AlertDialog
+						open={editLayers}
+						actionLabel="Save"
+						onAction={() => {
+							updateField({ ...field, layers: selectedFeatures });
+							selectedFeatures = [];
+							editLayers = false;
+						}}
+						onCancel={() => {
+							editLayers = false;
+							selectedFeatures = [];
+						}}
+						cancelLabel="Cancel"
+					>
+						<div class="metric-form">
+							<ButtonList items={$features} let:item>
+								{#if getFeatureLayerName(item)}
+									<div class="layer__button">
+										<Button
+											minimal
+											selected={selectedFeatures.includes(item)}
+											on:click={() =>
+												selectedFeatures.includes(item)
+													? (selectedFeatures = selectedFeatures.filter((it) => it !== item))
+													: (selectedFeatures = [...selectedFeatures, item])}
+										>
+											{getFeatureLayerName(item)}
+										</Button>
+										<div>GeoJSON</div>
+									</div>
+								{/if}
+							</ButtonList>
+						</div>
+					</AlertDialog>
 				</Section>
 
 				<Section title="Devices:" buttons={[{ label: 'See devices' }]}>
@@ -194,9 +248,9 @@
 					</AlertDialog>
 				</Section>
 
-				<Section title="Monitoring:" buttons={[{ label: 'Add metric monitor' }]}>
+				<!-- <Section title="Monitoring:" buttons={[{ label: 'Add metric monitor' }]}>
 					<span>No metric monitors</span>
-				</Section>
+				</Section> -->
 
 				<Section title="Alarms:" buttons={[{ label: 'Create alarm' }]}>
 					<span>No alarms</span>
@@ -242,5 +296,11 @@
 	.metric-form {
 		width: 30rem;
 		max-width: calc(100svw - 4rem);
+	}
+
+	.layer__button {
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
 	}
 </style>

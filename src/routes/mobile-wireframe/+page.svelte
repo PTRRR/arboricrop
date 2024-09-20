@@ -21,7 +21,7 @@
 
 	const devices = useDevices();
 	const notifications = useNotifications();
-	const fields = useFields();
+	const { fields } = useFields();
 	const organisation = useOrganisation();
 	const randomFields = shuffle($fields).splice(0, 5);
 

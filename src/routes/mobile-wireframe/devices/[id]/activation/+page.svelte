@@ -24,7 +24,7 @@
 
 	const devices = useDevices();
 	const returnButton = useReturnButton();
-	const fields = useFields();
+	const { fields } = useFields();
 	const url = createUrlBuilder();
 	const steps: Step[] = [
 		{ label: 'Connect probes', checked: false },

@@ -14,7 +14,7 @@
 	import Info from '../../components/Info.svelte';
 	import { goto } from '$app/navigation';
 
-	const fields = useFields();
+	const { fields } = useFields();
 	const devices = useDevices();
 
 	$: getFieldDeviceCount = (fieldId: string) => {

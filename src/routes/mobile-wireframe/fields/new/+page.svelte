@@ -21,7 +21,7 @@
 	let map: MapV2;
 	let generalSettings: FieldGeneralSettings;
 
-	const fields = useFields();
+	const { fields } = useFields();
 	const features = useGeoJSONFeatures();
 	const returnButton = useReturnButton();
 	const url = createUrlBuilder();

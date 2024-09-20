@@ -15,7 +15,7 @@
 	import type { Device } from '../../../../utils/types';
 
 	const devices = useDevices();
-	const fields = useFields();
+	const { fields } = useFields();
 	const returnButton = useReturnButton();
 
 	let map: MapV2 | undefined = undefined;

@@ -13,7 +13,7 @@
 		href: '/mobile-wireframe'
 	});
 
-	const fields = useFields();
+	const { fields } = useFields();
 	const devices = useDevices();
 </script>
 

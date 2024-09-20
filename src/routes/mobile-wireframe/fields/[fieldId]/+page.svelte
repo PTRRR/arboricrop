@@ -17,7 +17,7 @@
 	import MapLayers from '../../../../components/wireframe/MapLayers.svelte';
 	import type { GeoJSON as GeoJSONType, Feature, Geometry, GeoJsonProperties } from 'geojson';
 
-	const fields = useFields();
+	const { fields } = useFields();
 	const devices = useDevices();
 	const returnButton = useReturnButton();
 

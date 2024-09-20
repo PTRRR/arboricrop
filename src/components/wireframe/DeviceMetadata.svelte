@@ -16,7 +16,7 @@
 
 	let note: HTMLTextAreaElement;
 
-	const fields = useFields();
+	const { fields } = useFields();
 	const url = createUrlBuilder();
 	const mediaOptions: { label: string; type: MediaType }[] = [
 		{ label: 'Image', type: 'image' },

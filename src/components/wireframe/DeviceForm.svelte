@@ -28,7 +28,7 @@
 	$: showMetadata = device?.status === 'active' && !isNewDevice;
 
 	const network = useNetwork();
-	const fields = useFields();
+	const { fields } = useFields();
 	$: selectedField = $fields.find((it) => it.id === device?.fieldId);
 
 	let id = device?.id || `dev-${createId()}`;
