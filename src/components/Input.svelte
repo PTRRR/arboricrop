@@ -1,10 +1,20 @@
 <script lang="ts">
+	export let type: 'text' | 'password' = 'text';
 	export let value: string | undefined = undefined;
 	export let placeholder: string | undefined = undefined;
 	export let onValue: ((value: string) => void) | undefined = undefined;
 </script>
 
-<input type="text" {placeholder} bind:value on:input={(e) => onValue?.(e.currentTarget.value)} />
+{#if type === 'password'}
+	<input
+		type="password"
+		{placeholder}
+		bind:value
+		on:input={(e) => onValue?.(e.currentTarget.value)}
+	/>
+{:else}
+	<input type="text" {placeholder} bind:value on:input={(e) => onValue?.(e.currentTarget.value)} />
+{/if}
 
 <style>
 	input {

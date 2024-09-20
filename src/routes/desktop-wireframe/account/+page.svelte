@@ -77,10 +77,10 @@
 	<Spacer />
 	<SaveSection
 		onSave={() => {
-			goto('/desktop-wireframe');
+			goto('/desktop-wireframe/dashboard');
 		}}
 		onCancel={() => {
-			goto('/desktop-wireframe');
+			goto('/desktop-wireframe/dashboard');
 		}}
 	/>
 </div>
