@@ -17,11 +17,11 @@
 	useInvitedUsers();
 </script>
 
-{#if data.projectId}
+<!-- {#if data.projectId}
 	<div class="comments">
 		<Comments projectId={data.projectId} />
 	</div>
-{/if}
+{/if} -->
 
 <div class="layout">
 	<MainMenu />

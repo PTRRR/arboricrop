@@ -3,6 +3,9 @@
 	import Button from './Button.svelte';
 	import Separation from './Separation.svelte';
 	import Section from './wireframe/Section.svelte';
+	import { useScrollLock } from '../stores';
+
+	const scrollLock = useScrollLock();
 
 	export let open: boolean = false;
 	export let triggerLabel: string | undefined = undefined;
@@ -11,9 +14,13 @@
 
 	export let onAction: (() => void) | undefined = undefined;
 	export let onCancel: (() => void) | undefined = undefined;
+
+	$: {
+		$scrollLock = open;
+	}
 </script>
 
-<AlertDialog.Root {open}>
+<AlertDialog.Root {open} preventScroll={false}>
 	{#if triggerLabel}
 		<AlertDialog.Trigger asChild let:builder>
 			<Button builders={[builder]}>{triggerLabel}</Button>
