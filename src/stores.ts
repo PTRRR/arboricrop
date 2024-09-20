@@ -55,6 +55,9 @@ export const useFields = () => {
 	const fields = useWritable('fields', getFields(), true);
 	return {
 		fields,
+		deleteField: (fieldId: string) => {
+			fields.update((fields) => fields.filter((it) => it.id !== fieldId));
+		},
 		updateField: (field: PartialBy<Field, 'center' | 'layers' | 'name' | 'type'>) => {
 			fields.update((fields) => {
 				const fieldIndex = fields.findIndex((it) => it.id === field.id);

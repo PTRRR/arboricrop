@@ -19,7 +19,7 @@
 	import Grid from '../../../../components/Grid.svelte';
 	import { getFeatureLayerName } from '../../../../utils/geoJSON';
 
-	const { fields, updateField } = useFields();
+	const { fields, updateField, deleteField } = useFields();
 	const devices = useDevices();
 	const features = useGeoJSONFeatures();
 	const { metrics, addMetric, deleteMetric, getMetricsByFieldId } = useMetrics();
@@ -38,6 +38,7 @@
 	$: fieldMetrics = field && $metrics ? getMetricsByFieldId(field.id) : [];
 	$: selectedTab = tabs.find((it) => it.value === $page.data.tab) || tabs[0];
 
+	let editMetadata: boolean = false;
 	let editLayers: boolean = false;
 	let editMetric: boolean = false;
 	let metricType: string | undefined = undefined;
@@ -120,12 +121,31 @@
 					</Grid>
 				</Section>
 			{:else if selectedTab?.value === 'settings'}
-				<Section title="Metadata:" buttons={[{ label: 'Edit' }]}>
+				<Section
+					title="Metadata:"
+					buttons={[
+						{
+							label: editMetadata ? 'Cancel' : 'Edit',
+							onClick: () => (editMetadata = !editMetadata)
+						}
+					]}
+				>
 					<Info label="Id:" value={field.id} />
 					<Spacer />
 					<Info label="Name:" value={field.name} />
 					<Spacer />
 					<Info label="Type:" value={field.type} />
+					{#if editMetadata}
+						<Spacer />
+						<Button
+							on:click={() => {
+								deleteField(field.id);
+								goto('/desktop-wireframe/dashboard');
+							}}
+						>
+							Permanently delete field
+						</Button>
+					{/if}
 				</Section>
 
 				<Section
