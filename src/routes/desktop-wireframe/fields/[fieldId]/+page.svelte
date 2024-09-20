@@ -16,6 +16,7 @@
 	import type { Metric, Tab } from '../../../../utils/types';
 	import { createUrlBuilder } from '../../../../utils/urls';
 	import { goto } from '$app/navigation';
+	import Grid from '../../../../components/Grid.svelte';
 
 	const fields = useFields();
 	const devices = useDevices();
@@ -86,11 +87,34 @@
 						}
 					]}
 				>
-					<div class="fields__analysis">
+					<Grid columns={3}>
 						{#each fieldMetrics as metric}
-							<Image ratio={3} placeholder={`Graph: ${metric.type}`} />
+							<div>
+								<Image ratio={3} placeholder="Graph:" />
+								<Spacer />
+								<Info label="Metric:" value={metric.type} />
+							</div>
 						{/each}
-					</div>
+					</Grid>
+				</Section>
+				<Section title=" Analysis reports:">
+					<Grid columns={2}>
+						{#each fieldMetrics as metric}
+							<Section title={metric.type}>
+								<Info label="Date:" value="10/09/2024" />
+								<Spacer />
+								<p>
+									Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quia quaerat laboriosam
+									animi culpa eligendi quod veritatis nam omnis, fugiat quibusdam reprehenderit odio
+									quidem voluptatem autem exercitationem iure! Eos, alias maiores!
+								</p>
+								<Spacer />
+								<div>
+									<Button minimal>Acknowledge report</Button>
+								</div>
+							</Section>
+						{/each}
+					</Grid>
 				</Section>
 			{:else if selectedTab?.value === 'settings'}
 				<Section title="Metadata:" buttons={[{ label: 'Edit' }]}>
@@ -207,13 +231,6 @@
 		display: flex;
 		justify-content: space-between;
 		width: 100%;
-	}
-
-	.fields__analysis {
-		display: grid;
-		grid-template-columns: repeat(3, 1fr);
-		gap: var(--gap);
-		align-items: center;
 	}
 
 	.filters {
