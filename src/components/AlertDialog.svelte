@@ -1,7 +1,10 @@
 <script lang="ts">
 	import { AlertDialog } from 'bits-ui';
 	import Button from './Button.svelte';
+	import Separation from './Separation.svelte';
+	import Section from './wireframe/Section.svelte';
 
+	export let open: boolean = false;
 	export let triggerLabel: string | undefined = undefined;
 	export let actionLabel: string | undefined = undefined;
 	export let cancelLabel: string | undefined = undefined;
@@ -10,10 +13,13 @@
 	export let onCancel: (() => void) | undefined = undefined;
 </script>
 
-<AlertDialog.Root>
-	<AlertDialog.Trigger asChild let:builder>
-		<Button builders={[builder]}>{triggerLabel}</Button>
-	</AlertDialog.Trigger>
+<AlertDialog.Root {open}>
+	{#if triggerLabel}
+		<AlertDialog.Trigger asChild let:builder>
+			<Button builders={[builder]}>{triggerLabel}</Button>
+		</AlertDialog.Trigger>
+	{/if}
+
 	<AlertDialog.Portal>
 		<AlertDialog.Overlay asChild>
 			<div class="alert-dialog__overlay"></div>
@@ -21,22 +27,27 @@
 		<AlertDialog.Content asChild>
 			<div class="alert-dialog__content">
 				<slot />
-				<div class="alert-dialog__actions">
-					{#if cancelLabel}
-						<AlertDialog.Cancel asChild let:builder>
-							<Button builders={[builder]} on:click={() => onCancel?.()}>
-								{cancelLabel}
-							</Button>
-						</AlertDialog.Cancel>
-					{/if}
-					{#if actionLabel}
-						<AlertDialog.Action asChild let:builder>
-							<Button builders={[builder]} on:click={() => onAction?.()}>
-								{actionLabel}
-							</Button>
-						</AlertDialog.Action>
-					{/if}
-				</div>
+				{#if cancelLabel || actionLabel}
+					<div>
+						<Separation title="Confirm changes:" />
+						<div class="alert-dialog__actions">
+							{#if cancelLabel}
+								<AlertDialog.Cancel asChild let:builder>
+									<Button builders={[builder]} on:click={() => onCancel?.()}>
+										{cancelLabel}
+									</Button>
+								</AlertDialog.Cancel>
+							{/if}
+							{#if actionLabel}
+								<AlertDialog.Action asChild let:builder>
+									<Button builders={[builder]} on:click={() => onAction?.()}>
+										{actionLabel}
+									</Button>
+								</AlertDialog.Action>
+							{/if}
+						</div>
+					</div>
+				{/if}
 			</div>
 		</AlertDialog.Content>
 	</AlertDialog.Portal>
@@ -63,6 +74,9 @@
 		left: 50%;
 		z-index: 20;
 		transform: translate(-50%, -50%);
+		background-color: white;
+		padding: 1rem;
+		border: solid 1px black;
 	}
 
 	.alert-dialog__actions {

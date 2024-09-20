@@ -459,3 +459,16 @@ export const changinGeoJson: GeoJSONType = {
 };
 
 export const features = getGeoJSONFeatures(changinGeoJson);
+
+export const plantationMetrics: string[] = [
+	'Soil Moisture Levels',
+	'Crop Growth Rate',
+	'Nutrient Levels',
+	'Weather Conditions',
+	'Pest and Disease Incidence',
+	'Plant Health Index (NDVI)',
+	'Irrigation Efficiency',
+	'Yield Forecast',
+	'Soil pH Levels',
+	'Carbon Sequestration'
+];

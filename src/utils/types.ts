@@ -1,6 +1,8 @@
 import type { LngLatLike } from 'svelte-maplibre';
 import type { Feature, GeoJsonProperties, Geometry } from 'geojson';
 
+export type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
+
 export type MediaType = 'image' | 'audio-note' | 'file';
 
 export type Media = {
@@ -57,3 +59,14 @@ export type Notification = {
 
 export type Marker = { lngLat: LngLatLike; label?: string };
 export type GeoJSONFeature = Feature<Geometry, GeoJsonProperties>;
+
+export type Tab = {
+	value: string;
+	label?: string;
+};
+
+export type Metric = {
+	id: string;
+	fieldId: string;
+	type: string;
+};

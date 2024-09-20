@@ -1,4 +1,4 @@
-import { readable, writable, type Writable } from 'svelte/store';
+import { get, readable, writable, type Writable } from 'svelte/store';
 import { getContext, hasContext, setContext } from 'svelte';
 import {
 	getDevices,
@@ -9,7 +9,7 @@ import {
 	organisations
 } from './utils/dummyData';
 import type { comment } from './db/schema';
-import type { GeoJSONFeature } from './utils/types';
+import type { GeoJSONFeature, Metric, PartialBy } from './utils/types';
 
 const STORE_VERSION = 'v12';
 const dummyDevices = getDevices(30);
@@ -74,3 +74,30 @@ export const useIsOrganisation = () => useWritable('is-organisation', false, tru
 export const useOrganisationName = () => useWritable('organisation-name', '', true);
 export const useInvitedUsers = () => useWritable<string[]>('invited-users', [], true);
 export const useGeoJSONFeatures = () => useWritable<GeoJSONFeature[]>('features', features, false);
+export const useMetrics = () => {
+	const metrics = useWritable<Metric[]>('metrics', [], true);
+
+	return {
+		metrics,
+		addMetric: (metric: Metric) => {
+			metrics.update((metrics) => [...metrics, metric]);
+		},
+		deleteMetric: (metricId: string) => {
+			metrics.update((metrics) => metrics.filter((it) => it.id !== metricId));
+		},
+		updateMetric: (metric: PartialBy<Metric, 'fieldId' | 'type'>) => {
+			metrics.update((metrics) => {
+				const metricIndex = metrics.findIndex((it) => it.id === metric.id);
+
+				if (metricIndex > -1) {
+					const newMetrics = [...metrics];
+					newMetrics[metricIndex] = { ...newMetrics[metricIndex], ...metric };
+					return newMetrics;
+				}
+
+				return metrics;
+			});
+		},
+		getMetricsByFieldId: (fieldId: string) => get(metrics).filter((it) => it.fieldId === fieldId)
+	};
+};

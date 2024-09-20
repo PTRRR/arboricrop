@@ -31,6 +31,7 @@
 
 <div
 	class="map"
+	class:map--non-interactive={!interactive}
 	style={getCss({
 		'--ratio': ratio.toString()
 	})}
@@ -94,6 +95,10 @@
 <style>
 	.map {
 		width: 100%;
+	}
+
+	.map--non-interactive {
+		pointer-events: none;
 	}
 
 	.map__wrapper {

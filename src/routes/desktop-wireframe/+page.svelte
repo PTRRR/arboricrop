@@ -9,6 +9,10 @@
 	import { createId } from '@paralleldrive/cuid2';
 	import { changinCenter } from '../../utils/dummyData';
 	import MapV2 from '../../components/MapV2.svelte';
+	import type { LngLatLike } from 'svelte-maplibre';
+	import Section from '../../components/wireframe/Section.svelte';
+	import Info from '../../components/Info.svelte';
+	import { goto } from '$app/navigation';
 
 	const fields = useFields();
 	const devices = useDevices();
@@ -17,57 +21,76 @@
 		return $devices.filter((it) => it.fieldId === fieldId).length;
 	};
 
+	$: getFieldMarkers = (fieldId: string) =>
+		$devices
+			.filter((it) => it.location && it.fieldId === fieldId)
+			.map((it) => ({ lngLat: it.location as LngLatLike }));
+
 	let newFieldName: string | undefined = undefined;
 	let newFieldType: string | undefined = undefined;
 </script>
 
-<Separation title="Analysis Feed:" />
+<!-- <Separation title="Analysis Feed:" /> -->
 
-<Separation title="Fields:" />
-<AlertDialog
-	triggerLabel="Create new field"
-	cancelLabel="Cancel"
-	actionLabel="Create"
-	onCancel={() => {
-		newFieldName = undefined;
-		newFieldType = undefined;
-	}}
-	onAction={() => {
-		if (newFieldName && newFieldType) {
-			fields.set([
-				...$fields,
-				{
-					id: `fie-${createId()}`,
-					name: newFieldName,
-					type: newFieldType,
-					layers: [],
-					center: changinCenter
-				}
-			]);
-		}
+<Section title="Fields:" buttons={[{ label: 'Create new field' }]}>
+	<!-- <AlertDialog
+		triggerLabel="Create new field"
+		cancelLabel="Cancel"
+		actionLabel="Create"
+		onCancel={() => {
+			newFieldName = undefined;
+			newFieldType = undefined;
+		}}
+		onAction={() => {
+			if (newFieldName && newFieldType) {
+				fields.set([
+					...$fields,
+					{
+						id: `fie-${createId()}`,
+						name: newFieldName,
+						type: newFieldType,
+						layers: [],
+						center: changinCenter
+					}
+				]);
+			}
 
-		newFieldName = undefined;
-		newFieldType = undefined;
-	}}
->
-	<div class="dashboard__new-field">
-		<Separation title="New field:" />
-		<Input placeholder="Field name" onValue={(value) => (newFieldName = value)} />
-		<Input placeholder="Field type" onValue={(value) => (newFieldType = value)} />
-	</div>
-</AlertDialog>
-<Spacer />
-<div class="dashboard">
-	{#each $fields as field}
-		<div class="dashboard__item">
-			<MapV2 ratio={1.5} center={field.center} zoom={15} interactive={false} />
-			<!-- <Image ratio={0.1} placeholder={`Infographic: ${field.name}`} /> -->
-			<Spacer />
-			<span>Devices count: {getFieldDeviceCount(field.id)}</span>
-			<Button minimal href={`/desktop-wireframe/fields/${field.id}`}>See field</Button>
+			newFieldName = undefined;
+			newFieldType = undefined;
+		}}
+	>
+		<div class="dashboard__new-field">
+			<Separation title="New field:" />
+			<Input placeholder="Field name" onValue={(value) => (newFieldName = value)} />
+			<Input placeholder="Field type" onValue={(value) => (newFieldType = value)} />
 		</div>
-	{/each}
-</div>
+	</AlertDialog> -->
+
+	<div class="dashboard">
+		{#each $fields as field}
+			<!-- svelte-ignore a11y-click-events-have-key-events -->
+			<!-- svelte-ignore a11y-no-static-element-interactions -->
+			<a class="dashboard__item" href={`/desktop-wireframe/fields/${field.id}`}>
+				<MapV2
+					ratio={1.5}
+					center={field.center}
+					zoom={15}
+					interactive={false}
+					geoJSONs={field.layers}
+					markers={getFieldMarkers(field.id)}
+				/>
+				<Spacer />
+				<div class="dashboard__info">
+					<Info label="Name:" value={field.name || '-'} />
+					<div class="dashboard__field-data">
+						<span>Devices count: {getFieldDeviceCount(field.id)}</span>
+						<Button minimal href={`/desktop-wireframe/fields/${field.id}`}>See field</Button>
+					</div>
+				</div>
+			</a>
+		{/each}
+	</div>
+</Section>
 
 <style>
 	.dashboard {
@@ -77,16 +100,21 @@
 	}
 
 	.dashboard__item {
-		height: 30svh;
+		display: flex;
+		flex-direction: column;
+		cursor: pointer;
+		color: initial;
+		text-decoration: none;
+	}
+
+	.dashboard__info {
+		display: flex;
+		justify-content: space-between;
+	}
+
+	.dashboard__field-data {
 		display: flex;
 		flex-direction: column;
 		align-items: flex-end;
-	}
-
-	.dashboard__new-field {
-		display: flex;
-		flex-direction: column;
-		min-width: 30rem;
-		gap: var(--gap);
 	}
 </style>
