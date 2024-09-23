@@ -9,8 +9,10 @@
 
 	export let open: boolean = false;
 	export let triggerLabel: string | undefined = undefined;
+	export let actionDisabled: boolean = false;
 	export let actionLabel: string | undefined = undefined;
 	export let cancelLabel: string | undefined = undefined;
+	export let cancelDisabled: boolean = false;
 
 	export let onAction: (() => void) | undefined = undefined;
 	export let onCancel: (() => void) | undefined = undefined;
@@ -40,14 +42,22 @@
 						<div class="alert-dialog__actions">
 							{#if cancelLabel}
 								<AlertDialog.Cancel asChild let:builder>
-									<Button builders={[builder]} on:click={() => onCancel?.()}>
+									<Button
+										disabled={cancelDisabled}
+										builders={[builder]}
+										on:click={() => onCancel?.()}
+									>
 										{cancelLabel}
 									</Button>
 								</AlertDialog.Cancel>
 							{/if}
 							{#if actionLabel}
 								<AlertDialog.Action asChild let:builder>
-									<Button builders={[builder]} on:click={() => onAction?.()}>
+									<Button
+										disabled={actionDisabled}
+										builders={[builder]}
+										on:click={() => onAction?.()}
+									>
 										{actionLabel}
 									</Button>
 								</AlertDialog.Action>

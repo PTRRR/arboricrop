@@ -9,9 +9,10 @@ import {
 	organisations
 } from './utils/dummyData';
 import type { comment } from './db/schema';
-import type { Field, GeoJSONFeature, Metric, PartialBy } from './utils/types';
+import type { Alarm, Field, GeoJSONFeature, Metric, PartialBy } from './utils/types';
+import { filterByUniqueAttribute } from './utils/arrays';
 
-const STORE_VERSION = 'v12';
+const STORE_VERSION = 'v13';
 const dummyDevices = getDevices(30);
 const dummyNotifications = getNotifications(dummyDevices);
 
@@ -53,24 +54,42 @@ export const useDevices = () => useWritable('devices', dummyDevices, true);
 export const useNotifications = () => useWritable('notifications', dummyNotifications, true);
 export const useFields = () => {
 	const fields = useWritable('fields', getFields(), true);
+
+	const updateField = (field: PartialBy<Field, 'center' | 'layers' | 'name' | 'type'>) => {
+		fields.update((fields) => {
+			const fieldIndex = fields.findIndex((it) => it.id === field.id);
+
+			if (fieldIndex > -1) {
+				const newFields = [...fields];
+				newFields[fieldIndex] = { ...newFields[fieldIndex], ...field };
+				return newFields;
+			}
+
+			return fields;
+		});
+	};
+
+	const removeFieldLayer = (field: Field, layerId: string | number | undefined) => {
+		updateField({ ...field, layers: field.layers.filter((it) => it.id !== layerId) });
+	};
+
 	return {
 		fields,
 		deleteField: (fieldId: string) => {
 			fields.update((fields) => fields.filter((it) => it.id !== fieldId));
 		},
-		updateField: (field: PartialBy<Field, 'center' | 'layers' | 'name' | 'type'>) => {
-			fields.update((fields) => {
-				const fieldIndex = fields.findIndex((it) => it.id === field.id);
-
-				if (fieldIndex > -1) {
-					const newFields = [...fields];
-					newFields[fieldIndex] = { ...newFields[fieldIndex], ...field };
-					return newFields;
-				}
-
-				return fields;
-			});
-		}
+		updateField,
+		addFieldLayer: (field: Field, feature: GeoJSONFeature) => {
+			updateField({ ...field, layers: filterByUniqueAttribute([...field.layers, feature], 'id') });
+		},
+		addFieldLayers: (field: Field, layers: GeoJSONFeature[]) =>
+			updateField({
+				...field,
+				layers: filterByUniqueAttribute([...field.layers, ...layers], 'id')
+			}),
+		removeFieldLayer,
+		removeFieldLayers: (field: Field, layersIds: string[]) =>
+			layersIds.forEach((layerId) => removeFieldLayer(field, layerId))
 	};
 };
 export const useBlurApp = () => useWritable('blur-app', false);
@@ -99,7 +118,7 @@ export const useOrganisation = () => useWritable('organisation', organisations[0
 export const useIsOrganisation = () => useWritable('is-organisation', false, true);
 export const useOrganisationName = () => useWritable('organisation-name', '', true);
 export const useInvitedUsers = () => useWritable<string[]>('invited-users', [], true);
-export const useGeoJSONFeatures = () => useWritable<GeoJSONFeature[]>('features', features, false);
+export const useGeoJSONFeatures = () => useWritable<GeoJSONFeature[]>('features', features, true);
 export const useMetrics = () => {
 	const metrics = useWritable<Metric[]>('metrics', [], true);
 
@@ -125,5 +144,16 @@ export const useMetrics = () => {
 			});
 		},
 		getMetricsByFieldId: (fieldId: string) => get(metrics).filter((it) => it.fieldId === fieldId)
+	};
+};
+export const useAlarms = () => {
+	const alarms = useWritable<Alarm[]>('alarms', [], true);
+
+	return {
+		alarms,
+		addAlarm: (alarm: Alarm) => alarms.update((alarms) => [...alarms, alarm]),
+		removeAlarm: (alarmId: string) =>
+			alarms.update((alarms) => alarms.filter((it) => it.id !== alarmId)),
+		getAlarmsByFieldId: (fieldId: string) => get(alarms).filter((it) => it.fieldId === fieldId)
 	};
 };

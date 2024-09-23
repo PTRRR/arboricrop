@@ -3,7 +3,13 @@
 	import Button from '../../../../components/Button.svelte';
 	import Info from '../../../../components/Info.svelte';
 	import Spacer from '../../../../components/Spacer.svelte';
-	import { useDevices, useFields, useGeoJSONFeatures, useMetrics } from '../../../../stores';
+	import {
+		useAlarms,
+		useDevices,
+		useFields,
+		useGeoJSONFeatures,
+		useMetrics
+	} from '../../../../stores';
 	import { getDevicesByFieldId, plantationMetrics } from '../../../../utils/dummyData';
 	import MapV2 from '../../../../components/MapV2.svelte';
 	import type { LngLatLike } from 'svelte-maplibre';
@@ -13,20 +19,23 @@
 	import AlertDialog from '../../../../components/AlertDialog.svelte';
 	import { createId } from '@paralleldrive/cuid2';
 	import ButtonList from '../../../../components/wireframe/ButtonList.svelte';
-	import type { GeoJSONFeature, Metric, Tab } from '../../../../utils/types';
+	import type { Alarm, GeoJSONFeature, Metric, Tab } from '../../../../utils/types';
 	import { createUrlBuilder } from '../../../../utils/urls';
 	import { goto } from '$app/navigation';
 	import Grid from '../../../../components/Grid.svelte';
 	import { getFeatureLayerName } from '../../../../utils/geoJSON';
+	import Input from '../../../../components/Input.svelte';
 
-	const { fields, updateField, deleteField } = useFields();
+	const { fields, deleteField, updateField, addFieldLayers, removeFieldLayer } = useFields();
 	const devices = useDevices();
 	const features = useGeoJSONFeatures();
 	const { metrics, addMetric, deleteMetric, getMetricsByFieldId } = useMetrics();
+	const { alarms, addAlarm, removeAlarm, getAlarmsByFieldId } = useAlarms();
 
 	const url = createUrlBuilder();
 	const tabs: Tab[] = [
 		{ value: 'analysis', label: 'Biosignals' },
+		{ value: 'reports', label: 'Reports' },
 		{ value: 'settings', label: 'Settings' }
 	];
 
@@ -36,14 +45,18 @@
 		.filter((it) => it.location)
 		.map((it) => ({ lngLat: it.location as LngLatLike, label: it.name }));
 	$: fieldMetrics = field && $metrics ? getMetricsByFieldId(field.id) : [];
+	$: fieldAlarms = field && $alarms ? getAlarmsByFieldId(field.id) : [];
 	$: selectedTab = tabs.find((it) => it.value === $page.data.tab) || tabs[0];
 
 	let editMetadata: boolean = false;
 	let editLayers: boolean = false;
 	let editMetric: boolean = false;
+	let editAlarms: boolean = false;
 	let metricType: string | undefined = undefined;
 	let selectedMetricFilter: Metric | undefined = undefined;
 	let selectedFeatures: GeoJSONFeature[] = [];
+
+	let newAlarm: Alarm | undefined = undefined;
 </script>
 
 {#if field}
@@ -57,7 +70,8 @@
 				<MapV2
 					ratio={3}
 					center={field.center}
-					zoom={15}
+					interactive={false}
+					zoom={15.5}
 					minZoom={10}
 					maxZoom={19}
 					geoJSONs={field.layers}
@@ -101,25 +115,6 @@
 						{/each}
 					</Grid>
 				</Section>
-				<Section title=" Analysis reports:">
-					<Grid columns={2}>
-						{#each fieldMetrics as metric}
-							<Section title={metric.type}>
-								<Info label="Date:" value="10/09/2024" />
-								<Spacer />
-								<p>
-									Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quia quaerat laboriosam
-									animi culpa eligendi quod veritatis nam omnis, fugiat quibusdam reprehenderit odio
-									quidem voluptatem autem exercitationem iure! Eos, alias maiores!
-								</p>
-								<Spacer />
-								<div>
-									<Button minimal>Acknowledge report</Button>
-								</div>
-							</Section>
-						{/each}
-					</Grid>
-				</Section>
 			{:else if selectedTab?.value === 'settings'}
 				<Section
 					title="Metadata:"
@@ -132,9 +127,19 @@
 				>
 					<Info label="Id:" value={field.id} />
 					<Spacer />
-					<Info label="Name:" value={field.name} />
-					<Spacer />
-					<Info label="Type:" value={field.type} />
+					{#if editMetadata}
+						<Info label="Name:" />
+						<Spacer />
+						<Input value={field.name} onValue={(name) => updateField({ ...field, name })} />
+						<Spacer />
+						<Info label="Type:" />
+						<Spacer />
+						<Input value={field.type} onValue={(type) => updateField({ ...field, type })} />
+					{:else}
+						<Info label="Name:" value={field.name} />
+						<Spacer />
+						<Info label="Type:" value={field.type} />
+					{/if}
 					{#if editMetadata}
 						<Spacer />
 						<Button
@@ -161,7 +166,11 @@
 					]}
 				>
 					{#if field.layers.length > 0}
-						<ButtonList items={field.layers} let:item>
+						<ButtonList
+							items={field.layers}
+							let:item
+							onSelect={(layer) => removeFieldLayer(field, layer.id)}
+						>
 							{item.properties?.layerName}
 						</ButtonList>
 					{:else}
@@ -171,7 +180,7 @@
 						open={editLayers}
 						actionLabel="Save"
 						onAction={() => {
-							updateField({ ...field, layers: selectedFeatures });
+							addFieldLayers(field, selectedFeatures);
 							selectedFeatures = [];
 							editLayers = false;
 						}}
@@ -182,38 +191,43 @@
 						cancelLabel="Cancel"
 					>
 						<div class="metric-form">
-							<ButtonList items={$features} let:item>
-								{#if getFeatureLayerName(item)}
-									<div class="layer__button">
-										<Button
-											minimal
-											selected={selectedFeatures.includes(item)}
-											on:click={() =>
-												selectedFeatures.includes(item)
-													? (selectedFeatures = selectedFeatures.filter((it) => it !== item))
-													: (selectedFeatures = [...selectedFeatures, item])}
-										>
-											{getFeatureLayerName(item)}
-										</Button>
-										<div>GeoJSON</div>
-									</div>
-								{/if}
-							</ButtonList>
+							<Section title="Layers:">
+								<ButtonList items={$features} let:item>
+									{#if getFeatureLayerName(item)}
+										<div class="layer__button">
+											<Button
+												minimal
+												selected={!!selectedFeatures.find((it) => it.id === item.id)}
+												on:click={() =>
+													!!selectedFeatures.find((it) => it.id === item.id)
+														? (selectedFeatures = selectedFeatures.filter((it) => it !== item))
+														: (selectedFeatures = [...selectedFeatures, item])}
+											>
+												{getFeatureLayerName(item)}
+											</Button>
+											<div>GeoJSON</div>
+										</div>
+									{/if}
+								</ButtonList>
+							</Section>
 						</div>
 					</AlertDialog>
 				</Section>
 
-				<Section title="Devices:" buttons={[{ label: 'See devices' }]}>
-					{#each fieldDevices as device}
-						{#if device}
-							<Button minimal href={`/desktop-wireframe/devices/${device.id}`}>
-								<div class="device">
-									<span class="device-name">{device.name}</span>
-									<span class="device-id">{device.status}</span>
-								</div>
-							</Button>
-						{/if}
-					{/each}
+				<Section
+					title="Devices:"
+					buttons={[{ label: 'See devices', href: '/desktop-wireframe/devices' }]}
+				>
+					<ButtonList
+						items={fieldDevices}
+						let:item
+						onSelect={(device) => goto(`/desktop-wireframe/devices/${device.id}`)}
+					>
+						<div class="device">
+							<span class="device-name">{item.name}</span>
+							<span class="device-id">{item.status}</span>
+						</div>
+					</ButtonList>
 				</Section>
 
 				<Section
@@ -234,6 +248,7 @@
 
 					<AlertDialog
 						open={editMetric}
+						actionDisabled={!metricType}
 						onAction={() => {
 							if (metricType) {
 								addMetric({
@@ -272,8 +287,101 @@
 					<span>No metric monitors</span>
 				</Section> -->
 
-				<Section title="Alarms:" buttons={[{ label: 'Create alarm' }]}>
-					<span>No alarms</span>
+				<Section
+					title="Alarms:"
+					buttons={[
+						{
+							label: editAlarms ? 'Cancel' : 'Create alarm',
+							onClick: () => {
+								editAlarms = !editAlarms;
+								newAlarm = editAlarms
+									? {
+											id: createId(),
+											fieldId: field.id
+										}
+									: undefined;
+							}
+						}
+					]}
+				>
+					{#if fieldAlarms.length > 0}
+						<ButtonList items={fieldAlarms} let:item onSelect={(alarm) => removeAlarm(alarm.id)}>
+							{item.name}
+						</ButtonList>
+					{:else}
+						<span>No alarms</span>
+					{/if}
+					<AlertDialog
+						open={editAlarms}
+						actionDisabled={!newAlarm?.metricId || !newAlarm.name || !newAlarm.threshold}
+						onAction={() => {
+							if (newAlarm) {
+								addAlarm(newAlarm);
+							}
+
+							newAlarm = undefined;
+							editAlarms = false;
+						}}
+						onCancel={() => {
+							newAlarm = undefined;
+							editAlarms = false;
+						}}
+						cancelLabel="Cancel"
+						actionLabel="Create metric"
+					>
+						<div class="metric-form">
+							<Section title="Alarm:">
+								<Info label="Alarm name:" />
+								<Spacer />
+								<Input
+									placeholder="Value..."
+									onValue={(name) => (newAlarm = newAlarm ? { ...newAlarm, name } : undefined)}
+								/>
+								<Spacer />
+								<Info label="Threshold:" />
+								<Spacer />
+								<Input
+									placeholder="Value..."
+									type="number"
+									onValue={(threshold) =>
+										(newAlarm = newAlarm
+											? { ...newAlarm, threshold: parseFloat(threshold) }
+											: undefined)}
+								/>
+							</Section>
+							<Section title="Metrics:">
+								<ButtonList
+									items={fieldMetrics}
+									let:item
+									onSelect={(metric) =>
+										(newAlarm = newAlarm ? { ...newAlarm, metricId: metric.id } : undefined)}
+									selectedItems={fieldMetrics.filter((it) => it.id === newAlarm?.metricId)}
+								>
+									{item.type}
+								</ButtonList>
+							</Section>
+						</div>
+					</AlertDialog>
+				</Section>
+			{:else if selectedTab?.value === 'reports'}
+				<Section title=" Analysis reports:">
+					<Grid columns={2}>
+						{#each fieldMetrics as metric}
+							<Section title={metric.type}>
+								<Info label="Date:" value="10/09/2024" />
+								<Spacer />
+								<p>
+									Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quia quaerat laboriosam
+									animi culpa eligendi quod veritatis nam omnis, fugiat quibusdam reprehenderit odio
+									quidem voluptatem autem exercitationem iure! Eos, alias maiores!
+								</p>
+								<Spacer />
+								<div>
+									<Button minimal>Acknowledge report</Button>
+								</div>
+							</Section>
+						{/each}
+					</Grid>
 				</Section>
 			{/if}
 		{/if}

@@ -270,6 +270,7 @@ export const changinGeoJson: GeoJSONType = {
 	type: 'FeatureCollection',
 	features: [
 		{
+			id: createId(),
 			type: 'Feature',
 			properties: {
 				layerName: 'Greenhouse Changin'
@@ -285,10 +286,10 @@ export const changinGeoJson: GeoJSONType = {
 					]
 				],
 				type: 'Polygon'
-			},
-			id: 0
+			}
 		},
 		{
+			id: createId(),
 			type: 'Feature',
 			properties: {
 				layerName: 'Barn Westfield'
@@ -304,10 +305,10 @@ export const changinGeoJson: GeoJSONType = {
 					]
 				],
 				type: 'Polygon'
-			},
-			id: 1
+			}
 		},
 		{
+			id: createId(),
 			type: 'Feature',
 			properties: {
 				layerName: 'Water Tower'
@@ -327,10 +328,10 @@ export const changinGeoJson: GeoJSONType = {
 					]
 				],
 				type: 'Polygon'
-			},
-			id: 2
+			}
 		},
 		{
+			id: createId(),
 			type: 'Feature',
 			properties: {
 				layerName: 'Farmhouse East'
@@ -352,10 +353,10 @@ export const changinGeoJson: GeoJSONType = {
 					]
 				],
 				type: 'Polygon'
-			},
-			id: 3
+			}
 		},
 		{
+			id: createId(),
 			type: 'Feature',
 			properties: {
 				layerName: 'Irrigation Control Center'
@@ -374,6 +375,7 @@ export const changinGeoJson: GeoJSONType = {
 			}
 		},
 		{
+			id: createId(),
 			type: 'Feature',
 			properties: {
 				layerName: 'Storage Silo'
@@ -392,6 +394,7 @@ export const changinGeoJson: GeoJSONType = {
 			}
 		},
 		{
+			id: createId(),
 			type: 'Feature',
 			properties: {
 				layerName: 'Machinery Garage'
@@ -414,6 +417,7 @@ export const changinGeoJson: GeoJSONType = {
 			}
 		},
 		{
+			id: createId(),
 			type: 'Feature',
 			properties: {
 				layerName: 'Solar Panel Array'
@@ -436,6 +440,7 @@ export const changinGeoJson: GeoJSONType = {
 			}
 		},
 		{
+			id: createId(),
 			type: 'Feature',
 			properties: {
 				layerName: 'Grain Processing Unit'

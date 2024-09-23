@@ -18,3 +18,15 @@ export const shuffle = <T>(array: T[]) => {
 export const filterNotEmpty = <TValue>(value: TValue | null | undefined): value is TValue => {
 	return value !== null && value !== undefined;
 };
+
+export const filterByUniqueAttribute = <T, K extends keyof T>(arr: T[], key: K): T[] => {
+	const seen = new Set();
+	return arr.filter((item) => {
+		const attributeValue = item[key];
+		if (seen.has(attributeValue)) {
+			return false;
+		}
+		seen.add(attributeValue);
+		return true;
+	});
+};

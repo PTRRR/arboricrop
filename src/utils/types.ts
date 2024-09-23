@@ -70,3 +70,11 @@ export type Metric = {
 	fieldId: string;
 	type: string;
 };
+
+export type Alarm = {
+	id: string;
+	fieldId: string;
+	metricId: string;
+	name: string;
+	threshold: number;
+};

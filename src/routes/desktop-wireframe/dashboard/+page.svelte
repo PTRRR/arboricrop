@@ -31,7 +31,7 @@
 				<!-- svelte-ignore a11y-no-static-element-interactions -->
 				<a class="dashboard__item" href={`/desktop-wireframe/fields/${field.id}`}>
 					<MapV2
-						ratio={1.5}
+						ratio={2.5}
 						center={field.center}
 						zoom={15}
 						interactive={false}
