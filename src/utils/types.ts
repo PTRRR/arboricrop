@@ -74,7 +74,7 @@ export type Metric = {
 export type Alarm = {
 	id: string;
 	fieldId: string;
-	metricId: string;
-	name: string;
-	threshold: number;
+	metricId?: string;
+	name?: string;
+	threshold?: number;
 };
