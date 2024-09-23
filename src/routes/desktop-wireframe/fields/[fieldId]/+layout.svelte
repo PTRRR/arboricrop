@@ -30,7 +30,7 @@
 	<Tabs
 		{tabs}
 		selected={selectedTab}
-		onSelect={(tab) => goto(`/desktop-wireframe/fields/fie-bs3sbd223afkmd2a41qtu3eq/${tab.value}`)}
+		onSelect={(tab) => goto(`/desktop-wireframe/fields/${$page.params.fieldId}/${tab.value}`)}
 	>
 		{#if field}
 			<Section title="Map:" buttons={[{ label: 'Edit' }]}>
