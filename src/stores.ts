@@ -75,6 +75,7 @@ export const useFields = () => {
 
 	return {
 		fields,
+		addField: (field: Field) => fields.update((fields) => [...fields, field]),
 		deleteField: (fieldId: string) => {
 			fields.update((fields) => fields.filter((it) => it.id !== fieldId));
 		},
@@ -110,7 +111,11 @@ export const useReturnButton = () =>
 export const useNetwork = () => useWritable('network', loraNetworks[0], true);
 export const useScrollLock = () => {
 	const scrollLock = useWritable('scroll-lock', false);
-	scrollLock.subscribe((lock) => (window.document.body.style.overflow = lock ? 'hidden' : ''));
+	scrollLock.subscribe((lock) => {
+		if (typeof window !== 'undefined') {
+			window.document.body.style.overflow = lock ? 'hidden' : '';
+		}
+	});
 
 	return scrollLock;
 };

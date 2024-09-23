@@ -19,19 +19,22 @@
 	let selectedMetricFilter: Metric | undefined = undefined;
 </script>
 
-<Section title="Metrics filters:">
-	<div class="filters">
-		{#each fieldMetrics as metric}
-			<Button
-				selected={metric === selectedMetricFilter}
-				on:click={() =>
-					(selectedMetricFilter = selectedMetricFilter === metric ? undefined : metric)}
-			>
-				{metric.type}
-			</Button>
-		{/each}
-	</div>
-</Section>
+{#if fieldMetrics.length > 0}
+	<Section title="Metrics filters:">
+		<div class="filters">
+			{#each fieldMetrics as metric}
+				<Button
+					selected={metric === selectedMetricFilter}
+					on:click={() =>
+						(selectedMetricFilter = selectedMetricFilter === metric ? undefined : metric)}
+				>
+					{metric.type}
+				</Button>
+			{/each}
+		</div>
+	</Section>
+{/if}
+
 <Section
 	title="Analysis"
 	buttons={[
@@ -43,15 +46,25 @@
 		}
 	]}
 >
-	<Grid columns={3}>
-		{#each fieldMetrics as metric}
-			<div>
-				<Image ratio={3} placeholder="Graph:" />
-				<Spacer />
-				<Info label="Metric:" value={metric.type} />
-			</div>
-		{/each}
-	</Grid>
+	{#if fieldMetrics.length > 0}
+		<Grid columns={3}>
+			{#each fieldMetrics as metric}
+				<div>
+					<Image ratio={3} placeholder="Graph:" />
+					<Spacer />
+					<Info label="Metric:" value={metric.type} />
+				</div>
+			{/each}
+		</Grid>
+	{:else}
+		No metrics
+		<Spacer />
+		<div>
+			<Button href={`/desktop-wireframe/fields/${field?.id}/settings?createMetric=true`}>
+				Create new metric
+			</Button>
+		</div>
+	{/if}
 </Section>
 
 <style>

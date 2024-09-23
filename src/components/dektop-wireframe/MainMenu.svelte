@@ -7,13 +7,12 @@
 	<span>Arboricrop</span>
 	<div class="main-menu-section main-menu__right-section">
 		<Button href="/desktop-wireframe/dashboard">Dashboard</Button>
-		<Button href="/desktop-wireframe/dashboard">Fields</Button>
+		<Button href="/desktop-wireframe/fields">Fields</Button>
 		<Dropdown
 			label="Settings"
 			items={[
 				{ label: 'Profile', href: '/desktop-wireframe/profile' },
-				{ label: 'Account', href: '/desktop-wireframe/account' },
-				{ label: 'Notifications', href: '/desktop-wireframe/notifications' }
+				{ label: 'Account', href: '/desktop-wireframe/account' }
 			]}
 			align="right"
 		>

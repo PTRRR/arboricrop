@@ -49,7 +49,11 @@
 				</a>
 			{/each}
 		{:else}
-			No fields
+			<div>
+				No fields
+				<Spacer />
+				<Button>Create new field</Button>
+			</div>
 		{/if}
 	</div>
 </Section>
