@@ -34,7 +34,7 @@
 		let:item
 		onSelect={(field) => goto(`/desktop-wireframe/fields/${field.id}`)}
 	>
-		{item.name}
+		{item.name || '-'}
 	</ButtonList>
 
 	<AlertDialog

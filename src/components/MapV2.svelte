@@ -48,7 +48,6 @@
 			{zoom}
 			{maxZoom}
 			{minZoom}
-			{interactive}
 			style={mapStyle}
 			class="map__inner"
 			on:moveend={(event) => {
