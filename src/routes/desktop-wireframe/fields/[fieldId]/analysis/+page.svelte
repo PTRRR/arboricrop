@@ -32,7 +32,17 @@
 		{/each}
 	</div>
 </Section>
-<Section title="Analysis">
+<Section
+	title="Analysis"
+	buttons={[
+		{
+			label: 'Create metric',
+			onClick: () => {
+				goto(`/desktop-wireframe/fields/${field?.id}/settings?createMetric=true`);
+			}
+		}
+	]}
+>
 	<Grid columns={3}>
 		{#each fieldMetrics as metric}
 			<div>

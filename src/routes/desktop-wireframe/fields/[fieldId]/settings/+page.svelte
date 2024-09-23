@@ -19,6 +19,7 @@
 	import { goto } from '$app/navigation';
 	import { getFeatureLayerName } from '../../../../../utils/geoJSON';
 	import Input from '../../../../../components/Input.svelte';
+	import { createUrlBuilder } from '../../../../../utils/urls';
 
 	const { fields, deleteField, updateField, addFieldLayers, removeFieldLayer } = useFields();
 	const devices = useDevices();
@@ -31,13 +32,14 @@
 	$: fieldMetrics = field && $metrics ? getMetricsByFieldId(field.id) : [];
 	$: fieldAlarms = field && $alarms ? getAlarmsByFieldId(field.id) : [];
 
+	const url = createUrlBuilder();
+
 	let editMetadata: boolean = false;
 	let editLayers: boolean = false;
-	let editMetric: boolean = false;
+	let editMetric: boolean = $page.data.createMetric;
 	let editAlarms: boolean = false;
 	let metricType: string | undefined = undefined;
 	let selectedFeatures: GeoJSONFeature[] = [];
-
 	let newAlarm: Alarm | undefined = undefined;
 </script>
 
@@ -158,7 +160,15 @@
 
 	<Section
 		title="Metrics:"
-		buttons={[{ label: 'Add metric', onClick: () => (editMetric = !editMetric) }]}
+		buttons={[
+			{
+				label: 'Add metric',
+				onClick: () => {
+					editMetric = !editMetric;
+					goto(url.removeQuery({ name: 'createMetric' }));
+				}
+			}
+		]}
 	>
 		{#if fieldMetrics.length > 0}
 			<ButtonList items={fieldMetrics} let:item onSelect={(metric) => deleteMetric(metric.id)}>
@@ -182,10 +192,12 @@
 
 				metricType = undefined;
 				editMetric = false;
+				goto(url.removeQuery({ name: 'createMetric' }));
 			}}
 			onCancel={() => {
 				metricType = undefined;
 				editMetric = false;
+				goto(url.removeQuery({ name: 'createMetric' }));
 			}}
 			cancelLabel="Cancel"
 			actionLabel="Create metric"
@@ -204,10 +216,6 @@
 			</div>
 		</AlertDialog>
 	</Section>
-
-	<!-- <Section title="Monitoring:" buttons={[{ label: 'Add metric monitor' }]}>
-					<span>No metric monitors</span>
-				</Section> -->
 
 	<Section
 		title="Alarms:"
