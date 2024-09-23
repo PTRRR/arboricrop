@@ -94,6 +94,8 @@
 		background-color: white;
 		padding: 1rem;
 		border: solid 1px black;
+		max-height: 75svh;
+		overflow: auto;
 	}
 
 	.alert-dialog__actions {

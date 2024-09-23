@@ -20,6 +20,7 @@
 	import { getFeatureLayerName } from '../../../../../utils/geoJSON';
 	import Input from '../../../../../components/Input.svelte';
 	import { createUrlBuilder } from '../../../../../utils/urls';
+	import Dialog from '../../../../../components/Dialog.svelte';
 
 	const { fields, deleteField, updateField, addFieldLayers, removeFieldLayer } = useFields();
 	const devices = useDevices();
@@ -118,7 +119,7 @@
 			}}
 			cancelLabel="Cancel"
 		>
-			<div class="metric-form">
+			<Dialog>
 				<Section title="Layers:">
 					<ButtonList items={$features} let:item>
 						{#if getFeatureLayerName(item)}
@@ -138,7 +139,7 @@
 						{/if}
 					</ButtonList>
 				</Section>
-			</div>
+			</Dialog>
 		</AlertDialog>
 	</Section>
 
@@ -202,7 +203,7 @@
 			cancelLabel="Cancel"
 			actionLabel="Create metric"
 		>
-			<div class="metric-form">
+			<Dialog>
 				<Section title="Metric type:">
 					<ButtonList
 						items={plantationMetrics}
@@ -213,7 +214,7 @@
 						{item}
 					</ButtonList>
 				</Section>
-			</div>
+			</Dialog>
 		</AlertDialog>
 	</Section>
 
@@ -243,7 +244,12 @@
 		{/if}
 		<AlertDialog
 			open={editAlarms}
-			actionDisabled={!newAlarm?.metricId || !newAlarm.name || !newAlarm.threshold}
+			actionDisabled={!newAlarm?.metricId ||
+				!newAlarm.name ||
+				!newAlarm.threshold ||
+				!newAlarm.period ||
+				!newAlarm.dataPoints ||
+				!newAlarm?.notificationStrategies?.length}
 			onAction={() => {
 				if (newAlarm) {
 					addAlarm(newAlarm);
@@ -259,13 +265,33 @@
 			cancelLabel="Cancel"
 			actionLabel="Create metric"
 		>
-			<div class="metric-form">
+			<Dialog>
 				<Section title="Alarm:">
 					<Info label="Alarm name:" />
 					<Spacer />
 					<Input
 						placeholder="Value..."
 						onValue={(name) => (newAlarm = newAlarm ? { ...newAlarm, name } : undefined)}
+					/>
+					<Spacer />
+					<Info label="Period:" />
+					<Spacer />
+					<Input
+						placeholder="Value..."
+						type="number"
+						onValue={(period) =>
+							(newAlarm = newAlarm ? { ...newAlarm, period: parseFloat(period) } : undefined)}
+					/>
+					<Spacer />
+					<Info label="Data points:" />
+					<Spacer />
+					<Input
+						placeholder="Value..."
+						type="number"
+						onValue={(dataPoints) =>
+							(newAlarm = newAlarm
+								? { ...newAlarm, dataPoints: parseFloat(dataPoints) }
+								: undefined)}
 					/>
 					<Spacer />
 					<Info label="Threshold:" />
@@ -288,7 +314,41 @@
 						{item.type}
 					</ButtonList>
 				</Section>
-			</div>
+				<Section title="Notification strategies:">
+					<ButtonList
+						items={[
+							'Email',
+							'SMS',
+							'Push Notification',
+							'In-App Notification',
+							'Web Push',
+							'Slack',
+							'Microsoft Teams',
+							'Webhook',
+							'WhatsApp',
+							'Telegram',
+							'Messenger',
+							'Signal',
+							'Voice Call'
+						]}
+						let:item
+						selectedItems={newAlarm?.notificationStrategies}
+						onSelect={(strategy) =>
+							newAlarm
+								? (newAlarm = {
+										...newAlarm,
+										notificationStrategies: newAlarm.notificationStrategies
+											? newAlarm.notificationStrategies.includes(strategy)
+												? newAlarm.notificationStrategies.filter((it) => it !== strategy)
+												: [...newAlarm.notificationStrategies, strategy]
+											: [strategy]
+									})
+								: undefined}
+					>
+						{item}
+					</ButtonList>
+				</Section>
+			</Dialog>
 		</AlertDialog>
 	</Section>
 {/if}
@@ -318,11 +378,6 @@
 		display: flex;
 		justify-content: space-between;
 		width: 100%;
-	}
-
-	.metric-form {
-		width: 30rem;
-		max-width: calc(100svw - 4rem);
 	}
 
 	.layer__button {

@@ -77,4 +77,7 @@ export type Alarm = {
 	metricId?: string;
 	name?: string;
 	threshold?: number;
+	dataPoints?: number;
+	period?: number;
+	notificationStrategies?: string[];
 };

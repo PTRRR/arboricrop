@@ -4,12 +4,12 @@
 	type T = $$Generic;
 	export let items: T[] = [];
 	export let onSelect: ((item: T) => void) | undefined = undefined;
-	export let selectedItems: T[] = [];
+	export let selectedItems: T[] | undefined = [];
 </script>
 
 <div class="list">
 	{#each items as item}
-		<Button minimal on:click={() => onSelect?.(item)} selected={selectedItems.includes(item)}>
+		<Button minimal on:click={() => onSelect?.(item)} selected={selectedItems?.includes(item)}>
 			<div class="list__item-content">
 				<slot {item} />
 			</div>
