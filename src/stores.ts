@@ -90,7 +90,8 @@ export const useFields = () => {
 			}),
 		removeFieldLayer,
 		removeFieldLayers: (field: Field, layersIds: string[]) =>
-			layersIds.forEach((layerId) => removeFieldLayer(field, layerId))
+			layersIds.forEach((layerId) => removeFieldLayer(field, layerId)),
+		getFieldById: (fieldId: string) => get(fields).find((it) => it.id === fieldId)
 	};
 };
 export const useBlurApp = () => useWritable('blur-app', false);

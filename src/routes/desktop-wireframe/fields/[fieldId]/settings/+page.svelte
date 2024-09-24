@@ -161,16 +161,6 @@
 			<div style={headerStyles.name}>{item.name}</div>
 			<div style={headerStyles.status}>{item.status}</div>
 		</List>
-		<!-- <ButtonList
-			items={fieldDevices}
-			let:item
-			onSelect={(device) => goto(`/desktop-wireframe/devices/${device.id}`)}
-		>
-			<div class="device">
-				<span class="device-name">{item.name}</span>
-				<span class="device-id">{item.status}</span>
-			</div>
-		</ButtonList> -->
 	</Section>
 
 	<Section
@@ -384,32 +374,6 @@
 {/if}
 
 <style>
-	.device {
-		display: flex;
-		max-width: 100%;
-		justify-content: space-between;
-	}
-
-	.device-name {
-		flex: 0 0 auto;
-		width: 30%;
-		text-align: left;
-	}
-
-	.device-id {
-		overflow: hidden;
-		text-overflow: ellipsis;
-		flex: 1 1 auto;
-		white-space: nowrap;
-		text-align: right;
-	}
-
-	.device {
-		display: flex;
-		justify-content: space-between;
-		width: 100%;
-	}
-
 	.layer__button {
 		width: 100%;
 		display: flex;
