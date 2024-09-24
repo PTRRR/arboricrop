@@ -3,8 +3,8 @@
 	import { useDevices, useReturnButton } from '../../../stores';
 	import Section from '../../../components/wireframe/Section.svelte';
 
-	let devices = useDevices();
-	let returnButton = useReturnButton();
+	const { devices } = useDevices();
+	const returnButton = useReturnButton();
 	returnButton.set({
 		label: 'Devices',
 		href: '/mobile-wireframe/fields'
@@ -16,14 +16,18 @@
 		title="Devices:"
 		buttons={[{ label: 'Pair device', href: '/mobile-wireframe/devices/pairing' }]}
 	>
-		<div class="devices__list">
-			{#each $devices as device}
-				<Card href={`/mobile-wireframe/devices/${device.id}`}>
-					<h5 slot="title">{device.name}</h5>
-					<span slot="subTitle">Battery: {device.battery}% - {device.status}</span>
-				</Card>
-			{/each}
-		</div>
+		{#if $devices.length > 0}
+			<div class="devices__list">
+				{#each $devices as device}
+					<Card href={`/mobile-wireframe/devices/${device.id}`}>
+						<h5 slot="title">{device.name}</h5>
+						<span slot="subTitle">Battery: {device.battery}% - {device.status}</span>
+					</Card>
+				{/each}
+			</div>
+		{:else}
+			No devices
+		{/if}
 	</Section>
 </div>
 

@@ -15,7 +15,7 @@
 	let map: MapV2;
 
 	const { fields, updateField } = useFields();
-	const devices = useDevices();
+	const { devices } = useDevices();
 	const url = createUrlBuilder();
 
 	const tabs: Tab[] = [

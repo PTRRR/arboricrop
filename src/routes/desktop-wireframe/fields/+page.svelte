@@ -13,7 +13,7 @@
 	import List from '../../../components/List.svelte';
 
 	const { fields, addField } = useFields();
-	const devices = useDevices();
+	const { devices } = useDevices();
 
 	$: getDevicesCount = (fieldId: string) => $devices.filter((it) => it.fieldId === fieldId).length;
 

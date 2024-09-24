@@ -8,7 +8,7 @@
 	import Info from '../../../components/Info.svelte';
 
 	const { fields } = useFields();
-	const devices = useDevices();
+	const { devices } = useDevices();
 
 	$: getFieldDeviceCount = (fieldId: string) => {
 		return $devices.filter((it) => it.fieldId === fieldId).length;

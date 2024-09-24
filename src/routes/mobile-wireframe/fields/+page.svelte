@@ -1,8 +1,6 @@
 <script lang="ts">
-	import Spacer from '../../../components/Spacer.svelte';
 	import Button from '../../../components/Button.svelte';
 	import Card from '../../../components/wireframe/Card.svelte';
-	import Separation from '../../../components/Separation.svelte';
 	import { useDevices, useFields, useReturnButton } from '../../../stores';
 	import { getDevicesByFieldId } from '../../../utils/dummyData';
 	import Section from '../../../components/wireframe/Section.svelte';
@@ -14,7 +12,7 @@
 	});
 
 	const { fields } = useFields();
-	const devices = useDevices();
+	const { devices } = useDevices();
 </script>
 
 <div class="fields">
@@ -22,16 +20,20 @@
 		title="Fields:"
 		buttons={[{ label: 'Create new field', href: '/mobile-wireframe/fields/new' }]}
 	>
-		<div class="fields__list">
-			{#each $fields as field}
-				<Card href={`/mobile-wireframe/fields/${field.id}`}>
-					<h5 slot="title">{field.name}</h5>
-					<span slot="subTitle">
-						{field.type} [{getDevicesByFieldId($devices, field.id).length} devices]
-					</span>
-				</Card>
-			{/each}
-		</div>
+		{#if $fields.length > 0}
+			<div class="fields__list">
+				{#each $fields as field}
+					<Card href={`/mobile-wireframe/fields/${field.id}`}>
+						<h5 slot="title">{field.name}</h5>
+						<span slot="subTitle">
+							{field.type} [{getDevicesByFieldId($devices, field.id).length} devices]
+						</span>
+					</Card>
+				{/each}
+			</div>
+		{:else}
+			No fields
+		{/if}
 	</Section>
 
 	<Section title="All devices:">

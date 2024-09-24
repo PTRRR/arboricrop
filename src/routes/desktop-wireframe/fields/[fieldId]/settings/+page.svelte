@@ -24,7 +24,7 @@
 	import List from '../../../../../components/List.svelte';
 
 	const { fields, deleteField, updateField, addFieldLayers, removeFieldLayer } = useFields();
-	const devices = useDevices();
+	const { devices } = useDevices();
 	const features = useGeoJSONFeatures();
 	const { metrics, addMetric, deleteMetric, getMetricsByFieldId, getMetricById } = useMetrics();
 	const { alarms, addAlarm, removeAlarm, getAlarmsByFieldId } = useAlarms();

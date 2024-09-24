@@ -22,7 +22,7 @@
 
 	type Step = { label: string; checked: boolean };
 
-	const devices = useDevices();
+	const { devices } = useDevices();
 	const returnButton = useReturnButton();
 	const { fields } = useFields();
 	const url = createUrlBuilder();

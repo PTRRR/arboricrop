@@ -18,7 +18,7 @@
 	import type { GeoJSON as GeoJSONType, Feature, Geometry, GeoJsonProperties } from 'geojson';
 
 	const { fields } = useFields();
-	const devices = useDevices();
+	const { devices } = useDevices();
 	const returnButton = useReturnButton();
 
 	let map: MapV2;

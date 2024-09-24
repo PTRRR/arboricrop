@@ -2,17 +2,16 @@ import { get, readable, writable, type Writable } from 'svelte/store';
 import { getContext, hasContext, setContext } from 'svelte';
 import {
 	getDevices,
-	getFields,
 	getNotifications,
 	loraNetworks,
 	features,
 	organisations
 } from './utils/dummyData';
 import type { comment } from './db/schema';
-import type { Alarm, Field, GeoJSONFeature, Metric, PartialBy } from './utils/types';
+import type { Alarm, Device, Field, GeoJSONFeature, Metric, PartialBy } from './utils/types';
 import { filterByUniqueAttribute } from './utils/arrays';
 
-const STORE_VERSION = 'v13';
+const STORE_VERSION = 'v15';
 const dummyDevices = getDevices(30);
 const dummyNotifications = getNotifications(dummyDevices);
 
@@ -50,10 +49,16 @@ export const useReadable = <T>(name: string, value: T) => useSharedStore(name, r
 
 // Stores
 
-export const useDevices = () => useWritable('devices', dummyDevices, true);
+export const useDevices = () => {
+	const devices = useWritable<Device[]>('devices', [], true);
+
+	return {
+		devices
+	};
+};
 export const useNotifications = () => useWritable('notifications', dummyNotifications, true);
 export const useFields = () => {
-	const fields = useWritable('fields', getFields(), true);
+	const fields = useWritable<Field[]>('fields', [], true);
 
 	const updateField = (field: PartialBy<Field, 'center' | 'layers' | 'name' | 'type'>) => {
 		fields.update((fields) => {

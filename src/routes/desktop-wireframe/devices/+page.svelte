@@ -8,7 +8,7 @@
 
 	export let data: LayoutData;
 
-	const devices = useDevices();
+	const { devices } = useDevices();
 	const { getFieldById } = useFields();
 	const url = createUrlBuilder();
 

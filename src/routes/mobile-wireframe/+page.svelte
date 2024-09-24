@@ -9,7 +9,7 @@
 		useReturnButton,
 		useUserName
 	} from '../../stores';
-	import { shuffle } from '../../utils/arrays';
+	import { filterNotEmpty, shuffle } from '../../utils/arrays';
 	import { getDevicesByFieldId } from '../../utils/dummyData';
 	import Section from '../../components/wireframe/Section.svelte';
 	import Info from '../../components/Info.svelte';
@@ -19,7 +19,7 @@
 		label: 'Arboricrop'
 	});
 
-	const devices = useDevices();
+	const { devices } = useDevices();
 	const notifications = useNotifications();
 	const { fields } = useFields();
 	const organisation = useOrganisation();
@@ -70,15 +70,17 @@
 			],
 			buttons: [{ label: 'Hide' }]
 		},
-		{
-			title: 'Notifications & Alerts',
-			cards: [
-				{
-					title: `Notifications [${$notifications.filter((it) => it.status !== 'acknowledged').length}]`,
-					href: '/mobile-wireframe/notifications'
+		$fields.length > 0
+			? {
+					title: 'Notifications & Alerts',
+					cards: [
+						{
+							title: `Notifications [${$notifications.filter((it) => it.status !== 'acknowledged').length}]`,
+							href: '/mobile-wireframe/notifications'
+						}
+					]
 				}
-			]
-		},
+			: undefined,
 		{
 			title: 'Recent Fields',
 			buttons: [
@@ -93,7 +95,7 @@
 				href: `/mobile-wireframe/fields/${it.id}`
 			}))
 		}
-	];
+	].filter(filterNotEmpty);
 </script>
 
 <div class="home">

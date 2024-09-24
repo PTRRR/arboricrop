@@ -7,7 +7,7 @@
 	import type { Device } from '../../../../utils/types';
 	import { goto } from '$app/navigation';
 
-	const devices = useDevices();
+	const { devices } = useDevices();
 	const returnButton = useReturnButton();
 
 	returnButton.set({

@@ -7,7 +7,7 @@
 	let device: Device;
 	export let isNewDevice: boolean | undefined = undefined;
 	export let id: string | undefined = undefined;
-	const devices = useDevices();
+	const { devices } = useDevices();
 
 	let returnButton = useReturnButton();
 

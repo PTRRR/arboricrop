@@ -9,7 +9,7 @@
 	import Section from '../../../../components/wireframe/Section.svelte';
 	import { useDevices, useFields } from '../../../../stores';
 
-	const devices = useDevices();
+	const { devices } = useDevices();
 	const { fields, getFieldById } = useFields();
 
 	$: device = $devices.find((it) => it.id === $page.params.deviceId);

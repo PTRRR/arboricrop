@@ -14,7 +14,7 @@
 	import { swissBounds } from '../../../../utils/dummyData';
 	import type { Device } from '../../../../utils/types';
 
-	const devices = useDevices();
+	const { devices } = useDevices();
 	const { fields } = useFields();
 	const returnButton = useReturnButton();
 
