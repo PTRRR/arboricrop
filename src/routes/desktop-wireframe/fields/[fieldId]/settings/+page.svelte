@@ -146,7 +146,7 @@
 
 	<Section
 		title="Devices:"
-		buttons={[{ label: 'See devices', href: '/desktop-wireframe/devices' }]}
+		buttons={[{ label: 'See devices', href: `/desktop-wireframe/devices?fieldId=${field.id}` }]}
 	>
 		<List
 			items={fieldDevices}
