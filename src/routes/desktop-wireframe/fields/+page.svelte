@@ -5,14 +5,17 @@
 	import Info from '../../../components/Info.svelte';
 	import Input from '../../../components/Input.svelte';
 	import Spacer from '../../../components/Spacer.svelte';
-	import ButtonList from '../../../components/wireframe/ButtonList.svelte';
 	import Section from '../../../components/wireframe/Section.svelte';
-	import { useFields } from '../../../stores';
+	import { useDevices, useFields } from '../../../stores';
 	import type { Field } from '../../../utils/types';
 	import { changinCenter } from '../../../utils/dummyData';
 	import { goto } from '$app/navigation';
+	import List from '../../../components/List.svelte';
 
 	const { fields, addField } = useFields();
+	const devices = useDevices();
+
+	$: getDevicesCount = (fieldId: string) => $devices.filter((it) => it.fieldId === fieldId).length;
 
 	let newField: Field | undefined = undefined;
 </script>
@@ -29,13 +32,19 @@
 		}
 	]}
 >
-	<ButtonList
+	<List
 		items={$fields}
+		headers={{
+			name: { size: '10rem', label: 'Name' },
+			devicesCount: { size: '10rem', label: 'Devices count' }
+		}}
 		let:item
-		onSelect={(field) => goto(`/desktop-wireframe/fields/${field.id}`)}
+		let:headerStyles
+		onSelect={(item) => goto(`/desktop-wireframe/fields/${item.id}`)}
 	>
-		{item.name || '-'}
-	</ButtonList>
+		<div class="list__item" style={headerStyles.name}>{item.name || '-'}</div>
+		<div class="list__item" style={headerStyles.devicesCount}>{getDevicesCount(item.id)}</div>
+	</List>
 
 	<AlertDialog
 		open={!!newField}

@@ -21,11 +21,12 @@
 	import Input from '../../../../../components/Input.svelte';
 	import { createUrlBuilder } from '../../../../../utils/urls';
 	import Dialog from '../../../../../components/Dialog.svelte';
+	import List from '../../../../../components/List.svelte';
 
 	const { fields, deleteField, updateField, addFieldLayers, removeFieldLayer } = useFields();
 	const devices = useDevices();
 	const features = useGeoJSONFeatures();
-	const { metrics, addMetric, deleteMetric, getMetricsByFieldId } = useMetrics();
+	const { metrics, addMetric, deleteMetric, getMetricsByFieldId, getMetricById } = useMetrics();
 	const { alarms, addAlarm, removeAlarm, getAlarmsByFieldId } = useAlarms();
 
 	$: field = $fields.find((it) => it.id === $page.params.fieldId);
@@ -128,7 +129,7 @@
 									minimal
 									selected={!!selectedFeatures.find((it) => it.id === item.id)}
 									on:click={() =>
-										!!selectedFeatures.find((it) => it.id === item.id)
+										selectedFeatures.find((it) => it.id === item.id)
 											? (selectedFeatures = selectedFeatures.filter((it) => it !== item))
 											: (selectedFeatures = [...selectedFeatures, item])}
 								>
@@ -147,7 +148,20 @@
 		title="Devices:"
 		buttons={[{ label: 'See devices', href: '/desktop-wireframe/devices' }]}
 	>
-		<ButtonList
+		<List
+			items={fieldDevices}
+			headers={{
+				name: { size: '7rem', label: 'Name' },
+				status: { size: '10rem', label: 'Status' }
+			}}
+			let:item
+			let:headerStyles
+			onSelect={(device) => goto(`/desktop-wireframe/devices/${device.id}`)}
+		>
+			<div style={headerStyles.name}>{item.name}</div>
+			<div style={headerStyles.status}>{item.status}</div>
+		</List>
+		<!-- <ButtonList
 			items={fieldDevices}
 			let:item
 			onSelect={(device) => goto(`/desktop-wireframe/devices/${device.id}`)}
@@ -156,7 +170,7 @@
 				<span class="device-name">{item.name}</span>
 				<span class="device-id">{item.status}</span>
 			</div>
-		</ButtonList>
+		</ButtonList> -->
 	</Section>
 
 	<Section
@@ -236,9 +250,25 @@
 		]}
 	>
 		{#if fieldAlarms.length > 0}
-			<ButtonList items={fieldAlarms} let:item onSelect={(alarm) => removeAlarm(alarm.id)}>
-				{item.name}
-			</ButtonList>
+			<List
+				items={fieldAlarms}
+				headers={{
+					name: { size: '7rem', label: 'Name' },
+					metricId: { size: '14rem', label: 'Metric' },
+					notificationStrategies: { size: '20rem', label: 'Notification Strategies' }
+				}}
+				let:item
+				let:headerStyles
+				onSelect={(item) => removeAlarm(item.id)}
+			>
+				<div class="list__item" style={headerStyles.name}>{item.name}</div>
+				<div class="list__item" style={headerStyles.metricId}>
+					{getMetricById(item.metricId || '')?.type}
+				</div>
+				<div class="list__item" style={headerStyles.notificationStrategies}>
+					{item.notificationStrategies?.join(', ')}
+				</div>
+			</List>
 		{:else}
 			<span>No alarms</span>
 		{/if}
@@ -263,7 +293,7 @@
 				editAlarms = false;
 			}}
 			cancelLabel="Cancel"
-			actionLabel="Create metric"
+			actionLabel="Create alarm"
 		>
 			<Dialog>
 				<Section title="Alarm:">
@@ -384,5 +414,11 @@
 		width: 100%;
 		display: flex;
 		justify-content: space-between;
+	}
+
+	.list__item {
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 </style>

@@ -1,18 +1,19 @@
 <script lang="ts">
+	import { camelToKebab } from '../utils/strings';
 	import { getCss } from '../utils/css';
 
 	type T = $$Generic;
 	type HeaderValue = { size?: string; label?: string };
-	type Headers = { [K in keyof T]?: HeaderValue };
+	type Headers = Record<string, HeaderValue>;
 
 	export let items: T[] = [];
 	export let headers: Headers | undefined = undefined;
 	export let onSelect: ((item: T) => void) | undefined = undefined;
 
-	$: headerStyles = Object.keys(headers || {}).reduce<Record<keyof T, string>>(
+	$: headerStyles = Object.keys(headers || {}).reduce<Record<keyof Headers, string>>(
 		(acc, key) => {
-			acc[key as keyof T] = getCss({
-				width: `var(--header-${key})`
+			acc[key as keyof Headers] = getCss({
+				width: `var(--header-${camelToKebab(key)})`
 			});
 			return acc;
 		},
@@ -21,7 +22,7 @@
 
 	$: headerVars = Object.entries((headers || {}) as Headers).reduce<Record<string, string>>(
 		(acc, [key, value]) => {
-			acc[`--header-${key}`] = (value as HeaderValue).size || '';
+			acc[`--header-${camelToKebab(key)}`] = (value as HeaderValue).size || '';
 			return acc;
 		},
 		{}
@@ -34,18 +35,21 @@
 </script>
 
 <div class="list" class:list--selectable={!!onSelect} style={getCss(headerVars)}>
-	<div class="list__row">
-		{#each headerItems as header}
-			<div
-				class="list__header-item"
-				style={getCss({
-					width: `var(--header-${header.key})`
-				})}
-			>
-				{header.label}
-			</div>
-		{/each}
-	</div>
+	{#if headerItems.length > 0}
+		<div class="list__headers">
+			{#each headerItems as header}
+				<div
+					class="list__header-item"
+					style={getCss({
+						width: `var(--header-${camelToKebab(header.key)})`
+					})}
+				>
+					{header.label}
+				</div>
+			{/each}
+		</div>
+	{/if}
+
 	{#each items as item}
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -69,10 +73,17 @@
 		background-color: var(--dark-gray);
 	}
 
-	.list__row {
+	.list__row,
+	.list__headers {
 		display: flex;
 		padding: 0.5rem 0;
 		gap: var(--gap);
+	}
+
+	.list__headers {
+		padding-top: 0;
+		color: var(--dark-gray);
+		border-bottom: solid 1px var(--dark-gray);
 	}
 
 	.list__row + .list__row {

@@ -148,7 +148,8 @@ export const useMetrics = () => {
 				return metrics;
 			});
 		},
-		getMetricsByFieldId: (fieldId: string) => get(metrics).filter((it) => it.fieldId === fieldId)
+		getMetricsByFieldId: (fieldId: string) => get(metrics).filter((it) => it.fieldId === fieldId),
+		getMetricById: (metricId: string) => get(metrics).find((it) => it.id === metricId)
 	};
 };
 export const useAlarms = () => {
