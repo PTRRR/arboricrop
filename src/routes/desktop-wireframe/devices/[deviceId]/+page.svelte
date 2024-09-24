@@ -33,7 +33,20 @@
 		{#if editMetadata}
 			<Info label="Name:" />
 			<Spacer />
-			<Input value={device.name} />
+			<Input
+				value={device.name}
+				onValue={(value) => {
+					const deviceIndex = $devices.findIndex((it) => it.id === device.id);
+					if (deviceIndex > -1) {
+						const newDevices = [...$devices];
+						newDevices[deviceIndex] = {
+							...$devices[deviceIndex],
+							name: value
+						};
+						$devices = newDevices;
+					}
+				}}
+			/>
 		{:else}
 			<Info label="Name:" value={device.name} />
 			<Spacer />
