@@ -1,15 +1,9 @@
 import { get, readable, writable, type Writable } from 'svelte/store';
 import { getContext, hasContext, setContext } from 'svelte';
-import {
-	getDevices,
-	getNotifications,
-	loraNetworks,
-	features,
-	organisations
-} from './utils/dummyData';
+import { getDevices, getNotifications, loraNetworks, features } from './utils/dummyData';
 import type { comment } from './db/schema';
 import type { Alarm, Device, Field, GeoJSONFeature, Metric, PartialBy } from './utils/types';
-import { filterByUniqueAttribute } from './utils/arrays';
+import { filterByUniqueAttribute, filterDuplicate } from './utils/arrays';
 
 const STORE_VERSION = 'v15';
 const dummyDevices = getDevices(30);
@@ -25,7 +19,7 @@ export const useSharedStore = <T, A>(name: string, fn: (value?: A) => T, default
 };
 
 export const useWritable = <T>(name: string, value: T, persist: boolean = false) => {
-	const sharedStore = useSharedStore(name, writable, value) as Writable<T>;
+	const sharedStore = useSharedStore(`${name}-${STORE_VERSION}`, writable, value) as Writable<T>;
 
 	if (typeof window !== 'undefined' && persist) {
 		const storageValueKey = `${name}-${STORE_VERSION}`;
@@ -129,10 +123,17 @@ export const useScrollLock = () => {
 export const useOrganisations = () => {
 	const organisations = useWritable<string[]>('organisations', [], true);
 	return {
-		organisations
+		organisations,
+		addOrganisation: (organisation: string) =>
+			organisations.update((organisations) =>
+				[...organisations, organisation].filter(filterDuplicate)
+			),
+		deleteOrganisation: (organisation: string) =>
+			organisations.update((organisations) => organisations.filter((it) => it !== organisation))
 	};
 };
-export const useOrganisation = () => useWritable('organisation', organisations[0], true);
+export const useOrganisation = () =>
+	useWritable<string | undefined>('organisation', undefined, true);
 export const useIsOrganisation = () => useWritable('is-organisation', false, true);
 export const useOrganisationName = () => useWritable('organisation-name', '', true);
 export const useInvitedUsers = () => useWritable<string[]>('invited-users', [], true);

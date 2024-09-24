@@ -33,6 +33,7 @@
 	$: fieldDevices = getDevicesByFieldId($devices, $page.params.fieldId);
 	$: fieldMetrics = field && $metrics ? getMetricsByFieldId(field.id) : [];
 	$: fieldAlarms = field && $alarms ? getAlarmsByFieldId(field.id) : [];
+	$: longestDeviceName = Math.max(...fieldDevices.map((it) => it.name?.length || 0));
 
 	const url = createUrlBuilder();
 
@@ -151,15 +152,15 @@
 		<List
 			items={fieldDevices}
 			headers={{
-				name: { size: '7rem', label: 'Name' },
+				name: { size: `${longestDeviceName * 0.6}rem`, label: 'Name' },
 				status: { size: '10rem', label: 'Status' }
 			}}
 			let:item
 			let:headerStyles
 			onSelect={(device) => goto(`/desktop-wireframe/devices/${device.id}`)}
 		>
-			<div style={headerStyles.name}>{item.name}</div>
-			<div style={headerStyles.status}>{item.status}</div>
+			<div class="list__item" style={headerStyles.name}>{item.name}</div>
+			<div class="list__item" style={headerStyles.status}>{item.status}</div>
 		</List>
 	</Section>
 

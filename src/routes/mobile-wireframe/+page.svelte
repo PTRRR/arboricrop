@@ -44,11 +44,13 @@
 					label: 'Selected account:',
 					value: 'Jon Doe'
 				},
-				{
-					label: 'Selected organisation:',
-					value: $organisation
-				}
-			],
+				$organisation
+					? {
+							label: 'Selected organisation:',
+							value: $organisation
+						}
+					: undefined
+			].filter(filterNotEmpty),
 			buttons: [
 				{
 					label: 'Edit',

@@ -82,7 +82,7 @@
 
 	{#if $organisations.length > 0}
 		<Section title="Account settings:">
-			<Info label="Selected organisation:" value={$organisation} />
+			<Info label="Selected organisation:" value={$organisation || '-'} />
 			<Spacer />
 			<Button href={`${window.location.pathname}?organisation=true`}>Switch organisation</Button>
 		</Section>

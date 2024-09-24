@@ -8,10 +8,16 @@
 	import Spacer from '../../../components/Spacer.svelte';
 	import ButtonList from '../../../components/wireframe/ButtonList.svelte';
 	import SaveSection from '../../../components/wireframe/SaveSection.svelte';
-	import { useInvitedUsers, useIsOrganisation, useOrganisationName } from '../../../stores';
+	import {
+		useInvitedUsers,
+		useIsOrganisation,
+		useOrganisationName,
+		useOrganisations
+	} from '../../../stores';
 
-	const isOrganisation = useIsOrganisation();
+	const { addOrganisation, deleteOrganisation } = useOrganisations();
 	const organisationName = useOrganisationName();
+	const isOrganisation = useIsOrganisation();
 	const invitedUsers = useInvitedUsers();
 
 	let currentEmail = '';
@@ -25,7 +31,7 @@
 		<Input
 			placeholder="Organisation name"
 			value={$organisationName}
-			onValue={(value) => organisationName.set(value)}
+			onValue={(value) => ($organisationName = value)}
 		/>
 		<Spacer />
 		<Separation title="Users:" />
@@ -59,7 +65,9 @@
 		<Button
 			on:click={() => {
 				isOrganisation.set(false);
-				organisationName.set('');
+				if ($organisationName) {
+					deleteOrganisation($organisationName);
+				}
 				invitedUsers.set([]);
 			}}
 		>
@@ -77,9 +85,16 @@
 	<Spacer />
 	<SaveSection
 		onSave={() => {
+			if (organisationName) {
+				addOrganisation($organisationName);
+			}
 			goto('/desktop-wireframe/dashboard');
 		}}
 		onCancel={() => {
+			if (!$organisationName) {
+				$isOrganisation = false;
+				$organisationName = '';
+			}
 			goto('/desktop-wireframe/dashboard');
 		}}
 	/>
