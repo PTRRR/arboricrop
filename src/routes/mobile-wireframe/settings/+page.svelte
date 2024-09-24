@@ -8,12 +8,14 @@
 	import Info from '../../../components/Info.svelte';
 	import SaveSection from '../../../components/wireframe/SaveSection.svelte';
 	import Separation from '../../../components/Separation.svelte';
-	import { useNetwork, useOrganisation, useReturnButton } from '../../../stores';
-	import { loraNetworks, organisations } from '../../../utils/dummyData';
+	import { useNetwork, useOrganisation, useOrganisations, useReturnButton } from '../../../stores';
+	import { loraNetworks } from '../../../utils/dummyData';
+	import Section from '../../../components/wireframe/Section.svelte';
 
 	const usedNetwork = useNetwork();
 	const returnButton = useReturnButton();
 	const organisation = useOrganisation();
+	const { organisations } = useOrganisations();
 
 	let selectedNetwork = $usedNetwork;
 	let selectedOrganisation = $organisation;
@@ -49,7 +51,7 @@
 	<CenteredWrapper>
 		<Separation title="Organisations:" />
 		<ButtonList
-			items={organisations}
+			items={$organisations}
 			let:item
 			selectedItems={[selectedOrganisation]}
 			onSelect={(organisation) => (selectedOrganisation = organisation)}
@@ -68,48 +70,42 @@
 		/>
 	</CenteredWrapper>
 {:else}
-	<Separation title="User settings:" />
-	<label for="">First name:</label>
-	<Spacer />
-	<input type="text" placeholder="First name" value="Jon" />
-	<Spacer />
-	<label for="">Last name:</label>
-	<Spacer />
-	<input type="text" placeholder="Last name" value="Doe" />
-	<Spacer />
-	<Spacer />
+	<Section title="User settings:">
+		<label for="">First name:</label>
+		<Spacer />
+		<input type="text" placeholder="First name" value="Jon" />
+		<Spacer />
+		<label for="">Last name:</label>
+		<Spacer />
+		<input type="text" placeholder="Last name" value="Doe" />
+	</Section>
 
-	<Separation title="Account settings:" />
-	<Info label="Selected organisation:" value={$organisation} />
-	<Spacer />
-	<Button href={`${window.location.pathname}?organisation=true`}>Switch organisation</Button>
-	<Spacer />
-	<Spacer />
+	{#if $organisations.length > 0}
+		<Section title="Account settings:">
+			<Info label="Selected organisation:" value={$organisation} />
+			<Spacer />
+			<Button href={`${window.location.pathname}?organisation=true`}>Switch organisation</Button>
+		</Section>
+	{/if}
 
-	<Separation title="Notification settings:" />
-	<Info label="Status:" value="unmuted" />
-	<Spacer />
-	<Button>Mute notifications</Button>
-	<Spacer />
-	<Spacer />
+	<Section title="Notification settings:">
+		<Info label="Status:" value="unmuted" />
+		<Spacer />
+		<Button>Mute notifications</Button>
+	</Section>
 
-	<Separation title="Advanced settings:" />
-	<Info label="Default gateway:" value={$usedNetwork} />
-	<Spacer />
-	<Button href={`${window.location.pathname}?network=true`}>Set default network gateway</Button>
+	<Section title="Notification settings:">
+		<Info label="Default gateway:" value={$usedNetwork} />
+		<Spacer />
+		<Button href={`${window.location.pathname}?network=true`}>Set default network gateway</Button>
+	</Section>
 
-	<Spacer />
-	<Spacer />
-	<Spacer />
-	<Spacer />
-	<Separation />
-	<Spacer />
-	<Spacer />
-	<Spacer />
-	<SaveSection
-		onSave={() => goto('/mobile-wireframe')}
-		onCancel={() => goto('/mobile-wireframe')}
-	/>
+	<Section title="Confirm changes:">
+		<SaveSection
+			onSave={() => goto('/mobile-wireframe')}
+			onCancel={() => goto('/mobile-wireframe')}
+		/>
+	</Section>
 {/if}
 
 <style>

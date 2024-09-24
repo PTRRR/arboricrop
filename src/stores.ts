@@ -125,6 +125,13 @@ export const useScrollLock = () => {
 
 	return scrollLock;
 };
+
+export const useOrganisations = () => {
+	const organisations = useWritable<string[]>('organisations', [], true);
+	return {
+		organisations
+	};
+};
 export const useOrganisation = () => useWritable('organisation', organisations[0], true);
 export const useIsOrganisation = () => useWritable('is-organisation', false, true);
 export const useOrganisationName = () => useWritable('organisation-name', '', true);
