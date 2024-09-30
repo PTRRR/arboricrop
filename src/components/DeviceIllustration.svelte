@@ -12,7 +12,7 @@
 
 	onMount(() => {
 		const timeout = setTimeout(() => {
-			mounted = false;
+			mounted = true;
 		}, 300);
 
 		return () => {
@@ -23,9 +23,9 @@
 
 <div
 	class="device-illustration"
-	class:device-illustration--usb={usb && !mounted}
-	class:device-illustration--jack={jack && !mounted}
-	class:device-illustration--button={button && !mounted}
+	class:device-illustration--usb={usb && mounted}
+	class:device-illustration--jack={jack && mounted}
+	class:device-illustration--button={button && mounted}
 >
 	<div class="device-illustration__inner">
 		<img class="device-illustration__device" src="/images/device_caps.png" alt="" />
@@ -104,13 +104,8 @@
 		transition-delay: 0.4s;
 	}
 
-	.device-illustration__usb {
-		left: 51%;
-	}
-
 	.device-illustration--usb .device-illustration__usb {
 		top: 83%;
-		left: 51%;
 		opacity: 1;
 	}
 
@@ -125,7 +120,7 @@
 	}
 
 	.device-illustration__button {
-		left: 30%;
+		left: calc(50% - 8svh);
 		position: absolute;
 		transform: translate(-50%, -50%);
 		display: flex;
@@ -134,15 +129,14 @@
 
 	.device-illustration__button-arrow {
 		position: absolute;
-		top: 50%;
+		top: 0%;
 		left: 50%;
-		transform: translate(-50%, -50%);
+		transform: translate(-50%, 0%);
 		height: 10rem;
 	}
 
 	.device-illustration--button .device-illustration__button {
-		top: 79%;
-		left: 30%;
+		top: 74%;
 		opacity: 1;
 	}
 </style>
