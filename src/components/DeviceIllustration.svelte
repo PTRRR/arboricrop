@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 
 	export let animate: boolean = true;
+	export let led: boolean = true;
 	export let usb: boolean = false;
 	export let jack: boolean = false;
 	export let button: boolean = false;
@@ -30,6 +31,10 @@
 	class:device-illustration--button={button && mounted}
 >
 	<div class="device-illustration__inner">
+		{#if led}
+			<div class="device-illustration__led"></div>
+		{/if}
+
 		{#if usb || jack}
 			<img class="device-illustration__device" src="/images/device_caps.png" alt="" />
 		{:else}
@@ -150,5 +155,31 @@
 	.device-illustration--button .device-illustration__button {
 		top: 74%;
 		opacity: 1;
+	}
+
+	@keyframes blink {
+		from {
+			background-color: rgb(191, 242, 133);
+		}
+		to {
+			background-color: rgb(255, 255, 255);
+		}
+	}
+
+	.device-illustration__led {
+		position: absolute;
+		top: 62%;
+		left: 30%;
+		width: 30px;
+		height: 45px;
+		transform: translate(-50%, -50%);
+		border-radius: 100%;
+		filter: blur(5px);
+		mix-blend-mode: multiply;
+		background-color: rgb(191, 242, 133);
+		z-index: 10;
+		animation-name: blink;
+		animation-duration: 1s;
+		animation-iteration-count: infinite;
 	}
 </style>
