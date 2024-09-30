@@ -38,6 +38,7 @@
 	<div class="mobile__content">
 		{#if aspectRatio}
 			<div class="mobile__app" style={appStyle}>
+				<div id="mobile-portal" class="mobile__portal"></div>
 				<div class="mobile__app-inner" style={appInnerStyle}>
 					<ScrollArea>
 						<slot />
@@ -80,6 +81,16 @@
 		overflow: hidden;
 	}
 
+	.mobile__portal {
+		position: absolute;
+		width: 30svw;
+		height: 100%;
+		top: 50%;
+		left: calc(100% + var(--gap) * 3);
+		transform: translate(0, -50%);
+		z-index: 1000;
+	}
+
 	img {
 		position: absolute;
 		top: 50%;
@@ -88,6 +99,12 @@
 		height: 100%;
 		opacity: 1;
 		pointer-events: none;
+	}
+
+	@media (max-aspect-ratio: 11/9) {
+		.mobile__portal {
+			display: none;
+		}
 	}
 
 	@media screen and (max-width: 700px) {

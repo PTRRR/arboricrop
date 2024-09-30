@@ -13,6 +13,7 @@
 	import { getDevicesByFieldId } from '../../utils/dummyData';
 	import Section from '../../components/wireframe/Section.svelte';
 	import Info from '../../components/Info.svelte';
+	import Portal from 'svelte-portal';
 
 	let returnButton = useReturnButton();
 	returnButton.set({

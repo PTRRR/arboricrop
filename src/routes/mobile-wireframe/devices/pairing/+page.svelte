@@ -9,6 +9,8 @@
 	import { createUrlBuilder } from '../../../../utils/urls';
 	import CenteredWrapper from '../../../../components/wireframe/CenteredWrapper.svelte';
 	import Separation from '../../../../components/Separation.svelte';
+	import Portal from 'svelte-portal';
+	import DeviceIllustration from '../../../../components/DeviceIllustration.svelte';
 
 	const returnButton = useReturnButton();
 	returnButton.set({
@@ -60,6 +62,12 @@
 	</div>
 </CenteredWrapper>
 
+<Portal target="#mobile-portal">
+	<div class="portal">
+		<DeviceIllustration animate usb jack />
+	</div>
+</Portal>
+
 <style>
 	.pairing__content {
 		width: 100%;
@@ -94,5 +102,13 @@
 
 	.pairing__success span {
 		color: var(--dark-gray);
+	}
+
+	.portal {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
 	}
 </style>
