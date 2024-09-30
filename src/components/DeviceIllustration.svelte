@@ -28,7 +28,12 @@
 	class:device-illustration--button={button && mounted}
 >
 	<div class="device-illustration__inner">
-		<img class="device-illustration__device" src="/images/device_caps.png" alt="" />
+		{#if usb || jack}
+			<img class="device-illustration__device" src="/images/device_caps.png" alt="" />
+		{:else}
+			<img class="device-illustration__device" src="/images/device_caps_closed.png" alt="" />
+		{/if}
+
 		<img class="device-illustration__usb" src="/images/usb.png" alt="" />
 		<img class="device-illustration__jack" src="/images/jack.png" alt="" />
 
