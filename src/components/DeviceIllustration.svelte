@@ -169,9 +169,9 @@
 	.device-illustration__led {
 		position: absolute;
 		top: 62%;
-		left: 30%;
-		width: 30px;
-		height: 45px;
+		left: calc(50% - 8svh);
+		width: 2svh;
+		height: 3svh;
 		transform: translate(-50%, -50%);
 		border-radius: 100%;
 		filter: blur(5px);
