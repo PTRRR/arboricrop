@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import Portal from 'svelte-portal';
 	import Button from '../../../../components/Button.svelte';
 	import Info from '../../../../components/Info.svelte';
 	import MapV2 from '../../../../components/MapV2.svelte';
@@ -13,6 +14,7 @@
 	import { getCss } from '../../../../utils/css';
 	import { swissBounds } from '../../../../utils/dummyData';
 	import type { Device } from '../../../../utils/types';
+	import DeviceIllustration from '../../../../components/DeviceIllustration.svelte';
 
 	const { devices } = useDevices();
 	const { fields } = useFields();
@@ -204,6 +206,14 @@
 	<span>Device unknown</span>
 {/if}
 
+<Portal target="#mobile-portal">
+	{#if $page.data.connected}
+		<div class="portal">
+			<DeviceIllustration animate={false} usb={true} jack={device?.status === 'active'} />
+		</div>
+	{/if}
+</Portal>
+
 <!-- <Device id={$page.params.id} /> -->
 
 <style>
@@ -216,5 +226,13 @@
 		outline: none;
 		max-width: 100%;
 		resize: vertical;
+	}
+
+	.portal {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
 	}
 </style>

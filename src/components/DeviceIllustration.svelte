@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
+	export let animate: boolean = true;
 	export let usb: boolean = false;
 	export let jack: boolean = false;
 	export let button: boolean = false;
 
-	export let mounted: boolean = false;
+	export let mounted: boolean = !animate;
 	const arrowWidth = 80;
 	const arrowHeight = 100;
 	const arrowHeadWidth = 40;
@@ -23,6 +24,7 @@
 
 <div
 	class="device-illustration"
+	class:device-illustration--animate={animate}
 	class:device-illustration--usb={usb && mounted}
 	class:device-illustration--jack={jack && mounted}
 	class:device-illustration--button={button && mounted}
@@ -100,6 +102,11 @@
 		top: 133%;
 		pointer-events: none;
 		left: 50%;
+	}
+
+	.device-illustration--animate .device-illustration__usb,
+	.device-illustration--animate .device-illustration__jack,
+	.device-illustration--animate .device-illustration__button {
 		transition:
 			top 0.6s ease-in-out,
 			opacity 0.6s ease-in-out;
