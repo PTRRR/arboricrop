@@ -64,7 +64,10 @@
 
 <Portal target="#mobile-portal">
 	<div class="portal">
-		<DeviceIllustration animate usb jack />
+		<DeviceIllustration
+			usb={currentPairingStrategy.value === 'usb'}
+			button={currentPairingStrategy.value === 'bluetooth'}
+		/>
 	</div>
 </Portal>
 

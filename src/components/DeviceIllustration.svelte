@@ -1,19 +1,19 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
-	export let animate: boolean = false;
 	export let usb: boolean = false;
 	export let jack: boolean = false;
 	export let button: boolean = false;
 
+	export let mounted: boolean = false;
 	const arrowWidth = 80;
 	const arrowHeight = 100;
 	const arrowHeadWidth = 40;
 
 	onMount(() => {
 		const timeout = setTimeout(() => {
-			animate = false;
-		}, 500);
+			mounted = false;
+		}, 300);
 
 		return () => {
 			clearTimeout(timeout);
@@ -21,46 +21,43 @@
 	});
 </script>
 
-<div class="device-illustration" class:device-illustration--start={animate}>
+<div
+	class="device-illustration"
+	class:device-illustration--usb={usb && !mounted}
+	class:device-illustration--jack={jack && !mounted}
+	class:device-illustration--button={button && !mounted}
+>
 	<div class="device-illustration__inner">
 		<img class="device-illustration__device" src="/images/device_caps.png" alt="" />
+		<img class="device-illustration__usb" src="/images/usb.png" alt="" />
+		<img class="device-illustration__jack" src="/images/jack.png" alt="" />
 
-		{#if usb}
-			<img class="device-illustration__usb" src="/images/usb.png" alt="" />
-		{/if}
-
-		{#if jack}
-			<img class="device-illustration__jack" src="/images/jack.png" alt="" />
-		{/if}
-
-		{#if button}
-			<div class="device-illustration__button">
-				<div class="device-illustration__button-arrow">
-					<svg
-						width={arrowWidth}
-						height={arrowHeight + 20}
-						xmlns="http://www.w3.org/2000/svg"
-						viewBox={`0 0 ${arrowWidth} 120`}
-					>
-						<line
-							x1={arrowWidth * 0.5}
-							y1="0"
-							x2={arrowWidth * 0.5}
-							y2={arrowHeight}
-							stroke="black"
-							stroke-linecap="round"
-						/>
-						<polyline
-							fill="none"
-							stroke="black"
-							points={`${arrowWidth * 0.5 - arrowHeadWidth * 0.5},${arrowHeadWidth * 0.5} ${arrowWidth * 0.5},0 ${arrowWidth * 0.5 + arrowHeadWidth * 0.5},${arrowHeadWidth * 0.5}`}
-							stroke-linecap="round"
-						/>
-						<text x={arrowWidth * 0.5} y={arrowHeight + 20} text-anchor="middle">Push button</text>
-					</svg>
-				</div>
+		<div class="device-illustration__button">
+			<div class="device-illustration__button-arrow">
+				<svg
+					width={arrowWidth}
+					height={arrowHeight + 20}
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox={`0 0 ${arrowWidth} 120`}
+				>
+					<line
+						x1={arrowWidth * 0.5}
+						y1="0"
+						x2={arrowWidth * 0.5}
+						y2={arrowHeight}
+						stroke="black"
+						stroke-linecap="round"
+					/>
+					<polyline
+						fill="none"
+						stroke="black"
+						points={`${arrowWidth * 0.5 - arrowHeadWidth * 0.5},${arrowHeadWidth * 0.5} ${arrowWidth * 0.5},0 ${arrowWidth * 0.5 + arrowHeadWidth * 0.5},${arrowHeadWidth * 0.5}`}
+						stroke-linecap="round"
+					/>
+					<text x={arrowWidth * 0.5} y={arrowHeight + 20} text-anchor="middle">Push button</text>
+				</svg>
 			</div>
-		{/if}
+		</div>
 
 		<img class="device-illustration__device" src="/images/device.png" alt="" />
 	</div>
@@ -94,11 +91,13 @@
 	.device-illustration__usb,
 	.device-illustration__jack,
 	.device-illustration__button {
-		top: 83%;
+		opacity: 0;
+		top: 133%;
+		pointer-events: none;
 		left: 50%;
 		transition:
-			top 1s ease-in-out,
-			opacity 1s ease-in-out;
+			top 0.6s ease-in-out,
+			opacity 0.6s ease-in-out;
 	}
 
 	.device-illustration__jack {
@@ -109,17 +108,25 @@
 		left: 51%;
 	}
 
-	.device-illustration--start .device-illustration__usb,
-	.device-illustration--start .device-illustration__jack,
-	.device-illustration--start .device-illustration__button {
-		opacity: 0;
-		top: 133%;
+	.device-illustration--usb .device-illustration__usb {
+		top: 83%;
+		left: 51%;
+		opacity: 1;
+	}
+
+	.device-illustration__jack {
+		left: 50%;
+	}
+
+	.device-illustration--jack .device-illustration__jack {
+		top: 83%;
+		left: 50%;
+		opacity: 1;
 	}
 
 	.device-illustration__button {
-		position: absolute;
-		top: 79%;
 		left: 30%;
+		position: absolute;
 		transform: translate(-50%, -50%);
 		display: flex;
 		flex-direction: column;
@@ -131,5 +138,11 @@
 		left: 50%;
 		transform: translate(-50%, -50%);
 		height: 10rem;
+	}
+
+	.device-illustration--button .device-illustration__button {
+		top: 79%;
+		left: 30%;
+		opacity: 1;
 	}
 </style>
