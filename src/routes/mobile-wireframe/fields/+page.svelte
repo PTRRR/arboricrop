@@ -4,6 +4,7 @@
 	import { useDevices, useFields, useReturnButton } from '../../../stores';
 	import { getDevicesByFieldId } from '../../../utils/dummyData';
 	import Section from '../../../components/wireframe/Section.svelte';
+	import Spacer from '../../../components/Spacer.svelte';
 
 	let returnButton = useReturnButton();
 	returnButton.set({
@@ -33,11 +34,19 @@
 			</div>
 		{:else}
 			No fields
+			<Spacer />
+			<Button href="/mobile-wireframe/fields/new">Create new field</Button>
 		{/if}
 	</Section>
 
 	<Section title="All devices:">
-		<Button href="/mobile-wireframe/devices">See all devices</Button>
+		{#if $devices.length === 0}
+			<span>No devices</span>
+			<Spacer />
+			<Button href="/mobile-wireframe/devices/pairing">Pair new device</Button>
+		{:else}
+			<Button href="/mobile-wireframe/devices">See all devices</Button>
+		{/if}
 	</Section>
 </div>
 

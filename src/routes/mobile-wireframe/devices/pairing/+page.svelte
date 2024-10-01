@@ -10,6 +10,8 @@
 	import CenteredWrapper from '../../../../components/wireframe/CenteredWrapper.svelte';
 	import Separation from '../../../../components/Separation.svelte';
 	import { onMount } from 'svelte';
+	import Section from '../../../../components/wireframe/Section.svelte';
+	import Spacer from '../../../../components/Spacer.svelte';
 
 	const { setVisibility, reset, setUsb, setButton } = useDeviceIllustration();
 	const returnButton = useReturnButton();
@@ -37,64 +39,51 @@
 </script>
 
 <CenteredWrapper>
-	<div class="pairing__content">
-		{#if !$page.data.success}
-			<Separation title={`${currentPairingStrategy.label} pairing:`} />
-			<div class="pairing__image">
-				<Image
-					ratio={1}
-					placeholder="Comprehensive schema or tutorial explaining how to proceed"
-					onClick={() => {
-						goto(url.addQuery({ name: 'success', value: true }));
-						setTimeout(() => {
-							if ($page.data.deviceId) {
-								const url = createUrlBuilder(`/mobile-wireframe/devices/${$page.data.deviceId}`);
-								goto(url.resetQueries([{ name: 'connected', value: true }]));
-							} else {
-								goto(newDeviceUrl.resetQueries([{ name: 'connected', value: true }]));
-							}
-						}, 2000);
-					}}
-				/>
-				<span class="pairing__description">{currentPairingStrategy.description}</span>
-			</div>
+	{#if !$page.data.success}
+		<Section title={`${currentPairingStrategy.label} pairing:`}>
+			<Image
+				ratio={1}
+				placeholder="Comprehensive schema or tutorial explaining how to proceed"
+				onClick={() => {
+					goto(url.addQuery({ name: 'success', value: true }));
+					setTimeout(() => {
+						if ($page.data.deviceId) {
+							const url = createUrlBuilder(`/mobile-wireframe/devices/${$page.data.deviceId}`);
+							goto(url.resetQueries([{ name: 'connected', value: true }]));
+						} else {
+							goto(newDeviceUrl.resetQueries([{ name: 'connected', value: true }]));
+						}
+					}, 2000);
+				}}
+			/>
+			<Spacer />
+			<p class="pairing__description">
+				<span>{currentPairingStrategy.description}</span>
+			</p>
+			<Spacer />
 			<Dropdown label="Use other pairing strategy" items={strategyOptions}>
 				<Button slot="item" let:item href={url.addQuery({ name: 'strategy', value: item.value })}>
 					{item.label}
 				</Button>
 			</Dropdown>
-		{:else}
-			<div class="pairing__success">
-				<p>Pairing successful</p>
-				<span>Loading device metadata...</span>
-			</div>
-		{/if}
-	</div>
+		</Section>
+	{:else}
+		<div class="pairing__success">
+			<p>Pairing successful</p>
+			<span>Loading device metadata...</span>
+		</div>
+	{/if}
 </CenteredWrapper>
 
 <style>
-	.pairing__content {
-		width: 100%;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		gap: 2rem;
-	}
-
-	.pairing__image {
-		width: 100%;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		gap: 1rem;
-	}
-
 	.pairing__description {
 		color: var(--dark-gray);
-		max-width: 14rem;
 		text-align: center;
+	}
+
+	.pairing__description span {
+		display: inline-block;
+		max-width: 14rem;
 	}
 
 	.pairing__success {

@@ -4,6 +4,7 @@
 	import {
 		useDevices,
 		useFields,
+		useGettingStarted,
 		useNotifications,
 		useOrganisation,
 		useReturnButton,
@@ -13,13 +14,13 @@
 	import { getDevicesByFieldId } from '../../utils/dummyData';
 	import Section from '../../components/wireframe/Section.svelte';
 	import Info from '../../components/Info.svelte';
-	import Portal from 'svelte-portal';
 
 	let returnButton = useReturnButton();
 	returnButton.set({
 		label: 'Arboricrop'
 	});
 
+	const { gettingStarted, setVisibility } = useGettingStarted();
 	const { devices } = useDevices();
 	const notifications = useNotifications();
 	const { fields } = useFields();
@@ -37,7 +38,7 @@
 		}[];
 	};
 
-	const sections: Section[] = [
+	$: sections = [
 		{
 			title: 'General informations:',
 			infos: [
@@ -59,20 +60,22 @@
 				}
 			]
 		},
-		{
-			title: 'Getting Started',
-			cards: [
-				{
-					title: 'Devices Installation',
-					href: '/mobile-wireframe/getting-started'
-				},
-				{
-					title: 'Throubleshooting',
-					href: '/mobile-wireframe/getting-started'
+		$gettingStarted.visible
+			? {
+					title: 'Getting Started',
+					cards: [
+						{
+							title: 'Devices Installation',
+							href: '/mobile-wireframe/getting-started'
+						},
+						{
+							title: 'Throubleshooting',
+							href: '/mobile-wireframe/getting-started'
+						}
+					],
+					buttons: [{ label: 'Hide', onClick: () => setVisibility(false) }]
 				}
-			],
-			buttons: [{ label: 'Hide' }]
-		},
+			: undefined,
 		$fields.length > 0
 			? {
 					title: 'Notifications & Alerts',
@@ -98,7 +101,7 @@
 				href: `/mobile-wireframe/fields/${it.id}`
 			}))
 		}
-	].filter(filterNotEmpty);
+	].filter(filterNotEmpty) as Section[];
 </script>
 
 <div class="home">
@@ -125,7 +128,12 @@
 				{/each}
 
 				{#if section.title === 'Recent Fields'}
-					<Button href="/mobile-wireframe/fields">See all fields</Button>
+					{#if $fields.length === 0}
+						<span>No fields</span>
+						<Button href="/mobile-wireframe/fields/new">Create new field</Button>
+					{:else}
+						<Button href="/mobile-wireframe/fields">See all fields</Button>
+					{/if}
 				{/if}
 			</div>
 		</Section>

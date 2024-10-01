@@ -43,6 +43,19 @@ export const useReadable = <T>(name: string, value: T) => useSharedStore(name, r
 
 // Stores
 
+export const useGettingStarted = () => {
+	const gettingStarted = useWritable<{ visible: boolean }>(
+		'getting-started',
+		{ visible: true },
+		true
+	);
+
+	return {
+		gettingStarted,
+		setVisibility: (visible: boolean) =>
+			gettingStarted.update((gettingStarted) => ({ ...gettingStarted, visible }))
+	};
+};
 export const useDevices = () => {
 	const devices = useWritable<Device[]>('devices', [], true);
 
