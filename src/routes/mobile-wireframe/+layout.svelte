@@ -10,6 +10,7 @@
 	import {
 		useBlurApp,
 		useComments,
+		useDeviceIllustration,
 		useDevices,
 		useFields,
 		useGeoJSONFeatures,
@@ -23,6 +24,8 @@
 	import { strategies } from '../../utils/pairing';
 	import { iphone } from '../../utils/phones';
 	import type { LayoutData } from './$types';
+	import Portal from 'svelte-portal';
+	import DeviceIllustration from '../../components/DeviceIllustration.svelte';
 
 	export let data: LayoutData;
 
@@ -41,6 +44,7 @@
 	];
 
 	const returnButton = useReturnButton();
+	const { deviceIllustration } = useDeviceIllustration();
 	useOrganisation();
 	useScrollLock();
 	useNetwork();
@@ -107,6 +111,16 @@
 	</div>
 </Mobile>
 
+<Portal target="#mobile-portal">
+	<div class="portal" class:portal--visible={$deviceIllustration.show}>
+		<DeviceIllustration
+			usb={$deviceIllustration.usb}
+			jack={$deviceIllustration.jack}
+			button={$deviceIllustration.button}
+		/>
+	</div>
+</Portal>
+
 <style>
 	.mobile-wireframe {
 		width: 100%;
@@ -134,6 +148,21 @@
 	.mobile-wireframe--blur {
 		opacity: 0.2;
 		pointer-events: none;
+	}
+
+	.portal {
+		opacity: 0;
+		pointer-events: none;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		transition: opacity 0.3s ease-in-out;
+	}
+
+	.portal--visible {
+		opacity: 1;
 	}
 
 	@media screen and (max-width: 700px) {

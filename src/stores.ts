@@ -177,3 +177,30 @@ export const useAlarms = () => {
 		getAlarmsByFieldId: (fieldId: string) => get(alarms).filter((it) => it.fieldId === fieldId)
 	};
 };
+export const useDeviceIllustration = () => {
+	const deviceIllustration = useWritable<{
+		show: boolean;
+		usb: boolean;
+		jack: boolean;
+		button: boolean;
+	}>('device-illustration', {
+		show: false,
+		usb: false,
+		jack: false,
+		button: false
+	});
+
+	return {
+		deviceIllustration,
+		setVisibility: (visible: boolean) =>
+			deviceIllustration.update((deviceIllustration) => ({ ...deviceIllustration, show: visible })),
+		setUsb: (usb: boolean) =>
+			deviceIllustration.update((deviceIllustration) => ({ ...deviceIllustration, usb })),
+		setJack: (jack: boolean) =>
+			deviceIllustration.update((deviceIllustration) => ({ ...deviceIllustration, jack })),
+		setButton: (button: boolean) =>
+			deviceIllustration.update((deviceIllustration) => ({ ...deviceIllustration, button })),
+		reset: () =>
+			deviceIllustration.update(() => ({ show: false, usb: false, jack: false, button: false }))
+	};
+};

@@ -10,12 +10,18 @@
 	import DeviceGeneralSettings from '../../../../components/wireframe/DeviceGeneralSettings.svelte';
 	import SaveSection from '../../../../components/wireframe/SaveSection.svelte';
 	import Section from '../../../../components/wireframe/Section.svelte';
-	import { useDevices, useFields, useReturnButton } from '../../../../stores';
+	import {
+		useDeviceIllustration,
+		useDevices,
+		useFields,
+		useReturnButton
+	} from '../../../../stores';
 	import { getCss } from '../../../../utils/css';
 	import { swissBounds } from '../../../../utils/dummyData';
 	import type { Device } from '../../../../utils/types';
-	import DeviceIllustration from '../../../../components/DeviceIllustration.svelte';
+	import { onMount } from 'svelte';
 
+	const { setVisibility, reset, setUsb, setJack } = useDeviceIllustration();
 	const { devices } = useDevices();
 	const { fields } = useFields();
 	const returnButton = useReturnButton();
@@ -44,6 +50,20 @@
 		};
 		devices.set(newDevices);
 	};
+
+	$: {
+		if ($page.data.connected) {
+			setVisibility(true);
+			setUsb(true);
+			setJack(device?.status === 'active');
+		} else {
+			reset();
+		}
+	}
+
+	onMount(() => {
+		return () => reset();
+	});
 </script>
 
 {#if device}
@@ -206,14 +226,6 @@
 	<span>Device unknown</span>
 {/if}
 
-<Portal target="#mobile-portal">
-	{#if $page.data.connected}
-		<div class="portal">
-			<DeviceIllustration animate={false} usb={true} jack={device?.status === 'active'} />
-		</div>
-	{/if}
-</Portal>
-
 <!-- <Device id={$page.params.id} /> -->
 
 <style>
@@ -226,13 +238,5 @@
 		outline: none;
 		max-width: 100%;
 		resize: vertical;
-	}
-
-	.portal {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
 	}
 </style>

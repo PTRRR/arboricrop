@@ -3,10 +3,12 @@
 	import DeviceMetadataV2 from '../../../../components/wireframe/DeviceGeneralSettings.svelte';
 	import SaveSection from '../../../../components/wireframe/SaveSection.svelte';
 	import Section from '../../../../components/wireframe/Section.svelte';
-	import { useDevices, useReturnButton } from '../../../../stores';
+	import { useDeviceIllustration, useDevices, useReturnButton } from '../../../../stores';
 	import type { Device } from '../../../../utils/types';
 	import { goto } from '$app/navigation';
+	import { onMount } from 'svelte';
 
+	const { setVisibility, reset, setUsb } = useDeviceIllustration();
 	const { devices } = useDevices();
 	const returnButton = useReturnButton();
 
@@ -24,6 +26,12 @@
 		fieldId: undefined,
 		battery: Math.floor(Math.random() * 50 + 50)
 	};
+
+	onMount(() => {
+		setVisibility(true);
+		setUsb(true);
+		return () => reset();
+	});
 </script>
 
 <Section title="Device:">

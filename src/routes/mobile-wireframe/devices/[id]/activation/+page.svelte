@@ -14,16 +14,21 @@
 	import Image from '../../../../../components/wireframe/Image.svelte';
 	import SaveSection from '../../../../../components/wireframe/SaveSection.svelte';
 	import Section from '../../../../../components/wireframe/Section.svelte';
-	import { useDevices, useFields, useReturnButton } from '../../../../../stores';
+	import {
+		useDeviceIllustration,
+		useDevices,
+		useFields,
+		useReturnButton
+	} from '../../../../../stores';
 	import { swissBounds } from '../../../../../utils/dummyData';
 	import type { Device, Field, MediaType } from '../../../../../utils/types';
 	import { createUrlBuilder } from '../../../../../utils/urls';
 	import Separation from '../../../../../components/Separation.svelte';
-	import DeviceIllustration from '../../../../../components/DeviceIllustration.svelte';
-	import Portal from 'svelte-portal';
+	import { onMount } from 'svelte';
 
 	type Step = { label: string; checked: boolean };
 
+	const { setVisibility, reset, setUsb, setJack } = useDeviceIllustration();
 	const { devices } = useDevices();
 	const returnButton = useReturnButton();
 	const { fields } = useFields();
@@ -79,6 +84,13 @@
 		};
 		devices.set(newDevices);
 	};
+
+	onMount(() => {
+		setVisibility(true);
+		setUsb(true);
+		setJack(true);
+		return () => reset();
+	});
 </script>
 
 <CenteredWrapper>
@@ -289,12 +301,6 @@
 	{/if}
 </CenteredWrapper>
 
-<Portal target="#mobile-portal">
-	<div class="portal">
-		<DeviceIllustration usb={true} jack={true} />
-	</div>
-</Portal>
-
 <style>
 	textarea {
 		font-family: inherit;
@@ -305,13 +311,5 @@
 		outline: none;
 		max-width: 100%;
 		resize: vertical;
-	}
-
-	.portal {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
 	}
 </style>
