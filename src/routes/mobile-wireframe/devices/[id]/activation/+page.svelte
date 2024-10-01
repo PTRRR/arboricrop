@@ -34,9 +34,8 @@
 	const { fields } = useFields();
 	const url = createUrlBuilder();
 	const steps: Step[] = [
-		{ label: 'Connect probes', checked: false },
 		{ label: 'Install device', checked: false },
-		{ label: 'Install sensors', checked: false },
+		{ label: 'Connect probes', checked: false },
 		{ label: 'Assign field', checked: false },
 		{ label: 'Set location', checked: false },
 		{ label: 'Add metadata', checked: false }
@@ -85,10 +84,13 @@
 		devices.set(newDevices);
 	};
 
+	$: {
+		setJack(stepIndex > 0);
+	}
+
 	onMount(() => {
 		setVisibility(true);
 		setUsb(true);
-		setJack(true);
 		return () => reset();
 	});
 </script>
@@ -139,19 +141,6 @@
 			]}
 		>
 			{#if stepIndex === 0}
-				<Image ratio={1} placeholder="Schema showing how to plug the probes into the device" />
-				<Spacer size="calc(var(--gap) * 3)" />
-				<Separation title="Checks:" buttons={[{ label: 'Show live data' }]} />
-				<Checklist
-					points={[
-						{ label: 'Plug the jack into the device', checked: true },
-						{ label: 'Wait for probe response', checked: true }
-					]}
-				/>
-				<Spacer size="calc(var(--gap) * 3)" />
-				<Separation title="Review & confirm:" />
-				<Button href={nextHref}>Next step</Button>
-			{:else if stepIndex === 1}
 				<Image ratio={1} placeholder="Schema showing how to attach the device on a plant" />
 				<Spacer size="calc(var(--gap) * 3)" />
 				<Separation title="Checks:" buttons={[{ label: 'Show live data' }]} />
@@ -164,20 +153,24 @@
 				<Spacer size="calc(var(--gap) * 3)" />
 				<Separation title="Review & confirm:" />
 				<Button href={nextHref}>Next step</Button>
-			{:else if stepIndex === 2}
-				<Image ratio={1} placeholder="Schema showing how to install the probes on a plant" />
+			{:else if stepIndex === 1}
+				<Image
+					ratio={1}
+					placeholder="Schema showing how to plug the jack into the device and install the probes on a plant"
+				/>
 				<Spacer size="calc(var(--gap) * 3)" />
 				<Separation title="Checks:" buttons={[{ label: 'Show live data' }]} />
 				<Checklist
 					points={[
-						{ label: 'Wait for plant signal', checked: true },
-						{ label: 'Signal is clean', checked: true }
+						{ label: 'Plug the jack into the device', checked: true },
+						{ label: 'Install probes', checked: true },
+						{ label: 'Wait for signal', checked: true }
 					]}
 				/>
 				<Spacer size="calc(var(--gap) * 3)" />
 				<Separation title="Review & confirm:" />
 				<Button href={nextHref}>Next step</Button>
-			{:else if stepIndex === 3}
+			{:else if stepIndex === 2}
 				<Info label="Selected field:" value={field?.name || '-'} />
 				<Spacer />
 				<Button href={url.addQuery({ name: 'selectField', value: true })}>
@@ -186,7 +179,7 @@
 				<Spacer size="calc(var(--gap) * 3)" />
 				<Separation title="Review & confirm:" />
 				<Button href={nextHref} disabled={!field}>Next step</Button>
-			{:else if stepIndex === 4}
+			{:else if stepIndex === 3}
 				<MapV2
 					bind:this={map}
 					maxBounds={swissBounds}
@@ -215,7 +208,7 @@
 				<Spacer size="calc(var(--gap) * 3)" />
 				<Separation title="Review & confirm:" />
 				<Button href={nextHref} disabled={!device?.location}>Next step</Button>
-			{:else if stepIndex === 5 && device}
+			{:else if stepIndex === 4 && device}
 				<Info label="Note:" />
 				<Spacer />
 
