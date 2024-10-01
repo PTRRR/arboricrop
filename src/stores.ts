@@ -43,6 +43,13 @@ export const useReadable = <T>(name: string, value: T) => useSharedStore(name, r
 
 // Stores
 
+export const useShowComments = () => {
+	const showComments = useWritable('show-comments', false);
+	return {
+		showComments
+	};
+};
+
 export const useGettingStarted = () => {
 	const gettingStarted = useWritable<{ visible: boolean }>(
 		'getting-started',

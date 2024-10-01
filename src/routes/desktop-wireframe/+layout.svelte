@@ -5,23 +5,41 @@
 		useInvitedUsers,
 		useIsOrganisation,
 		useOrganisationName,
-		useProfile
+		useProfile,
+		useShowComments
 	} from '../../stores';
 	import type { LayoutData } from './$types';
+	import { onMount } from 'svelte';
 
 	export let data: LayoutData;
+
+	const { showComments } = useShowComments();
 
 	useOrganisationName();
 	useIsOrganisation();
 	useProfile();
 	useInvitedUsers();
+
+	onMount(() => {
+		const keyDownHandler = (event: KeyboardEvent) => {
+			if (event.key === 'c') {
+				$showComments = !$showComments;
+			}
+		};
+
+		window.addEventListener('keydown', keyDownHandler);
+
+		return () => {
+			window.removeEventListener('keydown', keyDownHandler);
+		};
+	});
 </script>
 
-<!-- {#if data.projectId}
+{#if data.projectId && $showComments}
 	<div class="comments">
 		<Comments projectId={data.projectId} />
 	</div>
-{/if} -->
+{/if}
 
 <div class="layout">
 	<MainMenu />

@@ -20,6 +20,7 @@
 		useOrganisation,
 		useReturnButton,
 		useScrollLock,
+		useShowComments,
 		useUserName
 	} from '../../stores';
 	import { strategies } from '../../utils/pairing';
@@ -27,6 +28,7 @@
 	import type { LayoutData } from './$types';
 	import Portal from 'svelte-portal';
 	import DeviceIllustration from '../../components/DeviceIllustration.svelte';
+	import { onMount } from 'svelte';
 
 	export let data: LayoutData;
 
@@ -46,6 +48,7 @@
 
 	const returnButton = useReturnButton();
 	const { deviceIllustration } = useDeviceIllustration();
+	const { showComments } = useShowComments();
 	useOrganisation();
 	useScrollLock();
 	useNetwork();
@@ -63,13 +66,27 @@
 			blurApp.set(false);
 		}
 	});
+
+	onMount(() => {
+		const keyDownHandler = (event: KeyboardEvent) => {
+			if (event.key === 'c') {
+				$showComments = !$showComments;
+			}
+		};
+
+		window.addEventListener('keydown', keyDownHandler);
+
+		return () => {
+			window.removeEventListener('keydown', keyDownHandler);
+		};
+	});
 </script>
 
 <svelte:head>
 	<title>Arboricrop - Mobile Wireframe</title>
 </svelte:head>
 
-{#if data.projectId}
+{#if data.projectId && $showComments}
 	<div class="comments">
 		<Comments projectId={data.projectId} />
 	</div>
