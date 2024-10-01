@@ -119,6 +119,9 @@
 			usb={$deviceIllustration.usb}
 			jack={$deviceIllustration.jack}
 			button={$deviceIllustration.button}
+			ledBlink={$deviceIllustration.blink}
+			ledOn={$deviceIllustration.on}
+			ledColor={$deviceIllustration.color}
 		/>
 	</div>
 </Portal>

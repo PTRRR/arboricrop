@@ -8,12 +8,11 @@
 	import { goto } from '$app/navigation';
 	import { createUrlBuilder } from '../../../../utils/urls';
 	import CenteredWrapper from '../../../../components/wireframe/CenteredWrapper.svelte';
-	import Separation from '../../../../components/Separation.svelte';
 	import { onMount } from 'svelte';
 	import Section from '../../../../components/wireframe/Section.svelte';
 	import Spacer from '../../../../components/Spacer.svelte';
 
-	const { setVisibility, reset, setUsb, setButton } = useDeviceIllustration();
+	const { setVisibility, reset, setUsb, setButton, setBlink, setColor } = useDeviceIllustration();
 	const returnButton = useReturnButton();
 	returnButton.set({
 		label: 'Pair device',
@@ -34,6 +33,8 @@
 
 	onMount(() => {
 		setVisibility(true);
+		setBlink(true);
+		setColor('rgb(133, 165, 242)');
 		return () => reset();
 	});
 </script>

@@ -28,7 +28,7 @@
 
 	type Step = { label: string; checked: boolean };
 
-	const { setVisibility, reset, setUsb, setJack } = useDeviceIllustration();
+	const { setVisibility, reset, setUsb, setJack, setBlink } = useDeviceIllustration();
 	const { devices } = useDevices();
 	const returnButton = useReturnButton();
 	const { fields } = useFields();
@@ -91,6 +91,7 @@
 	onMount(() => {
 		setVisibility(true);
 		setUsb(true);
+		setBlink(true);
 		return () => reset();
 	});
 </script>

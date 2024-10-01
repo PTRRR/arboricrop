@@ -1,11 +1,15 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { getCss } from '../utils/css';
 
 	export let animate: boolean = true;
 	export let led: boolean = true;
 	export let usb: boolean = false;
 	export let jack: boolean = false;
 	export let button: boolean = false;
+	export let ledBlink: boolean = false;
+	export let ledOn: boolean = false;
+	export let ledColor: string | undefined = undefined;
 
 	export let mounted: boolean = !animate;
 	const arrowWidth = 80;
@@ -29,6 +33,9 @@
 	class:device-illustration--usb={usb && mounted}
 	class:device-illustration--jack={jack && mounted}
 	class:device-illustration--button={button && mounted}
+	class:device-illustration--led-blink={ledBlink}
+	class:device-illustration--led-on={ledOn}
+	style={getCss({ '--led-color': ledColor || 'rgb(191, 242, 133)' })}
 >
 	<div class="device-illustration__inner">
 		{#if led}
@@ -159,7 +166,7 @@
 
 	@keyframes blink {
 		from {
-			background-color: rgb(191, 242, 133);
+			background-color: var(--led-color);
 		}
 		to {
 			background-color: rgb(255, 255, 255);
@@ -174,12 +181,21 @@
 		height: 3svh;
 		transform: translate(-50%, -50%);
 		border-radius: 100%;
-		filter: blur(5px);
+		filter: blur(4px);
 		mix-blend-mode: multiply;
-		background-color: rgb(191, 242, 133);
+		background-color: var(--led-color);
 		z-index: 10;
+		opacity: 0;
+	}
+
+	.device-illustration--led-blink .device-illustration__led {
+		opacity: 1;
 		animation-name: blink;
 		animation-duration: 1s;
 		animation-iteration-count: infinite;
+	}
+
+	.device-illustration--led-on .device-illustration__led {
+		opacity: 1;
 	}
 </style>

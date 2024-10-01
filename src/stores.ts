@@ -196,11 +196,17 @@ export const useDeviceIllustration = () => {
 		usb: boolean;
 		jack: boolean;
 		button: boolean;
+		blink: boolean;
+		on: boolean;
+		color?: string;
 	}>('device-illustration', {
 		show: false,
 		usb: false,
 		jack: false,
-		button: false
+		button: false,
+		on: false,
+		blink: false,
+		color: undefined
 	});
 
 	return {
@@ -213,7 +219,21 @@ export const useDeviceIllustration = () => {
 			deviceIllustration.update((deviceIllustration) => ({ ...deviceIllustration, jack })),
 		setButton: (button: boolean) =>
 			deviceIllustration.update((deviceIllustration) => ({ ...deviceIllustration, button })),
+		setColor: (color: string | undefined) =>
+			deviceIllustration.update((deviceIllustration) => ({ ...deviceIllustration, color })),
+		setOn: (on: boolean) =>
+			deviceIllustration.update((deviceIllustration) => ({ ...deviceIllustration, on })),
+		setBlink: (blink: boolean) =>
+			deviceIllustration.update((deviceIllustration) => ({ ...deviceIllustration, blink })),
 		reset: () =>
-			deviceIllustration.update(() => ({ show: false, usb: false, jack: false, button: false }))
+			deviceIllustration.update(() => ({
+				show: false,
+				usb: false,
+				jack: false,
+				button: false,
+				on: false,
+				blink: false,
+				color: undefined
+			}))
 	};
 };

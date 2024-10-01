@@ -8,7 +8,7 @@
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 
-	const { setVisibility, reset, setUsb } = useDeviceIllustration();
+	const { setVisibility, reset, setUsb, setBlink } = useDeviceIllustration();
 	const { devices } = useDevices();
 	const returnButton = useReturnButton();
 
@@ -30,6 +30,7 @@
 	onMount(() => {
 		setVisibility(true);
 		setUsb(true);
+		setBlink(true);
 		return () => reset();
 	});
 </script>

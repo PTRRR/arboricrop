@@ -21,7 +21,7 @@
 	import type { Device } from '../../../../utils/types';
 	import { onMount } from 'svelte';
 
-	const { setVisibility, reset, setUsb, setJack } = useDeviceIllustration();
+	const { setVisibility, reset, setUsb, setJack, setBlink, setOn } = useDeviceIllustration();
 	const { devices } = useDevices();
 	const { fields } = useFields();
 	const returnButton = useReturnButton();
@@ -55,6 +55,8 @@
 		if ($page.data.connected) {
 			setVisibility(true);
 			setUsb(true);
+			setBlink(device?.status !== 'active');
+			setOn(device?.status === 'active');
 			setJack(device?.status === 'active');
 		} else {
 			reset();
