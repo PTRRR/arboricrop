@@ -117,7 +117,10 @@
 		<Spacer />
 		<Info label={`User mode: ${$userMode}`} />
 		<Spacer />
-		<Checkbox onChange={(checked) => setUserMode(checked ? 'advanced' : 'normal')} />
+		<Checkbox
+			initialChecked={$userMode === 'advanced'}
+			onChange={(checked) => setUserMode(checked ? 'advanced' : 'normal')}
+		/>
 	</Section>
 
 	<Section title="Confirm changes:">

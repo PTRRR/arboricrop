@@ -5,13 +5,18 @@
 	interface Props {
 		size?: string;
 		padding?: string;
+		initialChecked?: boolean;
 		onChange?: (checked: boolean) => void;
 	}
 
 	let props: Props = $props();
 </script>
 
-<Checkbox.Root class="checkbox" onCheckedChange={(checked) => props.onChange?.(checked === true)}>
+<Checkbox.Root
+	class="checkbox"
+	checked={props.initialChecked}
+	onCheckedChange={(checked) => props.onChange?.(checked === true)}
+>
 	<Checkbox.Indicator class="checkbox__indicator" let:isChecked>
 		<div
 			class="checkbox__content"
