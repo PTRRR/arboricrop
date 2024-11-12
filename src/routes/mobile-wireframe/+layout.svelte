@@ -150,11 +150,11 @@
 
 <button
 	class="clear-local-storage"
-	on:click={() => {
+	on:click={async () => {
 		if (typeof Storage !== 'undefined') {
-			localStorage.clear();
 			// Reload the page
-			goto('/mobile-wireframe');
+			await goto('/mobile-wireframe');
+			localStorage.clear();
 			window.location.reload();
 		} else {
 			console.log('localStorage is not supported in this browser');
