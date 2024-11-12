@@ -32,6 +32,11 @@
 	import DeviceIllustration from '../../components/DeviceIllustration.svelte';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
+	import Image from '../../components/wireframe/Image.svelte';
+	import Spacer from '../../components/Spacer.svelte';
+	import Pagination from '../../components/wireframe/Pagination.svelte';
+	import CenteredWrapper from '../../components/wireframe/CenteredWrapper.svelte';
+	import Section from '../../components/wireframe/Section.svelte';
 
 	export let data: LayoutData;
 
@@ -52,6 +57,7 @@
 	const returnButton = useReturnButton();
 	const { deviceIllustration } = useDeviceIllustration();
 	const { showComments } = useShowComments();
+	const { gettingStarted } = useGettingStarted();
 	useOrganisation();
 	useScrollLock();
 	useNetwork();
@@ -61,7 +67,6 @@
 	useUserName();
 	useComments();
 	useGeoJSONFeatures();
-	useGettingStarted();
 	useUserMode();
 	useLoRaConfigurations();
 	let blurApp = useBlurApp();
@@ -115,7 +120,28 @@
 			<Button slot="action" let:action href={action.href}>{action.label}</Button>
 		</Menu>
 		<div class="mobile-wireframe__app" class:mobile-wireframe--blur={$blurApp}>
-			<slot />
+			{#if $gettingStarted.visible}
+				<CenteredWrapper>
+					<Section title="Getting started:">
+						<div class="getting-started">
+							<Spacer />
+							<Spacer />
+							<Image ratio={1} placeholder="Slides / animations" />
+							<Spacer />
+							<Pagination />
+							<Spacer />
+							<Spacer />
+							<p>Description...</p>
+						</div>
+						<Spacer />
+						<Spacer />
+						<Spacer />
+						<Button on:click={() => ($gettingStarted.visible = false)}>Done</Button>
+					</Section>
+				</CenteredWrapper>
+			{:else}
+				<slot />
+			{/if}
 		</div>
 		{#if $page.route.id !== '/mobile-wireframe/settings'}
 			<FooterMenu actions={footerActions}>
@@ -210,6 +236,15 @@
 		position: fixed;
 		bottom: 1rem;
 		right: 1rem;
+	}
+
+	.getting-started {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		text-align: center;
 	}
 
 	@media screen and (max-width: 700px) {

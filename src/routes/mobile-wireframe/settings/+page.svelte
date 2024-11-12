@@ -98,11 +98,11 @@
 		</Section>
 	{/if}
 
-	<Section title="Notification settings:">
+	<!-- <Section title="Notification settings:">
 		<Info label="Status:" value="unmuted" />
 		<Spacer />
 		<Button>Mute notifications</Button>
-	</Section>
+	</Section> -->
 
 	<Section title="Advanced settings:">
 		<Info label="LoRa configurations:" />
