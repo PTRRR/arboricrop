@@ -45,19 +45,6 @@
 			{/if}
 		</div>
 	</Section>
-
-	<!-- {#if $gettingStarted.visible}
-		<Section title="Getting Started">
-			<div class="home__section">
-				<Card href="/mobile-wireframe/getting-started">
-					<h1 slot="title">Devices Installation</h1>
-				</Card>
-				<Card href="/mobile-wireframe/getting-started">
-					<h1 slot="title">Throubleshooting</h1>
-				</Card>
-			</div>
-		</Section>
-	{/if} -->
 </div>
 
 <style>
