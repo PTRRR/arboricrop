@@ -2,9 +2,9 @@
 	<h1>Arboricrop UX/UI Designs</h1>
 
 	<div class="links">
-		<a href="/mobile-wireframe">Mobile Wireframe</a>
-		<a href="/desktop-wireframe">Desktop Wireframe</a>
-		<a href="/map-system">Map System</a>
+		<a href="/mobile-wireframe">Provisioning App Wireframe</a>
+		<a href="/desktop-wireframe">Dashboard Wireframe</a>
+		<a href="/map-system">Map System [research]</a>
 	</div>
 </div>
 

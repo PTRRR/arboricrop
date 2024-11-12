@@ -31,6 +31,7 @@
 	import Portal from 'svelte-portal';
 	import DeviceIllustration from '../../components/DeviceIllustration.svelte';
 	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
 
 	export let data: LayoutData;
 
@@ -147,6 +148,20 @@
 	</div>
 </Portal>
 
+<button
+	class="clear-local-storage"
+	on:click={() => {
+		if (typeof Storage !== 'undefined') {
+			localStorage.clear();
+			// Reload the page
+			goto('/mobile-wireframe');
+			window.location.reload();
+		} else {
+			console.log('localStorage is not supported in this browser');
+		}
+	}}>Reset DB</button
+>
+
 <style>
 	.mobile-wireframe {
 		width: 100%;
@@ -191,12 +206,22 @@
 		opacity: 1;
 	}
 
+	.clear-local-storage {
+		position: fixed;
+		bottom: 1rem;
+		right: 1rem;
+	}
+
 	@media screen and (max-width: 700px) {
 		.mobile-wireframe {
 			min-height: 100svh;
 		}
 
 		.comments {
+			display: none;
+		}
+
+		.clear-local-storage {
 			display: none;
 		}
 	}
