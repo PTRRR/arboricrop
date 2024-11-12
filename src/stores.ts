@@ -2,8 +2,17 @@ import { get, readable, writable, type Writable } from 'svelte/store';
 import { getContext, hasContext, setContext } from 'svelte';
 import { getDevices, getNotifications, loraNetworks, features } from './utils/dummyData';
 import type { comment } from './db/schema';
-import type { Alarm, Device, Field, GeoJSONFeature, Metric, PartialBy } from './utils/types';
+import type {
+	Alarm,
+	Device,
+	Field,
+	GeoJSONFeature,
+	LoRaConfiguration,
+	Metric,
+	PartialBy
+} from './utils/types';
 import { filterByUniqueAttribute, filterDuplicate } from './utils/arrays';
+import { createId } from '@paralleldrive/cuid2';
 
 const STORE_VERSION = 'v15';
 const dummyDevices = getDevices(30);
@@ -242,5 +251,84 @@ export const useDeviceIllustration = () => {
 				blink: false,
 				color: undefined
 			}))
+	};
+};
+
+export const useUserMode = () => {
+	const userMode = useWritable<'advanced' | 'normal'>('user-mode', 'normal', true);
+
+	return {
+		userMode,
+		setUserMode: (mode: 'advanced' | 'normal') => userMode.update(() => mode)
+	};
+};
+
+export const useLoRaConfigurations = () => {
+	const defaultLoRaConfigurations: (LoRaConfiguration & { id: string })[] = [
+		{
+			id: createId(),
+			name: 'TTN Switzerland',
+			frequency: 868100000,
+			bandwidth: 125000,
+			spreadingFactor: 7,
+			codingRate: 5,
+			deviceEui: '0011223344556677',
+			appEui: '0123456789ABCDEF',
+			appKey: '00112233445566778899AABBCCDDEEFF'
+		},
+		{
+			id: createId(),
+			name: 'TTN Switzerland Long Range',
+			frequency: 868100000,
+			bandwidth: 125000,
+			spreadingFactor: 12,
+			codingRate: 8,
+			deviceEui: '1122334455667788',
+			appEui: 'FEDCBA9876543210',
+			appKey: 'FFEEDDCCBBAA99887766554433221100'
+		}
+	];
+
+	const loRaConfigurations = useWritable<(LoRaConfiguration & { id: string })[]>(
+		'lora-configurations',
+		defaultLoRaConfigurations,
+		true
+	);
+
+	const addConfiguration = (configuration: LoRaConfiguration) => {
+		loRaConfigurations.update((configurations) => [
+			...configurations,
+			{ ...configuration, id: createId() }
+		]);
+	};
+
+	const removeConfiguration = (configurationId: string) => {
+		loRaConfigurations.update((configurations) =>
+			configurations.filter((it) => it.id !== configurationId)
+		);
+	};
+
+	const updateConfiguration = (configuration: LoRaConfiguration & { id: string }) => {
+		loRaConfigurations.update((configurations) => {
+			const configurationIndex = configurations.findIndex((it) => it.id === configuration.id);
+
+			if (configurationIndex > -1) {
+				const newConfigurations = [...configurations];
+				newConfigurations[configurationIndex] = {
+					...newConfigurations[configurationIndex],
+					...configuration
+				};
+				return newConfigurations;
+			}
+
+			return configurations;
+		});
+	};
+
+	return {
+		loRaConfigurations,
+		addConfiguration,
+		removeConfiguration,
+		updateConfiguration
 	};
 };

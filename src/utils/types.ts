@@ -81,3 +81,16 @@ export type Alarm = {
 	period?: number;
 	notificationStrategies?: string[];
 };
+
+export type LoRaConfiguration = {
+	name: string;
+	frequency: number;
+	bandwidth: number;
+	spreadingFactor: number;
+	codingRate?: number;
+	deviceEui: string;
+	appEui: string;
+	appKey: string;
+};
+
+export type LoRaConfigurationWithId = LoRaConfiguration & { id: string };

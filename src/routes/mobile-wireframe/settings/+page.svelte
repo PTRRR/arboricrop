@@ -8,14 +8,24 @@
 	import Info from '../../../components/Info.svelte';
 	import SaveSection from '../../../components/wireframe/SaveSection.svelte';
 	import Separation from '../../../components/Separation.svelte';
-	import { useNetwork, useOrganisation, useOrganisations, useReturnButton } from '../../../stores';
+	import {
+		useLoRaConfigurations,
+		useNetwork,
+		useOrganisation,
+		useOrganisations,
+		useReturnButton,
+		useUserMode
+	} from '../../../stores';
 	import { loraNetworks } from '../../../utils/dummyData';
 	import Section from '../../../components/wireframe/Section.svelte';
+	import Checkbox from '../../../components/Checkbox.svelte';
 
 	const usedNetwork = useNetwork();
 	const returnButton = useReturnButton();
 	const organisation = useOrganisation();
 	const { organisations } = useOrganisations();
+	const { userMode, setUserMode } = useUserMode();
+	const { loRaConfigurations } = useLoRaConfigurations();
 
 	let selectedNetwork = $usedNetwork;
 	let selectedOrganisation = $organisation;
@@ -94,10 +104,20 @@
 		<Button>Mute notifications</Button>
 	</Section>
 
-	<Section title="Notification settings:">
-		<Info label="Default gateway:" value={$usedNetwork} />
+	<Section title="Advanced settings:">
+		<Info label="LoRa configurations:" />
 		<Spacer />
-		<Button href={`${window.location.pathname}?network=true`}>Set default network gateway</Button>
+		<ButtonList items={$loRaConfigurations} let:item>
+			<Button minimal href={`${window.location.pathname}/lora/${item.id}`}>
+				{item.name}
+			</Button>
+		</ButtonList>
+		<Spacer />
+		<Button href={`${window.location.pathname}/lora/new`}>Create configuration</Button>
+		<Spacer />
+		<Info label={`User mode: ${$userMode}`} />
+		<Spacer />
+		<Checkbox onChange={(checked) => setUserMode(checked ? 'advanced' : 'normal')} />
 	</Section>
 
 	<Section title="Confirm changes:">

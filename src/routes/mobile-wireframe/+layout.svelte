@@ -15,12 +15,14 @@
 		useFields,
 		useGeoJSONFeatures,
 		useGettingStarted,
+		useLoRaConfigurations,
 		useNetwork,
 		useNotifications,
 		useOrganisation,
 		useReturnButton,
 		useScrollLock,
 		useShowComments,
+		useUserMode,
 		useUserName
 	} from '../../stores';
 	import { strategies } from '../../utils/pairing';
@@ -59,6 +61,8 @@
 	useComments();
 	useGeoJSONFeatures();
 	useGettingStarted();
+	useUserMode();
+	useLoRaConfigurations();
 	let blurApp = useBlurApp();
 
 	navigating.subscribe(async (navigating) => {
