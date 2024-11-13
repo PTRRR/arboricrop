@@ -18,6 +18,7 @@
 		useDeviceIllustration,
 		useDevices,
 		useFields,
+		useNavigationHistory,
 		useReturnButton
 	} from '../../../../../stores';
 	import { swissBounds } from '../../../../../utils/dummyData';
@@ -28,6 +29,7 @@
 
 	type Step = { label: string; checked: boolean };
 
+	const { preventNavigationHistory } = useNavigationHistory();
 	const { setVisibility, reset, setUsb, setJack, setBlink } = useDeviceIllustration();
 	const { devices } = useDevices();
 	const returnButton = useReturnButton();
@@ -117,10 +119,12 @@
 						updateDevice({ ...device, fieldId: selectedField.id });
 					}
 
+					$preventNavigationHistory = true;
 					goto(url.removeQuery({ name: 'selectField' }));
 				}}
 				onCancel={() => {
 					selectedField = undefined;
+					$preventNavigationHistory = true;
 					goto(url.removeQuery({ name: 'selectField' }));
 				}}
 			/>
@@ -133,8 +137,10 @@
 					label: stepIndex > 0 ? 'Previous' : 'Cancel',
 					onClick: () => {
 						if (stepIndex > 0) {
+							$preventNavigationHistory = true;
 							goto(url.addQuery({ name: 'step', value: stepIndex - 1 }));
 						} else {
+							$preventNavigationHistory = true;
 							goto(`/mobile-wireframe/devices/${device?.id}?connected=true`);
 						}
 					}
@@ -153,7 +159,7 @@
 				/>
 				<Spacer size="calc(var(--gap) * 3)" />
 				<Separation title="Review & confirm:" />
-				<Button href={nextHref}>Next step</Button>
+				<Button preventHistory href={nextHref}>Next step</Button>
 			{:else if stepIndex === 1}
 				<Image
 					ratio={1}
@@ -170,16 +176,16 @@
 				/>
 				<Spacer size="calc(var(--gap) * 3)" />
 				<Separation title="Review & confirm:" />
-				<Button href={nextHref}>Next step</Button>
+				<Button preventHistory href={nextHref}>Next step</Button>
 			{:else if stepIndex === 2}
 				<Info label="Selected field:" value={field?.name || '-'} />
 				<Spacer />
-				<Button href={url.addQuery({ name: 'selectField', value: true })}>
+				<Button preventHistory href={url.addQuery({ name: 'selectField', value: true })}>
 					{field ? 'Change field' : 'Assign field'}
 				</Button>
 				<Spacer size="calc(var(--gap) * 3)" />
 				<Separation title="Review & confirm:" />
-				<Button href={nextHref} disabled={!field}>Next step</Button>
+				<Button preventHistory href={nextHref} disabled={!field}>Next step</Button>
 			{:else if stepIndex === 3}
 				<MapV2
 					bind:this={map}
@@ -208,11 +214,12 @@
 				</Button>
 				<Spacer size="calc(var(--gap) * 3)" />
 				<Separation title="Review & confirm:" />
-				<Button href={nextHref} disabled={!device?.location}>Next step</Button>
+				<Button preventHistory href={nextHref} disabled={!device?.location}>Next step</Button>
 			{:else if stepIndex === 4 && device}
 				<Info label="Note:" />
 				<Spacer />
 
+				<!-- svelte-ignore element_invalid_self_closing_tag -->
 				<textarea
 					placeholder="Your note..."
 					value={device?.note || ''}
@@ -276,6 +283,7 @@
 				<Spacer size="calc(var(--gap) * 3)" />
 				<Separation title="Review & confirm:" />
 				<Button
+					preventHistory
 					href={`/mobile-wireframe/devices/${device?.id}?connected=true`}
 					on:click={() => {
 						if (device) {
@@ -290,7 +298,9 @@
 				</Button>
 			{/if}
 			<Spacer />
-			<Button href={`/mobile-wireframe/devices/${device?.id}?connected=true`}>Cancel</Button>
+			<Button href={`/mobile-wireframe/devices/${device?.id}?connected=true`} preventHistory>
+				Cancel
+			</Button>
 		</Section>
 	{/if}
 </CenteredWrapper>

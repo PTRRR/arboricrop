@@ -1,7 +1,5 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import Portal from 'svelte-portal';
 	import Button from '../../../../components/Button.svelte';
 	import Info from '../../../../components/Info.svelte';
 	import MapV2 from '../../../../components/MapV2.svelte';
@@ -14,6 +12,8 @@
 		useDeviceIllustration,
 		useDevices,
 		useFields,
+		useLoRaConfigurations,
+		useNavigationHistory,
 		useReturnButton
 	} from '../../../../stores';
 	import { getCss } from '../../../../utils/css';
@@ -21,7 +21,9 @@
 	import type { Device } from '../../../../utils/types';
 	import { onMount } from 'svelte';
 
+	const { preventNavigationHistory, navigateToPreviousPage } = useNavigationHistory();
 	const { setVisibility, reset, setUsb, setJack, setBlink, setOn } = useDeviceIllustration();
+	const { loRaConfigurations } = useLoRaConfigurations();
 	const { devices } = useDevices();
 	const { fields } = useFields();
 	const returnButton = useReturnButton();
@@ -33,6 +35,7 @@
 
 	$: device = $devices.find((it) => it.id === $page.params.id);
 	$: field = $fields.find((it) => it.id === device?.fieldId);
+	$: loraConfiguration = $loRaConfigurations.find((it) => it.id === field?.loraConfigId);
 
 	$: {
 		returnButton.set({
@@ -82,7 +85,10 @@
 		{#if $page.data.connected}
 			{#if device.status === 'unactive'}
 				<Spacer />
-				<Button href={`/mobile-wireframe/devices/${device.id}/activation?connected=true`}>
+				<Button
+					preventHistory
+					href={`/mobile-wireframe/devices/${device.id}/activation?connected=true`}
+				>
 					Activate
 				</Button>
 			{:else if editMetadata}
@@ -98,7 +104,9 @@
 			{/if}
 		{:else}
 			<Spacer />
-			<Button href={`/mobile-wireframe/devices/pairing?deviceId=${device.id}`}>Pair device</Button>
+			<Button preventHistory href={`/mobile-wireframe/devices/pairing?deviceId=${device.id}`}>
+				Pair device
+			</Button>
 		{/if}
 	</Section>
 	{#if device.status === 'active'}
@@ -162,6 +170,7 @@
 	{/if}
 
 	<Section title="Metadata:" buttons={[{ label: 'Edit' }]}>
+		<!-- svelte-ignore element_invalid_self_closing_tag -->
 		<textarea
 			placeholder="Your note..."
 			value={device?.note || ''}
@@ -198,14 +207,16 @@
 	</Section>
 
 	{#if $page.data.connected}
-		<Section title="Troubleshooting:">
-			<Button>See live data</Button>
-		</Section>
-
 		<Section title="Advanced settings:">
+			<Info label="LoRa Configuration:" value={loraConfiguration?.name} />
+			<Spacer />
 			<Info label="Firmware version:" value={device.firmwareVersion} />
 			<Spacer />
 			<Button>Upgrate firmware</Button>
+			<Spacer />
+			<Info label="Troubleshooting:" />
+			<Spacer />
+			<Button>See live data</Button>
 		</Section>
 	{/if}
 
@@ -219,8 +230,9 @@
 		<SaveSection
 			deleteLabel="Permanently delete device"
 			onDelete={() => {
+				$preventNavigationHistory = true;
 				devices.set([...$devices.filter((it) => it.id !== device.id)]);
-				goto('/mobile-wireframe/devices');
+				navigateToPreviousPage();
 			}}
 		/>
 	</Section>

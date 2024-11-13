@@ -13,6 +13,7 @@ import type {
 } from './utils/types';
 import { filterByUniqueAttribute, filterDuplicate } from './utils/arrays';
 import { createId } from '@paralleldrive/cuid2';
+import { goto } from '$app/navigation';
 
 const STORE_VERSION = 'v15';
 const dummyDevices = getDevices(30);
@@ -351,10 +352,19 @@ export const useNavigationHistory = () => {
 		});
 	};
 
+	const navigateToPreviousPage = () => {
+		if (get(navigationHistory) && get(navigationHistory).length > 0) {
+			const lastItem = get(navigationHistory)[0];
+			goto(lastItem);
+			shiftNavigationHistory();
+		}
+	};
+
 	return {
 		navigationHistory,
 		preventNavigationHistory,
 		pushNavigationHistory,
-		shiftNavigationHistory
+		shiftNavigationHistory,
+		navigateToPreviousPage
 	};
 };

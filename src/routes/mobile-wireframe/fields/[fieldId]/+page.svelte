@@ -134,7 +134,9 @@
 
 		<Section
 			title="Devices:"
-			buttons={[{ label: 'Add device', href: '/mobile-wireframe/devices' }]}
+			buttons={fieldDevices.length > 0
+				? [{ label: 'Add device', href: `/mobile-wireframe/devices/pairing?field=${field.id}` }]
+				: []}
 		>
 			{#if fieldDevices.length > 0}
 				<ButtonList
@@ -151,6 +153,8 @@
 				</ButtonList>
 			{:else}
 				<span>No devices in this field</span>
+				<Spacer />
+				<Button href={`/mobile-wireframe/devices/pairing?field=${field.id}`}>Add device</Button>
 			{/if}
 		</Section>
 

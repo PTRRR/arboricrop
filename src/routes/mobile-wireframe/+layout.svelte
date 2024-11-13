@@ -65,7 +65,8 @@
 		navigationHistory,
 		preventNavigationHistory,
 		pushNavigationHistory,
-		shiftNavigationHistory
+		shiftNavigationHistory,
+		navigateToPreviousPage
 	} = useNavigationHistory();
 	useOrganisation();
 	useScrollLock();
@@ -130,16 +131,7 @@
 	<div class="mobile-wireframe">
 		<Menu actions={menuActions}>
 			{#if $returnButton}
-				<Button
-					minimal
-					href={$navigationHistory[0]}
-					preventHistory
-					on:click={() => {
-						requestAnimationFrame(() => {
-							shiftNavigationHistory();
-						});
-					}}
-				>
+				<Button minimal preventHistory on:click={() => navigateToPreviousPage()}>
 					<div class="mobile-wireframe__return">
 						{#if $navigationHistory[0]}
 							<Chevron direction="left" />
