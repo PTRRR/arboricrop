@@ -39,7 +39,7 @@
 		{/if}
 	</Section>
 
-	<Section title="All devices:">
+	<!-- <Section title="All devices:">
 		{#if $devices.length === 0}
 			<span>No devices</span>
 			<Spacer />
@@ -47,7 +47,7 @@
 		{:else}
 			<Button href="/mobile-wireframe/devices">See all devices</Button>
 		{/if}
-	</Section>
+	</Section> -->
 </div>
 
 <style>
