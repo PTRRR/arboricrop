@@ -66,11 +66,14 @@
 				<div class="layer__button">
 					<Button
 						minimal
-						selected={selectedFeatures.includes(item)}
-						on:click={() =>
-							selectedFeatures.includes(item)
-								? (selectedFeatures = selectedFeatures.filter((it) => it !== item))
-								: (selectedFeatures = [...selectedFeatures, item])}
+						selected={!!selectedFeatures.find((it) => it.id === item.id)}
+						on:click={() => {
+							if (selectedFeatures.find((it) => it.id === item.id)) {
+								selectedFeatures = selectedFeatures.filter((it) => it.id !== item.id);
+							} else {
+								selectedFeatures = [...selectedFeatures, item];
+							}
+						}}
 					>
 						{getFeatureLayerName(item)}
 					</Button>
