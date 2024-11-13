@@ -26,6 +26,9 @@
 	import { createUrlBuilder } from '../../../../../utils/urls';
 	import Separation from '../../../../../components/Separation.svelte';
 	import { onMount } from 'svelte';
+	import type { PageData } from './$types';
+
+	export let data: PageData;
 
 	type Step = { label: string; checked: boolean };
 
@@ -97,38 +100,157 @@
 	});
 </script>
 
-<CenteredWrapper>
-	{#if $page.data.selectField}
-		<Section title="Available fields:">
-			<ButtonList
-				items={$fields}
+{#if data.advanced && device}
+	<Section title="Advanced Activation:" buttons={[{ label: 'See live data' }]}>
+		<Checklist
+			points={[
+				{ label: 'Correct device orientation', checked: true },
+				{ label: 'Device is not moving', checked: true },
+				{ label: 'Plug the jack into the device', checked: true },
+				{ label: 'Install probes', checked: true },
+				{ label: 'Wait for signal', checked: true }
+			]}
+		/>
+		<Spacer />
+		<MapV2
+			bind:this={map}
+			maxBounds={swissBounds}
+			zoom={15}
+			minZoom={8}
+			maxZoom={18.5}
+			center={device?.location || field?.center}
+			showTarget
+			markers={device?.location ? [{ lngLat: device.location }] : []}
+			geoJSONs={field?.layers}
+		/>
+		<Spacer />
+		<Button
+			on:click={() => {
+				const center = map?.getCenter();
+				if (device && center) {
+					updateDevice({
+						...device,
+						location: [center.lng, center.lat]
+					});
+				}
+			}}
+		>
+			Validate location
+		</Button>
+		<Spacer />
+		<Info label="Note:" />
+		<Spacer />
+
+		<!-- svelte-ignore element_invalid_self_closing_tag -->
+		<textarea
+			placeholder="Your note..."
+			value={device?.note || ''}
+			on:input={(event) => {
+				if (device) {
+					updateDevice({
+						...device,
+						note: event.currentTarget.value
+					});
+				}
+			}}
+		/>
+		<Spacer />
+
+		<Info label="Medias:" />
+		<Spacer />
+
+		<Dropdown label="Add media" items={mediaOptions}>
+			<Button
+				slot="item"
 				let:item
-				selectedItems={[selectedField]}
-				onSelect={(field) => (selectedField = field)}
-			>
-				{item?.name}
-			</ButtonList>
-		</Section>
+				on:click={() => {
+					const medias =
+						item.type === 'image'
+							? [...device.medias, { name: `${createId()}.jpg`, type: item.type }]
+							: item.type === 'audio-note'
+								? [...device.medias, { name: `${createId()}.mp3`, type: item.type }]
+								: [...device.medias, { name: `${createId()}.pdf`, type: item.type }];
 
-		<Section title="Confirm changes:">
-			<SaveSection
-				saveDisabled={!selectedField}
-				onSave={() => {
-					if (device && selectedField) {
-						updateDevice({ ...device, fieldId: selectedField.id });
+					if (device) {
+						updateDevice({
+							...device,
+							medias
+						});
 					}
+				}}
+			>
+				{item.label}
+			</Button>
+		</Dropdown>
 
-					$preventNavigationHistory = true;
-					goto(url.removeQuery({ name: 'selectField' }));
+		{#if device.medias.length > 0}
+			<Spacer />
+			<ButtonList
+				items={device.medias}
+				let:item
+				onSelect={(media) => {
+					if (device) {
+						updateDevice({
+							...device,
+							medias: (device.medias || []).filter((it) => it !== media)
+						});
+					}
 				}}
-				onCancel={() => {
-					selectedField = undefined;
-					$preventNavigationHistory = true;
-					goto(url.removeQuery({ name: 'selectField' }));
-				}}
-			/>
-		</Section>
-	{:else}
+			>
+				<span>{item.name}</span>
+				<span>{item.type}</span>
+			</ButtonList>
+		{/if}
+
+		<Spacer size="calc(var(--gap) * 3)" />
+		<Separation title="Review & confirm:" />
+		<Button
+			preventHistory
+			href={`/mobile-wireframe/devices/${device?.id}?connected=true`}
+			on:click={() => {
+				if (device) {
+					updateDevice({
+						...device,
+						status: 'active'
+					});
+				}
+			}}
+		>
+			Activate device
+		</Button>
+	</Section>
+{:else if $page.data.selectField}
+	<Section title="Available fields:">
+		<ButtonList
+			items={$fields}
+			let:item
+			selectedItems={[selectedField]}
+			onSelect={(field) => (selectedField = field)}
+		>
+			{item?.name}
+		</ButtonList>
+	</Section>
+
+	<Section title="Confirm changes:">
+		<SaveSection
+			saveDisabled={!selectedField}
+			onSave={() => {
+				if (device && selectedField) {
+					updateDevice({ ...device, fieldId: selectedField.id });
+				}
+
+				$preventNavigationHistory = true;
+				goto(url.removeQuery({ name: 'selectField' }));
+			}}
+			onCancel={() => {
+				selectedField = undefined;
+				$preventNavigationHistory = true;
+				goto(url.removeQuery({ name: 'selectField' }));
+			}}
+		/>
+	</Section>
+{:else}
+	<CenteredWrapper>
 		<Section
 			title={`Activation Step ${stepIndex + 1}/${steps.length}: ${currentStep?.label}`}
 			buttons={[
@@ -292,8 +414,8 @@
 				Cancel
 			</Button>
 		</Section>
-	{/if}
-</CenteredWrapper>
+	</CenteredWrapper>
+{/if}
 
 <style>
 	textarea {

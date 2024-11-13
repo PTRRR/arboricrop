@@ -14,7 +14,8 @@
 		useFields,
 		useLoRaConfigurations,
 		useNavigationHistory,
-		useReturnButton
+		useReturnButton,
+		useUserMode
 	} from '../../../../stores';
 	import { getCss } from '../../../../utils/css';
 	import { swissBounds } from '../../../../utils/dummyData';
@@ -27,6 +28,7 @@
 	const { devices } = useDevices();
 	const { fields } = useFields();
 	const returnButton = useReturnButton();
+	const { userMode } = useUserMode();
 
 	let map: MapV2 | undefined = undefined;
 	let editMetadata: boolean = false;
@@ -87,7 +89,7 @@
 				<Spacer />
 				<Button
 					preventHistory
-					href={`/mobile-wireframe/devices/${device.id}/activation?connected=true`}
+					href={`/mobile-wireframe/devices/${device.id}/activation?connected=true&advanced=${$userMode === 'advanced'}`}
 				>
 					Activate
 				</Button>
