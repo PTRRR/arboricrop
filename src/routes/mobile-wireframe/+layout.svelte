@@ -124,8 +124,6 @@
 				<CenteredWrapper>
 					<Section title="Getting started:">
 						<div class="getting-started">
-							<Spacer />
-							<Spacer />
 							<Image ratio={1} placeholder="Slides / animations" />
 							<Spacer />
 							<Pagination />
@@ -143,7 +141,7 @@
 				<slot />
 			{/if}
 		</div>
-		{#if $page.route.id !== '/mobile-wireframe/settings'}
+		{#if $page.route.id !== '/mobile-wireframe/settings' && !$gettingStarted.visible}
 			<FooterMenu actions={footerActions}>
 				<svelte:fragment slot="action" let:action>
 					{#if action.label === 'Pair device'}
