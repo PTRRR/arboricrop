@@ -5,7 +5,12 @@
 	import Spacer from '../../../../components/Spacer.svelte';
 	import Button from '../../../../components/Button.svelte';
 	import Line from '../../../../components/Line.svelte';
-	import { useDevices, useFields, useReturnButton } from '../../../../stores';
+	import {
+		useDevices,
+		useFields,
+		useLoRaConfigurations,
+		useReturnButton
+	} from '../../../../stores';
 	import { getDevicesByFieldId, swissBounds } from '../../../../utils/dummyData';
 	import type { Device, Marker } from '../../../../utils/types';
 	import ButtonList from '../../../../components/wireframe/ButtonList.svelte';
@@ -16,9 +21,11 @@
 	import SaveSection from '../../../../components/wireframe/SaveSection.svelte';
 	import MapLayers from '../../../../components/wireframe/MapLayers.svelte';
 	import type { GeoJSON as GeoJSONType, Feature, Geometry, GeoJsonProperties } from 'geojson';
+	import Info from '../../../../components/Info.svelte';
 
 	const { fields } = useFields();
 	const { devices } = useDevices();
+	const { loRaConfigurations } = useLoRaConfigurations();
 	const returnButton = useReturnButton();
 
 	let map: MapV2;
@@ -34,6 +41,8 @@
 	$: deviceMarkers = fieldDevices
 		.map((it) => ({ lngLat: it.location as LngLatLike, label: it.name }))
 		.filter((it) => it.lngLat) as Marker[];
+
+	$: loraConfiguration = $loRaConfigurations.find((it) => it.id === field?.loraConfigId);
 
 	$: {
 		if (field) {
@@ -110,7 +119,7 @@
 		</div>
 	{:else if typeof field !== 'undefined'}
 		<Section
-			title="General settings:"
+			title="General Settings:"
 			buttons={[
 				{
 					label: editGeneralSettings ? 'Cancel' : 'Edit',
@@ -187,6 +196,10 @@
 			{:else}
 				<span>No devices in this field</span>
 			{/if}
+		</Section>
+
+		<Section title="LoRa Settings:" buttons={[{ label: 'Edit' }]}>
+			<Info label="Selected Configuration:" value={loraConfiguration?.name} />
 		</Section>
 
 		{#if editGeneralSettings || editMap}

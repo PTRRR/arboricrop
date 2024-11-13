@@ -2,7 +2,12 @@
 	import { goto } from '$app/navigation';
 	import Spacer from '../../../../components/Spacer.svelte';
 	import Separation from '../../../../components/Separation.svelte';
-	import { useFields, useGeoJSONFeatures, useReturnButton } from '../../../../stores';
+	import {
+		useFields,
+		useGeoJSONFeatures,
+		useLoRaConfigurations,
+		useReturnButton
+	} from '../../../../stores';
 	import Button from '../../../../components/Button.svelte';
 	import type { Field, GeoJSONFeature } from '../../../../utils/types';
 	import { createUrlBuilder } from '../../../../utils/urls';
@@ -17,6 +22,7 @@
 	import MapV2 from '../../../../components/MapV2.svelte';
 	import SaveSection from '../../../../components/wireframe/SaveSection.svelte';
 	import Section from '../../../../components/wireframe/Section.svelte';
+	import Info from '../../../../components/Info.svelte';
 
 	let map: MapV2;
 	let generalSettings: FieldGeneralSettings;
@@ -24,24 +30,33 @@
 	const { fields } = useFields();
 	const features = useGeoJSONFeatures();
 	const returnButton = useReturnButton();
+	const { loRaConfigurations } = useLoRaConfigurations();
 	const url = createUrlBuilder();
 
-	let field: Field = {
+	const defaultLoRaConfiguration = $loRaConfigurations.find((it) => it.isDefault);
+
+	let field: Field = $state({
 		id: `fie-${createId()}`,
 		name: '',
 		type: '',
+		loraConfigId: defaultLoRaConfiguration?.id as string,
 		center: changinCenter,
 		layers: []
-	};
+	});
 
-	let selectedFeatures: GeoJSONFeature[] = [];
+	const loraConfiguration = $derived.by(() =>
+		$loRaConfigurations.find((it) => it.id === field.loraConfigId)
+	);
 
-	$: {
+	let selectedLoraConfiguration = $state<string | undefined>(defaultLoRaConfiguration?.id);
+	let selectedFeatures: GeoJSONFeature[] = $state([]);
+
+	$effect(() => {
 		returnButton.set({
 			label: `New field`,
 			href: $page.data.addLayer ? url.resetQueries([]) : '/mobile-wireframe/fields'
 		});
-	}
+	});
 </script>
 
 {#if $page.data.addLayer}
@@ -76,10 +91,37 @@
 	</Section>
 {/if}
 
+{#if $page.data.setLoraConfig}
+	<Section title="Available LoRa Configurations:" buttons={[{ label: 'Create new' }]}>
+		<ButtonList items={$loRaConfigurations} let:item>
+			<Button
+				minimal
+				selected={item.id === selectedLoraConfiguration}
+				on:click={() => (selectedLoraConfiguration = item.id)}
+			>
+				{item.name}
+			</Button>
+		</ButtonList>
+	</Section>
+	<Section title="Confirm Changes:">
+		<SaveSection
+			saveLabel="Save"
+			onSave={() => {
+				field.loraConfigId = selectedLoraConfiguration as string;
+				goto(url.resetQueries([]));
+			}}
+			onCancel={() => {
+				selectedFeatures = [];
+				goto(url.resetQueries([]));
+			}}
+		/>
+	</Section>
+{/if}
+
 <div
 	class="field__form"
 	style={getCss({
-		display: $page.data.addLayer ? 'none' : undefined
+		display: $page.data.addLayer || $page.data.setLoraConfig ? 'none' : undefined
 	})}
 >
 	<Section title="General settings:">
@@ -111,6 +153,14 @@
 			}}
 		>
 			Set field location
+		</Button>
+	</Section>
+
+	<Section title="LoRa Settings">
+		<Info label="Selected configuration:" value={loraConfiguration?.name} />
+		<Spacer />
+		<Button href={url.addQuery({ name: 'setLoraConfig', value: true })}>
+			Change LoRa configuration
 		</Button>
 	</Section>
 

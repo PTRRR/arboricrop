@@ -10,7 +10,7 @@
 	export let field: Field;
 	export const getValues = () => {
 		return {
-			id: id.value,
+			id: id?.value || field.id,
 			name: name.value,
 			type: type.value
 		};
@@ -19,14 +19,11 @@
 
 <div class="field-general-settings">
 	{#if editable}
-		<label for="">Id:</label>
-		<input bind:this={id} type="text" value={field.id} />
 		<label for="">Name:</label>
 		<input bind:this={name} type="text" placeholder="Field name" value={field.name} />
 		<label for="">Type:</label>
 		<input bind:this={type} type="text" placeholder="Field type" value={field.type} />
 	{:else}
-		<Info label="Id:" value={field.id} />
 		<Info label="Name:" value={field.name || '-'} />
 		<Info label="Type:" value={field.type || '-'} />
 	{/if}

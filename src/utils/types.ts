@@ -40,6 +40,7 @@ export type Field = {
 	name: string;
 	type: string;
 	center: LngLatLike;
+	loraConfigId: string;
 	layers: GeoJSONFeature[];
 };
 
