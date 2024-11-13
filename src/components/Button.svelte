@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Button, type Builder } from 'bits-ui';
 	import ButtonInner from './ButtonInner.svelte';
+	import { useNavigationHistory } from '../stores';
 
 	export let type: 'button' | 'submit' | 'reset' | null | undefined = undefined;
 	export let tabIndex: number = 1;
@@ -13,11 +14,24 @@
 	export let href: string | undefined = undefined;
 	export let minimal: boolean = false;
 	export let selected: boolean = false;
+	export let preventHistory: boolean = false;
+
+	const { preventNavigationHistory } = useNavigationHistory();
 </script>
 
 {#if href}
 	<a class="button" data-sveltekit-preload-data="false" {style} {href} on:click>
-		<ButtonInner {disabled} {border} {minimal} {selected}>
+		<ButtonInner
+			{disabled}
+			{border}
+			{minimal}
+			{selected}
+			on:click={() => {
+				if (preventHistory) {
+					$preventNavigationHistory = true;
+				}
+			}}
+		>
 			<slot />
 		</ButtonInner>
 	</a>
@@ -33,7 +47,17 @@
 		formaction={formAction}
 		on:click
 	>
-		<ButtonInner {disabled} {border} {minimal} {selected}>
+		<ButtonInner
+			{disabled}
+			{border}
+			{minimal}
+			{selected}
+			on:click={() => {
+				if (preventHistory) {
+					$preventNavigationHistory = true;
+				}
+			}}
+		>
 			<slot />
 		</ButtonInner>
 	</Button.Root>

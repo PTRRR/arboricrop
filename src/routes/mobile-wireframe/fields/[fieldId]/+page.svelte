@@ -9,6 +9,7 @@
 		useDevices,
 		useFields,
 		useLoRaConfigurations,
+		useNavigationHistory,
 		useReturnButton
 	} from '../../../../stores';
 	import { getDevicesByFieldId, swissBounds } from '../../../../utils/dummyData';
@@ -20,13 +21,14 @@
 	import MapV2 from '../../../../components/MapV2.svelte';
 	import SaveSection from '../../../../components/wireframe/SaveSection.svelte';
 	import MapLayers from '../../../../components/wireframe/MapLayers.svelte';
-	import type { GeoJSON as GeoJSONType, Feature, Geometry, GeoJsonProperties } from 'geojson';
+	import type { Feature, Geometry, GeoJsonProperties } from 'geojson';
 	import Info from '../../../../components/Info.svelte';
 
 	const { fields } = useFields();
 	const { devices } = useDevices();
 	const { loRaConfigurations } = useLoRaConfigurations();
 	const returnButton = useReturnButton();
+	const { preventNavigationHistory } = useNavigationHistory();
 
 	let map: MapV2;
 	let generalSettings: FieldGeneralSettings;
@@ -231,6 +233,7 @@
 				deleteLabel="Permanently delete field"
 				onDelete={() => {
 					fields.set($fields.filter((it) => it.id !== field?.id));
+					$preventNavigationHistory = true;
 					goto('/mobile-wireframe/fields');
 				}}
 			/>

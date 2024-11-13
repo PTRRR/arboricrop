@@ -6,6 +6,7 @@
 		useFields,
 		useGeoJSONFeatures,
 		useLoRaConfigurations,
+		useNavigationHistory,
 		useReturnButton
 	} from '../../../../stores';
 	import Button from '../../../../components/Button.svelte';
@@ -31,6 +32,7 @@
 	const features = useGeoJSONFeatures();
 	const returnButton = useReturnButton();
 	const { loRaConfigurations } = useLoRaConfigurations();
+	const { preventNavigationHistory } = useNavigationHistory();
 	const url = createUrlBuilder();
 
 	const defaultLoRaConfiguration = $loRaConfigurations.find((it) => it.isDefault);
@@ -173,6 +175,7 @@
 					layers: selectedFeatures
 				};
 				fields.set([...$fields, field]);
+				$preventNavigationHistory = true;
 				goto(`/mobile-wireframe/fields/${field.id}`);
 			}}
 			onCancel={() => goto('/mobile-wireframe/fields')}

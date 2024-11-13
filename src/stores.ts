@@ -333,3 +333,28 @@ export const useLoRaConfigurations = () => {
 		updateConfiguration
 	};
 };
+
+export const useNavigationHistory = () => {
+	const navigationHistory = useWritable<string[]>('navigation-history', [], false);
+	const preventNavigationHistory = useWritable<boolean>('prevent-navigation-history', false, false);
+
+	const pushNavigationHistory = (path: string) => {
+		if (!get(preventNavigationHistory)) {
+			navigationHistory.update((history) => [path, ...history]);
+		}
+	};
+
+	const shiftNavigationHistory = () => {
+		navigationHistory.update((history) => {
+			history.shift();
+			return history;
+		});
+	};
+
+	return {
+		navigationHistory,
+		preventNavigationHistory,
+		pushNavigationHistory,
+		shiftNavigationHistory
+	};
+};

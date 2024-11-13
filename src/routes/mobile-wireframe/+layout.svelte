@@ -16,6 +16,7 @@
 		useGeoJSONFeatures,
 		useGettingStarted,
 		useLoRaConfigurations,
+		useNavigationHistory,
 		useNetwork,
 		useNotifications,
 		useOrganisation,
@@ -30,7 +31,7 @@
 	import type { LayoutData } from './$types';
 	import Portal from 'svelte-portal';
 	import DeviceIllustration from '../../components/DeviceIllustration.svelte';
-	import { onMount } from 'svelte';
+	import { onMount, type Snippet } from 'svelte';
 	import { goto } from '$app/navigation';
 	import Image from '../../components/wireframe/Image.svelte';
 	import Spacer from '../../components/Spacer.svelte';
@@ -38,7 +39,9 @@
 	import CenteredWrapper from '../../components/wireframe/CenteredWrapper.svelte';
 	import Section from '../../components/wireframe/Section.svelte';
 
-	export let data: LayoutData;
+	let data: LayoutData & { children: Snippet } = $props();
+
+	const { children } = data;
 
 	const menuActions = [
 		{
@@ -58,6 +61,12 @@
 	const { deviceIllustration } = useDeviceIllustration();
 	const { showComments } = useShowComments();
 	const { gettingStarted } = useGettingStarted();
+	const {
+		navigationHistory,
+		preventNavigationHistory,
+		pushNavigationHistory,
+		shiftNavigationHistory
+	} = useNavigationHistory();
 	useOrganisation();
 	useScrollLock();
 	useNetwork();
@@ -71,10 +80,21 @@
 	useLoRaConfigurations();
 	let blurApp = useBlurApp();
 
+	const forbiddenNavigationPathnames = ['/'];
+
 	navigating.subscribe(async (navigating) => {
 		if (navigating) {
 			blurApp.set(false);
+			if (
+				typeof navigating.from?.url.pathname === 'string' &&
+				!$preventNavigationHistory &&
+				!forbiddenNavigationPathnames.includes(navigating.from.url.pathname)
+			) {
+				pushNavigationHistory(navigating.from.url.pathname);
+			}
 		}
+
+		$preventNavigationHistory = false;
 	});
 
 	onMount(() => {
@@ -83,6 +103,10 @@
 				$showComments = !$showComments;
 			}
 		};
+
+		if ($page.url.pathname !== '/mobile-wireframe') {
+			pushNavigationHistory('/mobile-wireframe');
+		}
 
 		window.addEventListener('keydown', keyDownHandler);
 
@@ -106,9 +130,18 @@
 	<div class="mobile-wireframe">
 		<Menu actions={menuActions}>
 			{#if $returnButton}
-				<Button minimal href={$returnButton.href}>
+				<Button
+					minimal
+					href={$navigationHistory[0]}
+					preventHistory
+					on:click={() => {
+						requestAnimationFrame(() => {
+							shiftNavigationHistory();
+						});
+					}}
+				>
 					<div class="mobile-wireframe__return">
-						{#if $returnButton.href}
+						{#if $navigationHistory[0]}
 							<Chevron direction="left" />
 						{/if}
 						{$returnButton.label || 'Arboricrop'}
@@ -138,7 +171,7 @@
 					</Section>
 				</CenteredWrapper>
 			{:else}
-				<slot />
+				{@render children()}
 			{/if}
 		</div>
 		{#if $page.route.id !== '/mobile-wireframe/settings' && !$gettingStarted.visible}
@@ -174,7 +207,7 @@
 
 <button
 	class="clear-local-storage"
-	on:click={async () => {
+	onclick={async () => {
 		if (typeof Storage !== 'undefined') {
 			// Reload the page
 			await goto('/mobile-wireframe');
