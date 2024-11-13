@@ -206,10 +206,10 @@
 		{/if}
 	</Section>
 
-	{#if $page.data.connected}
-		<Section title="Advanced settings:">
-			<Info label="LoRa Configuration:" value={loraConfiguration?.name} />
-			<Spacer />
+	<Section title="Advanced settings:">
+		<Info label="LoRa Configuration:" value={loraConfiguration?.name} />
+		<Spacer />
+		{#if $page.data.connected}
 			<Info label="Firmware version:" value={device.firmwareVersion} />
 			<Spacer />
 			<Button>Upgrate firmware</Button>
@@ -217,8 +217,8 @@
 			<Info label="Troubleshooting:" />
 			<Spacer />
 			<Button>See live data</Button>
-		</Section>
-	{/if}
+		{/if}
+	</Section>
 
 	{#if editMetadata}
 		<Section title="Confirm changes:">

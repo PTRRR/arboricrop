@@ -38,7 +38,6 @@
 	const steps: Step[] = [
 		{ label: 'Install device', checked: false },
 		{ label: 'Connect probes', checked: false },
-		{ label: 'Assign field', checked: false },
 		{ label: 'Set location', checked: false },
 		{ label: 'Add metadata', checked: false }
 	];
@@ -178,15 +177,6 @@
 				<Separation title="Review & confirm:" />
 				<Button preventHistory href={nextHref}>Next step</Button>
 			{:else if stepIndex === 2}
-				<Info label="Selected field:" value={field?.name || '-'} />
-				<Spacer />
-				<Button preventHistory href={url.addQuery({ name: 'selectField', value: true })}>
-					{field ? 'Change field' : 'Assign field'}
-				</Button>
-				<Spacer size="calc(var(--gap) * 3)" />
-				<Separation title="Review & confirm:" />
-				<Button preventHistory href={nextHref} disabled={!field}>Next step</Button>
-			{:else if stepIndex === 3}
 				<MapV2
 					bind:this={map}
 					maxBounds={swissBounds}
@@ -215,7 +205,7 @@
 				<Spacer size="calc(var(--gap) * 3)" />
 				<Separation title="Review & confirm:" />
 				<Button preventHistory href={nextHref} disabled={!device?.location}>Next step</Button>
-			{:else if stepIndex === 4 && device}
+			{:else if stepIndex === 3 && device}
 				<Info label="Note:" />
 				<Spacer />
 
