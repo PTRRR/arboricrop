@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import Spacer from '../../../../components/Spacer.svelte';
-	import Separation from '../../../../components/Separation.svelte';
 	import {
 		useFields,
 		useGeoJSONFeatures,
@@ -13,7 +12,6 @@
 	import type { Field, GeoJSONFeature } from '../../../../utils/types';
 	import { createUrlBuilder } from '../../../../utils/urls';
 	import { page } from '$app/stores';
-	import CenteredWrapper from '../../../../components/wireframe/CenteredWrapper.svelte';
 	import ButtonList from '../../../../components/wireframe/ButtonList.svelte';
 	import { createId } from '@paralleldrive/cuid2';
 	import { getCss } from '../../../../utils/css';
@@ -84,9 +82,13 @@
 	<Section title="Confirm Changes:">
 		<SaveSection
 			saveLabel="Save"
-			onSave={() => goto(url.resetQueries([]))}
+			onSave={() => {
+				$preventNavigationHistory = true;
+				goto(url.resetQueries([]));
+			}}
 			onCancel={() => {
 				selectedFeatures = [];
+				$preventNavigationHistory = true;
 				goto(url.resetQueries([]));
 			}}
 		/>
@@ -110,10 +112,12 @@
 			saveLabel="Save"
 			onSave={() => {
 				field.loraConfigId = selectedLoraConfiguration as string;
+				$preventNavigationHistory = true;
 				goto(url.resetQueries([]));
 			}}
 			onCancel={() => {
 				selectedFeatures = [];
+				$preventNavigationHistory = true;
 				goto(url.resetQueries([]));
 			}}
 		/>
@@ -143,7 +147,9 @@
 			geoJSONs={selectedFeatures}
 		/>
 		<Spacer />
-		<Button href={url.addQuery({ name: 'addLayer', value: true })}>Manage layers</Button>
+		<Button preventHistory href={url.addQuery({ name: 'addLayer', value: true })}
+			>Manage layers</Button
+		>
 		<Spacer />
 		<Button
 			on:click={() => {
@@ -161,7 +167,7 @@
 	<Section title="LoRa Settings">
 		<Info label="Selected configuration:" value={loraConfiguration?.name} />
 		<Spacer />
-		<Button href={url.addQuery({ name: 'setLoraConfig', value: true })}>
+		<Button preventHistory href={url.addQuery({ name: 'setLoraConfig', value: true })}>
 			Change LoRa configuration
 		</Button>
 	</Section>
@@ -178,7 +184,10 @@
 				$preventNavigationHistory = true;
 				goto(`/mobile-wireframe/fields/${field.id}`);
 			}}
-			onCancel={() => goto('/mobile-wireframe/fields')}
+			onCancel={() => {
+				$preventNavigationHistory = true;
+				goto('/mobile-wireframe/fields');
+			}}
 		/>
 	</Section>
 </div>

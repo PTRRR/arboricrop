@@ -166,7 +166,7 @@
 				{@render children()}
 			{/if}
 		</div>
-		{#if $page.route.id !== '/mobile-wireframe/settings' && !$gettingStarted.visible}
+		<!-- {#if $page.route.id !== '/mobile-wireframe/settings' && !$gettingStarted.visible}
 			<FooterMenu actions={footerActions}>
 				<svelte:fragment slot="action" let:action>
 					{#if action.label === 'Pair device'}
@@ -180,7 +180,7 @@
 					{/if}
 				</svelte:fragment>
 			</FooterMenu>
-		{/if}
+		{/if} -->
 	</div>
 </Mobile>
 
