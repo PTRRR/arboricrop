@@ -131,6 +131,28 @@
 		</Section>
 
 		<Section
+			title="Devices:"
+			buttons={[{ label: 'Add device', href: '/mobile-wireframe/devices' }]}
+		>
+			{#if fieldDevices.length > 0}
+				<ButtonList
+					items={fieldDevices}
+					onSelect={(item) => {
+						goto(`/mobile-wireframe/devices/${item.id}`);
+					}}
+					let:item
+				>
+					<div class="device">
+						<span class="device-name">{item.name}</span>
+						<span class="device-id">{item.status}</span>
+					</div>
+				</ButtonList>
+			{:else}
+				<span>No devices in this field</span>
+			{/if}
+		</Section>
+
+		<Section
 			title="Map:"
 			buttons={[{ label: editMap ? 'Cancel' : 'Edit', onClick: () => (editMap = !editMap) }]}
 		>
@@ -173,28 +195,6 @@
 				<MapLayers geoJSONs={field.layers} onSelect={(feature) => (selectedFeature = feature)} />
 			{:else}
 				<span>No layers</span>
-			{/if}
-		</Section>
-
-		<Section
-			title="Devices:"
-			buttons={[{ label: 'See all devices', href: '/mobile-wireframe/devices' }]}
-		>
-			{#if fieldDevices.length > 0}
-				<ButtonList
-					items={fieldDevices}
-					onSelect={(item) => {
-						goto(`/mobile-wireframe/devices/${item.id}`);
-					}}
-					let:item
-				>
-					<div class="device">
-						<span class="device-name">{item.name}</span>
-						<span class="device-id">{item.status}</span>
-					</div>
-				</ButtonList>
-			{:else}
-				<span>No devices in this field</span>
 			{/if}
 		</Section>
 
