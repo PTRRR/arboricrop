@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import Checkbox from '../../../../../components/Checkbox.svelte';
 	import Spacer from '../../../../../components/Spacer.svelte';
 	import SaveSection from '../../../../../components/wireframe/SaveSection.svelte';
 	import Section from '../../../../../components/wireframe/Section.svelte';
@@ -25,6 +26,7 @@
 	let deviceEui = $state(initialConfig?.deviceEui || '');
 	let appEui = $state(initialConfig?.appEui || '');
 	let appKey = $state(initialConfig?.appKey || '');
+	let isDefault = $state(initialConfig?.isDefault || false);
 
 	let configuration = $derived<LoRaConfigurationWithId>({
 		id: initialConfig?.id || '',
@@ -35,7 +37,8 @@
 		codingRate,
 		deviceEui,
 		appEui,
-		appKey
+		appKey,
+		isDefault
 	});
 </script>
 
@@ -68,11 +71,21 @@
 		<label for="">App Key:</label>
 		<Spacer />
 		<input type="text" placeholder="value..." bind:value={appKey} />
+		<Spacer />
+		<label for="">Set as default:</label>
+		<Spacer />
+		<Checkbox initialChecked={isDefault} onChange={(checked) => (isDefault = checked)} />
 	</Section>
 
 	<Section title="Confirm changes:">
 		<SaveSection
 			onSave={() => {
+				if (isDefault) {
+					$loRaConfigurations.forEach((config) =>
+						updateConfiguration({ ...config, isDefault: false })
+					);
+				}
+
 				updateConfiguration(configuration);
 				goto('/mobile-wireframe/settings');
 			}}

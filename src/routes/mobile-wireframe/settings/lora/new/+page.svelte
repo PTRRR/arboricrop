@@ -7,9 +7,10 @@
 	import Section from '../../../../../components/wireframe/Section.svelte';
 	import { type LoRaConfiguration, type LoRaConfigurationWithId } from '../../../../../utils/types';
 	import { useLoRaConfigurations, useReturnButton } from '../../../../../stores';
+	import Checkbox from '../../../../../components/Checkbox.svelte';
 
 	const returnButton = useReturnButton();
-	const { addConfiguration } = useLoRaConfigurations();
+	const { addConfiguration, loRaConfigurations, updateConfiguration } = useLoRaConfigurations();
 
 	returnButton.set({
 		label: 'LoRa',
@@ -24,7 +25,8 @@
 		codingRate: 1,
 		deviceEui: '0000000000000000',
 		appEui: '0000000000000000',
-		appKey: '00000000000000000000000000000000'
+		appKey: '00000000000000000000000000000000',
+		isDefault: false
 	};
 
 	let name = $state(initialState.name);
@@ -35,6 +37,7 @@
 	let deviceEui = $state(initialState.deviceEui);
 	let appEui = $state(initialState.appEui);
 	let appKey = $state(initialState.appKey);
+	let isDefault = $state(initialState.isDefault);
 
 	let configuration = $derived<LoRaConfigurationWithId>({
 		id: createId(),
@@ -45,7 +48,8 @@
 		codingRate,
 		deviceEui,
 		appEui,
-		appKey
+		appKey,
+		isDefault
 	});
 </script>
 
@@ -78,11 +82,21 @@
 		<label for="">App Key:</label>
 		<Spacer />
 		<input type="text" placeholder="value..." bind:value={appKey} />
+		<Spacer />
+		<label for="">Set as default:</label>
+		<Spacer />
+		<Checkbox initialChecked={isDefault} onChange={(checked) => (isDefault = checked)} />
 	</Section>
 
 	<Section title="Confirm changes:">
 		<SaveSection
 			onSave={() => {
+				if (isDefault) {
+					$loRaConfigurations.forEach((config) =>
+						updateConfiguration({ ...config, isDefault: false })
+					);
+				}
+
 				addConfiguration(configuration);
 				goto('/mobile-wireframe/settings');
 			}}

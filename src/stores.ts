@@ -274,7 +274,8 @@ export const useLoRaConfigurations = () => {
 			codingRate: 5,
 			deviceEui: '0011223344556677',
 			appEui: '0123456789ABCDEF',
-			appKey: '00112233445566778899AABBCCDDEEFF'
+			appKey: '00112233445566778899AABBCCDDEEFF',
+			isDefault: true
 		},
 		{
 			id: createId(),

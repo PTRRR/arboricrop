@@ -91,6 +91,7 @@ export type LoRaConfiguration = {
 	deviceEui: string;
 	appEui: string;
 	appKey: string;
+	isDefault?: boolean;
 };
 
 export type LoRaConfigurationWithId = LoRaConfiguration & { id: string };

@@ -108,9 +108,14 @@
 		<Info label="LoRa configurations:" />
 		<Spacer />
 		<ButtonList items={$loRaConfigurations} let:item>
-			<Button minimal href={`${window.location.pathname}/lora/${item.id}`}>
-				{item.name}
-			</Button>
+			<div class="lora-config">
+				<Button minimal href={`${window.location.pathname}/lora/${item.id}`}>
+					{item.name}
+				</Button>
+				{#if item.isDefault}
+					<span>Is Default</span>
+				{/if}
+			</div>
 		</ButtonList>
 		<Spacer />
 		<Button href={`${window.location.pathname}/lora/new`}>Create configuration</Button>
@@ -141,5 +146,11 @@
 		outline: none;
 		max-width: 100%;
 		resize: vertical;
+	}
+
+	.lora-config {
+		display: flex;
+		justify-content: space-between;
+		width: 100%;
 	}
 </style>
