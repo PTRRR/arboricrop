@@ -1,10 +1,11 @@
 <script lang="ts">
 	import Button from '../../components/Button.svelte';
 	import Card from '../../components/wireframe/Card.svelte';
-	import { useDevices, useFields, useGettingStarted, useReturnButton } from '../../stores';
+	import { useDevices, useFields, useReturnButton } from '../../stores';
 	import { shuffle } from '../../utils/arrays';
 	import { getDevicesByFieldId } from '../../utils/dummyData';
 	import Section from '../../components/wireframe/Section.svelte';
+	import CenteredWrapper from '../../components/wireframe/CenteredWrapper.svelte';
 
 	let returnButton = useReturnButton();
 	returnButton.set({
@@ -16,9 +17,15 @@
 	const randomFields = shuffle($fields).splice(0, 5);
 </script>
 
-<div class="home">
+{#if randomFields.length === 0}
+	<CenteredWrapper>
+		<Section title="You don't have any fields yet">
+			<Button href="/mobile-wireframe/fields/new">Create new field</Button>
+		</Section>
+	</CenteredWrapper>
+{:else}
 	<Section
-		title="Recent fields"
+		title="Fields"
 		buttons={[
 			{
 				label: 'Create new field',
@@ -45,7 +52,7 @@
 			{/if}
 		</div>
 	</Section>
-</div>
+{/if}
 
 <style>
 	.home__section {

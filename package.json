@@ -37,7 +37,7 @@
 	"type": "module",
 	"dependencies": {
 		"@paralleldrive/cuid2": "^2.2.2",
-		"bits-ui": "^0.21.13",
+		"bits-ui": "^0.21.16",
 		"dotenv": "^16.4.5",
 		"drizzle-orm": "^0.33.0",
 		"pg": "^8.12.0",
