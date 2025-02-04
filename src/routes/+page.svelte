@@ -3,6 +3,7 @@
 
 	<div class="links">
 		<a href="/mobile-wireframe">Provisioning App Wireframe</a>
+		<a href="/mobile-layout">Provisioning App Layout</a>
 		<a href="/desktop-wireframe">Dashboard Wireframe</a>
 		<a href="/map-system">Map System [research]</a>
 	</div>
