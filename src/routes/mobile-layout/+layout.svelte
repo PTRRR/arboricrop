@@ -23,7 +23,6 @@
 <Mobile
 	phone={iphone}
 	onscroll={(value) => {
-		console.log(value);
 		menuMode = value > 30 ? 'scrolled' : 'default';
 	}}
 >

@@ -19,7 +19,7 @@
 	export let geoJSONs: GeoJSONType[] = [];
 	export let markers: { lngLat: LngLatLike; label?: string }[] = [];
 	export let mapStyle: string =
-		'https://api.maptiler.com/maps/ch-swisstopo-lbm-grey/style.json?key=epJVqnAFN0DeOXvikzSB';
+		'https://api.maptiler.com/maps/ch-swisstopo-lbm/style.json?key=epJVqnAFN0DeOXvikzSB';
 	export let onChange: ((location: LngLatLike) => void) | undefined = undefined;
 	export const getCenter = () => map.getCenter();
 
