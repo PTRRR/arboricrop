@@ -5,7 +5,7 @@
 	import { goto } from '$app/navigation';
 
 	let data: { children: Snippet } = $props();
-	let showSplashscreen = $state(false);
+	let showSplashscreen = $state(true);
 	let hideContent = $state(false);
 	let menuMode = $state<'default' | 'scrolled'>('default');
 
@@ -160,6 +160,7 @@
 			font-weight: inherit;
 			padding: 1rem;
 			gap: 1rem;
+			transition: opacity 1s 0.7s cubic-bezier(0.83, 0, 0.17, 1);
 
 			a {
 				text-decoration: none;
@@ -224,6 +225,11 @@
 			}
 
 			#{$this}__nav {
+				opacity: 0;
+				pointer-events: none;
+			}
+
+			#{$this}__menu {
 				opacity: 0;
 				pointer-events: none;
 			}
