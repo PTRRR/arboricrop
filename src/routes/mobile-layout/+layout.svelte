@@ -2,6 +2,7 @@
 	import type { Snippet } from 'svelte';
 	import Mobile from '../../components/Mobile.svelte';
 	import { iphone } from '../../utils/phones';
+	import { goto } from '$app/navigation';
 
 	let data: { children: Snippet } = $props();
 </script>
@@ -11,7 +12,7 @@
 </svelte:head>
 
 <Mobile phone={iphone}>
-	<span class="mobile-layout__breadcrumb">vita/hub</span>
+	<a class="mobile-layout__breadcrumb" href="/mobile-layout">vita/hub</a>
 	<div class="mobile-layout__nav">
 		<div class="mobile-layout__menu-button">
 			<div class="mobile-layout__menu-line"></div>
@@ -26,6 +27,22 @@
 		</div>
 	</div>
 </Mobile>
+
+<button
+	class="clear-local-storage"
+	onclick={async () => {
+		if (typeof Storage !== 'undefined') {
+			// Reload the page
+			await goto('/mobile-layout');
+			localStorage.clear();
+			window.location.reload();
+		} else {
+			console.log('localStorage is not supported in this browser');
+		}
+	}}
+>
+	Reset DB
+</button>
 
 <style lang="scss">
 	/* Rubik Regular */
@@ -83,23 +100,33 @@
 	}
 
 	:root {
+		--main-gap: 1rem;
 		--main-font-size: 1.5rem;
 		--big-font-size: 2rem;
-		--layout-margin-top: 5rem;
+		--layout-margin-top: 4rem;
 		--accent-color: #00cc5c;
 		--light-color: white;
 	}
 
+	.clear-local-storage {
+		position: fixed;
+		bottom: 1rem;
+		right: 1rem;
+	}
+
 	.mobile-layout {
-		border: solid;
 		font-family: Rubik;
 		font-weight: 500;
 		background-color: var(--accent-color);
 		min-height: 100%;
 		position: relative;
+		top: 0;
+		border: solid transparent 0.1px;
+		box-sizing: border-box;
 
 		&__nav,
 		&__breadcrumb {
+			text-decoration: none;
 			font-size: var(--big-font-size);
 			font-family: Rubik;
 			font-weight: 500;
@@ -110,7 +137,7 @@
 			left: 0;
 			width: 100%;
 			box-sizing: border-box;
-			padding: var(--layout-margin-top) 2rem 1rem 2rem;
+			padding: var(--layout-margin-top) 1rem 1rem 1rem;
 			color: var(--light-color);
 		}
 
@@ -121,8 +148,8 @@
 		&__menu-button {
 			position: absolute;
 			top: var(--layout-margin-top);
-			right: 2rem;
-			width: 3rem;
+			right: 1rem;
+			width: 2.5rem;
 			height: 2rem;
 			display: flex;
 			flex-direction: column;
@@ -131,7 +158,7 @@
 
 		&__menu-line {
 			width: 100%;
-			height: 4px;
+			height: 3px;
 			border-radius: 1px;
 			background-color: black;
 		}
@@ -142,8 +169,12 @@
 			background-color: var(--light-color);
 			font-size: var(--main-font-size);
 			margin-top: calc(var(--layout-margin-top) + var(--big-font-size) + 1rem);
-			padding: 2rem;
-			border-radius: 2rem;
+			padding: 1rem;
+			border-radius: 1rem;
+			box-sizing: border-box;
+			min-height: calc(
+				var(--mobile-app-height) - var(--layout-margin-top) - var(--big-font-size) - 1rem
+			);
 		}
 	}
 </style>
