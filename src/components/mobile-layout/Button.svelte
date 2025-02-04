@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import { useNavigationHistory } from '../../stores';
 
 	const props: {
 		children: Snippet;
@@ -7,7 +8,10 @@
 		href?: string;
 		disabled?: boolean;
 		onclick?: () => void;
+		preventHistory?: boolean;
 	} = $props();
+
+	const { preventNavigationHistory } = useNavigationHistory();
 </script>
 
 {#snippet innerButton()}
@@ -22,7 +26,12 @@
 		class:button--fit-width={props.fitWidth}
 		class:button--disabled={props.disabled}
 		href={props.href}
-		onclick={props.onclick}
+		onclick={() => {
+			if (props.preventHistory) {
+				$preventNavigationHistory = true;
+			}
+			props.onclick?.();
+		}}
 	>
 		{@render innerButton()}
 	</a>
@@ -32,7 +41,12 @@
 		class:button--fit-width={props.fitWidth}
 		class:button--disabled={props.disabled}
 		disabled={props.disabled}
-		onclick={props.onclick}
+		onclick={() => {
+			if (props.preventHistory) {
+				$preventNavigationHistory = true;
+			}
+			props.onclick?.();
+		}}
 	>
 		{@render innerButton()}
 	</button>

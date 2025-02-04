@@ -12,16 +12,19 @@
 <style lang="scss">
 	.step-separation {
 		width: 100%;
+		color: rgb(200, 200, 200);
 
 		&__label {
 			font-size: 1rem;
 			font-weight: normal;
 			text-transform: lowercase;
+			color: inherit;
 		}
 
 		&__line {
 			width: 100%;
-			border-top: solid 1px black;
+			border-top: solid 1px;
+			border-color: inherit;
 			margin-top: var(--main-gap);
 		}
 	}

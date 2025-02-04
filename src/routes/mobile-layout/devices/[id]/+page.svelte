@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import Button from '../../../../components/Button.svelte';
+	import Button from '../../../../components/mobile-layout/Button.svelte';
 	import Info from '../../../../components/Info.svelte';
 	import MapV2 from '../../../../components/MapV2.svelte';
 	import Spacer from '../../../../components/Spacer.svelte';
 	import ButtonList from '../../../../components/wireframe/ButtonList.svelte';
 	import DeviceGeneralSettings from '../../../../components/wireframe/DeviceGeneralSettings.svelte';
 	import SaveSection from '../../../../components/wireframe/SaveSection.svelte';
-	import Section from '../../../../components/wireframe/Section.svelte';
+	import Section from '../../../../components/mobile-layout/Section.svelte';
 	import {
 		useDeviceIllustration,
 		useDevices,
@@ -21,6 +21,8 @@
 	import { swissBounds } from '../../../../utils/dummyData';
 	import type { Device } from '../../../../utils/types';
 	import { onMount } from 'svelte';
+	import TextInput from '../../../../components/mobile-layout/TextInput.svelte';
+	import TextareaInput from '../../../../components/mobile-layout/TextareaInput.svelte';
 
 	const { preventNavigationHistory, navigateToPreviousPage } = useNavigationHistory();
 	const { setVisibility, reset, setUsb, setJack, setBlink, setOn } = useDeviceIllustration();
@@ -74,46 +76,44 @@
 </script>
 
 {#if device}
+	{#if $page.data.connected}
+		{#if device.status === 'unactive'}
+			<Button
+				preventHistory
+				href={`/mobile-wireframe/devices/${device.id}/activation?connected=true&advanced=${$userMode === 'advanced'}`}
+			>
+				Activate
+			</Button>
+		{:else if editMetadata}
+			<Spacer />
+			<Button
+				onclick={() => {
+					updateDevice({ ...device, status: 'unactive' });
+					editMetadata = false;
+				}}
+			>
+				Disactivate
+			</Button>
+		{/if}
+	{:else}
+		<Spacer />
+		<Button preventHistory href={`/mobile-wireframe/devices/pairing?deviceId=${device.id}`}>
+			Pair device
+		</Button>
+	{/if}
+	<Spacer />
 	<Section
-		title="Device:"
+		label="Device:"
 		buttons={[
 			{ label: editMetadata ? 'Cancel' : 'Edit', onClick: () => (editMetadata = !editMetadata) }
 		]}
 	>
-		<DeviceGeneralSettings {device} editable={editMetadata} />
-		<Spacer />
-		<Info label="Status:" value={device.status} />
-
-		{#if $page.data.connected}
-			{#if device.status === 'unactive'}
-				<Spacer />
-				<Button
-					preventHistory
-					href={`/mobile-wireframe/devices/${device.id}/activation?connected=true&advanced=${$userMode === 'advanced'}`}
-				>
-					Activate
-				</Button>
-			{:else if editMetadata}
-				<Spacer />
-				<Button
-					on:click={() => {
-						updateDevice({ ...device, status: 'unactive' });
-						editMetadata = false;
-					}}
-				>
-					Disactivate
-				</Button>
-			{/if}
-		{:else}
-			<Spacer />
-			<Button preventHistory href={`/mobile-wireframe/devices/pairing?deviceId=${device.id}`}>
-				Pair device
-			</Button>
-		{/if}
+		<TextInput label="Id:" defaultValue={device.id} readonly />
+		<TextInput label="Name:" defaultValue={device.name} readonly />
 	</Section>
 	{#if device.status === 'active'}
 		<Section
-			title="Location:"
+			label="Location:"
 			buttons={[
 				{ label: editLocation ? 'Cancel' : 'Edit', onClick: () => (editLocation = !editLocation) }
 			]}
@@ -133,7 +133,7 @@
 			{#if editLocation}
 				<Spacer />
 				<Button
-					on:click={() => {
+					onclick={() => {
 						if (map && device) {
 							const { lng, lat } = map.getCenter();
 							updateDevice({ ...device, location: [lng, lat] });
@@ -147,7 +147,7 @@
 		</Section>
 
 		<Section
-			title="Field:"
+			label="Field:"
 			buttons={[{ label: editField ? 'Cancel' : 'Edit', onClick: () => (editField = !editField) }]}
 		>
 			{#if editField}
@@ -163,7 +163,7 @@
 				</ButtonList>
 			{:else}
 				<div style={getCss({ display: 'flex', justifyContent: 'flex-start' })}>
-					<Button minimal href={`/mobile-wireframe/fields/${field?.id}`}>
+					<Button href={`/mobile-wireframe/fields/${field?.id}`}>
 						{field?.name || '-'}
 					</Button>
 				</div>
@@ -171,20 +171,20 @@
 		</Section>
 	{/if}
 
-	<Section title="Metadata:" buttons={[{ label: 'Edit' }]}>
+	<Section label="Metadata:" buttons={[{ label: 'Edit' }]}>
 		<!-- svelte-ignore element_invalid_self_closing_tag -->
-		<textarea
-			placeholder="Your note..."
-			value={device?.note || ''}
-			on:input={(event) => {
+		<TextareaInput
+			label="Notes"
+			onvalue={(value) => {
 				if (device) {
 					updateDevice({
 						...device,
-						note: event.currentTarget.value
+						note: value
 					});
 				}
 			}}
 		/>
+
 		{#if device.medias.length > 0}
 			<Spacer />
 			<ButtonList
@@ -208,7 +208,7 @@
 		{/if}
 	</Section>
 
-	<Section title="Advanced settings:">
+	<Section label="Advanced settings:">
 		<Info label="LoRa Configuration:" value={loraConfiguration?.name} />
 		<Spacer />
 		{#if $page.data.connected}
@@ -223,36 +223,20 @@
 	</Section>
 
 	{#if editMetadata}
-		<Section title="Confirm changes:">
+		<Section label="Confirm changes:">
 			<SaveSection onSave={() => {}} onCancel={() => {}} />
 		</Section>
 	{/if}
 
-	<Section title="Danger zone:">
-		<SaveSection
-			deleteLabel="Permanently delete device"
-			onDelete={() => {
+	<Section label="Danger zone:">
+		<Button
+			onclick={() => {
 				$preventNavigationHistory = true;
 				devices.set([...$devices.filter((it) => it.id !== device.id)]);
 				navigateToPreviousPage();
-			}}
-		/>
+			}}>Permanently delete device</Button
+		>
 	</Section>
 {:else}
 	<span>Device unknown</span>
 {/if}
-
-<!-- <Device id={$page.params.id} /> -->
-
-<style>
-	textarea {
-		font-family: inherit;
-		font-size: inherit;
-		padding: 1rem;
-		border: solid 1px var(--black);
-		background-color: var(--white);
-		outline: none;
-		max-width: 100%;
-		resize: vertical;
-	}
-</style>

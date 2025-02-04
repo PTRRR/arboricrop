@@ -1,18 +1,21 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, type Snippet } from 'svelte';
 	import { getCss } from '../utils/css';
 	import type { Phone } from '../utils/phones';
 	import ScrollArea from './ScrollArea.svelte';
 
-	export let phone: Phone;
-	let image: HTMLImageElement;
-	let aspectRatio: string | undefined = undefined;
+	const props: { phone: Phone; onscroll?: (value: number) => void; children?: Snippet } = $props();
 
-	$: appStyle = getCss({ aspectRatio });
-	$: appInnerStyle = getCss({
-		width: `${phone.widthScale * 100}%`,
-		height: `${phone.heightScale * 100}%`
-	});
+	let image: HTMLImageElement;
+	let aspectRatio = $state<string | undefined>(undefined);
+
+	const appStyle = $derived(getCss({ aspectRatio }));
+	const appInnerStyle = $derived(
+		getCss({
+			width: `${props.phone.widthScale * 100}%`,
+			height: `${props.phone.heightScale * 100}%`
+		})
+	);
 
 	const onLoad = () => {
 		const { width, height } = image;
@@ -31,8 +34,8 @@
 	style={getCss({
 		'--mobile-width': `calc((100svh - 2rem) * ${aspectRatio})`,
 		'--mobile-height': 'calc(100svh - 2rem)',
-		'--mobile-app-width': `calc(var(--mobile-width) * ${phone.widthScale})`,
-		'--mobile-app-height': `calc(var(--mobile-height) * ${phone.heightScale})`
+		'--mobile-app-width': `calc(var(--mobile-width) * ${props.phone.widthScale})`,
+		'--mobile-app-height': `calc(var(--mobile-height) * ${props.phone.heightScale})`
 	})}
 >
 	<div class="mobile__content">
@@ -40,13 +43,13 @@
 			<div class="mobile__app" style={appStyle}>
 				<div id="mobile-portal" class="mobile__portal"></div>
 				<div class="mobile__app-inner" style={appInnerStyle}>
-					<ScrollArea>
-						<slot />
+					<ScrollArea onscroll={props.onscroll}>
+						{@render props.children?.()}
 					</ScrollArea>
 				</div>
 			</div>
 		{/if}
-		<img bind:this={image} src={phone.src} on:load={() => onLoad()} alt="" />
+		<img bind:this={image} src={props.phone.src} onload={() => onLoad()} alt="" />
 	</div>
 </div>
 

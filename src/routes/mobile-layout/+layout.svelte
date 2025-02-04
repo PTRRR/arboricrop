@@ -5,8 +5,9 @@
 	import { goto } from '$app/navigation';
 
 	let data: { children: Snippet } = $props();
-	let showSplashscreen = $state(true);
+	let showSplashscreen = $state(false);
 	let hideContent = $state(false);
+	let menuMode = $state<'default' | 'scrolled'>('default');
 
 	onMount(() => {
 		setTimeout(() => {
@@ -19,11 +20,18 @@
 	<title>Arboricrop - Mobile Layout</title>
 </svelte:head>
 
-<Mobile phone={iphone}>
+<Mobile
+	phone={iphone}
+	onscroll={(value) => {
+		console.log(value);
+		menuMode = value > 30 ? 'scrolled' : 'default';
+	}}
+>
 	<div
 		class="mobile-layout"
 		class:mobile-layout--init={showSplashscreen}
 		class:mobile-layout--hide-content={hideContent}
+		class:mobile-layout--scrolled={menuMode === 'scrolled'}
 	>
 		<a class="mobile-layout__breadcrumb" href="/mobile-layout">vita/hub</a>
 		<!-- svelte-ignore a11y_click_events_have_key_events -->
@@ -163,10 +171,10 @@
 			transform: translate(0%, 0%);
 			font-size: var(--big-font-size);
 			transition:
-				transform 1s cubic-bezier(0.83, 0, 0.17, 1),
-				top 1s cubic-bezier(0.83, 0, 0.17, 1),
-				left 1s cubic-bezier(0.83, 0, 0.17, 1),
-				font-size 1s cubic-bezier(0.83, 0, 0.17, 1);
+				transform 0.7s cubic-bezier(0.83, 0, 0.17, 1),
+				top 0.7s cubic-bezier(0.83, 0, 0.17, 1),
+				left 0.7s cubic-bezier(0.83, 0, 0.17, 1),
+				font-size 0.7s cubic-bezier(0.83, 0, 0.17, 1);
 		}
 
 		&__nav {
@@ -176,7 +184,7 @@
 			right: 1.5rem;
 			width: 2.5rem;
 			height: 1.8rem;
-			transition: opacity 1s cubic-bezier(0.83, 0, 0.17, 1);
+			transition: opacity 0.7s cubic-bezier(0.83, 0, 0.17, 1);
 			cursor: pointer;
 		}
 
@@ -204,6 +212,15 @@
 			}
 		}
 
+		&--scrolled {
+			#{$this}__menu-line {
+				width: 100%;
+				height: 3px;
+				border-radius: 1px;
+				background-color: black;
+			}
+		}
+
 		&__menu-button {
 			width: 100%;
 			height: 100%;
@@ -213,6 +230,7 @@
 		}
 
 		&__menu-line {
+			transition: background-color 0.3s ease-in-out;
 			width: 100%;
 			height: 3px;
 			border-radius: 1px;
@@ -220,7 +238,7 @@
 		}
 
 		&__content {
-			transition: transform 1s cubic-bezier(0.83, 0, 0.17, 1);
+			transition: transform 0.7s cubic-bezier(0.83, 0, 0.17, 1);
 			position: relative;
 			z-index: 2;
 			background-color: var(--light-color);

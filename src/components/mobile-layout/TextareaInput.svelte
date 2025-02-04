@@ -12,7 +12,7 @@
 	} = $props();
 
 	let value = $state(props.defaultValue || '');
-	let input: HTMLInputElement | null = $state(null);
+	let input: HTMLTextAreaElement | null = $state(null);
 
 	onMount(() => {
 		if (props.autoFocus) {
@@ -25,23 +25,23 @@
 	});
 </script>
 
-<div class="text-input">
+<div class="textarea-input">
 	{#if props.label}
 		<label for={props.name}>{props.label}</label>
 	{/if}
-	<input
+	<textarea
 		bind:value
 		bind:this={input}
+		spellcheck="false"
 		oninput={() => props.onvalue?.(value)}
 		name={props.name}
 		placeholder={props.placeholder}
-		type="text"
-		class:text-input--readonly={props.readonly}
-	/>
+		class:textarea-input--readonly={props.readonly}
+	></textarea>
 </div>
 
 <style lang="scss">
-	.text-input {
+	.textarea-input {
 		display: flex;
 		flex-direction: column;
 		gap: 0.5rem;
@@ -50,7 +50,7 @@
 			text-transform: lowercase;
 		}
 
-		input {
+		textarea {
 			line-height: 1;
 			font-size: inherit;
 			font-family: inherit;
@@ -61,9 +61,12 @@
 			border: none;
 			background-color: rgb(235, 235, 235);
 			border-radius: 5px;
-			min-height: 2rem;
+			max-width: 100%;
+			min-height: 10rem;
 			outline: none;
 			box-sizing: border-box;
+			resize: vertical;
+			font-weight: normal;
 		}
 
 		&--readonly {

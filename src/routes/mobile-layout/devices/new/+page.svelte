@@ -49,7 +49,7 @@
 
 <Section label="Device:">
 	<TextInput label="id" defaultValue={device.id} readonly />
-	<TextInput label="name" defaultValue={'hello'} />
+	<TextInput label="name" autoFocus onvalue={(value) => (device.name = value)} />
 	<!-- <DeviceMetadataV2
 		{device}
 		editable

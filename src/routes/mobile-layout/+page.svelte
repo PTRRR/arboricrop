@@ -3,10 +3,16 @@
 	import Card from '../../components/mobile-layout/Card.svelte';
 	import Section from '../../components/mobile-layout/Section.svelte';
 	import TextInput from '../../components/mobile-layout/TextInput.svelte';
-	import { useFields } from '../../stores';
+	import { useDevices, useFields } from '../../stores';
+	import { getCss } from '../../utils/css';
 
+	const { devices } = useDevices();
 	const { fields } = useFields();
 	let newFieldName = $state<string | number>('');
+
+	const getFieldDeviceCount = (fieldId: string) => {
+		return $devices.filter((it) => it.fieldId === fieldId).length;
+	};
 </script>
 
 {#if $fields.length === 0}
@@ -25,8 +31,13 @@
 {:else}
 	<Section label="Fields:">
 		{#each $fields as field}
-			<Card href={`/mobile-layout/fields/${field.id}`}>
-				<span>{field.name}</span>
+			<Card href={`/mobile-layout/fields/${field.id}`} imageUrl="/images/map.png">
+				<div>
+					<p>Name: {field.name}</p>
+					<p style={getCss({ fontWeight: 'normal', fontSize: '1rem' })}>
+						Devices: {getFieldDeviceCount(field.id)}
+					</p>
+				</div>
 			</Card>
 		{/each}
 	</Section>
