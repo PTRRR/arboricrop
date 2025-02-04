@@ -1,10 +1,18 @@
 <script lang="ts">
-	import type { Snippet } from 'svelte';
+	import { onMount, type Snippet } from 'svelte';
 	import Mobile from '../../components/Mobile.svelte';
 	import { iphone } from '../../utils/phones';
 	import { goto } from '$app/navigation';
 
 	let data: { children: Snippet } = $props();
+	let showSplashscreen = $state(true);
+	let hideContent = $state(false);
+
+	onMount(() => {
+		setTimeout(() => {
+			showSplashscreen = false;
+		}, 2000);
+	});
 </script>
 
 <svelte:head>
@@ -12,18 +20,26 @@
 </svelte:head>
 
 <Mobile phone={iphone}>
-	<a class="mobile-layout__breadcrumb" href="/mobile-layout">vita/hub</a>
-	<div class="mobile-layout__nav">
-		<div class="mobile-layout__menu-button">
-			<div class="mobile-layout__menu-line"></div>
-			<div class="mobile-layout__menu-line"></div>
-			<div class="mobile-layout__menu-line"></div>
+	<div
+		class="mobile-layout"
+		class:mobile-layout--init={showSplashscreen}
+		class:mobile-layout--hide-content={hideContent}
+	>
+		<a class="mobile-layout__breadcrumb" href="/mobile-layout">vita/hub</a>
+		<!-- svelte-ignore a11y_click_events_have_key_events -->
+		<!-- svelte-ignore a11y_no_static_element_interactions -->
+		<div class="mobile-layout__nav" onclick={() => (hideContent = !hideContent)}>
+			<div class="mobile-layout__menu-button">
+				<div class="mobile-layout__menu-line"></div>
+				<div class="mobile-layout__menu-line"></div>
+				<div class="mobile-layout__menu-line"></div>
+			</div>
 		</div>
-	</div>
 
-	<div class="mobile-layout">
-		<div class="mobile-layout__content">
-			{@render data.children()}
+		<div class="mobile-layout__wrapper">
+			<div class="mobile-layout__content">
+				{@render data.children()}
+			</div>
 		</div>
 	</div>
 </Mobile>
@@ -115,14 +131,18 @@
 	}
 
 	.mobile-layout {
+		$this: &;
 		font-family: Rubik;
 		font-weight: 500;
 		background-color: var(--accent-color);
-		min-height: 100%;
-		position: relative;
-		top: 0;
-		border: solid transparent 0.1px;
-		box-sizing: border-box;
+
+		&__wrapper {
+			min-height: 100%;
+			position: relative;
+			top: 0;
+			border: solid transparent 0.1px;
+			box-sizing: border-box;
+		}
 
 		&__nav,
 		&__breadcrumb {
@@ -133,24 +153,60 @@
 			z-index: 1;
 			position: fixed;
 			line-height: 1;
-			top: 0;
-			left: 0;
-			width: 100%;
-			box-sizing: border-box;
-			padding: var(--layout-margin-top) 1rem 1rem 1rem;
 			color: var(--light-color);
+		}
+
+		&__breadcrumb {
+			top: var(--layout-margin-top);
+			left: 1rem;
+			white-space: nowrap;
+			transform: translate(0%, 0%);
+			font-size: var(--big-font-size);
+			transition:
+				transform 1s cubic-bezier(0.83, 0, 0.17, 1),
+				top 1s cubic-bezier(0.83, 0, 0.17, 1),
+				left 1s cubic-bezier(0.83, 0, 0.17, 1),
+				font-size 1s cubic-bezier(0.83, 0, 0.17, 1);
 		}
 
 		&__nav {
 			z-index: 10;
+			right: 0;
+			top: var(--layout-margin-top);
+			right: 1.5rem;
+			width: 2.5rem;
+			height: 1.8rem;
+			transition: opacity 1s cubic-bezier(0.83, 0, 0.17, 1);
+			cursor: pointer;
+		}
+
+		&--init {
+			#{$this}__content {
+				transform: translate(0, 100%);
+			}
+
+			#{$this}__breadcrumb {
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				font-size: 4rem;
+			}
+
+			#{$this}__nav {
+				opacity: 0;
+				pointer-events: none;
+			}
+		}
+
+		&--hide-content {
+			#{$this}__content {
+				transform: translate(0, 100%);
+			}
 		}
 
 		&__menu-button {
-			position: absolute;
-			top: var(--layout-margin-top);
-			right: 1rem;
-			width: 2.5rem;
-			height: 2rem;
+			width: 100%;
+			height: 100%;
 			display: flex;
 			flex-direction: column;
 			justify-content: space-between;
@@ -160,17 +216,18 @@
 			width: 100%;
 			height: 3px;
 			border-radius: 1px;
-			background-color: black;
+			background-color: var(--light-color);
 		}
 
 		&__content {
+			transition: transform 1s cubic-bezier(0.83, 0, 0.17, 1);
 			position: relative;
 			z-index: 2;
 			background-color: var(--light-color);
 			font-size: var(--main-font-size);
 			margin-top: calc(var(--layout-margin-top) + var(--big-font-size) + 1rem);
-			padding: 1rem;
-			border-radius: 1rem;
+			padding: 1.5rem;
+			border-radius: 1.5rem;
 			box-sizing: border-box;
 			min-height: calc(
 				var(--mobile-app-height) - var(--layout-margin-top) - var(--big-font-size) - 1rem
