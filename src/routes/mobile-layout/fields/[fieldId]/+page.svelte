@@ -39,9 +39,9 @@
 
 <div class="field">
   {#if field}
-    <Section label="General Settings" actions={[{label: "Edit", onclick: () => {}}]}>
-      <TextInput label="Name" defaultValue={field.name} readonly />
-      <TextInput label="Type" defaultValue={field.type} readonly />
+    <Section label="General Settings">
+      <TextInput label="Name" defaultValue={field.name} />
+      <TextInput label="Area" defaultValue={field.area} />
     </Section>
     <Section label="Devices"
              actions={fieldDevices.length > 0 ? [{label: "Add", onclick: () => goto(`/mobile-layout/devices/pairing?field=${field.id}`)}] : []}>
@@ -68,7 +68,11 @@
     <Section label="Layers"></Section>
     <Section label="LoRa"></Section>
     <Section label="Danger Zone">
-      <Button>Delete Permanently</Button>
+      <Button onclick={() => {
+        deleteField(field.id);
+        goto('/mobile-layout');
+      }} type="error">Delete Permanently
+      </Button>
     </Section>
   {/if}
 </div>

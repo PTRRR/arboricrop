@@ -36,12 +36,13 @@ export type Device = {
 };
 
 export type Field = {
+	area: string;
+	center: LngLatLike;
 	id: string;
+	layers: GeoJSONFeature[];
+	loraConfigId: string;
 	name: string;
 	type: string;
-	center: LngLatLike;
-	loraConfigId: string;
-	layers: GeoJSONFeature[];
 };
 
 export type NotificationType = 'notification' | 'warning' | 'alert';

@@ -18,11 +18,12 @@
 
   let map: Map | null = $state(null);
   let name = $state('');
-  let type = $state('');
+  let area = $state('');
 
   let field: Field = $state({
     id: `fie-${createId()}`,
     name: defaultName,
+    area: '',
     type: '',
     loraConfigId: '',
     center: changinCenter,
@@ -32,7 +33,7 @@
 
 <Section label="General settings">
   <TextInput label="Name" defaultValue={defaultName} onvalue={(value) => (name = value)} />
-  <TextInput label="Type" onvalue={(value) => (type = value)} />
+  <TextInput label="Area" onvalue={(value) => (area = value)} />
 </Section>
 
 <Section label="Location">
@@ -55,7 +56,7 @@
 			field = {
 				...field,
 				name,
-				type,
+				area,
 				// ...generalSettings.getValues(),
 				layers: []
 			};

@@ -6,11 +6,11 @@
 	import { strategies } from '../../../../utils/pairing';
 	import { goto } from '$app/navigation';
 	import { createUrlBuilder } from '../../../../utils/urls';
-	import CenteredWrapper from '../../../../components/wireframe/CenteredWrapper.svelte';
 	import { onMount } from 'svelte';
 	import Section from '../../../../components/mobile-layout/Section.svelte';
 	import Spacer from '../../../../components/Spacer.svelte';
 	import type { PageData } from './$types';
+	import CenteredWrapper from '../../../../components/mobile-layout/CenteredWrapper.svelte';
 
 	export let data: PageData;
 
@@ -41,71 +41,74 @@
 	});
 </script>
 
-{#if !data.success}
-	<Section label={`${currentPairingStrategy.label} pairing:`}>
-		<Image
-			ratio={1}
-			placeholder="Comprehensive schema or tutorial explaining how to proceed"
-			onclick={() => {
-				$preventNavigationHistory = true;
-				goto(url.addQuery({ name: 'success', value: true }));
-				setTimeout(() => {
-					if (data.deviceId) {
-						$preventNavigationHistory = true;
-						const url = createUrlBuilder(`/mobile-layout/devices/${data.deviceId}`);
-						goto(url.resetQueries([{ name: 'connected', value: true }]));
-					} else {
-						$preventNavigationHistory = true;
-						goto(
-							newDeviceUrl.resetQueries([
-								{ name: 'connected', value: true },
-								{
-									name: 'field',
-									value: data.field || undefined
-								}
-							])
-						);
-					}
-				}, 2000);
-			}}
-		/>
-		<Spacer />
-		<p class="pairing__description">
-			<span>{currentPairingStrategy.description}</span>
-		</p>
-		<Spacer />
-		<Dropdown label="Use other pairing strategy" items={strategyOptions}>
-			<Button slot="item" let:item href={url.addQuery({ name: 'strategy', value: item.value })}>
-				{item.label}
-			</Button>
-		</Dropdown>
-	</Section>
-{:else}
-	<div class="pairing__success">
-		<p>Pairing successful</p>
-		<span>Loading device metadata...</span>
-	</div>
-{/if}
+<CenteredWrapper>
+	{#if !data.success}
+		<Section label={`${currentPairingStrategy.label} pairing`}>
+			<Image
+				ratio={1}
+				placeholder="Comprehensive schema or tutorial explaining how to proceed"
+				onclick={() => {
+					$preventNavigationHistory = true;
+					goto(url.addQuery({ name: 'success', value: true }));
+					setTimeout(() => {
+						if (data.deviceId) {
+							$preventNavigationHistory = true;
+							const url = createUrlBuilder(`/mobile-layout/devices/${data.deviceId}`);
+							goto(url.resetQueries([{ name: 'connected', value: true }]));
+						} else {
+							$preventNavigationHistory = true;
+							goto(
+								newDeviceUrl.resetQueries([
+									{ name: 'connected', value: true },
+									{
+										name: 'field',
+										value: data.field || undefined
+									}
+								])
+							);
+						}
+					}, 2000);
+				}}
+			/>
+			<p class="pairing__description">
+				<span>{currentPairingStrategy.description}</span>
+			</p>
+		</Section>
+		<Section>
+			<Dropdown label="Use other pairing strategy" items={strategyOptions}>
+				<Button slot="item" let:item href={url.addQuery({ name: 'strategy', value: item.value })}>
+					{item.label}
+				</Button>
+			</Dropdown>
+		</Section>
+	{:else}
+		<div class="pairing__success">
+			<p>Pairing successful</p>
+			<span>Loading device metadata...</span>
+		</div>
+	{/if}
+</CenteredWrapper>
 
 <style>
 	.pairing__description {
+		font-weight: normal;
 		color: var(--dark-gray);
-		text-align: center;
+		width: 100%;
 	}
 
 	.pairing__description span {
 		display: inline-block;
-		max-width: 14rem;
+		text-transform: lowercase;
 	}
 
 	.pairing__success {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		gap: var(--gap);
 	}
 
 	.pairing__success span {
 		color: var(--dark-gray);
+		font-weight: normal;
 	}
 </style>

@@ -1,17 +1,23 @@
 <script lang="ts">
-	import type { Snippet } from 'svelte';
-	import { useNavigationHistory } from '../../stores';
+  import type { Snippet } from 'svelte';
+  import { useNavigationHistory } from '../../stores';
+  import { getCss } from '../../utils/css';
 
-	const props: {
-		children: Snippet;
-		fitWidth?: boolean;
-		href?: string;
-		disabled?: boolean;
-		onclick?: () => void;
-		preventHistory?: boolean;
-	} = $props();
+  const props: {
+    children: Snippet;
+    fitWidth?: boolean;
+    href?: string;
+    disabled?: boolean;
+    onclick?: () => void;
+    preventHistory?: boolean;
+    type?: 'normal' | 'error';
+  } = $props();
 
-	const { preventNavigationHistory } = useNavigationHistory();
+  const { preventNavigationHistory } = useNavigationHistory();
+  const buttonStyle = props.type === 'error' ? getCss({
+    color: '#ff3333',
+    backgroundColor: '#ffc7c7'
+  }) : '';
 </script>
 
 {#snippet innerButton()}
@@ -21,69 +27,71 @@
 {/snippet}
 
 {#if props.href}
-	<a
-		class="button"
-		class:button--fit-width={props.fitWidth}
-		class:button--disabled={props.disabled}
-		href={props.href}
-		onclick={() => {
+  <a
+    class="button"
+    class:button--fit-width={props.fitWidth}
+    class:button--disabled={props.disabled}
+    style={buttonStyle}
+    href={props.href}
+    onclick={() => {
 			if (props.preventHistory) {
 				$preventNavigationHistory = true;
 			}
 			props.onclick?.();
 		}}
-	>
-		{@render innerButton()}
-	</a>
+  >
+    {@render innerButton()}
+  </a>
 {:else}
-	<button
-		class="button"
-		class:button--fit-width={props.fitWidth}
-		class:button--disabled={props.disabled}
-		disabled={props.disabled}
-		onclick={() => {
+  <button
+    class="button"
+    class:button--fit-width={props.fitWidth}
+    class:button--disabled={props.disabled}
+    style={buttonStyle}
+    disabled={props.disabled}
+    onclick={() => {
 			if (props.preventHistory) {
 				$preventNavigationHistory = true;
 			}
 			props.onclick?.();
 		}}
-	>
-		{@render innerButton()}
-	</button>
+  >
+    {@render innerButton()}
+  </button>
 {/if}
 
 <style lang="scss">
-	.button {
-		background-color: lightgray;
-		color: black;
-		font-family: inherit;
-		font-size: inherit;
-		font-weight: inherit;
-		text-decoration: none;
-		text-transform: lowercase;
-		border: none;
-		padding: 0.5rem;
-		border-radius: 5px;
-		cursor: pointer;
-		text-align: left;
-		box-sizing: border-box;
+  .button {
+    background-color: lightgray;
+    color: black;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    text-decoration: none;
+    text-transform: lowercase;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: left;
+    box-sizing: border-box;
 
-		&--fit-width {
-			width: 100%;
-		}
+    &--fit-width {
+      width: 100%;
+    }
 
-		&--disabled {
-			opacity: 0.5;
-			pointer-events: none;
-		}
+    &--disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
 
-		&:hover {
-			background-color: grey;
-		}
+    &:hover {
+      background-color: grey;
+    }
 
-		span {
-			display: block;
-			line-height: 1;
-		}
-	}
+    span {
+      display: block;
+      line-height: 1;
+    }
+  }
 </style>
