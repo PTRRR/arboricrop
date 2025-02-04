@@ -7,6 +7,7 @@
 		defaultValue?: string;
 		placeholder?: string;
 		autoFocus?: boolean;
+		readonly?: boolean;
 		onvalue?: (value: string) => void;
 	} = $props();
 
@@ -35,6 +36,7 @@
 		name={props.name}
 		placeholder={props.placeholder}
 		type="text"
+		class:text-input--readonly={props.readonly}
 	/>
 </div>
 
@@ -62,6 +64,12 @@
 			min-height: 2rem;
 			outline: none;
 			box-sizing: border-box;
+		}
+
+		&--readonly {
+			pointer-events: none;
+			opacity: 0.8;
+			color: gray;
 		}
 	}
 </style>

@@ -101,9 +101,9 @@
 
 	:root {
 		--main-gap: 1rem;
-		--main-font-size: 1.5rem;
+		--main-font-size: 1.2rem;
 		--big-font-size: 2rem;
-		--layout-margin-top: 4rem;
+		--layout-margin-top: 6vh;
 		--accent-color: #00cc5c;
 		--light-color: white;
 	}
