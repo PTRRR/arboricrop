@@ -43,6 +43,12 @@
 			</div>
 		</div>
 
+		<div class="mobile-layout__menu">
+			<a href="/mobile-layout" onclick={() => (hideContent = false)}>Fields</a>
+			<a href="/mobile-layout" onclick={() => (hideContent = false)}>Settings</a>
+			<a href="/mobile-layout" onclick={() => (hideContent = false)}>Account</a>
+		</div>
+
 		<div class="mobile-layout__wrapper">
 			<div class="mobile-layout__content">
 				{@render data.children()}
@@ -143,6 +149,24 @@
 		font-weight: 500;
 		background-color: var(--accent-color);
 
+		&__menu {
+			position: fixed;
+			top: 50%;
+			left: 0;
+			transform: translate(0, -50%);
+			display: flex;
+			flex-direction: column;
+			font-size: var(--big-font-size);
+			font-weight: inherit;
+			padding: 1rem;
+			gap: 1rem;
+
+			a {
+				text-decoration: none;
+				color: var(--light-color);
+			}
+		}
+
 		&__wrapper {
 			min-height: 100%;
 			position: relative;
@@ -206,6 +230,10 @@
 		}
 
 		&--hide-content {
+			#{$this}__wrapper {
+				pointer-events: none;
+			}
+
 			#{$this}__content {
 				transform: translate(0, 100%);
 			}

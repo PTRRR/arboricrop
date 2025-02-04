@@ -103,7 +103,7 @@
 	.map__wrapper {
 		width: 100%;
 		aspect-ratio: var(--ratio);
-		border: solid 1px lightgray;
+		/* border: solid 1px lightgray; */
 		border-radius: 5px;
 		position: relative;
 		overflow: hidden;
