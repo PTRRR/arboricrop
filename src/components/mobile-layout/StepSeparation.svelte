@@ -3,7 +3,7 @@
 
 	const props: {
 		label?: string | number;
-		actions?: { label: string; onclick: () => void }[];
+		actions?: { label: string; onclick?: () => void }[];
 	} = $props();
 </script>
 

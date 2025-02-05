@@ -134,6 +134,7 @@
 		--big-font-size: 2rem;
 		--layout-margin-top: 6vh;
 		--accent-color: #00cc5c;
+		--danger-red: #ff3333;
 		--light-color: white;
 	}
 

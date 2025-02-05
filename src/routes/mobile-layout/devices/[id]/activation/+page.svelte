@@ -3,17 +3,17 @@
 	import { page } from '$app/stores';
 	import { createId } from '@paralleldrive/cuid2';
 
-	import Button from '../../../../../components/Button.svelte';
-	import Checklist from '../../../../../components/Checklist.svelte';
-	import Dropdown from '../../../../../components/Dropdown.svelte';
+	import Button from '../../../../../components/mobile-layout/Button.svelte';
+	import Checklist from '../../../../../components/mobile-layout/Checklist.svelte';
+	import Dropdown from '../../../../../components/mobile-layout/Dropdown.svelte';
 	import Info from '../../../../../components/Info.svelte';
-	import MapV2 from '../../../../../components/MapV2.svelte';
+	import Map from '../../../../../components/mobile-layout/Map.svelte';
 	import Spacer from '../../../../../components/Spacer.svelte';
 	import ButtonList from '../../../../../components/wireframe/ButtonList.svelte';
-	import CenteredWrapper from '../../../../../components/wireframe/CenteredWrapper.svelte';
-	import Image from '../../../../../components/wireframe/Image.svelte';
+	import CenteredWrapper from '../../../../../components/mobile-layout/CenteredWrapper.svelte';
+	import Image from '../../../../../components/mobile-layout/Image.svelte';
 	import SaveSection from '../../../../../components/wireframe/SaveSection.svelte';
-	import Section from '../../../../../components/wireframe/Section.svelte';
+	import Section from '../../../../../components/mobile-layout/Section.svelte';
 	import {
 		useDeviceIllustration,
 		useDevices,
@@ -27,6 +27,9 @@
 	import Separation from '../../../../../components/Separation.svelte';
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
+	import StepSeparation from '../../../../../components/mobile-layout/StepSeparation.svelte';
+	import PageHeader from '../../../../../components/mobile-layout/PageHeader.svelte';
+	import TextareaInput from '../../../../../components/mobile-layout/TextareaInput.svelte';
 
 	export let data: PageData;
 
@@ -51,7 +54,7 @@
 		{ label: 'File', type: 'file' }
 	];
 
-	let map: MapV2 | undefined;
+	let map: Map | undefined;
 	let selectedField: Field | undefined = undefined;
 
 	$: stepIndex = ($page.data.step || 0) as number;
@@ -101,7 +104,7 @@
 </script>
 
 {#if data.advanced && device}
-	<Section title="Advanced Activation:" buttons={[{ label: 'See live data' }]}>
+	<Section label="Advanced Activation" buttons={[{ label: 'See live data' }]}>
 		<Checklist
 			points={[
 				{ label: 'Correct device orientation', checked: true },
@@ -112,7 +115,7 @@
 			]}
 		/>
 		<Spacer />
-		<MapV2
+		<Map
 			bind:this={map}
 			maxBounds={swissBounds}
 			zoom={15}
@@ -125,7 +128,7 @@
 		/>
 		<Spacer />
 		<Button
-			on:click={() => {
+			onclick={() => {
 				const center = map?.getCenter();
 				if (device && center) {
 					updateDevice({
@@ -138,7 +141,7 @@
 			Validate location
 		</Button>
 		<Spacer />
-		<Info label="Note:" />
+		<Info label="Note" />
 		<Spacer />
 
 		<!-- svelte-ignore element_invalid_self_closing_tag -->
@@ -156,14 +159,14 @@
 		/>
 		<Spacer />
 
-		<Info label="Medias:" />
+		<Info label="Medias" />
 		<Spacer />
 
 		<Dropdown label="Add media" items={mediaOptions}>
 			<Button
 				slot="item"
 				let:item
-				on:click={() => {
+				onclick={() => {
 					const medias =
 						item.type === 'image'
 							? [...device.medias, { name: `${createId()}.jpg`, type: item.type }]
@@ -203,11 +206,11 @@
 		{/if}
 
 		<Spacer size="calc(var(--gap) * 3)" />
-		<Separation title="Review & confirm:" />
+		<Separation title="Review & confirm" />
 		<Button
 			preventHistory
 			href={`/mobile-wireframe/devices/${device?.id}?connected=true`}
-			on:click={() => {
+			onclick={() => {
 				if (device) {
 					updateDevice({
 						...device,
@@ -220,7 +223,7 @@
 		</Button>
 	</Section>
 {:else if $page.data.selectField}
-	<Section title="Available fields:">
+	<Section label="Available fields">
 		<ButtonList
 			items={$fields}
 			let:item
@@ -231,7 +234,7 @@
 		</ButtonList>
 	</Section>
 
-	<Section title="Confirm changes:">
+	<Section label="Confirm changes">
 		<SaveSection
 			saveDisabled={!selectedField}
 			onSave={() => {
@@ -250,171 +253,160 @@
 		/>
 	</Section>
 {:else}
-	<CenteredWrapper>
-		<Section
-			title={`Activation Step ${stepIndex + 1}/${steps.length}: ${currentStep?.label}`}
-			buttons={[
-				{
-					label: stepIndex > 0 ? 'Previous' : 'Cancel',
-					onClick: () => {
-						if (stepIndex > 0) {
-							$preventNavigationHistory = true;
-							goto(url.addQuery({ name: 'step', value: stepIndex - 1 }));
-						} else {
-							$preventNavigationHistory = true;
-							goto(`/mobile-wireframe/devices/${device?.id}?connected=true`);
-						}
+	{#snippet stepHeader()}
+		<span>{currentStep?.label}</span>
+		<Button>Live Data</Button>
+	{/snippet}
+
+	<PageHeader title={stepHeader} subTitle={`Step ${stepIndex + 1}/${steps.length}`} />
+	<Section
+		buttons={[
+			{
+				label: stepIndex > 0 ? 'Previous' : 'Cancel',
+				onClick: () => {
+					if (stepIndex > 0) {
+						$preventNavigationHistory = true;
+						goto(url.addQuery({ name: 'step', value: stepIndex - 1 }));
+					} else {
+						$preventNavigationHistory = true;
+						goto(`/mobile-wireframe/devices/${device?.id}?connected=true`);
 					}
 				}
-			]}
-		>
-			{#if stepIndex === 0}
-				<Image ratio={1} placeholder="Schema showing how to attach the device on a plant" />
-				<Spacer size="calc(var(--gap) * 3)" />
-				<Separation title="Checks:" buttons={[{ label: 'Show live data' }]} />
-				<Checklist
-					points={[
-						{ label: 'Correct device orientation', checked: true },
-						{ label: 'Device is not moving', checked: true }
-					]}
-				/>
-				<Spacer size="calc(var(--gap) * 3)" />
-				<Separation title="Review & confirm:" />
-				<Button preventHistory href={nextHref}>Next step</Button>
-			{:else if stepIndex === 1}
-				<Image
-					ratio={1}
-					placeholder="Schema showing how to plug the jack into the device and install the probes on a plant"
-				/>
-				<Spacer size="calc(var(--gap) * 3)" />
-				<Separation title="Checks:" buttons={[{ label: 'Show live data' }]} />
-				<Checklist
-					points={[
-						{ label: 'Plug the jack into the device', checked: true },
-						{ label: 'Install probes', checked: true },
-						{ label: 'Wait for signal', checked: true }
-					]}
-				/>
-				<Spacer size="calc(var(--gap) * 3)" />
-				<Separation title="Review & confirm:" />
-				<Button preventHistory href={nextHref}>Next step</Button>
-			{:else if stepIndex === 2}
-				<MapV2
-					bind:this={map}
-					maxBounds={swissBounds}
-					zoom={15}
-					minZoom={8}
-					maxZoom={18.5}
-					center={device?.location || field?.center}
-					showTarget
-					markers={device?.location ? [{ lngLat: device.location }] : []}
-					geoJSONs={field?.layers}
-				/>
-				<Spacer />
-				<Button
-					on:click={() => {
-						const center = map?.getCenter();
-						if (device && center) {
-							updateDevice({
-								...device,
-								location: [center.lng, center.lat]
-							});
-						}
-					}}
-				>
-					Validate location
-				</Button>
-				<Spacer size="calc(var(--gap) * 3)" />
-				<Separation title="Review & confirm:" />
-				<Button preventHistory href={nextHref} disabled={!device?.location}>Next step</Button>
-			{:else if stepIndex === 3 && device}
-				<Info label="Note:" />
-				<Spacer />
-
-				<!-- svelte-ignore element_invalid_self_closing_tag -->
-				<textarea
-					placeholder="Your note..."
-					value={device?.note || ''}
-					on:input={(event) => {
-						if (device) {
-							updateDevice({
-								...device,
-								note: event.currentTarget.value
-							});
-						}
-					}}
-				/>
-				<Spacer />
-
-				<Info label="Medias:" />
-				<Spacer />
-
-				<Dropdown label="Add media" items={mediaOptions}>
-					<Button
-						slot="item"
-						let:item
-						on:click={() => {
-							const medias =
-								item.type === 'image'
-									? [...device.medias, { name: `${createId()}.jpg`, type: item.type }]
-									: item.type === 'audio-note'
-										? [...device.medias, { name: `${createId()}.mp3`, type: item.type }]
-										: [...device.medias, { name: `${createId()}.pdf`, type: item.type }];
-
-							if (device) {
-								updateDevice({
-									...device,
-									medias
-								});
-							}
-						}}
-					>
-						{item.label}
-					</Button>
-				</Dropdown>
-
-				{#if device.medias.length > 0}
-					<Spacer />
-					<ButtonList
-						items={device.medias}
-						let:item
-						onSelect={(media) => {
-							if (device) {
-								updateDevice({
-									...device,
-									medias: (device.medias || []).filter((it) => it !== media)
-								});
-							}
-						}}
-					>
-						<span>{item.name}</span>
-						<span>{item.type}</span>
-					</ButtonList>
-				{/if}
-
-				<Spacer size="calc(var(--gap) * 3)" />
-				<Separation title="Review & confirm:" />
-				<Button
-					preventHistory
-					href={`/mobile-wireframe/devices/${device?.id}?connected=true`}
-					on:click={() => {
-						if (device) {
-							updateDevice({
-								...device,
-								status: 'active'
-							});
-						}
-					}}
-				>
-					Activate device
-				</Button>
-			{/if}
-			<Spacer />
-			<Button href={`/mobile-wireframe/devices/${device?.id}?connected=true`} preventHistory>
-				Cancel
+			}
+		]}
+	>
+		{#if stepIndex === 0}
+			<Image ratio={1} placeholder="Schema showing how to attach the device on a plant" />
+			<StepSeparation label="Checks" />
+			<Checklist
+				points={[
+					{ label: 'Correct device orientation', checked: true },
+					{ label: 'Device is not moving', checked: true }
+				]}
+			/>
+			<StepSeparation label="Review & confirm" />
+			<Button preventHistory href={nextHref}>Next step</Button>
+		{:else if stepIndex === 1}
+			<Image
+				ratio={1}
+				placeholder="Schema showing how to plug the jack into the device and install the probes on a plant"
+			/>
+			<StepSeparation label="Checks" />
+			<Checklist
+				points={[
+					{ label: 'Plug the jack into the device', checked: true },
+					{ label: 'Install probes', checked: true },
+					{ label: 'Wait for signal', checked: true }
+				]}
+			/>
+			<StepSeparation label="Review & confirm" />
+			<Button preventHistory href={nextHref}>Next step</Button>
+		{:else if stepIndex === 2}
+			<Map
+				bind:this={map}
+				maxBounds={swissBounds}
+				zoom={15}
+				minZoom={8}
+				maxZoom={18.5}
+				center={device?.location || field?.center}
+				showTarget
+				markers={device?.location ? [{ lngLat: device.location }] : []}
+				geoJSONs={field?.layers}
+			/>
+			<Button
+				onclick={() => {
+					const center = map?.getCenter();
+					if (device && center) {
+						updateDevice({
+							...device,
+							location: [center.lng, center.lat]
+						});
+					}
+				}}
+			>
+				Validate location
 			</Button>
-		</Section>
-	</CenteredWrapper>
+			<StepSeparation label="Review & confirm" />
+			<Button preventHistory href={nextHref} disabled={!device?.location}>Next step</Button>
+		{:else if stepIndex === 3 && device}
+			<TextareaInput
+				placeholder="Your note..."
+				defaultValue={device?.note || ''}
+				onvalue={(value) => {
+					if (device) {
+						console.log(value);
+						updateDevice({
+							...device,
+							note: value
+						});
+					}
+				}}
+			/>
+
+			<StepSeparation label="Medias" />
+			<Dropdown label="Add media" items={mediaOptions}>
+				<Button
+					slot="item"
+					let:item
+					onclick={() => {
+						const medias =
+							item.type === 'image'
+								? [...device.medias, { name: `${createId()}.jpg`, type: item.type }]
+								: item.type === 'audio-note'
+									? [...device.medias, { name: `${createId()}.mp3`, type: item.type }]
+									: [...device.medias, { name: `${createId()}.pdf`, type: item.type }];
+
+						if (device) {
+							updateDevice({
+								...device,
+								medias
+							});
+						}
+					}}
+				>
+					{item.label}
+				</Button>
+			</Dropdown>
+
+			{#if device.medias.length > 0}
+				<Spacer />
+				<ButtonList
+					items={device.medias}
+					let:item
+					onSelect={(media) => {
+						if (device) {
+							updateDevice({
+								...device,
+								medias: (device.medias || []).filter((it) => it !== media)
+							});
+						}
+					}}
+				>
+					<span>{item.name}</span>
+					<span>{item.type}</span>
+				</ButtonList>
+			{/if}
+
+			<StepSeparation label="Review & confirm" />
+			<Button
+				preventHistory
+				href={`/mobile-layout/devices/${device?.id}?connected=true`}
+				onclick={() => {
+					if (device) {
+						updateDevice({
+							...device,
+							status: 'active'
+						});
+					}
+				}}
+			>
+				Activate device
+			</Button>
+		{/if}
+		<Button href={`/mobile-wireframe/devices/${device?.id}?connected=true`} preventHistory>
+			Cancel
+		</Button>
+	</Section>
 {/if}
 
 <style>

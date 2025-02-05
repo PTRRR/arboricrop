@@ -21,6 +21,7 @@
 	import Checkbox from '../../../components/Checkbox.svelte';
 	import TextInput from '../../../components/mobile-layout/TextInput.svelte';
 	import Table from '../../../components/mobile-layout/Table.svelte';
+	import PageHeader from '../../../components/mobile-layout/PageHeader.svelte';
 
 	const usedNetwork = useNetwork();
 	const returnButton = useReturnButton();
@@ -82,6 +83,8 @@
 		/>
 	</CenteredWrapper>
 {:else}
+	<PageHeader title="Settings" />
+
 	{#if $organisations.length > 0}
 		<Section label="Account settings">
 			<Info label="Selected organisation:" value={$organisation || '-'} />

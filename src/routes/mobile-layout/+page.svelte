@@ -7,6 +7,7 @@
 	import { getCss } from '../../utils/css';
 	import { goto } from '$app/navigation';
 	import CenteredWrapper from '../../components/mobile-layout/CenteredWrapper.svelte';
+	import PageHeader from '../../components/mobile-layout/PageHeader.svelte';
 
 	const { devices } = useDevices();
 	const { fields } = useFields();
@@ -31,15 +32,17 @@
 		</Section>
 	</CenteredWrapper>
 {:else}
-	<Section
-		label="Fields"
-		actions={[{ label: '+ Create new', onclick: () => goto('/mobile-layout/fields/new') }]}
-	>
+	{#snippet fieldsHeader()}
+		<span>Fields</span>
+		<Button href="/mobile-layout/fields/new">New</Button>
+	{/snippet}
+	<PageHeader title={fieldsHeader} />
+	<Section>
 		{#each $fields as field}
 			<Card href={`/mobile-layout/fields/${field.id}`} imageUrl="/images/map.png">
-				<div>
+				<div class="fields__info">
 					<p>Name: {field.name}</p>
-					<p style={getCss({ fontWeight: 'normal', fontSize: '1rem' })}>
+					<p style={getCss({ fontWeight: 'normal' })}>
 						Devices: {getFieldDeviceCount(field.id)}
 					</p>
 				</div>
@@ -47,3 +50,13 @@
 		{/each}
 	</Section>
 {/if}
+
+<style lang="scss">
+	.fields {
+		&__info {
+			display: flex;
+			flex-direction: column;
+			gap: 0.1rem;
+		}
+	}
+</style>

@@ -33,6 +33,7 @@
 		padding: 0.5rem;
 		border-radius: 5px;
 		overflow: hidden;
+		font-size: var(--main-font-size);
 
 		&:hover {
 			background-color: grey;

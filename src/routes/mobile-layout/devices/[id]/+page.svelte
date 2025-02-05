@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 	import Button from '../../../../components/mobile-layout/Button.svelte';
 	import Info from '../../../../components/Info.svelte';
-	import MapV2 from '../../../../components/MapV2.svelte';
+	import Map from '../../../../components/mobile-layout/Map.svelte';
 	import Spacer from '../../../../components/Spacer.svelte';
 	import ButtonList from '../../../../components/wireframe/ButtonList.svelte';
 	import DeviceGeneralSettings from '../../../../components/wireframe/DeviceGeneralSettings.svelte';
@@ -23,6 +23,10 @@
 	import { onMount } from 'svelte';
 	import TextInput from '../../../../components/mobile-layout/TextInput.svelte';
 	import TextareaInput from '../../../../components/mobile-layout/TextareaInput.svelte';
+	import { createUrlBuilder } from '../../../../utils/urls';
+	import PageHeader from '../../../../components/mobile-layout/PageHeader.svelte';
+	import { goto } from '$app/navigation';
+	import StepSeparation from '../../../../components/mobile-layout/StepSeparation.svelte';
 
 	const { preventNavigationHistory, navigateToPreviousPage } = useNavigationHistory();
 	const { setVisibility, reset, setUsb, setJack, setBlink, setOn } = useDeviceIllustration();
@@ -32,23 +36,34 @@
 	const returnButton = useReturnButton();
 	const { userMode } = useUserMode();
 
-	let map: MapV2 | undefined = undefined;
-	let editMetadata: boolean = false;
-	let editField: boolean = false;
-	let editLocation: boolean = false;
+	let map: Map | undefined = $state(undefined);
+	let editMetadata: boolean = $state(false);
+	let editField: boolean = $state(false);
+	let editLocation: boolean = $state(false);
 
-	$: device = $devices.find((it) => it.id === $page.params.id);
-	$: field = $fields.find((it) => it.id === device?.fieldId);
-	$: loraConfiguration = $loRaConfigurations.find((it) => it.id === field?.loraConfigId);
+	const device = $derived($devices.find((it) => it.id === $page.params.id));
+	const field = $derived($fields.find((it) => it.id === device?.fieldId));
+	const loraConfiguration = $derived(
+		$loRaConfigurations.find((it) => it.id === field?.loraConfigId)
+	);
 
-	$: {
+	const actionButtonLabel = $derived(
+		$page.data.connected ? (device?.status === 'active' ? 'Deactivate' : 'Activate') : 'Pair'
+	);
+	const actionButtonLink = $derived(
+		$page.data.connected && device?.status === 'unactive'
+			? `/mobile-layout/devices/${device?.id}/activation?connected=true&advanced=${$userMode === 'advanced'}`
+			: `/mobile-layout/devices/pairing?deviceId=${device?.id}`
+	);
+
+	$effect(() => {
 		returnButton.set({
 			label: `Device ${device?.name || 'Unknown'}`,
 			href: '/mobile-wireframe/devices'
 		});
-	}
+	});
 
-	$: updateDevice = (device: Device) => {
+	const updateDevice = $derived((device: Device) => {
 		const deviceIndex = $devices.findIndex((it) => it.id === device?.id);
 		const newDevices = [...$devices];
 		newDevices[deviceIndex] = {
@@ -56,9 +71,9 @@
 			...device
 		};
 		devices.set(newDevices);
-	};
+	});
 
-	$: {
+	$effect(() => {
 		if ($page.data.connected) {
 			setVisibility(true);
 			setUsb(true);
@@ -68,7 +83,7 @@
 		} else {
 			reset();
 		}
-	}
+	});
 
 	onMount(() => {
 		return () => reset();
@@ -76,14 +91,49 @@
 </script>
 
 {#if device}
+	{#snippet deviceName()}
+		<span>{device.name}</span>
+		<Button
+			onclick={() => {
+				if ($page.data.connected && device.status === 'active') {
+					updateDevice({ ...device, status: 'unactive' });
+				} else {
+					goto(actionButtonLink);
+				}
+			}}
+		>
+			{actionButtonLabel}
+		</Button>
+	{/snippet}
+
+	{#snippet deviceStatus()}
+		<div class="device__status">
+			<span class="device__status-dot" class:device__status--active={device.status === 'active'}
+			></span>
+			<span>{device.status}</span>
+		</div>
+	{/snippet}
+
+	<PageHeader title={deviceName} subTitle={deviceStatus} />
+	<!-- <div class="device__header">
+		<div class="device__name">
+			<h1>{device.name}</h1>
+			<Button href={actionButtonLink}>{actionButtonLabel}</Button>
+		</div>
+		<div class="device__status">
+			<span class="device__status-dot" class:device__status--active={device.status === 'active'}
+			></span>
+			<h2>{device.status}</h2>
+		</div>
+	</div> -->
 	{#if $page.data.connected}
 		{#if device.status === 'unactive'}
-			<Button
+			<!-- <Button
 				preventHistory
 				href={`/mobile-wireframe/devices/${device.id}/activation?connected=true&advanced=${$userMode === 'advanced'}`}
 			>
 				Activate
-			</Button>
+			</Button> -->
 		{:else if editMetadata}
 			<Spacer />
 			<Button
@@ -96,29 +146,39 @@
 			</Button>
 		{/if}
 	{:else}
-		<Spacer />
-		<Button preventHistory href={`/mobile-wireframe/devices/pairing?deviceId=${device.id}`}>
+		<!-- <Button preventHistory href={`/mobile-wireframe/devices/pairing?deviceId=${device.id}`}>
 			Pair device
-		</Button>
+		</Button> -->
 	{/if}
 	<Spacer />
-	<Section
-		label="Device:"
-		buttons={[
-			{ label: editMetadata ? 'Cancel' : 'Edit', onClick: () => (editMetadata = !editMetadata) }
-		]}
-	>
+	<Section>
 		<TextInput label="Id:" defaultValue={device.id} readonly />
-		<TextInput label="Name:" defaultValue={device.name} readonly />
+		<TextInput label="Name:" defaultValue={device.name} />
+		<TextareaInput
+			label="Notes"
+			defaultValue={device.note}
+			onvalue={(value) => {
+				if (device) {
+					updateDevice({
+						...device,
+						note: value
+					});
+				}
+			}}
+		/>
 	</Section>
 	{#if device.status === 'active'}
 		<Section
-			label="Location:"
-			buttons={[
-				{ label: editLocation ? 'Cancel' : 'Edit', onClick: () => (editLocation = !editLocation) }
+			label="Location"
+			actions={[
+				{ label: editLocation ? 'Cancel' : 'Edit', onclick: () => (editLocation = !editLocation) }
 			]}
 		>
-			<MapV2
+			<Button href={`/mobile-layout/fields/${field?.id}`}>
+				{field?.name || '-'}
+			</Button>
+
+			<Map
 				bind:this={map}
 				maxBounds={swissBounds}
 				zoom={15}
@@ -131,7 +191,6 @@
 			/>
 
 			{#if editLocation}
-				<Spacer />
 				<Button
 					onclick={() => {
 						if (map && device) {
@@ -145,46 +204,12 @@
 				</Button>
 			{/if}
 		</Section>
-
-		<Section
-			label="Field:"
-			buttons={[{ label: editField ? 'Cancel' : 'Edit', onClick: () => (editField = !editField) }]}
-		>
-			{#if editField}
-				<ButtonList
-					items={$fields}
-					let:item
-					onSelect={(field) => {
-						updateDevice({ ...device, fieldId: field.id });
-						editField = false;
-					}}
-				>
-					{item.name}
-				</ButtonList>
-			{:else}
-				<div style={getCss({ display: 'flex', justifyContent: 'flex-start' })}>
-					<Button href={`/mobile-wireframe/fields/${field?.id}`}>
-						{field?.name || '-'}
-					</Button>
-				</div>
-			{/if}
-		</Section>
 	{/if}
 
-	<Section label="Metadata:" buttons={[{ label: 'Edit' }]}>
-		<!-- svelte-ignore element_invalid_self_closing_tag -->
-		<TextareaInput
-			label="Notes"
-			onvalue={(value) => {
-				if (device) {
-					updateDevice({
-						...device,
-						note: value
-					});
-				}
-			}}
-		/>
-
+	<Section
+		label="Medias"
+		actions={device.medias.length > 0 ? [{ label: 'Add', onclick: () => {} }] : []}
+	>
 		{#if device.medias.length > 0}
 			<Spacer />
 			<ButtonList
@@ -203,21 +228,13 @@
 				<span>{item.type}</span>
 			</ButtonList>
 		{:else}
-			<Spacer />
-			<span>No medias</span>
+			<Button>Add media</Button>
 		{/if}
 	</Section>
 
-	<Section label="Advanced settings:">
-		<Info label="LoRa Configuration:" value={loraConfiguration?.name} />
-		<Spacer />
+	<Section label="Advanced">
 		{#if $page.data.connected}
-			<Info label="Firmware version:" value={device.firmwareVersion} />
-			<Spacer />
 			<Button>Upgrate firmware</Button>
-			<Spacer />
-			<Info label="Troubleshooting:" />
-			<Spacer />
 			<Button>See live data</Button>
 		{/if}
 	</Section>
@@ -228,8 +245,9 @@
 		</Section>
 	{/if}
 
-	<Section label="Danger zone:">
+	<Section label="Danger zone">
 		<Button
+			type="error"
 			onclick={() => {
 				$preventNavigationHistory = true;
 				devices.set([...$devices.filter((it) => it.id !== device.id)]);
@@ -240,3 +258,27 @@
 {:else}
 	<span>Device unknown</span>
 {/if}
+
+<style lang="scss">
+	.device {
+		&__status {
+			display: flex;
+			font-weight: normal;
+			align-items: center;
+			gap: 0.5rem;
+		}
+
+		&__status-dot {
+			display: block;
+			width: 10px;
+			height: 10px;
+			background-color: var(--danger-red);
+			border-radius: 100%;
+			transform: translate(0, 30%);
+		}
+
+		&__status--active {
+			background-color: var(--accent-color);
+		}
+	}
+</style>

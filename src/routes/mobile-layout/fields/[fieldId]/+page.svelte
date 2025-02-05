@@ -10,6 +10,7 @@
 	import { goto } from '$app/navigation';
 	import { getLocationDelta } from '../../../../utils/locations';
 	import { getFeatureLayerName } from '../../../../utils/geoJSON';
+	import PageHeader from '../../../../components/mobile-layout/PageHeader.svelte';
 
 	const fieldId = $page.params.fieldId;
 	const { devices } = useDevices();
@@ -57,7 +58,8 @@
 
 <div class="field">
 	{#if field}
-		<Section label="General Settings">
+		<PageHeader title={field.name} subTitle={`Devices: ${$devices.length}`} />
+		<Section>
 			<TextInput label="Name" defaultValue={field.name} />
 			<TextInput label="Area" defaultValue={field.area} />
 		</Section>
