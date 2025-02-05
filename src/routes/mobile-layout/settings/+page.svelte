@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import Spacer from '../../../components/Spacer.svelte';
 	import Button from '../../../components/mobile-layout/Button.svelte';
 	import ButtonList from '../../../components/wireframe/ButtonList.svelte';
 	import CenteredWrapper from '../../../components/wireframe/CenteredWrapper.svelte';
@@ -50,7 +49,6 @@
 		>
 			{item}
 		</ButtonList>
-		<Spacer />
 		<Separation />
 		<SaveSection
 			onSave={() => {
@@ -71,7 +69,6 @@
 		>
 			{item}
 		</ButtonList>
-		<Spacer />
 		<Separation />
 		<SaveSection
 			onSave={() => {
@@ -88,14 +85,12 @@
 	{#if $organisations.length > 0}
 		<Section label="Account settings">
 			<Info label="Selected organisation:" value={$organisation || '-'} />
-			<Spacer />
 			<Button href={`${window.location.pathname}?organisation=true`}>Switch organisation</Button>
 		</Section>
 	{/if}
 
 	<!-- <Section title="Notification settings:">
 		<Info label="Status:" value="unmuted" />
-		<Spacer />
 		<Button>Mute notifications</Button>
 	</Section> -->
 

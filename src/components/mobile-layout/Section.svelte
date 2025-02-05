@@ -7,7 +7,7 @@
 		label?: string;
 		buttons?: { label: string; href?: string; onClick?: () => void }[];
 		children?: Snippet;
-    actions?: { label: string, onclick: () => void }[];
+		actions?: { label: string; onclick: () => void }[];
 	} = $props();
 </script>
 

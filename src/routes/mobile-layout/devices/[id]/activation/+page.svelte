@@ -6,9 +6,7 @@
 	import Button from '../../../../../components/mobile-layout/Button.svelte';
 	import Checklist from '../../../../../components/mobile-layout/Checklist.svelte';
 	import Dropdown from '../../../../../components/mobile-layout/Dropdown.svelte';
-	import Info from '../../../../../components/Info.svelte';
 	import Map from '../../../../../components/mobile-layout/Map.svelte';
-	import Spacer from '../../../../../components/Spacer.svelte';
 	import ButtonList from '../../../../../components/wireframe/ButtonList.svelte';
 	import CenteredWrapper from '../../../../../components/mobile-layout/CenteredWrapper.svelte';
 	import Image from '../../../../../components/mobile-layout/Image.svelte';
@@ -24,7 +22,6 @@
 	import { swissBounds } from '../../../../../utils/dummyData';
 	import type { Device, Field, MediaType } from '../../../../../utils/types';
 	import { createUrlBuilder } from '../../../../../utils/urls';
-	import Separation from '../../../../../components/Separation.svelte';
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
 	import StepSeparation from '../../../../../components/mobile-layout/StepSeparation.svelte';
@@ -32,7 +29,7 @@
 	import TextareaInput from '../../../../../components/mobile-layout/TextareaInput.svelte';
 	import Table from '../../../../../components/mobile-layout/Table.svelte';
 
-	export let data: PageData;
+	const { data }: { data: PageData } = $props();
 
 	type Step = { label: string; checked: boolean };
 
@@ -55,15 +52,15 @@
 		{ label: 'File', type: 'file' }
 	];
 
-	let map: Map | undefined;
-	let selectedField: Field | undefined = undefined;
+	let map: Map | undefined = $state(undefined);
+	let selectedField: Field | undefined = $state(undefined);
 
-	$: stepIndex = ($page.data.step || 0) as number;
-	$: currentStep = steps[stepIndex];
-	$: device = $devices.find((it) => it.id === $page.params.id);
-	$: field = $fields.find((it) => it.id === device?.fieldId);
+	const stepIndex = $derived(($page.data.step || 0) as number);
+	const currentStep = $derived(steps[stepIndex]);
+	const device = $derived($devices.find((it) => it.id === $page.params.id));
+	const field = $derived($fields.find((it) => it.id === device?.fieldId));
 
-	$: {
+	$effect(() => {
 		if (device) {
 			returnButton.set({
 				label: `Device ${device?.name || 'Unknown'}`,
@@ -75,14 +72,23 @@
 				href: `/mobile-wireframe/devices`
 			});
 		}
-	}
+	});
 
-	$: nextHref = url.resetQueries([
-		{ name: 'connected', value: true },
-		{ name: 'step', value: stepIndex + 1 }
-	]);
+	const nextHref = $derived(
+		url.resetQueries([
+			{ name: 'connected', value: true },
+			{ name: 'step', value: stepIndex + 1 }
+		])
+	);
 
-	$: updateDevice = (device: Device) => {
+	const previousHref = $derived(
+		url.resetQueries([
+			{ name: 'connected', value: true },
+			{ name: 'step', value: stepIndex - 1 }
+		])
+	);
+
+	const updateDevice = $derived((device: Device) => {
 		const deviceIndex = $devices.findIndex((it) => it.id === device?.id);
 		const newDevices = [...$devices];
 		newDevices[deviceIndex] = {
@@ -90,11 +96,11 @@
 			...device
 		};
 		devices.set(newDevices);
-	};
+	});
 
-	$: {
+	$effect(() => {
 		setJack(stepIndex > 0);
-	}
+	});
 
 	onMount(() => {
 		setVisibility(true);
@@ -104,13 +110,8 @@
 	});
 </script>
 
-{#if data.advanced && device}
-	{#snippet advancedActivationTitle()}
-		<span>Device Activation</span>
-		<Button>Live Data</Button>
-	{/snippet}
-
-	{#snippet mediaOptionItem(item: { label: string; type: MediaType })}
+{#snippet mediaOptionItem(item: { label: string; type: MediaType })}
+	{#if device}
 		<Button
 			onclick={() => {
 				const medias =
@@ -130,6 +131,13 @@
 		>
 			{item.label}
 		</Button>
+	{/if}
+{/snippet}
+
+{#if data.advanced && device}
+	{#snippet advancedActivationTitle()}
+		<span>Device Activation</span>
+		<Button>Live Data</Button>
 	{/snippet}
 
 	<PageHeader title={advancedActivationTitle} />
@@ -253,39 +261,32 @@
 	{/snippet}
 
 	<PageHeader title={stepHeader} subTitle={`Step ${stepIndex + 1}/${steps.length}`} />
-	<Section
-		buttons={[
-			{
-				label: stepIndex > 0 ? 'Previous' : 'Cancel',
-				onClick: () => {
-					if (stepIndex > 0) {
-						$preventNavigationHistory = true;
-						goto(url.addQuery({ name: 'step', value: stepIndex - 1 }));
-					} else {
-						$preventNavigationHistory = true;
-						goto(`/mobile-wireframe/devices/${device?.id}?connected=true`);
-					}
-				}
-			}
-		]}
-	>
-		{#if stepIndex === 0}
+	{#if stepIndex === 0}
+		<Section>
 			<Image ratio={1} placeholder="Schema showing how to attach the device on a plant" />
-			<StepSeparation label="Checks" />
+		</Section>
+		<Section label="Checks">
 			<Checklist
 				points={[
 					{ label: 'Correct device orientation', checked: true },
 					{ label: 'Device is not moving', checked: true }
 				]}
 			/>
-			<StepSeparation label="Review & confirm" />
-			<Button preventHistory href={nextHref}>Next step</Button>
-		{:else if stepIndex === 1}
+		</Section>
+		<Section label="Review & confirm">
+			<Button preventHistory href={nextHref}>Next</Button>
+			<Button href={`/mobile-layout/devices/${device?.id}?connected=true`} preventHistory>
+				Cancel
+			</Button>
+		</Section>
+	{:else if stepIndex === 1}
+		<Section>
 			<Image
 				ratio={1}
 				placeholder="Schema showing how to plug the jack into the device and install the probes on a plant"
 			/>
-			<StepSeparation label="Checks" />
+		</Section>
+		<Section label="Checks">
 			<Checklist
 				points={[
 					{ label: 'Plug the jack into the device', checked: true },
@@ -293,9 +294,13 @@
 					{ label: 'Wait for signal', checked: true }
 				]}
 			/>
-			<StepSeparation label="Review & confirm" />
-			<Button preventHistory href={nextHref}>Next step</Button>
-		{:else if stepIndex === 2}
+		</Section>
+		<Section label="Review & confirm">
+			<Button preventHistory href={nextHref}>Next</Button>
+			<Button href={previousHref} preventHistory>Previous</Button>
+		</Section>
+	{:else if stepIndex === 2}
+		<Section>
 			<Map
 				bind:this={map}
 				maxBounds={swissBounds}
@@ -320,9 +325,13 @@
 			>
 				Validate location
 			</Button>
-			<StepSeparation label="Review & confirm" />
-			<Button preventHistory href={nextHref} disabled={!device?.location}>Next step</Button>
-		{:else if stepIndex === 3 && device}
+		</Section>
+		<Section label="Review & confirm">
+			<Button preventHistory href={nextHref} disabled={!device?.location}>Next</Button>
+			<Button href={previousHref} preventHistory>Previous</Button>
+		</Section>
+	{:else if stepIndex === 3 && device}
+		<Section>
 			<TextareaInput
 				placeholder="Your note..."
 				defaultValue={device?.note || ''}
@@ -336,52 +345,28 @@
 					}
 				}}
 			/>
+		</Section>
 
-			<StepSeparation label="Medias" />
-			<!-- <Dropdown label="Add media" items={mediaOptions}>
-				<Button
-					slot="item"
-					let:item
-					onclick={() => {
-						const medias =
-							item.type === 'image'
-								? [...device.medias, { name: `${createId()}.jpg`, type: item.type }]
-								: item.type === 'audio-note'
-									? [...device.medias, { name: `${createId()}.mp3`, type: item.type }]
-									: [...device.medias, { name: `${createId()}.pdf`, type: item.type }];
-
-						if (device) {
-							updateDevice({
-								...device,
-								medias
-							});
-						}
-					}}
-				>
-					{item.label}
-				</Button>
-			</Dropdown> -->
-
+		<Section label="Medias">
 			{#if device.medias.length > 0}
-				<Spacer />
-				<ButtonList
-					items={device.medias}
-					let:item
-					onSelect={(media) => {
-						if (device) {
-							updateDevice({
-								...device,
-								medias: (device.medias || []).filter((it) => it !== media)
-							});
-						}
-					}}
-				>
-					<span>{item.name}</span>
-					<span>{item.type}</span>
-				</ButtonList>
+				<Table
+					headers={[
+						{ label: 'Name', width: '50%' },
+						{ label: 'Type', width: '30%' }
+					]}
+					rows={device.medias.map((it) => ({
+						cells: [
+							{ label: it.name.length > 25 ? `${it.name.slice(0, 25)}...` : it.name },
+							{ label: it.type }
+						]
+					}))}
+				/>
+			{:else}
+				<Dropdown label="Add media" items={mediaOptions} renderItem={mediaOptionItem} />
 			{/if}
+		</Section>
 
-			<StepSeparation label="Review & confirm" />
+		<Section label="Review & confirm">
 			<Button
 				preventHistory
 				href={`/mobile-layout/devices/${device?.id}?connected=true`}
@@ -394,24 +379,9 @@
 					}
 				}}
 			>
-				Activate device
+				Activate
 			</Button>
-		{/if}
-		<Button href={`/mobile-wireframe/devices/${device?.id}?connected=true`} preventHistory>
-			Cancel
-		</Button>
-	</Section>
+			<Button href={previousHref} preventHistory>Previous</Button>
+		</Section>
+	{/if}
 {/if}
-
-<style>
-	textarea {
-		font-family: inherit;
-		font-size: inherit;
-		padding: 1rem;
-		border: solid 1px var(--black);
-		background-color: var(--white);
-		outline: none;
-		max-width: 100%;
-		resize: vertical;
-	}
-</style>
