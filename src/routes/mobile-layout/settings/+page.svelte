@@ -18,7 +18,7 @@
 	} from '../../../stores';
 	import { loraNetworks } from '../../../utils/dummyData';
 	import Section from '../../../components/mobile-layout/Section.svelte';
-	import Checkbox from '../../../components/Checkbox.svelte';
+	import Checkbox from '../../../components/mobile-layout/Checkbox.svelte';
 	import TextInput from '../../../components/mobile-layout/TextInput.svelte';
 	import Table from '../../../components/mobile-layout/Table.svelte';
 	import PageHeader from '../../../components/mobile-layout/PageHeader.svelte';
@@ -116,10 +116,13 @@
 	</Section>
 
 	<Section label="User mode">
-		<Checkbox
-			initialChecked={$userMode === 'advanced'}
-			onChange={(checked) => setUserMode(checked ? 'advanced' : 'normal')}
-		/>
+		<div class="settings__user-mode">
+			<Checkbox
+				initialChecked={$userMode === 'advanced'}
+				onChange={(checked) => setUserMode(checked ? 'advanced' : 'normal')}
+			/>
+			<span>{$userMode === 'advanced' ? 'Advanced' : 'Normal'}</span>
+		</div>
 	</Section>
 
 	<Section label="Confirm changes">
@@ -127,3 +130,14 @@
 		<Button>Cancel</Button>
 	</Section>
 {/if}
+
+<style lang="scss">
+	.settings {
+		&__user-mode {
+			display: flex;
+			align-items: center;
+			gap: 1rem;
+			text-transform: lowercase;
+		}
+	}
+</style>

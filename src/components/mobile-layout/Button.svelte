@@ -45,17 +45,17 @@
 {/snippet}
 
 {#if props.href}
-	<a href={props.href}>
+	<a href={props.href} class="root-button">
 		{@render innerButton()}
 	</a>
 {:else}
-	<Button.Root disabled={props.disabled} builders={props.builders}>
+	<Button.Root class="root-button" disabled={props.disabled} builders={props.builders}>
 		{@render innerButton()}
 	</Button.Root>
 {/if}
 
 <style lang="scss">
-	:global(button, a) {
+	:global(.root-button) {
 		padding: 0;
 		border: none;
 		outline: none;
