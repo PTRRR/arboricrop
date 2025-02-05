@@ -194,6 +194,7 @@
 			white-space: nowrap;
 			transform: translate(0%, 0%);
 			font-size: var(--big-font-size);
+			line-height: 1;
 			transition:
 				transform 0.7s cubic-bezier(0.83, 0, 0.17, 1),
 				top 0.7s cubic-bezier(0.83, 0, 0.17, 1),
@@ -206,8 +207,10 @@
 			right: 0;
 			top: var(--layout-margin-top);
 			right: 1.5rem;
-			width: 2.5rem;
-			height: 1.8rem;
+			width: 2.3rem;
+			height: var(--big-font-size);
+			padding: 0.2rem 0;
+			box-sizing: border-box;
 			transition: opacity 0.7s cubic-bezier(0.83, 0, 0.17, 1);
 			cursor: pointer;
 		}
@@ -247,9 +250,6 @@
 
 		&--scrolled {
 			#{$this}__menu-line {
-				width: 100%;
-				height: 3px;
-				border-radius: 1px;
 				background-color: black;
 			}
 		}
@@ -265,8 +265,8 @@
 		&__menu-line {
 			transition: background-color 0.3s ease-in-out;
 			width: 100%;
-			height: 3px;
-			border-radius: 1px;
+			height: 4px;
+			border-radius: 2px;
 			background-color: var(--light-color);
 		}
 
