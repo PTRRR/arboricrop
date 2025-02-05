@@ -3,19 +3,17 @@
 	import Button from '../../../../components/mobile-layout/Button.svelte';
 	import Section from '../../../../components/mobile-layout/Section.svelte';
 	import Map from '../../../../components/mobile-layout/Map.svelte';
-	import { useDevices, useFields, useLoRaConfigurations } from '../../../../stores';
+	import { useDevices, useFields } from '../../../../stores';
 	import { swissBounds } from '../../../../utils/dummyData';
 	import TextInput from '../../../../components/mobile-layout/TextInput.svelte';
 	import Table, { type Cell, type Row } from '../../../../components/mobile-layout/Table.svelte';
 	import { goto } from '$app/navigation';
-	import CenteredWrapper from '../../../../components/mobile-layout/CenteredWrapper.svelte';
 	import { getLocationDelta } from '../../../../utils/locations';
+	import { getFeatureLayerName } from '../../../../utils/geoJSON';
 
 	const fieldId = $page.params.fieldId;
 	const { devices } = useDevices();
 	const { fields, getFieldById, deleteField, updateField } = useFields();
-	const { loRaConfigurations } = useLoRaConfigurations();
-	const defaultLoRaConfiguration = $derived($loRaConfigurations.find((it) => it.isDefault));
 
 	let map: Map | null = $state(null);
 	let mapUpdated = $state(false);
@@ -36,6 +34,22 @@
 				{ label: it.name || it.id },
 				{ label: it.status || '' },
 				{ label: `${it.battery || '0'}%` }
+			]
+		}))
+	);
+
+	const layersHeaders: Cell[] = [
+		{ label: 'Layer name', width: '80%' },
+		{ label: 'Type', width: '20%' }
+	];
+
+	const selectedLayersRows: Row[] = $derived(
+		(field?.layers || []).map((it) => ({
+			cells: [
+				{
+					label: getFeatureLayerName(it) as string
+				},
+				{ label: 'GeoJSON' }
 			]
 		}))
 	);
@@ -68,13 +82,13 @@
 			<Map
 				bind:this={map}
 				maxBounds={swissBounds}
-				zoom={9}
+				zoom={14}
 				minZoom={3}
 				maxZoom={18}
 				center={field.center}
 				showTarget
 				markers={[{ lngLat: field.center }]}
-				geoJSONs={[]}
+				geoJSONs={field.layers}
 				onChange={(e) => {
 					const delta = getLocationDelta(e, field.center);
 					if (delta > 0.000001) mapUpdated = true;
@@ -91,7 +105,16 @@
 				</Button>
 			{/if}
 		</Section>
-		<Section label="Layers"></Section>
+		<Section
+			label="Layers"
+			actions={selectedLayersRows.length > 0 ? [{ label: 'Edit', onclick: () => {} }] : []}
+		>
+			{#if selectedLayersRows.length > 0}
+				<Table headers={layersHeaders} rows={selectedLayersRows} />
+			{:else}
+				<Button>Add layer</Button>
+			{/if}
+		</Section>
 		<Section label="LoRa"></Section>
 		<Section label="Danger Zone">
 			<Button
@@ -105,13 +128,3 @@
 		</Section>
 	{/if}
 </div>
-
-<style lang="scss">
-	.field {
-		&__device {
-			display: flex;
-			color: black;
-			text-decoration: none;
-		}
-	}
-</style>
