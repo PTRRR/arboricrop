@@ -141,7 +141,7 @@
 	{/snippet}
 
 	<PageHeader title={advancedActivationTitle} />
-	<Section buttons={[{ label: 'See live data' }]}>
+	<Section>
 		<Checklist
 			points={[
 				{ label: 'Correct device orientation', checked: true },
@@ -347,7 +347,7 @@
 			/>
 		</Section>
 
-		<Section label="Medias">
+		<Section label="Medias" actions={device.medias.length > 0 ? [{ label: 'Add' }] : []}>
 			{#if device.medias.length > 0}
 				<Table
 					headers={[
