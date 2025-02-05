@@ -30,6 +30,7 @@
 	import StepSeparation from '../../../../../components/mobile-layout/StepSeparation.svelte';
 	import PageHeader from '../../../../../components/mobile-layout/PageHeader.svelte';
 	import TextareaInput from '../../../../../components/mobile-layout/TextareaInput.svelte';
+	import Table from '../../../../../components/mobile-layout/Table.svelte';
 
 	export let data: PageData;
 
@@ -104,7 +105,35 @@
 </script>
 
 {#if data.advanced && device}
-	<Section label="Advanced Activation" buttons={[{ label: 'See live data' }]}>
+	{#snippet advancedActivationTitle()}
+		<span>Device Activation</span>
+		<Button>Live Data</Button>
+	{/snippet}
+
+	{#snippet mediaOptionItem(item: { label: string; type: MediaType })}
+		<Button
+			onclick={() => {
+				const medias =
+					item.type === 'image'
+						? [...device.medias, { name: `${createId()}.jpg`, type: item.type }]
+						: item.type === 'audio-note'
+							? [...device.medias, { name: `${createId()}.mp3`, type: item.type }]
+							: [...device.medias, { name: `${createId()}.pdf`, type: item.type }];
+
+				if (device) {
+					updateDevice({
+						...device,
+						medias
+					});
+				}
+			}}
+		>
+			{item.label}
+		</Button>
+	{/snippet}
+
+	<PageHeader title={advancedActivationTitle} />
+	<Section buttons={[{ label: 'See live data' }]}>
 		<Checklist
 			points={[
 				{ label: 'Correct device orientation', checked: true },
@@ -114,7 +143,6 @@
 				{ label: 'Wait for signal', checked: true }
 			]}
 		/>
-		<Spacer />
 		<Map
 			bind:this={map}
 			maxBounds={swissBounds}
@@ -126,7 +154,6 @@
 			markers={device?.location ? [{ lngLat: device.location }] : []}
 			geoJSONs={field?.layers}
 		/>
-		<Spacer />
 		<Button
 			onclick={() => {
 				const center = map?.getCenter();
@@ -140,76 +167,43 @@
 		>
 			Validate location
 		</Button>
-		<Spacer />
-		<Info label="Note" />
-		<Spacer />
-
-		<!-- svelte-ignore element_invalid_self_closing_tag -->
-		<textarea
+		<StepSeparation label="Note" />
+		<TextareaInput
 			placeholder="Your note..."
-			value={device?.note || ''}
-			on:input={(event) => {
+			defaultValue={device?.note || ''}
+			onvalue={(value) => {
 				if (device) {
 					updateDevice({
 						...device,
-						note: event.currentTarget.value
+						note: value
 					});
 				}
 			}}
 		/>
-		<Spacer />
 
-		<Info label="Medias" />
-		<Spacer />
-
-		<Dropdown label="Add media" items={mediaOptions}>
-			<Button
-				slot="item"
-				let:item
-				onclick={() => {
-					const medias =
-						item.type === 'image'
-							? [...device.medias, { name: `${createId()}.jpg`, type: item.type }]
-							: item.type === 'audio-note'
-								? [...device.medias, { name: `${createId()}.mp3`, type: item.type }]
-								: [...device.medias, { name: `${createId()}.pdf`, type: item.type }];
-
-					if (device) {
-						updateDevice({
-							...device,
-							medias
-						});
-					}
-				}}
-			>
-				{item.label}
-			</Button>
-		</Dropdown>
+		<StepSeparation label="Medias" />
 
 		{#if device.medias.length > 0}
-			<Spacer />
-			<ButtonList
-				items={device.medias}
-				let:item
-				onSelect={(media) => {
-					if (device) {
-						updateDevice({
-							...device,
-							medias: (device.medias || []).filter((it) => it !== media)
-						});
-					}
-				}}
-			>
-				<span>{item.name}</span>
-				<span>{item.type}</span>
-			</ButtonList>
+			<Table
+				headers={[
+					{ label: 'Name', width: '50%' },
+					{ label: 'Type', width: '30%' }
+				]}
+				rows={device.medias.map((it) => ({
+					cells: [
+						{ label: it.name.length > 25 ? `${it.name.slice(0, 25)}...` : it.name },
+						{ label: it.type }
+					]
+				}))}
+			/>
+		{:else}
+			<Dropdown label="Add media" items={mediaOptions} renderItem={mediaOptionItem} />
 		{/if}
 
-		<Spacer size="calc(var(--gap) * 3)" />
-		<Separation title="Review & confirm" />
+		<StepSeparation label="Review & confirm" />
 		<Button
 			preventHistory
-			href={`/mobile-wireframe/devices/${device?.id}?connected=true`}
+			href={`/mobile-layout/devices/${device?.id}?connected=true`}
 			onclick={() => {
 				if (device) {
 					updateDevice({
@@ -344,7 +338,7 @@
 			/>
 
 			<StepSeparation label="Medias" />
-			<Dropdown label="Add media" items={mediaOptions}>
+			<!-- <Dropdown label="Add media" items={mediaOptions}>
 				<Button
 					slot="item"
 					let:item
@@ -366,7 +360,7 @@
 				>
 					{item.label}
 				</Button>
-			</Dropdown>
+			</Dropdown> -->
 
 			{#if device.medias.length > 0}
 				<Spacer />

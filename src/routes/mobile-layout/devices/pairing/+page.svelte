@@ -46,6 +46,12 @@
 	});
 </script>
 
+{#snippet dropdownButton(item: { label: string; value: string })}
+	<Button href={url.addQuery({ name: 'strategy', value: item.value })} fitWidth>
+		{item.label}
+	</Button>
+{/snippet}
+
 {#if !data.success}
 	<PageHeader
 		title={`${currentPairingStrategy.label} pairing`}
@@ -78,11 +84,11 @@
 				}, 2000);
 			}}
 		/>
-		<Dropdown label="Use other pairing strategy" items={strategyOptions}>
-			<Button slot="item" let:item href={url.addQuery({ name: 'strategy', value: item.value })}>
-				{item.label}
-			</Button>
-		</Dropdown>
+		<Dropdown
+			label="Use other pairing strategy"
+			items={strategyOptions}
+			renderItem={dropdownButton}
+		/>
 	</Section>
 {:else}
 	<CenteredWrapper>

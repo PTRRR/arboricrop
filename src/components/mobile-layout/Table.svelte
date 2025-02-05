@@ -79,6 +79,7 @@
 			padding: 0.5rem;
 			color: black;
 			text-decoration: none;
+			box-sizing: border-box;
 
 			& + & {
 				border-top: solid 1px rgb(210, 210, 210);
@@ -105,6 +106,13 @@
 			display: flex;
 			white-space: nowrap;
 			text-transform: lowercase;
+			flex: 0 0 auto;
+
+			span {
+				display: block;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
 		}
 
 		&__data {

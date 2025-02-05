@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Button, type Builder } from 'bits-ui';
 	import type { Snippet } from 'svelte';
 	import { useNavigationHistory } from '../../stores';
 	import { getCss } from '../../utils/css';
@@ -11,6 +12,7 @@
 		onclick?: () => void;
 		preventHistory?: boolean;
 		type?: 'normal' | 'error';
+		builders?: Builder[];
 	} = $props();
 
 	const { preventNavigationHistory } = useNavigationHistory();
@@ -24,53 +26,49 @@
 </script>
 
 {#snippet innerButton()}
-	<span>
+	<!-- svelte-ignore a11y_click_events_have_key_events -->
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
+	<div
+		class="button"
+		class:button--fit-width={props.fitWidth}
+		class:button--disabled={props.disabled}
+		style={buttonStyle}
+		onclick={() => {
+			if (props.preventHistory) {
+				$preventNavigationHistory = true;
+			}
+			props.onclick?.();
+		}}
+	>
 		{@render props.children()}
-	</span>
+	</div>
 {/snippet}
 
 {#if props.href}
-	<a
-		class="button"
-		class:button--fit-width={props.fitWidth}
-		class:button--disabled={props.disabled}
-		style={buttonStyle}
-		href={props.href}
-		onclick={() => {
-			if (props.preventHistory) {
-				$preventNavigationHistory = true;
-			}
-			props.onclick?.();
-		}}
-	>
+	<a href={props.href}>
 		{@render innerButton()}
 	</a>
 {:else}
-	<button
-		class="button"
-		class:button--fit-width={props.fitWidth}
-		class:button--disabled={props.disabled}
-		style={buttonStyle}
-		disabled={props.disabled}
-		onclick={() => {
-			if (props.preventHistory) {
-				$preventNavigationHistory = true;
-			}
-			props.onclick?.();
-		}}
-	>
+	<Button.Root disabled={props.disabled} builders={props.builders}>
 		{@render innerButton()}
-	</button>
+	</Button.Root>
 {/if}
 
 <style lang="scss">
+	:global(button, a) {
+		padding: 0;
+		border: none;
+		outline: none;
+		background-color: transparent;
+		text-decoration: none;
+	}
+
 	.button {
 		background-color: lightgray;
 		color: black;
 		font-family: inherit;
 		font-size: var(--main-font-size);
-		font-weight: inherit;
-		text-decoration: none;
+		font-weight: 500;
 		text-transform: lowercase;
 		border: none;
 		padding: 0.5rem;

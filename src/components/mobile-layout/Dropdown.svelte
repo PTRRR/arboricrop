@@ -1,20 +1,55 @@
 <script lang="ts">
 	import { useBlurApp } from '../../stores';
-
-	import { DropdownMenu } from 'bits-ui';
+	import { DropdownMenu, Dialog } from 'bits-ui';
 	import Button from './Button.svelte';
-
-	export let label: string;
-	export let side: 'top' | 'bottom' | 'left' | 'right' | undefined = undefined;
-	export let sideOffset: number | undefined = 9;
-	export let align: 'left' | 'right' | 'center' = 'center';
-	export let sameWidth: boolean | undefined = undefined;
+	import type { Snippet } from 'svelte';
 
 	type T = $$Generic;
-	export let items: T[] = [];
+
+	const {
+		label,
+		side = undefined,
+		sideOffset = 9,
+		align = 'center',
+		sameWidth = undefined,
+		items = [],
+		renderItem
+	}: {
+		label: string;
+		side?: 'top' | 'bottom' | 'left' | 'right';
+		sideOffset?: number;
+		align?: 'left' | 'right' | 'center';
+		sameWidth?: boolean;
+		items: T[];
+		renderItem: Snippet<[item: T]>;
+	} = $props();
 
 	let blurApp = useBlurApp();
 </script>
+
+<!-- <Dialog.Root>
+	<Dialog.Trigger asChild let:builder>
+		<Button builders={[builder]}>{label}</Button>
+	</Dialog.Trigger>
+
+	<Dialog.Portal>
+		<Dialog.Overlay />
+		<Dialog.Content>
+			<div
+				class="dropdown__content"
+				class:dropdown__content--align-left={align === 'left'}
+				class:dropdown__content--align-right={align === 'right'}
+				class:dropdown__content--align-center={align === 'center'}
+			>
+				{#each items as item}
+					<div class="dropdown__item">
+						{@render renderItem(item)}
+					</div>
+				{/each}
+			</div>
+		</Dialog.Content>
+	</Dialog.Portal>
+</Dialog.Root> -->
 
 <DropdownMenu.Root
 	onOpenChange={(open) => {
@@ -34,27 +69,29 @@
 		>
 			{#each items as item}
 				<DropdownMenu.Item>
-					<slot name="item" {item} />
+					{@render renderItem(item)}
 				</DropdownMenu.Item>
 			{/each}
 		</div>
 	</DropdownMenu.Content>
 </DropdownMenu.Root>
 
-<style>
-	.dropdown__content,
-	.dropdown__content--align-center {
-		display: flex;
-		flex-direction: column;
-		gap: var(--gap);
-		align-items: center;
-	}
+<style lang="scss">
+	.dropdown {
+		&__content,
+		&__content--align-center {
+			display: flex;
+			flex-direction: column;
+			gap: var(--gap);
+			align-items: center;
+		}
 
-	.dropdown__content--align-left {
-		align-items: flex-start;
-	}
+		&__content--align-left {
+			align-items: flex-start;
+		}
 
-	.dropdown__content--align-right {
-		align-items: flex-end;
+		&__content--align-right {
+			align-items: flex-end;
+		}
 	}
 </style>

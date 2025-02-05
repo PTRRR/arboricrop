@@ -1,11 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import Button from '../../../../components/mobile-layout/Button.svelte';
-	import Info from '../../../../components/Info.svelte';
 	import Map from '../../../../components/mobile-layout/Map.svelte';
 	import Spacer from '../../../../components/Spacer.svelte';
-	import ButtonList from '../../../../components/wireframe/ButtonList.svelte';
-	import DeviceGeneralSettings from '../../../../components/wireframe/DeviceGeneralSettings.svelte';
 	import SaveSection from '../../../../components/wireframe/SaveSection.svelte';
 	import Section from '../../../../components/mobile-layout/Section.svelte';
 	import {
@@ -17,16 +14,16 @@
 		useReturnButton,
 		useUserMode
 	} from '../../../../stores';
-	import { getCss } from '../../../../utils/css';
 	import { swissBounds } from '../../../../utils/dummyData';
-	import type { Device } from '../../../../utils/types';
+	import type { Device, MediaType } from '../../../../utils/types';
 	import { onMount } from 'svelte';
 	import TextInput from '../../../../components/mobile-layout/TextInput.svelte';
 	import TextareaInput from '../../../../components/mobile-layout/TextareaInput.svelte';
-	import { createUrlBuilder } from '../../../../utils/urls';
 	import PageHeader from '../../../../components/mobile-layout/PageHeader.svelte';
 	import { goto } from '$app/navigation';
-	import StepSeparation from '../../../../components/mobile-layout/StepSeparation.svelte';
+	import Table from '../../../../components/mobile-layout/Table.svelte';
+	import Dropdown from '../../../../components/mobile-layout/Dropdown.svelte';
+	import { createId } from '@paralleldrive/cuid2';
 
 	const { preventNavigationHistory, navigateToPreviousPage } = useNavigationHistory();
 	const { setVisibility, reset, setUsb, setJack, setBlink, setOn } = useDeviceIllustration();
@@ -46,6 +43,12 @@
 	const loraConfiguration = $derived(
 		$loRaConfigurations.find((it) => it.id === field?.loraConfigId)
 	);
+
+	const mediaOptions: { label: string; type: MediaType }[] = [
+		{ label: 'Image', type: 'image' },
+		{ label: 'Audio note', type: 'audio-note' },
+		{ label: 'File', type: 'file' }
+	];
 
 	const actionButtonLabel = $derived(
 		$page.data.connected ? (device?.status === 'active' ? 'Deactivate' : 'Activate') : 'Pair'
@@ -112,6 +115,28 @@
 			></span>
 			<span>{device.status}</span>
 		</div>
+	{/snippet}
+
+	{#snippet mediaOptionItem(item: { label: string; type: MediaType })}
+		<Button
+			onclick={() => {
+				const medias =
+					item.type === 'image'
+						? [...device.medias, { name: `${createId()}.jpg`, type: item.type }]
+						: item.type === 'audio-note'
+							? [...device.medias, { name: `${createId()}.mp3`, type: item.type }]
+							: [...device.medias, { name: `${createId()}.pdf`, type: item.type }];
+
+				if (device) {
+					updateDevice({
+						...device,
+						medias
+					});
+				}
+			}}
+		>
+			{item.label}
+		</Button>
 	{/snippet}
 
 	<PageHeader title={deviceName} subTitle={deviceStatus} />
@@ -211,24 +236,20 @@
 		actions={device.medias.length > 0 ? [{ label: 'Add', onclick: () => {} }] : []}
 	>
 		{#if device.medias.length > 0}
-			<Spacer />
-			<ButtonList
-				items={device.medias}
-				let:item
-				onSelect={(media) => {
-					if (device) {
-						updateDevice({
-							...device,
-							medias: (device.medias || []).filter((it) => it !== media)
-						});
-					}
-				}}
-			>
-				<span>{item.name}</span>
-				<span>{item.type}</span>
-			</ButtonList>
+			<Table
+				headers={[
+					{ label: 'Name', width: '50%' },
+					{ label: 'Type', width: '30%' }
+				]}
+				rows={device.medias.map((it) => ({
+					cells: [
+						{ label: it.name.length > 25 ? `${it.name.slice(0, 25)}...` : it.name },
+						{ label: it.type }
+					]
+				}))}
+			/>
 		{:else}
-			<Button>Add media</Button>
+			<Dropdown label="Add media" items={mediaOptions} renderItem={mediaOptionItem} />
 		{/if}
 	</Section>
 
