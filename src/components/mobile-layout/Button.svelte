@@ -40,11 +40,14 @@
 		iconBackgroundColor?: string;
 		backgroundColor?: string;
 		iconOrder?: 'inverted';
-		padding?: boolean;
+		padding?: boolean | string;
 	} = $props();
 
 	const { preventNavigationHistory } = useNavigationHistory();
-	const buttonStyle = getCss({ backgroundColor });
+	const buttonStyle = getCss({
+		backgroundColor,
+		padding: typeof padding === 'string' ? padding : undefined
+	});
 </script>
 
 {#snippet innerButton()}
@@ -145,9 +148,13 @@
 			padding: 0.2rem 0.5rem;
 		}
 
-		&--selected,
-		&:hover {
-			// background-color: var(--grey);
+		// &--selected,
+		// &:hover {
+		//   background-color: var(--grey);
+		// }
+
+		&--selected {
+			background-color: var(--dark-grey) !important;
 		}
 
 		&--background-color#{&}--padding {

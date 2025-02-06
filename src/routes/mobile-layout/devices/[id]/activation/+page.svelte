@@ -280,7 +280,7 @@
 				href={`/mobile-layout/devices/${device?.id}?connected=true`}
 				iconBackgroundColor="var(--dark-grey)"
 			></Button>
-			<Button icon="check" iconSize="large" href={nextHref}></Button>
+			<Button icon="navigate" iconSize="large" href={nextHref}></Button>
 		</ActionMenu>
 	{:else if stepIndex === 1}
 		<Section>
@@ -305,7 +305,7 @@
 				href={previousHref}
 				iconBackgroundColor="var(--dark-grey)"
 			></Button>
-			<Button icon="check" iconSize="large" href={nextHref}></Button>
+			<Button icon="navigate" iconSize="large" href={nextHref}></Button>
 		</ActionMenu>
 	{:else if stepIndex === 2}
 		<Section>
@@ -319,17 +319,19 @@
 				showTarget
 				markers={device?.location ? [{ lngLat: device.location }] : []}
 				geoJSONs={field?.layers}
-				onmoveend={() => {
-					// console.log('ldsfkjh');
-					// const center = map?.getCenter();
-					// if (device && center) {
-					// 	updateDevice({
-					// 		...device,
-					// 		location: [center.lng, center.lat]
-					// 	});
-					// }
-				}}
 			/>
+			<Button
+				icon="check"
+				onclick={() => {
+					const center = map?.getCenter();
+					if (device && center) {
+						updateDevice({
+							...device,
+							location: [center.lng, center.lat]
+						});
+					}
+				}}>Validate</Button
+			>
 		</Section>
 		<ActionMenu>
 			<Button
@@ -338,7 +340,8 @@
 				href={previousHref}
 				iconBackgroundColor="var(--dark-grey)"
 			></Button>
-			<Button icon="check" iconSize="large" href={nextHref}></Button>
+			<Button icon="navigate" iconSize="large" disabled={!device?.location} href={nextHref}
+			></Button>
 		</ActionMenu>
 	{:else if stepIndex === 3 && device}
 		<Section>
@@ -371,7 +374,7 @@
 					}))}
 				/>
 			{:else}
-				<Dropdown label="Add media" items={mediaOptions} renderItem={mediaOptionItem} />
+				<Dropdown label="Add media" icon="add" items={mediaOptions} renderItem={mediaOptionItem} />
 			{/if}
 		</Section>
 

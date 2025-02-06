@@ -25,7 +25,7 @@
 
 <Mobile
 	phone={iphone}
-	backgroundColor="var(--accent-color)"
+	backgroundColor="var(--green)"
 	onscroll={(value) => {
 		menuMode = value > 30 ? 'scrolled' : 'default';
 	}}
@@ -142,7 +142,8 @@
 		--mid-font-size: 1.5rem;
 		--big-font-size: 2.6rem;
 		--layout-margin-top: 6vh;
-		--accent-color: #00cc5d;
+		--green: #00cc5d;
+		--light-green: #dbffeb;
 		--red: #ff2900;
 		--light-red: #ffd5cc;
 		--yellow: #fecc00;
@@ -163,7 +164,7 @@
 		$this: &;
 		font-family: Rubik;
 		font-weight: 500;
-		background-color: var(--accent-color);
+		background-color: var(--green);
 
 		&__menu {
 			position: fixed;

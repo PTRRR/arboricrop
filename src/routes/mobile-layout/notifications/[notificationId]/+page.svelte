@@ -54,7 +54,7 @@
 </script>
 
 {#if $page.data.acknowledge}
-	<PageHeader title="Acknowledge" subTitle={notification?.title} />
+	<PageHeader title="Review" subTitle={notification?.title} />
 	<Section>
 		<TextareaInput placeholder="Personal note" />
 		<SaveMenu
@@ -85,9 +85,10 @@
 			href={`${window.location.pathname}?acknowledge=true`}
 			padding
 			icon="check"
-			iconSize="large"
-			iconBackgroundColor="var(--accent-color)"
-		></Button>
+			iconOrder="inverted"
+			backgroundColor="var(--light-green)"
+			iconBackgroundColor="var(--green)">Review</Button
+		>
 	{/snippet}
 
 	{#snippet pageSubtitle()}

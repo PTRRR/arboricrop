@@ -53,6 +53,7 @@
 			display: flex;
 			align-items: flex-start;
 			justify-content: space-between;
+			gap: 1rem;
 			// line-height: 1;
 
 			* {

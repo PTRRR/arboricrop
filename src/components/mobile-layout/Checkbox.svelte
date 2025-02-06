@@ -53,7 +53,7 @@
 			}
 
 			.checkbox--checked {
-				background-color: var(--accent-color);
+				background-color: var(--green);
 			}
 
 			.checkbox__toggle {

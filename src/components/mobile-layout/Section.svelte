@@ -8,19 +8,24 @@
 		description?: string;
 		children?: Snippet;
 		actions?: StepSeparationAction[];
+		hidden?: boolean;
 	} = $props();
 </script>
 
-<section class="section">
+<section class="section" class:section--hidden={props.hidden}>
 	<StepSeparation label={props.label} description={props.description} actions={props.actions} />
 	{@render props.children?.()}
 	<Spacer size="calc(var(--gap) * 3)" />
 </section>
 
-<style>
+<style lang="scss">
 	.section {
 		display: flex;
 		flex-direction: column;
 		gap: var(--main-gap);
+
+		&--hidden {
+			display: none;
+		}
 	}
 </style>

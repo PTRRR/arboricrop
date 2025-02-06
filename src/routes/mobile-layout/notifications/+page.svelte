@@ -25,9 +25,11 @@
 
 <PageHeader title="Notifications & Alerts" />
 
-<Section label="Filters">
+<Section>
 	<div class="notifications_filters">
 		<Button
+			padding="0.5rem"
+			backgroundColor="var(--grey)"
 			selected={filter === 'alert'}
 			href={filter === 'alert'
 				? window.location.pathname
@@ -36,6 +38,8 @@
 			Alerts
 		</Button>
 		<Button
+			padding="0.5rem"
+			backgroundColor="var(--grey)"
 			selected={filter === 'warning'}
 			href={filter === 'warning'
 				? window.location.pathname
@@ -44,6 +48,8 @@
 			Warnings
 		</Button>
 		<Button
+			padding="0.5rem"
+			backgroundColor="var(--grey)"
 			selected={filter === 'notification'}
 			href={filter === 'notification'
 				? window.location.pathname

@@ -53,7 +53,7 @@
 		}
 
 		&--checked {
-			background-color: var(--accent-color);
+			background-color: var(--green);
 		}
 	}
 </style>

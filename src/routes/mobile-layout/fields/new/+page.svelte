@@ -80,59 +80,58 @@
 </script>
 
 <PageHeader title="New Field" />
+
+<Section hidden={!addLayer} actions={[{ label: 'Import', onclick: () => {} }]}>
+	<Table headers={layersHeaders} rows={availableLayersRows} />
+</Section>
+
+<Section hidden={addLayer}>
+	<TextInput label="Name" defaultValue={defaultName} onvalue={(value) => (name = value)} />
+	<TextInput label="Area" onvalue={(value) => (area = value)} />
+</Section>
+
+<Section hidden={addLayer} label="Location">
+	<Map
+		bind:this={map}
+		maxBounds={swissBounds}
+		zoom={11}
+		minZoom={3}
+		maxZoom={18}
+		center={field.center}
+		showTarget
+		markers={[{ lngLat: field.center }]}
+		geoJSONs={selectedFeatures}
+	/>
+	<Button
+		icon="check"
+		onclick={() => {
+			field.center = map?.getCenter() || field.center;
+		}}
+	>
+		Validate Location
+	</Button>
+</Section>
+
+<Section
+	hidden={addLayer}
+	label="Layers"
+	actions={selectedFeaturesSet.size > 0
+		? [{ icon: 'add', onclick: () => goto(url.addQuery({ name: 'addLayer', value: 'true' })) }]
+		: []}
+>
+	{#if selectedFeaturesSet.size > 0}
+		<Table headers={layersHeaders} rows={selectedLayersRows} />
+	{:else}
+		<Button href={url.addQuery({ name: 'addLayer', value: 'true' })} icon="add">Add layer</Button>
+	{/if}
+</Section>
+
 {#if addLayer}
-	<Section actions={[{ label: 'Import', onclick: () => {} }]}>
-		<Table headers={layersHeaders} rows={availableLayersRows} />
-	</Section>
 	<SaveMenu
 		onsave={() => goto(url.removeQuery({ name: 'addLayer' }))}
 		oncancel={() => goto(url.removeQuery({ name: 'addLayer' }))}
 	/>
 {:else}
-	<Section>
-		<TextInput label="Name" defaultValue={defaultName} onvalue={(value) => (name = value)} />
-		<TextInput label="Area" onvalue={(value) => (area = value)} />
-	</Section>
-
-	<Section
-		label="Location"
-		actions={[
-			{
-				label: 'Set Location',
-				icon: 'navigate',
-				iconOrder: 'inverted',
-				onclick: () => {
-					field.center = map?.getCenter() || field.center;
-				}
-			}
-		]}
-	>
-		<Map
-			bind:this={map}
-			maxBounds={swissBounds}
-			zoom={11}
-			minZoom={3}
-			maxZoom={18}
-			center={field.center}
-			showTarget
-			markers={[{ lngLat: field.center }]}
-			geoJSONs={selectedFeatures}
-		/>
-	</Section>
-
-	<Section
-		label="Layers"
-		actions={selectedFeaturesSet.size > 0
-			? [{ label: 'Edit', onclick: () => goto(url.addQuery({ name: 'addLayer', value: 'true' })) }]
-			: []}
-	>
-		{#if selectedFeaturesSet.size > 0}
-			<Table headers={layersHeaders} rows={selectedLayersRows} />
-		{:else}
-			<Button href={url.addQuery({ name: 'addLayer', value: 'true' })} icon="add">Add layer</Button>
-		{/if}
-	</Section>
-
 	<SaveMenu
 		onsave={() => {
 			field = {

@@ -2,8 +2,6 @@
 	import { page } from '$app/stores';
 	import Button from '../../../../components/mobile-layout/Button.svelte';
 	import Map from '../../../../components/mobile-layout/Map.svelte';
-	import Spacer from '../../../../components/Spacer.svelte';
-	import SaveSection from '../../../../components/wireframe/SaveSection.svelte';
 	import Section from '../../../../components/mobile-layout/Section.svelte';
 	import {
 		useDeviceIllustration,
@@ -25,6 +23,11 @@
 	import Dropdown from '../../../../components/mobile-layout/Dropdown.svelte';
 	import { createId } from '@paralleldrive/cuid2';
 	import type { LngLatLike } from 'svelte-maplibre';
+	import SaveMenu from '../../../../components/mobile-layout/SaveMenu.svelte';
+	import { getLocationDelta } from '../../../../utils/locations';
+	import type { IconName } from '../../../../components/mobile-layout/Icon.svelte';
+	import { getCss } from '../../../../utils/css';
+	import { addElipsis } from '../../../../utils/strings';
 
 	const { preventNavigationHistory, navigateToPreviousPage } = useNavigationHistory();
 	const { setVisibility, reset, setUsb, setJack, setBlink, setOn } = useDeviceIllustration();
@@ -35,20 +38,16 @@
 	const { userMode } = useUserMode();
 
 	let map: Map | undefined = $state(undefined);
-	let center = $state<LngLatLike | undefined>(undefined);
+	let location = $state<LngLatLike | undefined>(undefined);
 	let name = $state<string | undefined>(undefined);
 	let notes = $state<string | undefined>(undefined);
-	let editMetadata: boolean = $state(false);
-	let editField: boolean = $state(false);
-	let editLocation: boolean = $state(false);
 
+	const hasChanged = $derived(location || name || notes);
 	const device = $derived($devices.find((it) => it.id === $page.params.id));
 	const field = $derived($fields.find((it) => it.id === device?.fieldId));
 	const loraConfiguration = $derived(
 		$loRaConfigurations.find((it) => it.id === field?.loraConfigId)
 	);
-
-	const hasChanged = $derived(center || name || notes);
 
 	const mediaOptions: { label: string; type: MediaType }[] = [
 		{ label: 'Image', type: 'image' },
@@ -58,6 +57,23 @@
 
 	const actionButtonLabel = $derived(
 		$page.data.connected ? (device?.status === 'active' ? 'Deactivate' : 'Activate') : 'Pair'
+	);
+	const actionButtonIcon = $derived<IconName>(
+		$page.data.connected ? (device?.status === 'active' ? 'cross' : 'check') : 'navigate'
+	);
+	const actionButtonIconBackgroundColor = $derived(
+		$page.data.connected
+			? device?.status === 'active'
+				? 'var(--red)'
+				: 'var(--green)'
+			: 'var(--black)'
+	);
+	const actionButtonBackgroundColor = $derived(
+		$page.data.connected
+			? device?.status === 'active'
+				? 'var(--light-red)'
+				: 'var(--light-green)'
+			: 'var(--grey)'
 	);
 	const actionButtonLink = $derived(
 		$page.data.connected && device?.status === 'unactive'
@@ -101,9 +117,13 @@
 
 {#if device}
 	{#snippet deviceName()}
-		<span>{device.name}</span>
+		<span>{addElipsis(device.name || '', 8)}</span>
 		<Button
 			padding
+			icon={actionButtonIcon}
+			iconBackgroundColor={actionButtonIconBackgroundColor}
+			backgroundColor={actionButtonBackgroundColor}
+			iconOrder="inverted"
 			onclick={() => {
 				if ($page.data.connected && device.status === 'active') {
 					updateDevice({ ...device, status: 'unactive' });
@@ -150,18 +170,15 @@
 
 	<Section>
 		<TextInput label="Id:" defaultValue={device.id} readonly />
-		<TextInput label="Name:" defaultValue={device.name} />
+		<TextInput
+			label="Name:"
+			defaultValue={device.name}
+			onvalue={(value) => (name = value !== device.name ? value : undefined)}
+		/>
 		<TextareaInput
 			label="Notes"
 			defaultValue={device.note}
-			onvalue={(value) => {
-				if (device) {
-					updateDevice({
-						...device,
-						note: value
-					});
-				}
-			}}
+			onvalue={(value) => (notes = value !== device.note ? value : undefined)}
 		/>
 	</Section>
 
@@ -185,23 +202,17 @@
 				maxZoom={18.5}
 				center={device?.location || field?.center}
 				markers={device?.location ? [{ lngLat: device.location }] : []}
-				showTarget={editLocation}
+				showTarget={Boolean(location)}
 				geoJSONs={field?.layers}
-			/>
-
-			{#if editLocation}
-				<Button
-					onclick={() => {
-						if (map && device) {
-							const { lng, lat } = map.getCenter();
-							updateDevice({ ...device, location: [lng, lat] });
+				onChange={(value) => {
+					if (device.location) {
+						const delta = getLocationDelta(value, device.location);
+						if (delta > 0.0001) {
+							location = value;
 						}
-						editLocation = false;
-					}}
-				>
-					Validate location
-				</Button>
-			{/if}
+					}
+				}}
+			/>
 		</Section>
 	{/if}
 
@@ -234,12 +245,6 @@
 		</Section>
 	{/if}
 
-	{#if editMetadata}
-		<Section label="Confirm changes:">
-			<SaveSection onSave={() => {}} onCancel={() => {}} />
-		</Section>
-	{/if}
-
 	<Section label="Danger zone">
 		<Button
 			padding
@@ -254,6 +259,29 @@
 			>Delete Permanently
 		</Button>
 	</Section>
+
+	{#if hasChanged}
+		<SaveMenu
+			onsave={() => {
+				updateDevice({
+					...device,
+					location: location || device.location,
+					name: name || device.name,
+					note: notes || device.note
+				});
+
+				name = undefined;
+				notes = undefined;
+				location = undefined;
+			}}
+			oncancel={() => {
+				updateDevice(device);
+				name = undefined;
+				notes = undefined;
+				location = undefined;
+			}}
+		/>
+	{/if}
 {:else}
 	<span>Device unknown</span>
 {/if}
@@ -277,7 +305,7 @@
 		}
 
 		&__status--active {
-			background-color: var(--accent-color);
+			background-color: var(--green);
 		}
 	}
 </style>

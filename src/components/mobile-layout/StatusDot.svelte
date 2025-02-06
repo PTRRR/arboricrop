@@ -19,7 +19,7 @@
 		flex: 0 0 auto;
 
 		&--success {
-			background-color: var(--accent-color);
+			background-color: var(--green);
 		}
 
 		&--normal {
