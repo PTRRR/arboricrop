@@ -9,7 +9,7 @@
 	import { DROPDOWN_PORTAL } from '../../components/mobile-layout/Dropdown.svelte';
 
 	let data: { children: Snippet } = $props();
-	let showSplashscreen = $state(false);
+	let showSplashscreen = $state(true);
 	let hideContent = $state(false);
 	let menuMode = $state<'default' | 'scrolled'>('default');
 	const notifications = useNotifications();
@@ -196,7 +196,8 @@
 				font-size: 4rem;
 			}
 
-			#{$this}__main-navigation {
+			#{$this}__notifications,
+			#{$this}__hamburger {
 				opacity: 0;
 				pointer-events: none;
 			}
@@ -316,6 +317,7 @@
 			align-items: center;
 			justify-content: center;
 			font-size: var(--main-font-size);
+			transition: opacity 0.7s cubic-bezier(0.83, 0, 0.17, 1);
 
 			&-inner {
 				background-color: var(--white);
