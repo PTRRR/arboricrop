@@ -77,6 +77,7 @@
 		outline: none;
 		background-color: transparent;
 		text-decoration: none;
+		font-family: inherit;
 	}
 
 	.button {
