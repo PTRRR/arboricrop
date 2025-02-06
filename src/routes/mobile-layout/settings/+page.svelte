@@ -21,6 +21,7 @@
 	import TextInput from '../../../components/mobile-layout/TextInput.svelte';
 	import Table from '../../../components/mobile-layout/Table.svelte';
 	import PageHeader from '../../../components/mobile-layout/PageHeader.svelte';
+	import SaveMenu from '../../../components/mobile-layout/SaveMenu.svelte';
 
 	const usedNetwork = useNetwork();
 	const returnButton = useReturnButton();
@@ -106,7 +107,7 @@
 
 	<Section
 		label="LoRa Configurations"
-		actions={[{ label: 'Create', onclick: () => goto(`${window.location.pathname}/lora/new`) }]}
+		actions={[{ icon: 'add', onclick: () => goto(`${window.location.pathname}/lora/new`) }]}
 	>
 		<Table
 			headers={[
@@ -120,10 +121,14 @@
 		/>
 	</Section>
 
-	<Section label="Confirm changes">
-		<Button>Save</Button>
-		<Button>Cancel</Button>
-	</Section>
+	<SaveMenu
+		oncancel={() => {
+			goto('/mobile-layout');
+		}}
+		onsave={() => {
+			goto('/mobile-layout');
+		}}
+	/>
 {/if}
 
 <style lang="scss">

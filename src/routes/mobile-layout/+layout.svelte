@@ -5,12 +5,14 @@
 	import { goto } from '$app/navigation';
 	import { createPortal } from '../../utils/portal';
 	import { ACTION_MENU_PORTAL } from '../../components/mobile-layout/ActionMenu.svelte';
-	import { getCss } from '../../utils/css';
+	import { useNotifications } from '../../stores';
 
 	let data: { children: Snippet } = $props();
 	let showSplashscreen = $state(false);
 	let hideContent = $state(false);
 	let menuMode = $state<'default' | 'scrolled'>('default');
+	const notifications = useNotifications();
+	const pendingNotifications = $derived($notifications.filter((it) => it.status === 'pending'));
 
 	onMount(() => {
 		setTimeout(() => {
@@ -38,30 +40,44 @@
 	>
 		<a class="mobile-layout__breadcrumb" href="/mobile-layout">vita/hub</a>
 		<img class="mobile-layout__logo" src="/images/logo.svg" alt="" />
+
+		{#if pendingNotifications.length > 0}
+			<!-- svelte-ignore a11y_click_events_have_key_events -->
+			<!-- svelte-ignore a11y_no_static_element_interactions -->
+			<div
+				class="mobile-layout__notifications"
+				onclick={() => goto('/mobile-layout/notifications')}
+			>
+				<div class="mobile-layout__notifications-inner">
+					{pendingNotifications.length}
+				</div>
+			</div>
+		{/if}
+
 		<!-- svelte-ignore a11y_click_events_have_key_events -->
 		<!-- svelte-ignore a11y_no_static_element_interactions -->
-		<div class="mobile-layout__nav" onclick={() => (hideContent = !hideContent)}>
-			<div class="mobile-layout__menu-button">
-				<div class="mobile-layout__menu-line"></div>
-				<div class="mobile-layout__menu-line"></div>
-				<div class="mobile-layout__menu-line"></div>
+		<div class="mobile-layout__hamburger" onclick={() => (hideContent = !hideContent)}>
+			<div class="mobile-layout__hamburger-inner">
+				<div class="mobile-layout__hamburger-line"></div>
+				<div class="mobile-layout__hamburger-line"></div>
+				<div class="mobile-layout__hamburger-line"></div>
 			</div>
 		</div>
 
-		<div class="mobile-layout__menu">
+		<div class="mobile-layout__links">
 			<a href="/mobile-layout" onclick={() => (hideContent = false)}>Fields</a>
 			<a href="/mobile-layout/notifications" onclick={() => (hideContent = false)}>Notifications</a>
 			<a href="/mobile-layout/settings" onclick={() => (hideContent = false)}>Settings</a>
 			<a href="/mobile-layout/account" onclick={() => (hideContent = false)}>Account</a>
 		</div>
 
-		<div class="mobile-layout__action-menu" use:createPortal={ACTION_MENU_PORTAL}></div>
-
 		<div class="mobile-layout__wrapper">
 			<div class="mobile-layout__content">
 				{@render data.children()}
 			</div>
 		</div>
+
+		<div class="mobile-layout__action-menu" use:createPortal={ACTION_MENU_PORTAL}></div>
 	</div>
 </Mobile>
 
@@ -166,7 +182,46 @@
 		font-weight: 500;
 		background-color: var(--green);
 
-		&__menu {
+		&--init {
+			#{$this}__content {
+				transform: translate(0, 100%);
+			}
+
+			#{$this}__breadcrumb {
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				font-size: 4rem;
+			}
+
+			#{$this}__main-navigation {
+				opacity: 0;
+				pointer-events: none;
+			}
+
+			#{$this}__links {
+				opacity: 0;
+				pointer-events: none;
+			}
+		}
+
+		&--hide-content {
+			#{$this}__wrapper {
+				pointer-events: none;
+			}
+
+			#{$this}__content {
+				transform: translate(0, 100%);
+			}
+		}
+
+		&--scrolled {
+			#{$this}__hamburger-line {
+				background-color: black;
+			}
+		}
+
+		&__links {
 			position: fixed;
 			top: 50%;
 			left: 0;
@@ -193,7 +248,6 @@
 			box-sizing: border-box;
 		}
 
-		&__nav,
 		&__breadcrumb {
 			text-decoration: none;
 			font-size: var(--big-font-size);
@@ -219,72 +273,57 @@
 				font-size 0.7s cubic-bezier(0.83, 0, 0.17, 1);
 		}
 
-		&__nav {
-			z-index: 10;
-			right: 0;
-			top: var(--layout-margin-top);
-			right: 1.5rem;
-			width: 2.3rem;
-			height: var(--big-font-size);
-			padding: 0.4rem 0;
-			box-sizing: border-box;
-			transition: opacity 0.7s cubic-bezier(0.83, 0, 0.17, 1);
+		&__hamburger {
 			cursor: pointer;
-		}
+			position: absolute;
+			right: 1.5rem;
+			top: var(--layout-margin-top);
+			height: var(--big-font-size);
+			width: 2.5rem;
+			transition: opacity 0.7s cubic-bezier(0.83, 0, 0.17, 1);
+			z-index: 10;
+			padding: 0.3rem 0;
+			box-sizing: border-box;
 
-		&--init {
-			#{$this}__content {
-				transform: translate(0, 100%);
+			&-inner {
+				width: 100%;
+				height: 100%;
+				position: relative;
+				display: flex;
+				flex-direction: column;
+				justify-content: space-between;
 			}
 
-			#{$this}__breadcrumb {
-				top: 50%;
-				left: 50%;
-				transform: translate(-50%, -50%);
-				font-size: 4rem;
-			}
-
-			#{$this}__nav {
-				opacity: 0;
-				pointer-events: none;
-			}
-
-			#{$this}__menu {
-				opacity: 0;
-				pointer-events: none;
-			}
-		}
-
-		&--hide-content {
-			#{$this}__wrapper {
-				pointer-events: none;
-			}
-
-			#{$this}__content {
-				transform: translate(0, 100%);
+			&-line {
+				transition: background-color 0.3s ease-in-out;
+				width: 100%;
+				height: 4px;
+				border-radius: 2px;
+				background-color: var(--white);
 			}
 		}
 
-		&--scrolled {
-			#{$this}__menu-line {
-				background-color: black;
-			}
-		}
-
-		&__menu-button {
-			width: 100%;
-			height: 100%;
+		&__notifications {
+			cursor: pointer;
+			z-index: 1;
+			top: var(--layout-margin-top);
+			right: 5rem;
+			height: var(--big-font-size);
+			position: absolute;
 			display: flex;
-			flex-direction: column;
-			justify-content: space-between;
-		}
+			align-items: center;
+			justify-content: center;
+			font-size: var(--main-font-size);
 
-		&__menu-line {
-			transition: background-color 0.3s ease-in-out;
-			width: 100%;
-			height: 4px;
-			border-radius: 2px;
-			background-color: var(--white);
+			&-inner {
+				background-color: var(--white);
+				color: var(--green);
+				padding: 5px;
+				border-radius: 5px;
+				height: 1em;
+				width: 1em;
+				text-align: center;
+			}
 		}
 
 		&__content {
