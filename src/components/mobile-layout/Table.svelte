@@ -89,6 +89,7 @@
 			color: black;
 			text-decoration: none;
 			box-sizing: border-box;
+			border-radius: 5px;
 
 			& + & {
 				border-top: solid 1px var(--grey);

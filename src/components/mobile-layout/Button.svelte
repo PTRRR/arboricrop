@@ -100,13 +100,13 @@
 		font-weight: 500;
 		text-transform: lowercase;
 		border: none;
-		// padding: 0.5rem;
+		padding: 0.5rem 0;
 		border-radius: 6px;
 		cursor: pointer;
 		text-align: left;
 		box-sizing: border-box;
 		display: flex;
-		gap: 0.5rem;
+		gap: 0.3rem;
 
 		&--fit-width {
 			width: 100%;
@@ -141,7 +141,7 @@
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			border-radius: 3px;
+			border-radius: 5px;
 		}
 
 		&__content {

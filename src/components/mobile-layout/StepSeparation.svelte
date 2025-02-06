@@ -45,7 +45,7 @@
 		&__heading {
 			display: flex;
 			justify-content: space-between;
-			align-items: flex-end;
+			align-items: center;
 		}
 
 		&__label {

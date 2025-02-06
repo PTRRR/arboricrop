@@ -111,7 +111,7 @@
 		</Section>
 		<Section
 			label="Layers"
-			actions={selectedLayersRows.length > 0 ? [{ label: 'Edit', onclick: () => {} }] : []}
+			actions={selectedLayersRows.length > 0 ? [{ icon: 'add', onclick: () => {} }] : []}
 		>
 			{#if selectedLayersRows.length > 0}
 				<Table headers={layersHeaders} rows={selectedLayersRows} />

@@ -168,7 +168,7 @@
 			font-size: var(--big-font-size);
 			font-weight: inherit;
 			padding: 1rem;
-			gap: 1rem;
+			gap: 0.2rem;
 			transition: opacity 1s 0.7s cubic-bezier(0.83, 0, 0.17, 1);
 
 			a {
@@ -199,7 +199,7 @@
 
 		&__breadcrumb {
 			top: var(--layout-margin-top);
-			left: 1rem;
+			left: 1.5rem;
 			white-space: nowrap;
 			transform: translate(0%, 0%);
 			font-size: var(--big-font-size);
