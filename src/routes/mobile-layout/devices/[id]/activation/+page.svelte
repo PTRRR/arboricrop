@@ -207,7 +207,7 @@
 				}))}
 			/>
 		{:else}
-			<Dropdown label="Add media" items={mediaOptions} renderItem={mediaOptionItem} />
+			<Dropdown label="Add media" icon="add" items={mediaOptions} renderItem={mediaOptionItem} />
 		{/if}
 
 		<SaveMenu
