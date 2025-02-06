@@ -16,7 +16,6 @@
 	.action-menu {
 		display: flex;
 		gap: 1rem;
-		background-color: var(--grey);
 		padding: 0.5rem;
 		border-radius: 5px;
 	}

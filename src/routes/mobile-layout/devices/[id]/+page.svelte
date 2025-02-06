@@ -24,6 +24,7 @@
 	import Table from '../../../../components/mobile-layout/Table.svelte';
 	import Dropdown from '../../../../components/mobile-layout/Dropdown.svelte';
 	import { createId } from '@paralleldrive/cuid2';
+	import type { LngLatLike } from 'svelte-maplibre';
 
 	const { preventNavigationHistory, navigateToPreviousPage } = useNavigationHistory();
 	const { setVisibility, reset, setUsb, setJack, setBlink, setOn } = useDeviceIllustration();
@@ -34,6 +35,9 @@
 	const { userMode } = useUserMode();
 
 	let map: Map | undefined = $state(undefined);
+	let center = $state<LngLatLike | undefined>(undefined);
+	let name = $state<string | undefined>(undefined);
+	let notes = $state<string | undefined>(undefined);
 	let editMetadata: boolean = $state(false);
 	let editField: boolean = $state(false);
 	let editLocation: boolean = $state(false);
@@ -43,6 +47,8 @@
 	const loraConfiguration = $derived(
 		$loRaConfigurations.find((it) => it.id === field?.loraConfigId)
 	);
+
+	const hasChanged = $derived(center || name || notes);
 
 	const mediaOptions: { label: string; type: MediaType }[] = [
 		{ label: 'Image', type: 'image' },
@@ -141,42 +147,7 @@
 	{/snippet}
 
 	<PageHeader title={deviceName} subTitle={deviceStatus} />
-	<!-- <div class="device__header">
-		<div class="device__name">
-			<h1>{device.name}</h1>
-			<Button href={actionButtonLink}>{actionButtonLabel}</Button>
-		</div>
-		<div class="device__status">
-			<span class="device__status-dot" class:device__status--active={device.status === 'active'}
-			></span>
-			<h2>{device.status}</h2>
-		</div>
-	</div> -->
-	{#if $page.data.connected}
-		{#if device.status === 'unactive'}
-			<!-- <Button
-				preventHistory
-				href={`/mobile-wireframe/devices/${device.id}/activation?connected=true&advanced=${$userMode === 'advanced'}`}
-			>
-				Activate
-			</Button> -->
-		{:else if editMetadata}
-			<Spacer />
-			<Button
-				onclick={() => {
-					updateDevice({ ...device, status: 'unactive' });
-					editMetadata = false;
-				}}
-			>
-				Disactivate
-			</Button>
-		{/if}
-	{:else}
-		<!-- <Button preventHistory href={`/mobile-wireframe/devices/pairing?deviceId=${device.id}`}>
-			Pair device
-		</Button> -->
-	{/if}
-	<Spacer />
+
 	<Section>
 		<TextInput label="Id:" defaultValue={device.id} readonly />
 		<TextInput label="Name:" defaultValue={device.name} />
@@ -193,17 +164,19 @@
 			}}
 		/>
 	</Section>
+
 	{#if device.status === 'active'}
 		<Section
 			label="Location"
 			actions={[
-				{ label: editLocation ? 'Cancel' : 'Edit', onclick: () => (editLocation = !editLocation) }
+				{
+					label: field?.name || '-',
+					href: `/mobile-layout/fields/${field?.id}`,
+					icon: 'navigate',
+					iconOrder: 'inverted'
+				}
 			]}
 		>
-			<Button href={`/mobile-layout/fields/${field?.id}`}>
-				{field?.name || '-'}
-			</Button>
-
 			<Map
 				bind:this={map}
 				maxBounds={swissBounds}
@@ -239,7 +212,7 @@
 		{#if device.medias.length > 0}
 			<Table
 				headers={[
-					{ label: 'Name', width: '50%' },
+					{ label: 'Name', width: '60%' },
 					{ label: 'Type', width: '30%' }
 				]}
 				rows={device.medias.map((it) => ({

@@ -6,6 +6,21 @@
 </script>
 
 <ActionMenu>
-	<Button icon="cross" iconBackgroundColor="var(--dark-grey)" iconSize="large" onclick={oncancel} />
-	<Button icon="add" iconSize="large" iconBackgroundColor="var(--accent-color)" onclick={onsave} />
+	{#if oncancel}
+		<Button
+			icon="cross"
+			iconBackgroundColor="var(--dark-grey)"
+			iconSize="large"
+			onclick={oncancel}
+		/>
+	{/if}
+
+	{#if onsave}
+		<Button
+			icon="add"
+			iconSize="large"
+			iconBackgroundColor="var(--accent-color)"
+			onclick={onsave}
+		/>
+	{/if}
 </ActionMenu>

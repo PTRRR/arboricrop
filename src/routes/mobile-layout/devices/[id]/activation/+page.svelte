@@ -8,7 +8,6 @@
 	import Dropdown from '../../../../../components/mobile-layout/Dropdown.svelte';
 	import Map from '../../../../../components/mobile-layout/Map.svelte';
 	import ButtonList from '../../../../../components/wireframe/ButtonList.svelte';
-	import CenteredWrapper from '../../../../../components/mobile-layout/CenteredWrapper.svelte';
 	import Image from '../../../../../components/mobile-layout/Image.svelte';
 	import SaveSection from '../../../../../components/wireframe/SaveSection.svelte';
 	import Section from '../../../../../components/mobile-layout/Section.svelte';
@@ -28,6 +27,7 @@
 	import PageHeader from '../../../../../components/mobile-layout/PageHeader.svelte';
 	import TextareaInput from '../../../../../components/mobile-layout/TextareaInput.svelte';
 	import Table from '../../../../../components/mobile-layout/Table.svelte';
+	import ActionMenu from '../../../../../components/mobile-layout/ActionMenu.svelte';
 
 	const { data }: { data: PageData } = $props();
 
@@ -257,7 +257,7 @@
 {:else}
 	{#snippet stepHeader()}
 		<span>{currentStep?.label}</span>
-		<Button>Live Data</Button>
+		<Button padding icon="navigate" iconOrder="inverted">Live Data</Button>
 	{/snippet}
 
 	<PageHeader title={stepHeader} subTitle={`Step ${stepIndex + 1}/${steps.length}`} />
@@ -273,12 +273,14 @@
 				]}
 			/>
 		</Section>
-		<Section label="Review & confirm">
-			<Button preventHistory href={nextHref}>Next</Button>
-			<Button href={`/mobile-layout/devices/${device?.id}?connected=true`} preventHistory>
-				Cancel
-			</Button>
-		</Section>
+		<ActionMenu>
+			<Button
+				icon="cross"
+				iconSize="large"
+				href={`/mobile-layout/devices/${device?.id}?connected=true`}
+			></Button>
+			<Button icon="check" iconSize="large" href={nextHref}></Button>
+		</ActionMenu>
 	{:else if stepIndex === 1}
 		<Section>
 			<Image
@@ -295,10 +297,10 @@
 				]}
 			/>
 		</Section>
-		<Section label="Review & confirm">
-			<Button preventHistory href={nextHref}>Next</Button>
-			<Button href={previousHref} preventHistory>Previous</Button>
-		</Section>
+		<ActionMenu>
+			<Button icon="cross" iconSize="large" href={previousHref}></Button>
+			<Button icon="check" iconSize="large" href={nextHref}></Button>
+		</ActionMenu>
 	{:else if stepIndex === 2}
 		<Section>
 			<Map
@@ -311,25 +313,22 @@
 				showTarget
 				markers={device?.location ? [{ lngLat: device.location }] : []}
 				geoJSONs={field?.layers}
-			/>
-			<Button
-				onclick={() => {
-					const center = map?.getCenter();
-					if (device && center) {
-						updateDevice({
-							...device,
-							location: [center.lng, center.lat]
-						});
-					}
+				onmoveend={() => {
+					// console.log('ldsfkjh');
+					// const center = map?.getCenter();
+					// if (device && center) {
+					// 	updateDevice({
+					// 		...device,
+					// 		location: [center.lng, center.lat]
+					// 	});
+					// }
 				}}
-			>
-				Validate location
-			</Button>
+			/>
 		</Section>
-		<Section label="Review & confirm">
-			<Button preventHistory href={nextHref} disabled={!device?.location}>Next</Button>
-			<Button href={previousHref} preventHistory>Previous</Button>
-		</Section>
+		<ActionMenu>
+			<Button icon="cross" iconSize="large" href={previousHref}></Button>
+			<Button icon="check" iconSize="large" href={nextHref}></Button>
+		</ActionMenu>
 	{:else if stepIndex === 3 && device}
 		<Section>
 			<TextareaInput
@@ -337,7 +336,6 @@
 				defaultValue={device?.note || ''}
 				onvalue={(value) => {
 					if (device) {
-						console.log(value);
 						updateDevice({
 							...device,
 							note: value
@@ -347,7 +345,7 @@
 			/>
 		</Section>
 
-		<Section label="Medias" actions={device.medias.length > 0 ? [{ label: 'Add' }] : []}>
+		<Section label="Medias" actions={device.medias.length > 0 ? [{ icon: 'add' }] : []}>
 			{#if device.medias.length > 0}
 				<Table
 					headers={[
@@ -366,9 +364,11 @@
 			{/if}
 		</Section>
 
-		<Section label="Review & confirm">
+		<ActionMenu>
+			<Button icon="cross" iconSize="large" href={previousHref}></Button>
 			<Button
-				preventHistory
+				icon="check"
+				iconSize="large"
 				href={`/mobile-layout/devices/${device?.id}?connected=true`}
 				onclick={() => {
 					if (device) {
@@ -378,10 +378,7 @@
 						});
 					}
 				}}
-			>
-				Activate
-			</Button>
-			<Button href={previousHref} preventHistory>Previous</Button>
-		</Section>
+			></Button>
+		</ActionMenu>
 	{/if}
 {/if}

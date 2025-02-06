@@ -4,7 +4,12 @@
 	import type { Phone } from '../utils/phones';
 	import ScrollArea from './ScrollArea.svelte';
 
-	const props: { phone: Phone; onscroll?: (value: number) => void; children?: Snippet } = $props();
+	const props: {
+		phone: Phone;
+		onscroll?: (value: number) => void;
+		children?: Snippet;
+		backgroundColor?: string;
+	} = $props();
 
 	let image: HTMLImageElement;
 	let aspectRatio = $state<string | undefined>(undefined);
@@ -13,7 +18,8 @@
 	const appInnerStyle = $derived(
 		getCss({
 			width: `${props.phone.widthScale * 100}%`,
-			height: `${props.phone.heightScale * 100}%`
+			height: `${props.phone.heightScale * 100}%`,
+			backgroundColor: props.backgroundColor
 		})
 	);
 

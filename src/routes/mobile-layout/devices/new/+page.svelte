@@ -1,7 +1,5 @@
 <script lang="ts">
 	import { createId } from '@paralleldrive/cuid2';
-	import DeviceMetadataV2 from '../../../../components/wireframe/DeviceGeneralSettings.svelte';
-	import SaveSection from '../../../../components/wireframe/SaveSection.svelte';
 	import Section from '../../../../components/mobile-layout/Section.svelte';
 	import {
 		useDeviceIllustration,
@@ -14,9 +12,8 @@
 	import { onMount } from 'svelte';
 	import type { PageData } from '../$types';
 	import TextInput from '../../../../components/mobile-layout/TextInput.svelte';
-	import { Label } from 'bits-ui';
-	import Button from '../../../../components/mobile-layout/Button.svelte';
 	import PageHeader from '../../../../components/mobile-layout/PageHeader.svelte';
+	import SaveMenu from '../../../../components/mobile-layout/SaveMenu.svelte';
 
 	export let data: PageData;
 
@@ -52,25 +49,12 @@
 <Section>
 	<TextInput label="id" defaultValue={device.id} readonly />
 	<TextInput label="name" autoFocus onvalue={(value) => (device.name = value)} />
-	<!-- <DeviceMetadataV2
-		{device}
-		editable
-		onValues={({ name }) =>
-			(device = {
-				...device,
-				name
-			})}
-	/> -->
 </Section>
-<Section label="Confirm:">
-	<Button
-		onclick={() => {
-			$preventNavigationHistory = true;
-			devices.set([...$devices, device]);
-			goto(`/mobile-layout/devices/${device.id}?connected=true`);
-		}}
-	>
-		Save new device
-	</Button>
-	<Button>Cancel</Button>
-</Section>
+<SaveMenu
+	onsave={() => {
+		$preventNavigationHistory = true;
+		devices.set([...$devices, device]);
+		goto(`/mobile-layout/devices/${device.id}?connected=true`);
+	}}
+	oncancel={() => goto(`/mobile-layout/fields/${data.field}`)}
+/>

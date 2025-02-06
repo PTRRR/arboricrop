@@ -25,6 +25,7 @@
 
 <Mobile
 	phone={iphone}
+	backgroundColor="var(--accent-color)"
 	onscroll={(value) => {
 		menuMode = value > 30 ? 'scrolled' : 'default';
 	}}
@@ -293,6 +294,7 @@
 			font-size: var(--main-font-size);
 			margin-top: calc(var(--layout-margin-top) + var(--big-font-size) + 1rem);
 			padding: 1.5rem;
+			padding-bottom: 5rem;
 			border-radius: 1.5rem;
 			box-sizing: border-box;
 			min-height: calc(

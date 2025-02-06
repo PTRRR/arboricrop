@@ -167,6 +167,7 @@
 
 		&__content {
 			line-height: 1;
+			white-space: nowrap;
 		}
 
 		span {

@@ -10,6 +10,8 @@
 	import Table, { type Row } from '../../../../components/mobile-layout/Table.svelte';
 	import StatusDot, { type Status } from '../../../../components/mobile-layout/StatusDot.svelte';
 	import { getCss } from '../../../../utils/css';
+	import SaveMenu from '../../../../components/mobile-layout/SaveMenu.svelte';
+	import { goto } from '$app/navigation';
 
 	const returnButton = useReturnButton();
 	const notifications = useNotifications();
@@ -55,9 +57,8 @@
 	<PageHeader title="Acknowledge" subTitle={notification?.title} />
 	<Section>
 		<TextareaInput placeholder="Personal note" />
-		<Button
-			href="/mobile-wireframe/notifications"
-			onclick={() => {
+		<SaveMenu
+			onsave={() => {
 				if (notification) {
 					const notificationIndex = $notifications.findIndex((it) => it.id === notification.id);
 					if (notificationIndex > -1) {
@@ -69,16 +70,24 @@
 						notifications.set(newNotifications);
 					}
 				}
+
+				goto('/mobile-layout/notifications');
 			}}
-		>
-			Confirm
-		</Button>
-		<Button href={window.location.pathname}>Cancel</Button>
+			oncancel={() => {
+				goto(window.location.pathname);
+			}}
+		/>
 	</Section>
 {:else}
 	{#snippet pageTitle()}
 		<span>{notification?.title}</span>
-		<Button href={`${window.location.pathname}?acknowledge=true`} padding>Acknowledge</Button>
+		<Button
+			href={`${window.location.pathname}?acknowledge=true`}
+			padding
+			icon="check"
+			iconSize="large"
+			iconBackgroundColor="var(--accent-color)"
+		></Button>
 	{/snippet}
 
 	{#snippet pageSubtitle()}
@@ -100,7 +109,7 @@
 				label: 'Device',
 				icon: 'navigate',
 				iconOrder: 'inverted',
-				href: `/mobile-wireframe/devices/${notification?.deviceId}`
+				href: `/mobile-layout/devices/${notification?.deviceId}`
 			}
 		]}
 	>

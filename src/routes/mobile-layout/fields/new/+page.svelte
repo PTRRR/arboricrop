@@ -13,6 +13,7 @@
 	import Table, { type Cell, type Row } from '../../../../components/mobile-layout/Table.svelte';
 	import { createUrlBuilder } from '../../../../utils/urls';
 	import PageHeader from '../../../../components/mobile-layout/PageHeader.svelte';
+	import SaveMenu from '../../../../components/mobile-layout/SaveMenu.svelte';
 
 	const defaultName = $page.url.searchParams.get('name') || '';
 	const addLayer = $derived($page.url.searchParams.get('addLayer') === 'true');
@@ -83,23 +84,33 @@
 	<Section actions={[{ label: 'Import', onclick: () => {} }]}>
 		<Table headers={layersHeaders} rows={availableLayersRows} />
 	</Section>
-	<Section>
-		<Button disabled={selectedFeaturesSet.size === 0} href={url.removeQuery({ name: 'addLayer' })}>
-			Confirm
-		</Button>
-		<Button href={url.removeQuery({ name: 'addLayer' })}>Cancel</Button>
-	</Section>
+	<SaveMenu
+		onsave={() => goto(url.removeQuery({ name: 'addLayer' }))}
+		oncancel={() => goto(url.removeQuery({ name: 'addLayer' }))}
+	/>
 {:else}
 	<Section>
 		<TextInput label="Name" defaultValue={defaultName} onvalue={(value) => (name = value)} />
 		<TextInput label="Area" onvalue={(value) => (area = value)} />
 	</Section>
 
-	<Section label="Location">
+	<Section
+		label="Location"
+		actions={[
+			{
+				label: 'Set Location',
+				icon: 'navigate',
+				iconOrder: 'inverted',
+				onclick: () => {
+					field.center = map?.getCenter() || field.center;
+				}
+			}
+		]}
+	>
 		<Map
 			bind:this={map}
 			maxBounds={swissBounds}
-			zoom={9}
+			zoom={11}
 			minZoom={3}
 			maxZoom={18}
 			center={field.center}
@@ -107,11 +118,6 @@
 			markers={[{ lngLat: field.center }]}
 			geoJSONs={selectedFeatures}
 		/>
-		<Button
-			onclick={() => {
-				field.center = map?.getCenter() || field.center;
-			}}>Set location</Button
-		>
 	</Section>
 
 	<Section
@@ -127,22 +133,18 @@
 		{/if}
 	</Section>
 
-	<Section label="Confirm changes">
-		<Button
-			onclick={() => {
-				field = {
-					...field,
-					name,
-					area,
-					// ...generalSettings.getValues(),
-					layers: selectedFeatures
-				};
-				fields.set([...$fields, field]);
-				goto(`/mobile-layout/fields/${field.id}`);
-			}}
-		>
-			Confirm
-		</Button>
-		<Button href="/mobile-layout">Cancel</Button>
-	</Section>
+	<SaveMenu
+		onsave={() => {
+			field = {
+				...field,
+				name,
+				area,
+				// ...generalSettings.getValues(),
+				layers: selectedFeatures
+			};
+			fields.set([...$fields, field]);
+			goto(`/mobile-layout`);
+		}}
+		oncancel={() => goto('/mobile-layout')}
+	/>
 {/if}

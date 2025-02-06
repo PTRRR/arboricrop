@@ -11,6 +11,8 @@
 	import { shuffle } from '../../utils/arrays';
 	import NotificationCard from '../../components/mobile-layout/NotificationCard.svelte';
 	import ActionMenu from '../../components/mobile-layout/ActionMenu.svelte';
+	import SaveMenu from '../../components/mobile-layout/SaveMenu.svelte';
+	import { goto } from '$app/navigation';
 
 	const { devices } = useDevices();
 	const { fields } = useFields();
@@ -30,13 +32,10 @@
 	<PageHeader title="Create field" description="You don't have any field yet" />
 	<Section>
 		<TextInput label="Name" onvalue={(name) => (newFieldName = name)} />
-		<Button
-			href={`/mobile-layout/fields/new/?name=${newFieldName}`}
-			disabled={!newFieldName}
-			fitWidth
-		>
-			Create
-		</Button>
+
+		{#if newFieldName}
+			<SaveMenu onsave={() => goto(`/mobile-layout/fields/new/?name=${newFieldName}`)} />
+		{/if}
 	</Section>
 {:else}
 	{#snippet notificationsTitle()}

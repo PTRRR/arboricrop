@@ -21,6 +21,7 @@
 	export let mapStyle: string =
 		'https://api.maptiler.com/maps/ch-swisstopo-lbm/style.json?key=epJVqnAFN0DeOXvikzSB';
 	export let onChange: ((location: LngLatLike) => void) | undefined = undefined;
+	export let onmoveend: (() => void) | undefined = undefined;
 	export const getCenter = () => map.getCenter();
 
 	$: features = geoJSONs.map(getGeoJSONFeatures).flat();
@@ -53,6 +54,7 @@
 			on:moveend={(event) => {
 				const center = event.detail.map.getCenter();
 				onChange?.([center.lng, center.lat]);
+				onmoveend?.();
 			}}
 			on:zoom={(event) => (zoomLevel = event.detail.map.getZoom())}
 		>
