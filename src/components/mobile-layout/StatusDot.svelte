@@ -1,5 +1,6 @@
 <script lang="ts">
-	const { status = 'normal' }: { status: 'error' | 'warning' | 'normal' | 'success' } = $props();
+	export type Status = 'error' | 'warning' | 'normal' | 'success';
+	const { status = 'normal' }: { status: Status } = $props();
 </script>
 
 <div

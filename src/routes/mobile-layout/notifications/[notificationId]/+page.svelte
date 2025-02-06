@@ -8,6 +8,8 @@
 	import PageHeader from '../../../../components/mobile-layout/PageHeader.svelte';
 	import TextareaInput from '../../../../components/mobile-layout/TextareaInput.svelte';
 	import Table, { type Row } from '../../../../components/mobile-layout/Table.svelte';
+	import StatusDot, { type Status } from '../../../../components/mobile-layout/StatusDot.svelte';
+	import { getCss } from '../../../../utils/css';
 
 	const returnButton = useReturnButton();
 	const notifications = useNotifications();
@@ -30,6 +32,14 @@
 			]
 		}
 	]);
+
+	const notificationStatus: Status = $derived(
+		notification?.type === 'alert'
+			? 'error'
+			: notification?.type === 'warning'
+				? 'warning'
+				: 'normal'
+	);
 
 	$effect(() => {
 		if (notification) {
@@ -70,7 +80,15 @@
 		<span>{notification?.title}</span>
 		<Button href={`${window.location.pathname}?acknowledge=true`}>Acknowledge</Button>
 	{/snippet}
-	<PageHeader title={pageTitle} subTitle={notification?.type} />
+
+	{#snippet pageSubtitle()}
+		<div style={getCss({ display: 'flex', alignItems: 'center', gap: '0.5rem' })}>
+			<StatusDot status={notificationStatus} />
+			<span>{notification?.type}</span>
+		</div>
+	{/snippet}
+
+	<PageHeader title={pageTitle} subTitle={pageSubtitle} />
 	<Section>
 		<Table rows={infoRows} />
 	</Section>
