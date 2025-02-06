@@ -65,7 +65,7 @@
 		}
 
 		&__subtitle {
-			font-size: var(--big-font-size);
+			font-size: var(--main-font-size);
 			font-weight: normal;
 			color: lightgray;
 		}

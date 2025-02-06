@@ -18,7 +18,7 @@
 			{/each}
 		</div>
 	{/if}
-	<div class="step-separation__line"></div>
+	<!-- <div class="step-separation__line"></div> -->
 </div>
 
 <style lang="scss">
@@ -33,9 +33,10 @@
 		}
 
 		&__label {
-			font-weight: normal;
+			font-weight: 500;
 			text-transform: lowercase;
 			color: inherit;
+			font-size: var(--big-font-size);
 		}
 
 		&__line {

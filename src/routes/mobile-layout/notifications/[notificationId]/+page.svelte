@@ -26,31 +26,29 @@
 </script>
 
 {#if $page.data.acknowledge}
-	<CenteredWrapper>
-		<PageHeader title="Acknowledge" subTitle={notification?.title} />
-		<Section>
-			<TextareaInput placeholder="Personal note" />
-			<Button
-				href="/mobile-wireframe/notifications"
-				onclick={() => {
-					if (notification) {
-						const notificationIndex = $notifications.findIndex((it) => it.id === notification.id);
-						if (notificationIndex > -1) {
-							const newNotifications = [...$notifications];
-							newNotifications[notificationIndex] = {
-								...newNotifications[notificationIndex],
-								status: 'acknowledged'
-							};
-							notifications.set(newNotifications);
-						}
+	<PageHeader title="Acknowledge" subTitle={notification?.title} />
+	<Section>
+		<TextareaInput placeholder="Personal note" />
+		<Button
+			href="/mobile-wireframe/notifications"
+			onclick={() => {
+				if (notification) {
+					const notificationIndex = $notifications.findIndex((it) => it.id === notification.id);
+					if (notificationIndex > -1) {
+						const newNotifications = [...$notifications];
+						newNotifications[notificationIndex] = {
+							...newNotifications[notificationIndex],
+							status: 'acknowledged'
+						};
+						notifications.set(newNotifications);
 					}
-				}}
-			>
-				Confirm
-			</Button>
-			<Button href={window.location.pathname}>Cancel</Button>
-		</Section>
-	</CenteredWrapper>
+				}
+			}}
+		>
+			Confirm
+		</Button>
+		<Button href={window.location.pathname}>Cancel</Button>
+	</Section>
 {:else}
 	{#snippet pageTitle()}
 		<span>{notification?.title}</span>

@@ -5,7 +5,7 @@
 	import { goto } from '$app/navigation';
 
 	let data: { children: Snippet } = $props();
-	let showSplashscreen = $state(false);
+	let showSplashscreen = $state(true);
 	let hideContent = $state(false);
 	let menuMode = $state<'default' | 'scrolled'>('default');
 
