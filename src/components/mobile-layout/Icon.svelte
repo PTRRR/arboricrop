@@ -54,7 +54,7 @@
 		}
 
 		&--large {
-			font-size: 32px;
+			font-size: 28px;
 			width: 24px;
 			height: 24px;
 		}

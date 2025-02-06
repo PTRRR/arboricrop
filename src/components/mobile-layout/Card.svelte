@@ -1,26 +1,36 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 
-	const props: { children: Snippet; href?: string; imageUrl?: string } = $props();
+	const {
+		children,
+		href,
+		imageUrl,
+		background = true
+	}: {
+		children: Snippet;
+		href?: string;
+		imageUrl?: string;
+		background?: boolean;
+	} = $props();
 </script>
 
 {#snippet cardInner()}
 	<div class="card__inner">
-		{#if props.imageUrl}
+		{#if imageUrl}
 			<div class="card__image">
-				<img src={props.imageUrl} alt="" />
+				<img src={imageUrl} alt="" />
 			</div>
 		{/if}
-		{@render props.children()}
+		{@render children()}
 	</div>
 {/snippet}
 
-{#if props.href}
-	<a class="card" href={props.href}>
+{#if href}
+	<a class="card" {href} class:card--background={background}>
 		{@render cardInner()}
 	</a>
 {:else}
-	<div class="card">
+	<div class="card" class:card--background={background}>
 		{@render cardInner()}
 	</div>
 {/if}
@@ -30,14 +40,21 @@
 		display: block;
 		text-decoration: none;
 		color: var(--black);
-		background-color: var(--grey);
 		padding: 0.5rem;
 		border-radius: 5px;
 		overflow: hidden;
 		font-size: var(--main-font-size);
 
 		&:hover {
-			background-color: var(--dark-grey);
+			background-color: var(--grey);
+		}
+
+		&--background {
+			background-color: var(--grey);
+
+			&:hover {
+				background-color: var(--dark-grey);
+			}
 		}
 
 		&__inner {
@@ -48,8 +65,10 @@
 
 		&__image {
 			margin: -0.5rem 0 -0.5rem -0.5rem;
-			width: 5rem;
-			height: 5rem;
+			width: 4.2rem;
+			height: 4.2rem;
+			border-radius: 5px;
+			overflow: hidden;
 
 			img {
 				width: 100%;

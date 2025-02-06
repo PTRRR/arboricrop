@@ -93,8 +93,18 @@
 		<Table rows={infoRows} />
 	</Section>
 
-	<Section label="Actionable insights" description={notification?.actionableInsight}>
+	<Section
+		label="Actionable insights"
+		actions={[
+			{
+				label: 'Device',
+				icon: 'navigate',
+				iconOrder: 'inverted',
+				href: `/mobile-wireframe/devices/${notification?.deviceId}`
+			}
+		]}
+	>
 		<Image ratio={1} placeholder="Comprehensive schema / animation explaining how to proceed" />
-		<Button href={`/mobile-wireframe/devices/${notification?.deviceId}`}>See device</Button>
+		<p style={getCss({ fontWeight: 'normal' })}>{notification?.actionableInsight}</p>
 	</Section>
 {/if}

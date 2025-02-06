@@ -122,15 +122,17 @@
 		<Section label="LoRa"></Section>
 		<Section label="Danger Zone">
 			<Button
-				onclick={() => {
-					deleteField(field.id);
-					goto('/mobile-layout');
-				}}
 				icon="cross"
 				iconBackgroundColor="var(--red)"
 				iconSize="large"
 				backgroundColor="var(--light-red)"
-				>Delete Permanently
+				padding
+				onclick={() => {
+					deleteField(field.id);
+					goto('/mobile-layout');
+				}}
+			>
+				Delete Permanently
 			</Button>
 		</Section>
 	{/if}

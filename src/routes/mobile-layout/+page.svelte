@@ -40,7 +40,9 @@
 {:else}
 	{#snippet notificationsTitle()}
 		<span>Notifications</span>
-		<Button href="/mobile-layout/notifications" icon="navigate" iconOrder="inverted">All</Button>
+		<Button href="/mobile-layout/notifications" icon="navigate" iconOrder="inverted" padding
+			>All</Button
+		>
 	{/snippet}
 
 	{#snippet notificationsSubTitle()}
@@ -61,18 +63,20 @@
 
 	{#snippet fieldsHeader()}
 		<span>Fields</span>
-		<Button href="/mobile-layout/fields/new" icon="add" />
+		<Button href="/mobile-layout/fields/new" icon="add" padding />
 	{/snippet}
 
 	<PageHeader title={fieldsHeader} />
 	<Section>
 		{#each $fields as field}
-			<Card href={`/mobile-layout/fields/${field.id}`} imageUrl="/images/map.png">
+			<Card
+				href={`/mobile-layout/fields/${field.id}`}
+				imageUrl="/images/map.png"
+				background={false}
+			>
 				<div class="home__info">
-					<p>Name: {field.name}</p>
-					<p style={getCss({ fontWeight: 'normal' })}>
-						Devices: {getFieldDeviceCount(field.id)}
-					</p>
+					<h3>{field.name}</h3>
+					<p>Devices: {getFieldDeviceCount(field.id)}</p>
 				</div>
 			</Card>
 		{/each}
@@ -84,7 +88,15 @@
 		&__info {
 			display: flex;
 			flex-direction: column;
-			gap: 0.1rem;
+
+			h3 {
+				font-size: var(--mid-font-size);
+			}
+
+			p {
+				font-weight: normal;
+				color: var(--dark-grey);
+			}
 		}
 
 		&__notifications-subtitle {

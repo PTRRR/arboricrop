@@ -5,8 +5,10 @@
 	export type StepSeparationAction = {
 		label?: string;
 		onclick?: () => void;
+		href?: string;
 		icon?: IconName;
 		iconColor?: string;
+		iconOrder?: 'inverted';
 	};
 
 	const props: {
@@ -22,11 +24,23 @@
 			<div class="step-separation__label">{props.label}</div>
 			{#each props.actions || [] as action}
 				{#if action.label}
-					<Button onclick={action.onclick} icon={action.icon} iconColor={action.iconColor}>
+					<Button
+						onclick={action.onclick}
+						icon={action.icon}
+						iconColor={action.iconColor}
+						iconOrder={action.iconOrder}
+						href={action.href}
+					>
 						{action.label}
 					</Button>
 				{:else}
-					<Button onclick={action.onclick} icon={action.icon} iconColor={action.iconColor}></Button>
+					<Button
+						onclick={action.onclick}
+						icon={action.icon}
+						iconColor={action.iconColor}
+						iconOrder={action.iconOrder}
+						href={action.href}
+					/>
 				{/if}
 			{/each}
 		</div>

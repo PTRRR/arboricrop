@@ -45,7 +45,7 @@
 		display: flex;
 		flex-direction: column;
 		text-transform: lowercase;
-		// gap: 0.5rem;
+		gap: 0.4rem;
 
 		&__title,
 		&__subtitle,
@@ -62,6 +62,7 @@
 
 		&__title {
 			font-size: var(--big-font-size);
+			line-height: 1.1;
 		}
 
 		&__subtitle {
