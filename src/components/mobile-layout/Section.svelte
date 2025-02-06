@@ -5,13 +5,14 @@
 
 	const props: {
 		label?: string;
+		description?: string;
 		children?: Snippet;
 		actions?: { label: string; onclick?: () => void }[];
 	} = $props();
 </script>
 
 <section class="section">
-	<StepSeparation label={props.label} actions={props.actions} />
+	<StepSeparation label={props.label} description={props.description} actions={props.actions} />
 	{@render props.children?.()}
 	<Spacer size="calc(var(--gap) * 3)" />
 </section>

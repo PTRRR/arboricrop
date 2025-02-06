@@ -4,6 +4,7 @@
 	export interface Cell {
 		label: string;
 		width?: string;
+		multiline?: boolean;
 	}
 
 	export interface Row {
@@ -17,32 +18,42 @@
 		headers,
 		rows
 	}: {
-		headers: Cell[];
+		headers?: Cell[];
 		rows: Row[];
 	} = $props();
 
-	const getCellWidth = (cellIndex: number) => {
-		const cell = headers[cellIndex];
-		return cell.width;
+	const getHeaderWidth = (cellIndex: number) => {
+		const cell = (headers || [])[cellIndex];
+		return cell?.width;
 	};
 </script>
 
 {#snippet innerRow(cells: Cell[])}
 	{#each cells as cell, index}
-		<div class="table__cell" style={getCss({ width: getCellWidth(index) })}>
+		<div
+			class="table__cell"
+			style={getCss({
+				width: getHeaderWidth(index) || cell.width,
+				whiteSpace: cell.multiline ? 'initial' : undefined,
+				flex: cell.multiline ? 'initial' : undefined
+			})}
+		>
 			<span>{cell.label}</span>
 		</div>
 	{/each}
 {/snippet}
 
 <div class="table">
-	<div class="table__row table__headers">
-		{#each headers as header}
-			<div class="table__cell" style={getCss({ width: header.width })}>
-				<span>{header.label}</span>
-			</div>
-		{/each}
-	</div>
+	{#if headers}
+		<div class="table__row table__headers">
+			{#each headers as header}
+				<div class="table__cell" style={getCss({ width: header.width })}>
+					<span>{header.label}</span>
+				</div>
+			{/each}
+		</div>
+	{/if}
+
 	{#each rows as row}
 		{#if row.href}
 			<a
@@ -70,19 +81,17 @@
 
 <style lang="scss">
 	.table {
-		background-color: rgb(235, 235, 235);
-		border-radius: 5px;
-		overflow: hidden;
+		background-color: var(--white);
 
 		&__row {
 			display: flex;
-			padding: 0.5rem;
+			padding: 0.5rem 0;
 			color: black;
 			text-decoration: none;
 			box-sizing: border-box;
 
 			& + & {
-				border-top: solid 1px rgb(210, 210, 210);
+				border-top: solid 1px var(--grey);
 			}
 		}
 
@@ -90,16 +99,16 @@
 			cursor: pointer;
 
 			&:hover {
-				background-color: rgb(245, 245, 245);
+				background-color: var(--grey);
 			}
 		}
 
 		&--selected {
-			background-color: rgb(200, 200, 200);
+			background-color: var(--grey);
 		}
 
 		&__headers {
-			background-color: rgb(210, 210, 210);
+			color: var(--grey);
 		}
 
 		&__cell {

@@ -18,21 +18,27 @@ export const getFields = (): Field[] => [
 		name: 'Fruit plantation',
 		type: 'Fruits',
 		layers: [],
-		center: changinCenter
+		center: changinCenter,
+		area: '19',
+		loraConfigId: ''
 	},
 	{
 		id: `fie-${createId()}`,
-		name: 'Vignard',
-		type: 'Wine',
+		name: 'Fruit plantation',
+		type: 'Fruits',
 		layers: [],
-		center: changinCenter
+		center: changinCenter,
+		area: '19',
+		loraConfigId: ''
 	},
 	{
 		id: `fie-${createId()}`,
-		name: 'Apples',
-		type: 'Apples',
+		name: 'Fruit plantation',
+		type: 'Fruits',
 		layers: [],
-		center: changinCenter
+		center: changinCenter,
+		area: '19',
+		loraConfigId: ''
 	}
 ];
 

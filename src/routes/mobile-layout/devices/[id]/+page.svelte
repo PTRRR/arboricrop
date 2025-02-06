@@ -293,7 +293,7 @@
 			display: block;
 			width: 10px;
 			height: 10px;
-			background-color: var(--danger-red);
+			background-color: var(--red);
 			border-radius: 100%;
 			transform: translate(0, 30%);
 		}

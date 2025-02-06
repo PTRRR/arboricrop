@@ -3,6 +3,7 @@
 
 	const props: {
 		label?: string | number;
+		description?: string | undefined;
 		actions?: { label: string; onclick?: () => void }[];
 	} = $props();
 </script>
@@ -18,13 +19,16 @@
 			{/each}
 		</div>
 	{/if}
-	<!-- <div class="step-separation__line"></div> -->
+
+	{#if props.description}
+		<div class="step-separation__description">{props.description}</div>
+	{/if}
 </div>
 
 <style lang="scss">
 	.step-separation {
 		width: 100%;
-		color: rgb(200, 200, 200);
+		color: var(--black);
 
 		&__heading {
 			display: flex;
@@ -39,11 +43,11 @@
 			font-size: var(--big-font-size);
 		}
 
-		&__line {
-			width: 100%;
-			border-top: solid 1px;
-			border-color: inherit;
-			margin-top: calc(var(--main-gap) * 0.5);
+		&__description {
+			font-weight: normal;
+			text-transform: lowercase;
+			color: var(--grey);
+			font-size: var(--main-font-size);
 		}
 	}
 </style>

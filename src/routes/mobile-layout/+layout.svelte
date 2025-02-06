@@ -5,7 +5,7 @@
 	import { goto } from '$app/navigation';
 
 	let data: { children: Snippet } = $props();
-	let showSplashscreen = $state(true);
+	let showSplashscreen = $state(false);
 	let hideContent = $state(false);
 	let menuMode = $state<'default' | 'scrolled'>('default');
 
@@ -134,9 +134,14 @@
 		--main-font-size: 1.2rem;
 		--big-font-size: 2rem;
 		--layout-margin-top: 6vh;
-		--accent-color: #00cc5c;
-		--danger-red: #ff3333;
-		--light-color: white;
+		--accent-color: #00cc5d;
+		--red: #ff2900;
+		--yellow: #fecc00;
+		--blue: #009fe3;
+		--black: #000000;
+		--grey: #dadadada;
+		--dark-grey: #87878787;
+		--white: white;
 	}
 
 	.clear-local-storage {
@@ -166,7 +171,7 @@
 
 			a {
 				text-decoration: none;
-				color: var(--light-color);
+				color: var(--white);
 			}
 		}
 
@@ -187,7 +192,7 @@
 			z-index: 1;
 			position: fixed;
 			line-height: 1;
-			color: var(--light-color);
+			color: var(--white);
 		}
 
 		&__breadcrumb {
@@ -269,14 +274,14 @@
 			width: 100%;
 			height: 4px;
 			border-radius: 2px;
-			background-color: var(--light-color);
+			background-color: var(--white);
 		}
 
 		&__content {
 			transition: transform 0.7s cubic-bezier(0.83, 0, 0.17, 1);
 			position: relative;
 			z-index: 2;
-			background-color: var(--light-color);
+			background-color: var(--white);
 			font-size: var(--main-font-size);
 			margin-top: calc(var(--layout-margin-top) + var(--big-font-size) + 1rem);
 			padding: 1.5rem;

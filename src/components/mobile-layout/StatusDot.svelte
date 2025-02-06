@@ -12,8 +12,8 @@
 
 <style lang="scss">
 	.status-dot {
-		width: 0.7rem;
-		height: 0.7rem;
+		width: 10px;
+		height: 10px;
 		border-radius: 100%;
 		flex: 0 0 auto;
 
@@ -22,15 +22,15 @@
 		}
 
 		&--normal {
-			background-color: blue;
+			background-color: var(--blue);
 		}
 
 		&--error {
-			background-color: var(--danger-red);
+			background-color: var(--red);
 		}
 
 		&--warning {
-			background-color: orange;
+			background-color: var(--yellow);
 		}
 	}
 </style>

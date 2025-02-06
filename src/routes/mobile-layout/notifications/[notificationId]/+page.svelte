@@ -2,18 +2,34 @@
 	import { page } from '$app/stores';
 	import Button from '../../../../components/mobile-layout/Button.svelte';
 	import Image from '../../../../components/mobile-layout/Image.svelte';
-	import Info from '../../../../components/Info.svelte';
 	import { useNotifications, useReturnButton } from '../../../../stores';
 	import { formatDateToDDMMYYYY } from '../../../../utils/dates';
 	import Section from '../../../../components/mobile-layout/Section.svelte';
 	import PageHeader from '../../../../components/mobile-layout/PageHeader.svelte';
 	import TextareaInput from '../../../../components/mobile-layout/TextareaInput.svelte';
-	import CenteredWrapper from '../../../../components/mobile-layout/CenteredWrapper.svelte';
+	import Table, { type Row } from '../../../../components/mobile-layout/Table.svelte';
 
 	const returnButton = useReturnButton();
 	const notifications = useNotifications();
-
 	const notification = $derived($notifications.find((it) => it.id === $page.params.notificationId));
+
+	const infoRows: Row[] = $derived([
+		{
+			cells: [
+				{ label: 'Date', width: '35%' },
+				{ label: formatDateToDDMMYYYY(new Date(notification?.date || '')) }
+			]
+		},
+		{
+			cells: [{ label: 'Status', width: '35%' }, { label: notification?.status || '' }]
+		},
+		{
+			cells: [
+				{ label: 'Description', width: '35%' },
+				{ label: notification?.text || '', multiline: true }
+			]
+		}
+	]);
 
 	$effect(() => {
 		if (notification) {
@@ -56,13 +72,10 @@
 	{/snippet}
 	<PageHeader title={pageTitle} subTitle={notification?.type} />
 	<Section>
-		<Info label="Date:" value={formatDateToDDMMYYYY(new Date(notification?.date || ''))} />
-		<Info label="Status:" value={notification?.status} />
-		<Info label="Description:" value={notification?.text} />
+		<Table rows={infoRows} />
 	</Section>
 
-	<Section label="Actionable insights">
-		<span>{notification?.actionableInsight}</span>
+	<Section label="Actionable insights" description={notification?.actionableInsight}>
 		<Image ratio={1} placeholder="Comprehensive schema / animation explaining how to proceed" />
 		<Button href={`/mobile-wireframe/devices/${notification?.deviceId}`}>See device</Button>
 	</Section>

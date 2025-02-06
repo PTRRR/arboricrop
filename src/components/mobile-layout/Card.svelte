@@ -29,15 +29,15 @@
 	.card {
 		display: block;
 		text-decoration: none;
-		color: black;
-		background-color: lightgray;
+		color: var(--black);
+		background-color: var(--grey);
 		padding: 0.5rem;
 		border-radius: 5px;
 		overflow: hidden;
 		font-size: var(--main-font-size);
 
 		&:hover {
-			background-color: grey;
+			background-color: var(--dark-grey);
 		}
 
 		&__inner {
