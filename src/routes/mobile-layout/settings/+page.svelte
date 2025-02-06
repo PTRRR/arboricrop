@@ -82,6 +82,16 @@
 {:else}
 	<PageHeader title="Settings" />
 
+	<Section>
+		<div class="settings__user-mode">
+			<Checkbox
+				initialChecked={$userMode === 'advanced'}
+				onChange={(checked) => setUserMode(checked ? 'advanced' : 'normal')}
+			/>
+			<span>{$userMode === 'advanced' ? 'Advanced User Mode' : 'Normal User Mode'}</span>
+		</div>
+	</Section>
+
 	{#if $organisations.length > 0}
 		<Section label="Account settings">
 			<Info label="Selected organisation:" value={$organisation || '-'} />
@@ -110,16 +120,6 @@
 		/>
 	</Section>
 
-	<Section label="User mode">
-		<div class="settings__user-mode">
-			<Checkbox
-				initialChecked={$userMode === 'advanced'}
-				onChange={(checked) => setUserMode(checked ? 'advanced' : 'normal')}
-			/>
-			<span>{$userMode === 'advanced' ? 'Advanced' : 'Normal'}</span>
-		</div>
-	</Section>
-
 	<Section label="Confirm changes">
 		<Button>Save</Button>
 		<Button>Cancel</Button>
@@ -133,6 +133,7 @@
 			align-items: center;
 			gap: 1rem;
 			text-transform: lowercase;
+			font-weight: normal;
 		}
 	}
 </style>

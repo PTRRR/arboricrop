@@ -45,6 +45,7 @@
 
 		<div class="mobile-layout__menu">
 			<a href="/mobile-layout" onclick={() => (hideContent = false)}>Fields</a>
+			<a href="/mobile-layout/notifications" onclick={() => (hideContent = false)}>Notifications</a>
 			<a href="/mobile-layout/settings" onclick={() => (hideContent = false)}>Settings</a>
 			<a href="/mobile-layout/account" onclick={() => (hideContent = false)}>Account</a>
 		</div>

@@ -12,6 +12,7 @@
 	import { getFeatureLayerName } from '../../../../utils/geoJSON';
 	import Table, { type Cell, type Row } from '../../../../components/mobile-layout/Table.svelte';
 	import { createUrlBuilder } from '../../../../utils/urls';
+	import PageHeader from '../../../../components/mobile-layout/PageHeader.svelte';
 
 	const defaultName = $page.url.searchParams.get('name') || '';
 	const addLayer = $derived($page.url.searchParams.get('addLayer') === 'true');
@@ -77,8 +78,9 @@
 	);
 </script>
 
+<PageHeader title="New Field" />
 {#if addLayer}
-	<Section label="Layers" actions={[{ label: 'Import', onclick: () => {} }]}>
+	<Section actions={[{ label: 'Import', onclick: () => {} }]}>
 		<Table headers={layersHeaders} rows={availableLayersRows} />
 	</Section>
 	<Section>
@@ -88,7 +90,7 @@
 		<Button href={url.removeQuery({ name: 'addLayer' })}>Cancel</Button>
 	</Section>
 {:else}
-	<Section label="General settings">
+	<Section>
 		<TextInput label="Name" defaultValue={defaultName} onvalue={(value) => (name = value)} />
 		<TextInput label="Area" onvalue={(value) => (area = value)} />
 	</Section>

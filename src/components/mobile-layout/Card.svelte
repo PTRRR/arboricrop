@@ -27,6 +27,7 @@
 
 <style lang="scss">
 	.card {
+		display: block;
 		text-decoration: none;
 		color: black;
 		background-color: lightgray;
