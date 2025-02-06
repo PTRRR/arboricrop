@@ -84,15 +84,25 @@
 		background-color: var(--white);
 
 		&__row {
+			position: relative;
 			display: flex;
 			padding: 0.5rem 0;
 			color: black;
 			text-decoration: none;
 			box-sizing: border-box;
 			border-radius: 5px;
+			width: 100%;
 
 			& + & {
-				border-top: solid 1px var(--grey);
+				&::before {
+					position: absolute;
+					top: 0;
+					left: 0;
+					width: 100%;
+					display: block;
+					content: '';
+					border-top: solid 1px var(--grey);
+				}
 			}
 		}
 

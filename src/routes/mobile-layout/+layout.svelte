@@ -3,6 +3,9 @@
 	import Mobile from '../../components/Mobile.svelte';
 	import { iphone } from '../../utils/phones';
 	import { goto } from '$app/navigation';
+	import { createPortal } from '../../utils/portal';
+	import { ACTION_MENU_PORTAL } from '../../components/mobile-layout/ActionMenu.svelte';
+	import { getCss } from '../../utils/css';
 
 	let data: { children: Snippet } = $props();
 	let showSplashscreen = $state(false);
@@ -50,6 +53,8 @@
 			<a href="/mobile-layout/settings" onclick={() => (hideContent = false)}>Settings</a>
 			<a href="/mobile-layout/account" onclick={() => (hideContent = false)}>Account</a>
 		</div>
+
+		<div class="mobile-layout__action-menu" use:createPortal={ACTION_MENU_PORTAL}></div>
 
 		<div class="mobile-layout__wrapper">
 			<div class="mobile-layout__content">
@@ -142,8 +147,8 @@
 		--yellow: #fecc00;
 		--blue: #009fe3;
 		--black: #000000;
-		--grey: #dadadada;
-		--dark-grey: #87878787;
+		--grey: #dadada;
+		--dark-grey: #878787;
 		--white: white;
 	}
 
@@ -302,6 +307,19 @@
 			width: 5rem;
 			object-fit: contain;
 			transform: translate(-50%, 0);
+		}
+
+		&__action-menu {
+			z-index: 1000;
+			position: absolute;
+			bottom: 1.5rem;
+			right: 1.5rem;
+			transition: opacity 0.3s ease-in-out;
+
+			#{$this}--hide-content & {
+				opacity: 0;
+				pointer-events: none;
+			}
 		}
 	}
 </style>

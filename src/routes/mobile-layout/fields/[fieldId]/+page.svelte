@@ -11,16 +11,21 @@
 	import { getLocationDelta } from '../../../../utils/locations';
 	import { getFeatureLayerName } from '../../../../utils/geoJSON';
 	import PageHeader from '../../../../components/mobile-layout/PageHeader.svelte';
+	import type { LngLatLike } from 'svelte-maplibre';
+	import SaveMenu from '../../../../components/mobile-layout/SaveMenu.svelte';
 
 	const fieldId = $page.params.fieldId;
 	const { devices } = useDevices();
 	const { fields, getFieldById, deleteField, updateField } = useFields();
 
-	let map: Map | null = $state(null);
-	let mapUpdated = $state(false);
-
 	const field = $derived($fields && getFieldById(fieldId));
 	const fieldDevices = $derived($devices.filter((it) => it.fieldId === field?.id));
+
+	let map: Map | null = $state(null);
+	let name = $state<string | undefined>(undefined);
+	let area = $state<string | undefined>(undefined);
+	let coords = $state<LngLatLike | undefined>(undefined);
+	const hasChanged = $derived(name || area || coords);
 
 	const devicesHeaders: Cell[] = [
 		{ label: 'Name', width: '50%' },
@@ -60,8 +65,24 @@
 	{#if field}
 		<PageHeader title={field.name} subTitle={`Devices: ${$devices.length}`} />
 		<Section>
-			<TextInput label="Name" defaultValue={field.name} />
-			<TextInput label="Area" defaultValue={field.area} />
+			<TextInput
+				label="Name"
+				defaultValue={field.name}
+				onvalue={(value) => {
+					if (value !== field.name) {
+						name = value;
+					}
+				}}
+			/>
+			<TextInput
+				label="Area"
+				defaultValue={field.area}
+				onvalue={(value) => {
+					if (value !== field.area) {
+						area = value;
+					}
+				}}
+			/>
 		</Section>
 		<Section
 			label="Devices"
@@ -93,21 +114,11 @@
 				showTarget
 				markers={[{ lngLat: field.center }]}
 				geoJSONs={field.layers}
-				onChange={(e) => {
-					const delta = getLocationDelta(e, field.center);
-					if (delta > 0.000001) mapUpdated = true;
+				onChange={(value) => {
+					const delta = getLocationDelta(value, field.center);
+					if (delta > 0.000001) coords = value;
 				}}
 			/>
-			{#if mapUpdated}
-				<Button
-					onclick={() => {
-						updateField({ ...field, center: map?.getCenter() });
-						mapUpdated = false;
-					}}
-				>
-					Set location
-				</Button>
-			{/if}
 		</Section>
 		<Section
 			label="Layers"
@@ -135,5 +146,27 @@
 				Delete Permanently
 			</Button>
 		</Section>
+
+		{#if hasChanged}
+			<SaveMenu
+				oncancel={() => {
+					name = undefined;
+					area = undefined;
+					coords = undefined;
+				}}
+				onsave={() => {
+					updateField({
+						...field,
+						name: name || field.name,
+						area: area || field.area,
+						center: coords || field.center
+					});
+
+					name = undefined;
+					area = undefined;
+					coords = undefined;
+				}}
+			/>
+		{/if}
 	{/if}
 </div>
