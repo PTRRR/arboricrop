@@ -242,10 +242,9 @@
 
 	<Section label="Danger zone">
 		<Button
+			padding
 			icon="cross"
 			iconBackgroundColor="var(--red)"
-			iconSize="large"
-			padding
 			backgroundColor="var(--light-red)"
 			onclick={() => {
 				$preventNavigationHistory = true;

@@ -135,7 +135,6 @@
 			<Button
 				icon="cross"
 				iconBackgroundColor="var(--red)"
-				iconSize="large"
 				backgroundColor="var(--light-red)"
 				padding
 				onclick={() => {

@@ -278,6 +278,7 @@
 				icon="cross"
 				iconSize="large"
 				href={`/mobile-layout/devices/${device?.id}?connected=true`}
+				iconBackgroundColor="var(--dark-grey)"
 			></Button>
 			<Button icon="check" iconSize="large" href={nextHref}></Button>
 		</ActionMenu>
@@ -298,7 +299,12 @@
 			/>
 		</Section>
 		<ActionMenu>
-			<Button icon="cross" iconSize="large" href={previousHref}></Button>
+			<Button
+				icon="cross"
+				iconSize="large"
+				href={previousHref}
+				iconBackgroundColor="var(--dark-grey)"
+			></Button>
 			<Button icon="check" iconSize="large" href={nextHref}></Button>
 		</ActionMenu>
 	{:else if stepIndex === 2}
@@ -326,7 +332,12 @@
 			/>
 		</Section>
 		<ActionMenu>
-			<Button icon="cross" iconSize="large" href={previousHref}></Button>
+			<Button
+				icon="cross"
+				iconSize="large"
+				href={previousHref}
+				iconBackgroundColor="var(--dark-grey)"
+			></Button>
 			<Button icon="check" iconSize="large" href={nextHref}></Button>
 		</ActionMenu>
 	{:else if stepIndex === 3 && device}
@@ -365,7 +376,12 @@
 		</Section>
 
 		<ActionMenu>
-			<Button icon="cross" iconSize="large" href={previousHref}></Button>
+			<Button
+				icon="cross"
+				iconSize="large"
+				href={previousHref}
+				iconBackgroundColor="var(--dark-grey)"
+			></Button>
 			<Button
 				icon="check"
 				iconSize="large"

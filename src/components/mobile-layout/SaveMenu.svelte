@@ -16,11 +16,6 @@
 	{/if}
 
 	{#if onsave}
-		<Button
-			icon="add"
-			iconSize="large"
-			iconBackgroundColor="var(--accent-color)"
-			onclick={onsave}
-		/>
+		<Button icon="check" iconSize="large" onclick={onsave} />
 	{/if}
 </ActionMenu>
