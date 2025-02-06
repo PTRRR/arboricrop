@@ -5,7 +5,7 @@
 	import { goto } from '$app/navigation';
 
 	let data: { children: Snippet } = $props();
-	let showSplashscreen = $state(false);
+	let showSplashscreen = $state(true);
 	let hideContent = $state(false);
 	let menuMode = $state<'default' | 'scrolled'>('default');
 
@@ -33,6 +33,7 @@
 		class:mobile-layout--scrolled={menuMode === 'scrolled'}
 	>
 		<a class="mobile-layout__breadcrumb" href="/mobile-layout">vita/hub</a>
+		<img class="mobile-layout__logo" src="/images/logo.svg" alt="" />
 		<!-- svelte-ignore a11y_click_events_have_key_events -->
 		<!-- svelte-ignore a11y_no_static_element_interactions -->
 		<div class="mobile-layout__nav" onclick={() => (hideContent = !hideContent)}>
@@ -290,6 +291,15 @@
 			min-height: calc(
 				var(--mobile-app-height) - var(--layout-margin-top) - var(--big-font-size) - 1rem
 			);
+		}
+
+		&__logo {
+			position: absolute;
+			bottom: 2rem;
+			left: 50%;
+			width: 5rem;
+			object-fit: contain;
+			transform: translate(-50%, 0);
 		}
 	}
 </style>
