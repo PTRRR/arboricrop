@@ -1,18 +1,17 @@
+<script module lang="ts">
+	export const DROPDOWN_PORTAL = 'dropdown';
+</script>
+
 <script lang="ts">
-	import { useBlurApp } from '../../stores';
-	import { DropdownMenu, Dialog } from 'bits-ui';
 	import Button from './Button.svelte';
 	import type { Snippet } from 'svelte';
 	import type { IconName } from './Icon.svelte';
+	import { portal } from '../../utils/portal';
 
 	type T = $$Generic;
 
 	const {
 		label,
-		side = undefined,
-		sideOffset = 9,
-		align = 'center',
-		sameWidth = undefined,
 		items = [],
 		renderItem,
 		icon
@@ -27,74 +26,64 @@
 		icon?: IconName;
 	} = $props();
 
-	let blurApp = useBlurApp();
+	let opened = $state(false);
 </script>
 
-<!-- <Dialog.Root>
-	<Dialog.Trigger asChild let:builder>
-		<Button builders={[builder]}>{label}</Button>
-	</Dialog.Trigger>
-
-	<Dialog.Portal>
-		<Dialog.Overlay />
-		<Dialog.Content>
-			<div
-				class="dropdown__content"
-				class:dropdown__content--align-left={align === 'left'}
-				class:dropdown__content--align-right={align === 'right'}
-				class:dropdown__content--align-center={align === 'center'}
-			>
-				{#each items as item}
-					<div class="dropdown__item">
-						{@render renderItem(item)}
-					</div>
-				{/each}
+<div class="dropdown">
+	<Button {icon} onclick={() => (opened = !opened)}>{label}</Button>
+	<div class="dropdown__portal" class:dropdown--opened={opened} use:portal={DROPDOWN_PORTAL}>
+		<div class="dropdown__overlay"></div>
+		{#each items as item}
+			<!-- svelte-ignore a11y_click_events_have_key_events -->
+			<!-- svelte-ignore a11y_no_static_element_interactions -->
+			<div class="dropdown__item" onclick={() => (opened = false)}>
+				{@render renderItem(item)}
 			</div>
-		</Dialog.Content>
-	</Dialog.Portal>
-</Dialog.Root> -->
-
-<DropdownMenu.Root
-	onOpenChange={(open) => {
-		blurApp.set(open);
-	}}
->
-	<DropdownMenu.Trigger asChild let:builder>
-		<Button builders={[builder]} {icon}>{label}</Button>
-	</DropdownMenu.Trigger>
-
-	<DropdownMenu.Content {sideOffset} {side} {sameWidth}>
-		<div
-			class="dropdown__content"
-			class:dropdown__content--align-left={align === 'left'}
-			class:dropdown__content--align-right={align === 'right'}
-			class:dropdown__content--align-center={align === 'center'}
-		>
-			{#each items as item}
-				<DropdownMenu.Item>
-					{@render renderItem(item)}
-				</DropdownMenu.Item>
-			{/each}
-		</div>
-	</DropdownMenu.Content>
-</DropdownMenu.Root>
+		{/each}
+	</div>
+</div>
 
 <style lang="scss">
 	.dropdown {
-		&__content,
-		&__content--align-center {
+		$this: &;
+
+		&__portal {
+			position: absolute;
+			z-index: 7;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			padding: 1.5rem;
 			display: flex;
+			justify-content: center;
 			flex-direction: column;
-			gap: var(--gap);
-			align-items: center;
+			box-sizing: border-box;
+			backdrop-filter: blur(10px);
+			opacity: 0;
+			pointer-events: none;
+			gap: 0.5rem;
+			transition: opacity 0.3s ease-in-out;
+
+			&#{$this}--opened {
+				opacity: 1;
+				pointer-events: initial;
+			}
 		}
 
-		&__content--align-left {
-			align-items: flex-start;
+		&__overlay {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-color: var(--green);
 		}
 
-		&__content--align-right {
-			align-items: flex-end;
+		&__item {
+			position: relative;
+			z-index: 5;
+			color: var(--white);
 		}
 	}
 </style>

@@ -6,6 +6,7 @@
 	import { createPortal } from '../../utils/portal';
 	import { ACTION_MENU_PORTAL } from '../../components/mobile-layout/ActionMenu.svelte';
 	import { useNotifications } from '../../stores';
+	import { DROPDOWN_PORTAL } from '../../components/mobile-layout/Dropdown.svelte';
 
 	let data: { children: Snippet } = $props();
 	let showSplashscreen = $state(false);
@@ -78,6 +79,7 @@
 		</div>
 
 		<div class="mobile-layout__action-menu" use:createPortal={ACTION_MENU_PORTAL}></div>
+		<div class="mobile-layout__dropdown" use:createPortal={DROPDOWN_PORTAL}></div>
 	</div>
 </Mobile>
 
@@ -352,7 +354,7 @@
 		}
 
 		&__action-menu {
-			z-index: 1000;
+			z-index: 6;
 			position: absolute;
 			bottom: 1.5rem;
 			right: 1.5rem;

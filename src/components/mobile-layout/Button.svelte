@@ -22,7 +22,9 @@
 		backgroundColor,
 		iconSize,
 		iconOrder,
-		padding = false
+		padding = false,
+		color,
+		fontSize
 	}: {
 		children?: Snippet;
 		fitWidth?: boolean;
@@ -41,12 +43,16 @@
 		backgroundColor?: string;
 		iconOrder?: 'inverted';
 		padding?: boolean | string;
+		color?: string;
+		fontSize?: string;
 	} = $props();
 
 	const { preventNavigationHistory } = useNavigationHistory();
 	const buttonStyle = getCss({
 		backgroundColor,
-		padding: typeof padding === 'string' ? padding : undefined
+		padding: typeof padding === 'string' ? padding : undefined,
+		color,
+		fontSize
 	});
 </script>
 

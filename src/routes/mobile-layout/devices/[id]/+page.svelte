@@ -146,6 +146,8 @@
 
 	{#snippet mediaOptionItem(item: { label: string; type: MediaType })}
 		<Button
+			color="var(--white)"
+			fontSize="var(--big-font-size)"
 			onclick={() => {
 				const medias =
 					item.type === 'image'

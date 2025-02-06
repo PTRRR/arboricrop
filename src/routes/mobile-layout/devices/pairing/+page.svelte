@@ -47,7 +47,12 @@
 </script>
 
 {#snippet dropdownButton(item: { label: string; value: string })}
-	<Button href={url.addQuery({ name: 'strategy', value: item.value })} fitWidth>
+	<Button
+		fitWidth
+		href={url.addQuery({ name: 'strategy', value: item.value })}
+		color="var(--white)"
+		fontSize="var(--big-font-size)"
+	>
 		{item.label}
 	</Button>
 {/snippet}
@@ -85,7 +90,8 @@
 			}}
 		/>
 		<Dropdown
-			label="Use other pairing strategy"
+			icon="navigate"
+			label="Other pairing strategy"
 			items={strategyOptions}
 			renderItem={dropdownButton}
 		/>
