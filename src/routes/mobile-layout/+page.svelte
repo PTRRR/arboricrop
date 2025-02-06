@@ -26,23 +26,21 @@
 </script>
 
 {#if $fields.length === 0}
-	<CenteredWrapper>
-		<PageHeader title="Create field" description="You don't have any field yet" />
-		<Section>
-			<TextInput label="Name" onvalue={(name) => (newFieldName = name)} />
-			<Button
-				href={`/mobile-layout/fields/new/?name=${newFieldName}`}
-				disabled={!newFieldName}
-				fitWidth
-			>
-				Create
-			</Button>
-		</Section>
-	</CenteredWrapper>
+	<PageHeader title="Create field" description="You don't have any field yet" />
+	<Section>
+		<TextInput label="Name" onvalue={(name) => (newFieldName = name)} />
+		<Button
+			href={`/mobile-layout/fields/new/?name=${newFieldName}`}
+			disabled={!newFieldName}
+			fitWidth
+		>
+			Create
+		</Button>
+	</Section>
 {:else}
 	{#snippet notificationsTitle()}
 		<span>Notifications</span>
-		<Button href="/mobile-layout/notifications">See all</Button>
+		<Button href="/mobile-layout/notifications" icon="navigate">All</Button>
 	{/snippet}
 
 	{#snippet notificationsSubTitle()}
@@ -62,8 +60,8 @@
 	</Section>
 
 	{#snippet fieldsHeader()}
-		<span>All Fields</span>
-		<Button href="/mobile-layout/fields/new">New</Button>
+		<span>Fields</span>
+		<Button href="/mobile-layout/fields/new" icon="add" />
 	{/snippet}
 
 	<PageHeader title={fieldsHeader} />

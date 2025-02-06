@@ -233,7 +233,7 @@
 
 	<Section
 		label="Medias"
-		actions={device.medias.length > 0 ? [{ label: 'Add', onclick: () => {} }] : []}
+		actions={device.medias.length > 0 ? [{ icon: 'add', onclick: () => {} }] : []}
 	>
 		{#if device.medias.length > 0}
 			<Table
@@ -249,14 +249,14 @@
 				}))}
 			/>
 		{:else}
-			<Dropdown label="Add media" items={mediaOptions} renderItem={mediaOptionItem} />
+			<Dropdown label="Add media" icon="add" items={mediaOptions} renderItem={mediaOptionItem} />
 		{/if}
 	</Section>
 
 	<Section label="Advanced">
 		{#if $page.data.connected}
-			<Button>Upgrate firmware</Button>
-			<Button>See live data</Button>
+			<Button icon="warning">Upgrate firmware</Button>
+			<Button icon="navigate">See live data</Button>
 		{/if}
 	</Section>
 

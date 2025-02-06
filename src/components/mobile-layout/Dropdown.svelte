@@ -3,6 +3,7 @@
 	import { DropdownMenu, Dialog } from 'bits-ui';
 	import Button from './Button.svelte';
 	import type { Snippet } from 'svelte';
+	import type { IconName } from './Icon.svelte';
 
 	type T = $$Generic;
 
@@ -13,7 +14,8 @@
 		align = 'center',
 		sameWidth = undefined,
 		items = [],
-		renderItem
+		renderItem,
+		icon
 	}: {
 		label: string;
 		side?: 'top' | 'bottom' | 'left' | 'right';
@@ -22,6 +24,7 @@
 		sameWidth?: boolean;
 		items: T[];
 		renderItem: Snippet<[item: T]>;
+		icon?: IconName;
 	} = $props();
 
 	let blurApp = useBlurApp();
@@ -57,7 +60,7 @@
 	}}
 >
 	<DropdownMenu.Trigger asChild let:builder>
-		<Button builders={[builder]}>{label}</Button>
+		<Button builders={[builder]} {icon}>{label}</Button>
 	</DropdownMenu.Trigger>
 
 	<DropdownMenu.Content {sideOffset} {side} {sameWidth}>

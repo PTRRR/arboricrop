@@ -68,14 +68,16 @@
 			actions={fieldDevices.length > 0
 				? [
 						{
-							label: 'Add',
+							icon: 'add',
 							onclick: () => goto(`/mobile-layout/devices/pairing?field=${field.id}`)
 						}
 					]
 				: []}
 		>
 			{#if fieldDevices.length === 0}
-				<Button href={`/mobile-layout/devices/pairing?field=${field.id}`}>Add device</Button>
+				<Button href={`/mobile-layout/devices/pairing?field=${field.id}`} icon="add">
+					Add device
+				</Button>
 			{:else}
 				<Table headers={devicesHeaders} rows={devicesRows} />
 			{/if}
@@ -114,7 +116,7 @@
 			{#if selectedLayersRows.length > 0}
 				<Table headers={layersHeaders} rows={selectedLayersRows} />
 			{:else}
-				<Button>Add layer</Button>
+				<Button icon="add">Add layer</Button>
 			{/if}
 		</Section>
 		<Section label="LoRa"></Section>

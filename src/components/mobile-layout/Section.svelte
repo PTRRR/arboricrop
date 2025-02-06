@@ -1,5 +1,5 @@
 <script lang="ts">
-	import StepSeparation from './StepSeparation.svelte';
+	import StepSeparation, { type StepSeparationAction } from './StepSeparation.svelte';
 	import Spacer from '../Spacer.svelte';
 	import type { Snippet } from 'svelte';
 
@@ -7,7 +7,7 @@
 		label?: string;
 		description?: string;
 		children?: Snippet;
-		actions?: { label: string; onclick?: () => void }[];
+		actions?: StepSeparationAction[];
 	} = $props();
 </script>
 

@@ -16,6 +16,7 @@
 	import TextInput from '../../../../components/mobile-layout/TextInput.svelte';
 	import { Label } from 'bits-ui';
 	import Button from '../../../../components/mobile-layout/Button.svelte';
+	import PageHeader from '../../../../components/mobile-layout/PageHeader.svelte';
 
 	export let data: PageData;
 
@@ -47,7 +48,8 @@
 	});
 </script>
 
-<Section label="Device:">
+<PageHeader title="New Device" />
+<Section>
 	<TextInput label="id" defaultValue={device.id} readonly />
 	<TextInput label="name" autoFocus onvalue={(value) => (device.name = value)} />
 	<!-- <DeviceMetadataV2

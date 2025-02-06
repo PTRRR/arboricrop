@@ -5,7 +5,7 @@
 	import { goto } from '$app/navigation';
 
 	let data: { children: Snippet } = $props();
-	let showSplashscreen = $state(true);
+	let showSplashscreen = $state(false);
 	let hideContent = $state(false);
 	let menuMode = $state<'default' | 'scrolled'>('default');
 
@@ -133,7 +133,8 @@
 	:root {
 		--main-gap: 1rem;
 		--main-font-size: 1.2rem;
-		--big-font-size: 2rem;
+		--mid-font-size: 1.5rem;
+		--big-font-size: 2.6rem;
 		--layout-margin-top: 6vh;
 		--accent-color: #00cc5d;
 		--red: #ff2900;
@@ -217,7 +218,7 @@
 			right: 1.5rem;
 			width: 2.3rem;
 			height: var(--big-font-size);
-			padding: 0.2rem 0;
+			padding: 0.4rem 0;
 			box-sizing: border-box;
 			transition: opacity 0.7s cubic-bezier(0.83, 0, 0.17, 1);
 			cursor: pointer;

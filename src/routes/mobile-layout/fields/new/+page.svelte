@@ -123,7 +123,7 @@
 		{#if selectedFeaturesSet.size > 0}
 			<Table headers={layersHeaders} rows={selectedLayersRows} />
 		{:else}
-			<Button href={url.addQuery({ name: 'addLayer', value: 'true' })}>Add layer</Button>
+			<Button href={url.addQuery({ name: 'addLayer', value: 'true' })} icon="add">Add layer</Button>
 		{/if}
 	</Section>
 

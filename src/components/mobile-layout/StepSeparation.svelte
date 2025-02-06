@@ -1,10 +1,18 @@
 <script lang="ts">
 	import Button from './Button.svelte';
+	import type { IconName } from './Icon.svelte';
+
+	export type StepSeparationAction = {
+		label?: string;
+		onclick?: () => void;
+		icon?: IconName;
+		iconColor?: string;
+	};
 
 	const props: {
 		label?: string | number;
 		description?: string | undefined;
-		actions?: { label: string; onclick?: () => void }[];
+		actions?: StepSeparationAction[];
 	} = $props();
 </script>
 
@@ -13,9 +21,13 @@
 		<div class="step-separation__heading">
 			<div class="step-separation__label">{props.label}</div>
 			{#each props.actions || [] as action}
-				<Button onclick={action.onclick}>
-					{action.label}
-				</Button>
+				{#if action.label}
+					<Button onclick={action.onclick} icon={action.icon} iconColor={action.iconColor}>
+						{action.label}
+					</Button>
+				{:else}
+					<Button onclick={action.onclick} icon={action.icon} iconColor={action.iconColor}></Button>
+				{/if}
 			{/each}
 		</div>
 	{/if}
@@ -39,14 +51,14 @@
 		&__label {
 			font-weight: 500;
 			text-transform: lowercase;
-			color: inherit;
-			font-size: var(--big-font-size);
+			color: var(--grey);
+			font-size: var(--mid-font-size);
 		}
 
 		&__description {
 			font-weight: normal;
 			text-transform: lowercase;
-			color: var(--grey);
+			color: var(--black);
 			font-size: var(--main-font-size);
 		}
 	}

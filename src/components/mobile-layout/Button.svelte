@@ -3,6 +3,7 @@
 	import type { Snippet } from 'svelte';
 	import { useNavigationHistory } from '../../stores';
 	import { getCss } from '../../utils/css';
+	import Icon, { type IconName } from './Icon.svelte';
 
 	const {
 		children,
@@ -14,9 +15,12 @@
 		type = 'normal',
 		builders = undefined,
 		size = 'normal',
-		selected = false
+		selected = false,
+		icon,
+		iconColor,
+		backgroundColor
 	}: {
-		children: Snippet;
+		children?: Snippet;
 		fitWidth?: boolean;
 		href?: string;
 		disabled?: boolean;
@@ -26,16 +30,13 @@
 		builders?: Builder[];
 		size?: 'small' | 'normal' | 'big';
 		selected?: boolean;
+		icon?: IconName;
+		iconColor?: string;
+		backgroundColor?: string;
 	} = $props();
 
 	const { preventNavigationHistory } = useNavigationHistory();
-	const buttonStyle =
-		type === 'error'
-			? getCss({
-					color: '#ff3333',
-					backgroundColor: '#ffc7c7'
-				})
-			: '';
+	const buttonStyle = getCss({ backgroundColor });
 </script>
 
 {#snippet innerButton()}
@@ -48,6 +49,7 @@
 		class:button--big={size === 'big'}
 		class:button--small={size === 'small'}
 		class:button--selected={selected}
+		class:button--icon={icon}
 		style={buttonStyle}
 		onclick={() => {
 			if (preventHistory) {
@@ -56,7 +58,17 @@
 			onclick?.();
 		}}
 	>
-		{@render children()}
+		{#if icon}
+			<div class="button__icon">
+				<Icon {icon} color={iconColor} />
+			</div>
+		{/if}
+
+		{#if children}
+			<div class="button__content">
+				{@render children()}
+			</div>
+		{/if}
 	</div>
 {/snippet}
 
@@ -81,18 +93,20 @@
 	}
 
 	.button {
-		background-color: lightgray;
+		background-color: transparent;
 		color: black;
 		font-family: inherit;
-		font-size: var(--main-font-size);
+		font-size: var(--mid-font-size);
 		font-weight: 500;
 		text-transform: lowercase;
 		border: none;
-		padding: 0.5rem 0.5rem;
-		border-radius: 5px;
+		// padding: 0.5rem;
+		border-radius: 6px;
 		cursor: pointer;
 		text-align: left;
 		box-sizing: border-box;
+		display: flex;
+		gap: 0.5rem;
 
 		&--fit-width {
 			width: 100%;
@@ -113,7 +127,25 @@
 
 		&--selected,
 		&:hover {
-			background-color: grey;
+			// background-color: var(--grey);
+		}
+
+		&--icon {
+			// padding: 5px 10px 5px 5px;
+		}
+
+		&__icon {
+			background-color: var(--black);
+			width: 24px;
+			height: 24px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			border-radius: 3px;
+		}
+
+		&__content {
+			line-height: 1;
 		}
 
 		span {
