@@ -138,6 +138,7 @@
 		--layout-margin-top: 6vh;
 		--accent-color: #00cc5d;
 		--red: #ff2900;
+		--light-red: #ffd5cc;
 		--yellow: #fecc00;
 		--blue: #009fe3;
 		--black: #000000;

@@ -2,11 +2,17 @@
 	import { getCss } from '../../utils/css';
 
 	export type IconName = 'add' | 'navigate' | 'warning' | 'check' | 'cross';
+	export type IconSize = 'normal' | 'large';
+
 	const {
 		icon,
 		color = 'var(--white)',
 		size = 'normal'
-	}: { icon: IconName; color?: string; size?: 'normal' | 'large' } = $props();
+	}: {
+		icon: IconName;
+		color?: string;
+		size?: IconSize;
+	} = $props();
 </script>
 
 <div
@@ -21,6 +27,8 @@
 		<span>!</span>
 	{:else if icon === 'navigate'}
 		<span>></span>
+	{:else if icon === 'cross'}
+		<span class="icon__cross">+</span>
 	{:else}
 		<span>+</span>
 	{/if}
@@ -28,9 +36,16 @@
 
 <style lang="scss">
 	.icon {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 18px;
+		height: 18px;
+		overflow: hidden;
+
 		span {
+			display: block;
 			font-weight: 500;
-			line-height: 1;
 			font-family: inherit;
 		}
 
@@ -39,7 +54,13 @@
 		}
 
 		&--large {
-			font-size: 35px;
+			font-size: 32px;
+			width: 24px;
+			height: 24px;
+		}
+
+		&__cross {
+			transform: rotate(45deg) translate(5%, -5%);
 		}
 	}
 </style>

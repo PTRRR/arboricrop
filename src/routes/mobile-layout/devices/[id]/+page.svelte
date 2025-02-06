@@ -97,6 +97,7 @@
 	{#snippet deviceName()}
 		<span>{device.name}</span>
 		<Button
+			padding
 			onclick={() => {
 				if ($page.data.connected && device.status === 'active') {
 					updateDevice({ ...device, status: 'unactive' });
@@ -253,12 +254,12 @@
 		{/if}
 	</Section>
 
-	<Section label="Advanced">
-		{#if $page.data.connected}
+	{#if $page.data.connected}
+		<Section label="Advanced">
 			<Button icon="warning">Upgrate firmware</Button>
 			<Button icon="navigate">See live data</Button>
-		{/if}
-	</Section>
+		</Section>
+	{/if}
 
 	{#if editMetadata}
 		<Section label="Confirm changes:">
@@ -268,13 +269,18 @@
 
 	<Section label="Danger zone">
 		<Button
-			type="error"
+			icon="cross"
+			iconBackgroundColor="var(--red)"
+			iconSize="large"
+			padding
+			backgroundColor="var(--light-red)"
 			onclick={() => {
 				$preventNavigationHistory = true;
 				devices.set([...$devices.filter((it) => it.id !== device.id)]);
 				navigateToPreviousPage();
-			}}>Permanently delete device</Button
-		>
+			}}
+			>Delete Permanently
+		</Button>
 	</Section>
 {:else}
 	<span>Device unknown</span>

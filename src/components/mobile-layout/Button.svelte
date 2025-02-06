@@ -3,7 +3,7 @@
 	import type { Snippet } from 'svelte';
 	import { useNavigationHistory } from '../../stores';
 	import { getCss } from '../../utils/css';
-	import Icon, { type IconName } from './Icon.svelte';
+	import Icon, { type IconName, type IconSize } from './Icon.svelte';
 
 	const {
 		children,
@@ -18,7 +18,11 @@
 		selected = false,
 		icon,
 		iconColor,
-		backgroundColor
+		iconBackgroundColor,
+		backgroundColor,
+		iconSize,
+		iconOrder,
+		padding = false
 	}: {
 		children?: Snippet;
 		fitWidth?: boolean;
@@ -32,7 +36,11 @@
 		selected?: boolean;
 		icon?: IconName;
 		iconColor?: string;
+		iconSize?: IconSize;
+		iconBackgroundColor?: string;
 		backgroundColor?: string;
+		iconOrder?: 'inverted';
+		padding?: boolean;
 	} = $props();
 
 	const { preventNavigationHistory } = useNavigationHistory();
@@ -49,7 +57,9 @@
 		class:button--big={size === 'big'}
 		class:button--small={size === 'small'}
 		class:button--selected={selected}
-		class:button--icon={icon}
+		class:button--background-color={backgroundColor}
+		class:button--inverted-icon={iconOrder === 'inverted'}
+		class:button--padding={padding}
 		style={buttonStyle}
 		onclick={() => {
 			if (preventHistory) {
@@ -59,8 +69,8 @@
 		}}
 	>
 		{#if icon}
-			<div class="button__icon">
-				<Icon {icon} color={iconColor} />
+			<div class="button__icon" style={getCss({ backgroundColor: iconBackgroundColor })}>
+				<Icon {icon} color={iconColor} size={iconSize} />
 			</div>
 		{/if}
 
@@ -93,6 +103,7 @@
 	}
 
 	.button {
+		$this: &;
 		background-color: transparent;
 		color: black;
 		font-family: inherit;
@@ -100,13 +111,22 @@
 		font-weight: 500;
 		text-transform: lowercase;
 		border: none;
-		padding: 0.5rem 0;
+
 		border-radius: 6px;
 		cursor: pointer;
 		text-align: left;
 		box-sizing: border-box;
 		display: flex;
-		gap: 0.3rem;
+		align-items: center;
+		gap: 0.4rem;
+
+		&--padding {
+			padding: 0.5rem 0;
+		}
+
+		&--inverted-icon {
+			flex-direction: row-reverse;
+		}
 
 		&--fit-width {
 			width: 100%;
@@ -130,18 +150,19 @@
 			// background-color: var(--grey);
 		}
 
-		&--icon {
-			// padding: 5px 10px 5px 5px;
+		&--background-color#{&}--padding {
+			padding: 5px;
 		}
 
 		&__icon {
 			background-color: var(--black);
-			width: 24px;
-			height: 24px;
-			display: flex;
-			justify-content: center;
-			align-items: center;
 			border-radius: 5px;
+			padding: 5px;
+			box-sizing: border-box;
+
+			#{$this}--background-color & {
+				border-radius: 3px;
+			}
 		}
 
 		&__content {

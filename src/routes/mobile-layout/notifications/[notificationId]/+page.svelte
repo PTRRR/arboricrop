@@ -78,7 +78,7 @@
 {:else}
 	{#snippet pageTitle()}
 		<span>{notification?.title}</span>
-		<Button href={`${window.location.pathname}?acknowledge=true`}>Acknowledge</Button>
+		<Button href={`${window.location.pathname}?acknowledge=true`} padding>Acknowledge</Button>
 	{/snippet}
 
 	{#snippet pageSubtitle()}

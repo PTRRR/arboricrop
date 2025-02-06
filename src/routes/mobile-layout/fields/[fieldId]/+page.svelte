@@ -126,7 +126,10 @@
 					deleteField(field.id);
 					goto('/mobile-layout');
 				}}
-				type="error"
+				icon="cross"
+				iconBackgroundColor="var(--red)"
+				iconSize="large"
+				backgroundColor="var(--light-red)"
 				>Delete Permanently
 			</Button>
 		</Section>

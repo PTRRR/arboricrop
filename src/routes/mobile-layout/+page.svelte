@@ -40,7 +40,7 @@
 {:else}
 	{#snippet notificationsTitle()}
 		<span>Notifications</span>
-		<Button href="/mobile-layout/notifications" icon="navigate">All</Button>
+		<Button href="/mobile-layout/notifications" icon="navigate" iconOrder="inverted">All</Button>
 	{/snippet}
 
 	{#snippet notificationsSubTitle()}
