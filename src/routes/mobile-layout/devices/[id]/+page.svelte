@@ -202,7 +202,7 @@
 				maxZoom={18.5}
 				center={device?.location || field?.center}
 				markers={device?.location ? [{ lngLat: device.location }] : []}
-				showTarget={Boolean(location)}
+				showTarget
 				geoJSONs={field?.layers}
 				onChange={(value) => {
 					if (device.location) {

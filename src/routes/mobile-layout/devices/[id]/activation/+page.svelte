@@ -28,6 +28,7 @@
 	import TextareaInput from '../../../../../components/mobile-layout/TextareaInput.svelte';
 	import Table from '../../../../../components/mobile-layout/Table.svelte';
 	import ActionMenu from '../../../../../components/mobile-layout/ActionMenu.svelte';
+	import SaveMenu from '../../../../../components/mobile-layout/SaveMenu.svelte';
 
 	const { data }: { data: PageData } = $props();
 
@@ -137,7 +138,7 @@
 {#if data.advanced && device}
 	{#snippet advancedActivationTitle()}
 		<span>Device Activation</span>
-		<Button>Live Data</Button>
+		<Button icon="navigate" iconOrder="inverted">Live Data</Button>
 	{/snippet}
 
 	<PageHeader title={advancedActivationTitle} />
@@ -163,6 +164,7 @@
 			geoJSONs={field?.layers}
 		/>
 		<Button
+			icon="check"
 			onclick={() => {
 				const center = map?.getCenter();
 				if (device && center) {
@@ -189,7 +191,7 @@
 			}}
 		/>
 
-		<StepSeparation label="Medias" />
+		<StepSeparation label="Medias" actions={device.medias.length > 0 ? [{ icon: 'add' }] : []} />
 
 		{#if device.medias.length > 0}
 			<Table
@@ -208,21 +210,17 @@
 			<Dropdown label="Add media" items={mediaOptions} renderItem={mediaOptionItem} />
 		{/if}
 
-		<StepSeparation label="Review & confirm" />
-		<Button
-			preventHistory
-			href={`/mobile-layout/devices/${device?.id}?connected=true`}
-			onclick={() => {
+		<SaveMenu
+			onsave={() => {
 				if (device) {
 					updateDevice({
 						...device,
 						status: 'active'
 					});
+					goto(`/mobile-layout/devices/${device?.id}?connected=true`);
 				}
 			}}
-		>
-			Activate device
-		</Button>
+		/>
 	</Section>
 {:else if $page.data.selectField}
 	<Section label="Available fields">
