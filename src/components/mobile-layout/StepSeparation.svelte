@@ -1,9 +1,10 @@
 <script lang="ts">
+	import type { Snippet } from 'svelte';
 	import Button from './Button.svelte';
 	import type { IconName } from './Icon.svelte';
 
 	export type StepSeparationAction = {
-		label?: string;
+		label?: string | Snippet;
 		onclick?: () => void;
 		href?: string;
 		icon?: IconName;
@@ -31,7 +32,11 @@
 						iconOrder={action.iconOrder}
 						href={action.href}
 					>
-						{action.label}
+						{#if typeof action.label === 'string'}
+							{action.label}
+						{:else}
+							{@render action.label()}
+						{/if}
 					</Button>
 				{:else}
 					<Button

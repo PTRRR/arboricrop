@@ -1,5 +1,6 @@
 <script module lang="ts">
 	export const LAYOUT_PORTAL = 'layout-portal';
+	export const SUB_CONTENT_PORTAL = 'sub-content-portal';
 </script>
 
 <script lang="ts">
@@ -8,9 +9,10 @@
 	import { iphone } from '../../utils/phones';
 	import { goto } from '$app/navigation';
 	import { createPortal } from '../../utils/portal';
-	import { useAppMenu, useNotifications, useReturnButton } from '../../stores';
+	import { useApp, useNotifications, useReturnButton } from '../../stores';
 	import Button from '../../components/mobile-layout/Button.svelte';
 	import { addEllipsis } from '../../utils/strings';
+	import { getCss } from '../../utils/css';
 
 	let data: { children: Snippet } = $props();
 	let showSplashscreen = $state(true);
@@ -19,7 +21,7 @@
 	const notifications = useNotifications();
 	const pendingNotifications = $derived($notifications.filter((it) => it.status === 'pending'));
 	const returnButton = useReturnButton();
-	const { showAppMenu } = useAppMenu();
+	const { showAppMenu, hideContent } = useApp();
 
 	const breadcrumbIcon = $derived(
 		!showBreadcrumb ? undefined : $returnButton?.backHref ? 'back' : undefined
@@ -108,7 +110,13 @@
 
 		<div class="mobile-layout__wrapper">
 			<div class="mobile-layout__content">
-				{@render data.children()}
+				<div
+					class="mobile-layout__content-inner"
+					style={getCss({ display: $hideContent ? 'none' : undefined })}
+				>
+					{@render data.children()}
+				</div>
+				<div class="mobile-layout__portal" use:createPortal={SUB_CONTENT_PORTAL}></div>
 			</div>
 		</div>
 
@@ -380,6 +388,7 @@
 			padding: 1.5rem;
 			padding-bottom: 5rem;
 			border-radius: 1.5rem;
+			overflow: hidden;
 			box-sizing: border-box;
 			min-height: calc(
 				var(--mobile-app-height) - var(--layout-margin-top) - var(--big-font-size) - 1rem

@@ -3,7 +3,7 @@
 	import Button from '../../../../components/mobile-layout/Button.svelte';
 	import Section from '../../../../components/mobile-layout/Section.svelte';
 	import Map from '../../../../components/mobile-layout/Map.svelte';
-	import { useDevices, useFields, useReturnButton } from '../../../../stores';
+	import { useDevices, useFields, useGeoJSONFeatures, useReturnButton } from '../../../../stores';
 	import { swissBounds } from '../../../../utils/dummyData';
 	import TextInput from '../../../../components/mobile-layout/TextInput.svelte';
 	import Table, { type Cell, type Row } from '../../../../components/mobile-layout/Table.svelte';
@@ -13,11 +13,14 @@
 	import PageHeader from '../../../../components/mobile-layout/PageHeader.svelte';
 	import type { LngLatLike } from 'svelte-maplibre';
 	import SaveMenu from '../../../../components/mobile-layout/SaveMenu.svelte';
+	import SubPage from '../../../../components/mobile-layout/SubPage.svelte';
+	import type { GeoJSONFeature } from '../../../../utils/types';
 
 	const fieldId = $page.params.fieldId;
 	const { devices } = useDevices();
 	const { fields, getFieldById, deleteField, updateField } = useFields();
 	const returnButton = useReturnButton();
+	const features = useGeoJSONFeatures();
 
 	returnButton.set({
 		label: '',
@@ -26,6 +29,8 @@
 
 	const field = $derived($fields && getFieldById(fieldId));
 	const fieldDevices = $derived($devices.filter((it) => it.fieldId === field?.id));
+	let selectedFeaturesSet = $state<Set<GeoJSONFeature>>(new Set());
+	const selectedFeatures = $derived(Array.from(selectedFeaturesSet));
 
 	let map: Map | null = $state(null);
 	let name = $state<string | undefined>(undefined);
@@ -57,6 +62,26 @@
 
 	const selectedLayersRows: Row[] = $derived(
 		(field?.layers || []).map((it) => ({
+			cells: [
+				{
+					label: getFeatureLayerName(it) as string
+				},
+				{ label: 'GeoJSON' }
+			]
+		}))
+	);
+
+	const availableLayersRows: Row[] = $derived(
+		$features.map((it) => ({
+			onclick: () => {
+				if (selectedFeaturesSet.has(it)) {
+					selectedFeaturesSet.delete(it);
+				} else {
+					selectedFeaturesSet.add(it);
+				}
+				selectedFeaturesSet = new Set(selectedFeaturesSet);
+			},
+			selected: selectedFeaturesSet.has(it),
 			cells: [
 				{
 					label: getFeatureLayerName(it) as string
@@ -126,17 +151,30 @@
 				}}
 			/>
 		</Section>
-		<Section
-			label="Layers"
-			actions={selectedLayersRows.length > 0 ? [{ icon: 'add', onclick: () => {} }] : []}
-		>
+
+		{#snippet addLayer()}
+			<SubPage icon="add">
+				<PageHeader title="Field Layers" />
+				<Section hidden={!addLayer} actions={[{ label: 'Import', onclick: () => {} }]}>
+					<Table headers={layersHeaders} rows={availableLayersRows} />
+				</Section>
+			</SubPage>
+		{/snippet}
+
+		<Section label="Layers" actions={selectedLayersRows.length > 0 ? [{ label: addLayer }] : []}>
 			{#if selectedLayersRows.length > 0}
 				<Table headers={layersHeaders} rows={selectedLayersRows} />
 			{:else}
-				<Button icon="add">Add layer</Button>
+				<SubPage label="Add layers" icon="add">
+					<PageHeader title="LoRa configuration" />
+				</SubPage>
 			{/if}
 		</Section>
-		<Section label="LoRa"></Section>
+		<Section label="LoRa">
+			<SubPage label="Add configuration" icon="navigate">
+				<PageHeader title="LoRa configuration" />
+			</SubPage>
+		</Section>
 		<Section label="Danger Zone">
 			<Button
 				icon="cross"

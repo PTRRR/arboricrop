@@ -1,13 +1,18 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import { portal } from '../../utils/portal';
-	import { useAppMenu } from '../../stores';
+	import { useApp } from '../../stores';
 	import { LAYOUT_PORTAL } from '../../routes/mobile-layout/+layout.svelte';
-	const { children }: { children?: Snippet } = $props();
-	const { showAppMenu } = useAppMenu();
+	const { children, hidden = $bindable(false) }: { children?: Snippet; hidden?: boolean } =
+		$props();
+	const { showAppMenu } = useApp();
 </script>
 
-<div class="action-menu" class:action-menu--hidden={$showAppMenu} use:portal={LAYOUT_PORTAL}>
+<div
+	class="action-menu"
+	class:action-menu--hidden={$showAppMenu || hidden}
+	use:portal={LAYOUT_PORTAL}
+>
 	{@render children?.()}
 </div>
 

@@ -372,10 +372,12 @@ export const useNavigationHistory = () => {
 	};
 };
 
-export const useAppMenu = () => {
+export const useApp = () => {
 	const showAppMenu = useWritable<boolean>('show-app-menu', false, false);
+	const hideContent = useWritable<boolean>('hide-content', false, false);
 
 	return {
-		showAppMenu
+		showAppMenu,
+		hideContent
 	};
 };
