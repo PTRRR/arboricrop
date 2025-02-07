@@ -259,7 +259,7 @@ export const useDeviceIllustration = () => {
 };
 
 export const useUserMode = () => {
-	const userMode = useWritable<'advanced' | 'normal'>('user-mode', 'normal', true);
+	const userMode = useWritable<'advanced' | 'normal'>('user-mode', 'advanced', true);
 
 	return {
 		userMode,

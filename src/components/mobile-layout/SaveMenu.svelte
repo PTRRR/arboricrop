@@ -2,10 +2,14 @@
 	import ActionMenu from './ActionMenu.svelte';
 	import Button from './Button.svelte';
 
-	const { onsave, oncancel }: { onsave?: () => void; oncancel?: () => void } = $props();
+	const {
+		onsave,
+		oncancel,
+		hidden
+	}: { onsave?: () => void; oncancel?: () => void; hidden?: boolean } = $props();
 </script>
 
-<ActionMenu>
+<ActionMenu {hidden}>
 	{#if oncancel}
 		<Button
 			icon="cross"
