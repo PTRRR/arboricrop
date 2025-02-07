@@ -28,6 +28,7 @@
 	const features = useGeoJSONFeatures();
 	const defaultLoRaConfiguration = $derived($loRaConfigurations.find((it) => it.isDefault));
 	const url = createUrlBuilder();
+	const returnButton = useReturnButton();
 
 	let map: Map | null = $state(null);
 	let name = $state('');
@@ -82,6 +83,11 @@
 			]
 		}))
 	);
+
+	returnButton.set({
+		label: '',
+		backHref: '/mobile-layout'
+	});
 </script>
 
 <PageHeader title="New Field" />
@@ -149,6 +155,5 @@
 			fields.set([...$fields, field]);
 			goto(`/mobile-layout`);
 		}}
-		oncancel={() => goto('/mobile-layout')}
 	/>
 {/if}

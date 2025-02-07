@@ -237,6 +237,12 @@
 				opacity: 0;
 				pointer-events: none;
 			}
+
+			#{$this}__action-menu {
+				opacity: 0;
+				pointer-events: none;
+				transform: translate(0, 150%);
+			}
 		}
 
 		&--hide-content {
@@ -392,7 +398,10 @@
 			position: absolute;
 			bottom: 1.5rem;
 			right: 1.5rem;
-			transition: opacity 0.3s ease-in-out;
+			transition:
+				opacity 0.3s ease-in-out,
+				transform 0.7s cubic-bezier(0.83, 0, 0.17, 1);
+			transform: translate(0, 0);
 
 			#{$this}--hide-content & {
 				opacity: 0;

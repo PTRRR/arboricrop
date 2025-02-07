@@ -124,9 +124,6 @@
 		oncancel={() => {
 			goto('/mobile-layout');
 		}}
-		onsave={() => {
-			goto('/mobile-layout');
-		}}
 	/>
 {/if}
 

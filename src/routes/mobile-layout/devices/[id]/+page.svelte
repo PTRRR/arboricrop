@@ -185,17 +185,7 @@
 	</Section>
 
 	{#if device.status === 'active'}
-		<Section
-			label="Location"
-			actions={[
-				{
-					label: field?.name || '-',
-					href: `/mobile-layout/fields/${field?.id}`,
-					icon: 'navigate',
-					iconOrder: 'inverted'
-				}
-			]}
-		>
+		<Section label="Location">
 			<Map
 				bind:this={map}
 				maxBounds={swissBounds}

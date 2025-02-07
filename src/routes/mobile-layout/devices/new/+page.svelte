@@ -56,5 +56,4 @@
 		devices.set([...$devices, device]);
 		goto(`/mobile-layout/devices/${device.id}?connected=true`);
 	}}
-	oncancel={() => goto(`/mobile-layout/fields/${data.field}`)}
 />

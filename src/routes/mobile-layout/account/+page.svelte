@@ -21,4 +21,4 @@
 	<TextInput label="Last name" defaultValue="Doe" />
 </Section>
 
-<SaveMenu oncancel={() => goto('/mobile-layout')} onsave={() => goto('/mobile-layout')} />
+<SaveMenu onsave={() => goto('/mobile-layout')} />

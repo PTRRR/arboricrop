@@ -274,12 +274,6 @@
 			/>
 		</Section>
 		<ActionMenu>
-			<Button
-				icon="cross"
-				iconSize="large"
-				href={`/mobile-layout/devices/${device?.id}?connected=true`}
-				iconBackgroundColor="var(--dark-grey)"
-			></Button>
 			<Button icon="navigate" iconSize="large" href={nextHref}></Button>
 		</ActionMenu>
 	{:else if stepIndex === 1}
@@ -300,7 +294,7 @@
 		</Section>
 		<ActionMenu>
 			<Button
-				icon="cross"
+				icon="back"
 				iconSize="large"
 				href={previousHref}
 				iconBackgroundColor="var(--dark-grey)"
@@ -335,7 +329,7 @@
 		</Section>
 		<ActionMenu>
 			<Button
-				icon="cross"
+				icon="back"
 				iconSize="large"
 				href={previousHref}
 				iconBackgroundColor="var(--dark-grey)"
@@ -380,7 +374,7 @@
 
 		<ActionMenu>
 			<Button
-				icon="cross"
+				icon="back"
 				iconSize="large"
 				href={previousHref}
 				iconBackgroundColor="var(--dark-grey)"
@@ -388,6 +382,7 @@
 			<Button
 				icon="check"
 				iconSize="large"
+				iconBackgroundColor="var(--green)"
 				href={`/mobile-layout/devices/${device?.id}?connected=true`}
 				onclick={() => {
 					if (device) {

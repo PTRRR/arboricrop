@@ -46,8 +46,10 @@
 	$effect(() => {
 		if (notification) {
 			returnButton.set({
-				label: 'Notifications',
-				backHref: '/mobile-layout/notifications'
+				label: $page.data.acknowledge ? 'Notification' : 'Notifications',
+				backHref: $page.data.acknowledge
+					? `/mobile-layout/notifications/${notification.id}`
+					: '/mobile-layout/notifications'
 			});
 		}
 	});
@@ -72,9 +74,6 @@
 				}
 
 				goto('/mobile-layout/notifications');
-			}}
-			oncancel={() => {
-				goto(window.location.pathname);
 			}}
 		/>
 	</Section>
