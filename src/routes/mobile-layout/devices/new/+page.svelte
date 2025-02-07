@@ -23,8 +23,8 @@
 	const { preventNavigationHistory } = useNavigationHistory();
 
 	returnButton.set({
-		label: `New Device`,
-		href: '/mobile-wireframe'
+		label: `Field`,
+		backHref: `/mobile-layout/fields/${data.field}`
 	});
 
 	let device: Device = {

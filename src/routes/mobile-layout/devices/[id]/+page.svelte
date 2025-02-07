@@ -27,7 +27,7 @@
 	import { getLocationDelta } from '../../../../utils/locations';
 	import type { IconName } from '../../../../components/mobile-layout/Icon.svelte';
 	import { getCss } from '../../../../utils/css';
-	import { addElipsis } from '../../../../utils/strings';
+	import { addEllipsis } from '../../../../utils/strings';
 
 	const { preventNavigationHistory, navigateToPreviousPage } = useNavigationHistory();
 	const { setVisibility, reset, setUsb, setJack, setBlink, setOn } = useDeviceIllustration();
@@ -83,8 +83,8 @@
 
 	$effect(() => {
 		returnButton.set({
-			label: `Device ${device?.name || 'Unknown'}`,
-			href: '/mobile-wireframe/devices'
+			label: 'Field',
+			backHref: `/mobile-layout/fields/${device?.fieldId}`
 		});
 	});
 
@@ -117,7 +117,7 @@
 
 {#if device}
 	{#snippet deviceName()}
-		<span>{addElipsis(device.name || '', 8)}</span>
+		<span>{addEllipsis(device.name || '', 8)}</span>
 		<Button
 			padding
 			icon={actionButtonIcon}

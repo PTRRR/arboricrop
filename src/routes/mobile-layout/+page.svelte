@@ -3,14 +3,10 @@
 	import Card from '../../components/mobile-layout/Card.svelte';
 	import Section from '../../components/mobile-layout/Section.svelte';
 	import TextInput from '../../components/mobile-layout/TextInput.svelte';
-	import { useDevices, useFields, useNotifications } from '../../stores';
-	import { getCss } from '../../utils/css';
-	import CenteredWrapper from '../../components/mobile-layout/CenteredWrapper.svelte';
+	import { useDevices, useFields, useNotifications, useReturnButton } from '../../stores';
 	import PageHeader from '../../components/mobile-layout/PageHeader.svelte';
-	import StatusDot from '../../components/mobile-layout/StatusDot.svelte';
 	import { shuffle } from '../../utils/arrays';
 	import NotificationCard from '../../components/mobile-layout/NotificationCard.svelte';
-	import ActionMenu from '../../components/mobile-layout/ActionMenu.svelte';
 	import SaveMenu from '../../components/mobile-layout/SaveMenu.svelte';
 	import { goto } from '$app/navigation';
 
@@ -18,6 +14,11 @@
 	const { fields } = useFields();
 	const notifications = useNotifications();
 	let newFieldName = $state<string | number>('');
+
+	const returnButton = useReturnButton();
+	returnButton.set({
+		label: 'vita/hub'
+	});
 
 	const selectedNotifications = $derived(
 		shuffle($notifications).slice(0, Math.floor(Math.random() * 3 + 1))

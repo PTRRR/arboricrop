@@ -3,7 +3,7 @@
 	import Button from '../../../../components/mobile-layout/Button.svelte';
 	import Section from '../../../../components/mobile-layout/Section.svelte';
 	import Map from '../../../../components/mobile-layout/Map.svelte';
-	import { useDevices, useFields } from '../../../../stores';
+	import { useDevices, useFields, useReturnButton } from '../../../../stores';
 	import { swissBounds } from '../../../../utils/dummyData';
 	import TextInput from '../../../../components/mobile-layout/TextInput.svelte';
 	import Table, { type Cell, type Row } from '../../../../components/mobile-layout/Table.svelte';
@@ -17,6 +17,12 @@
 	const fieldId = $page.params.fieldId;
 	const { devices } = useDevices();
 	const { fields, getFieldById, deleteField, updateField } = useFields();
+	const returnButton = useReturnButton();
+
+	returnButton.set({
+		label: '',
+		backHref: '/mobile-layout'
+	});
 
 	const field = $derived($fields && getFieldById(fieldId));
 	const fieldDevices = $derived($devices.filter((it) => it.fieldId === field?.id));

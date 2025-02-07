@@ -19,8 +19,13 @@
 	const returnButton = useReturnButton();
 
 	returnButton.set({
-		label: 'Pair device',
-		href: '/mobile-layout/devices'
+		label: data.field ? 'Field' : 'Device',
+		href: '/mobile-layout/devices',
+		backHref: data.field
+			? `/mobile-layout/fields/${data.field}`
+			: data.deviceId
+				? `/mobile-layout/devices/${data.deviceId}`
+				: undefined
 	});
 
 	const url = createUrlBuilder();

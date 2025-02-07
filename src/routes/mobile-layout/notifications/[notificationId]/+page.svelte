@@ -46,8 +46,8 @@
 	$effect(() => {
 		if (notification) {
 			returnButton.set({
-				label: notification?.title || '',
-				href: '/mobile-wireframe/notifications'
+				label: 'Notifications',
+				backHref: '/mobile-layout/notifications'
 			});
 		}
 	});

@@ -5,20 +5,36 @@
 	import { goto } from '$app/navigation';
 	import { createPortal } from '../../utils/portal';
 	import { ACTION_MENU_PORTAL } from '../../components/mobile-layout/ActionMenu.svelte';
-	import { useNotifications } from '../../stores';
+	import { useNotifications, useReturnButton } from '../../stores';
 	import { DROPDOWN_PORTAL } from '../../components/mobile-layout/Dropdown.svelte';
+	import Button from '../../components/mobile-layout/Button.svelte';
+	import { addEllipsis } from '../../utils/strings';
 
 	let data: { children: Snippet } = $props();
 	let showSplashscreen = $state(true);
+	let showBreadcrumb = $state(false);
 	let hideContent = $state(false);
 	let menuMode = $state<'default' | 'scrolled'>('default');
 	const notifications = useNotifications();
 	const pendingNotifications = $derived($notifications.filter((it) => it.status === 'pending'));
+	const returnButton = useReturnButton();
+
+	const breadcrumbIcon = $derived(
+		!showBreadcrumb ? undefined : $returnButton?.backHref ? 'back' : undefined
+	);
+
+	const breadcrumbContent = $derived(
+		!showBreadcrumb ? 'vita/hub' : addEllipsis($returnButton?.label || 'vita/hub', 10)
+	);
 
 	onMount(() => {
 		setTimeout(() => {
 			showSplashscreen = false;
 		}, 2000);
+
+		setTimeout(() => {
+			showBreadcrumb = true;
+		}, 3000);
 	});
 </script>
 
@@ -39,7 +55,22 @@
 		class:mobile-layout--hide-content={hideContent}
 		class:mobile-layout--scrolled={menuMode === 'scrolled'}
 	>
-		<a class="mobile-layout__breadcrumb" href="/mobile-layout">vita/hub</a>
+		<div class="mobile-layout__breadcrumb">
+			<Button
+				preventHistory
+				href={$returnButton?.backHref || '/mobile-layout'}
+				color="var(--white)"
+				fontSize="inherit"
+				icon={breadcrumbIcon}
+				iconBackgroundColor="var(--white)"
+				iconColor="var(--green)"
+			>
+				<div class="mobile-layout__breadcrumb-inner">
+					{breadcrumbContent}
+				</div>
+			</Button>
+		</div>
+		<!-- <a class="mobile-layout__breadcrumb" href="/mobile-layout">vita/hub</a> -->
 		<img class="mobile-layout__logo" src="/images/logo.svg" alt="" />
 
 		{#if pendingNotifications.length > 0}
@@ -252,17 +283,14 @@
 		}
 
 		&__breadcrumb {
+			display: flex;
 			text-decoration: none;
-			font-size: var(--big-font-size);
 			font-family: Rubik;
 			font-weight: 500;
 			z-index: 1;
 			position: fixed;
 			line-height: 1;
 			color: var(--white);
-		}
-
-		&__breadcrumb {
 			top: var(--layout-margin-top);
 			left: 1.5rem;
 			white-space: nowrap;
@@ -274,6 +302,10 @@
 				top 0.7s cubic-bezier(0.83, 0, 0.17, 1),
 				left 0.7s cubic-bezier(0.83, 0, 0.17, 1),
 				font-size 0.7s cubic-bezier(0.83, 0, 0.17, 1);
+
+			&-inner {
+				transform: translate(0, -5%);
+			}
 		}
 
 		&__hamburger {

@@ -18,7 +18,6 @@
 	import { loraNetworks } from '../../../utils/dummyData';
 	import Section from '../../../components/mobile-layout/Section.svelte';
 	import Checkbox from '../../../components/mobile-layout/Checkbox.svelte';
-	import TextInput from '../../../components/mobile-layout/TextInput.svelte';
 	import Table from '../../../components/mobile-layout/Table.svelte';
 	import PageHeader from '../../../components/mobile-layout/PageHeader.svelte';
 	import SaveMenu from '../../../components/mobile-layout/SaveMenu.svelte';
@@ -34,8 +33,8 @@
 	let selectedOrganisation = $organisation;
 
 	returnButton.set({
-		label: 'Settings',
-		href: '/mobile-wireframe'
+		label: ``,
+		backHref: `/mobile-layout`
 	});
 </script>
 

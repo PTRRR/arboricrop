@@ -137,7 +137,10 @@ export const useProfile = () =>
 	);
 export const useComments = () => useWritable<(typeof comment.$inferSelect)[]>('comments', []);
 export const useReturnButton = () =>
-	useWritable<{ label: string; href?: string } | undefined>('return-button', undefined);
+	useWritable<{ label: string; href?: string; backHref?: string } | undefined>(
+		'return-button',
+		undefined
+	);
 export const useNetwork = () => useWritable('network', loraNetworks[0], true);
 export const useScrollLock = () => {
 	const scrollLock = useWritable('scroll-lock', false);

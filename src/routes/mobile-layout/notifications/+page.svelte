@@ -18,8 +18,8 @@
 		: aknowledgedNotifications;
 
 	returnButton.set({
-		label: 'Notifications',
-		href: '/mobile-wireframe'
+		label: '',
+		backHref: '/mobile-layout'
 	});
 </script>
 

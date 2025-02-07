@@ -109,6 +109,7 @@
 		background-color: transparent;
 		text-decoration: none;
 		font-family: inherit;
+		font-size: inherit;
 	}
 
 	.button {
@@ -120,7 +121,6 @@
 		font-weight: 500;
 		text-transform: lowercase;
 		border: none;
-
 		border-radius: 6px;
 		cursor: pointer;
 		text-align: left;

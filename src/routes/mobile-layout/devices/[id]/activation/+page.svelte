@@ -64,8 +64,8 @@
 	$effect(() => {
 		if (device) {
 			returnButton.set({
-				label: `Device ${device?.name || 'Unknown'}`,
-				href: `/mobile-wireframe/devices/${device.id}?connected=true`
+				label: `Device`,
+				backHref: `/mobile-layout/devices/${device.id}?connected=true`
 			});
 		} else {
 			returnButton.set({
