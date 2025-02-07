@@ -40,6 +40,7 @@
 		"bits-ui": "^0.21.16",
 		"dotenv": "^16.4.5",
 		"drizzle-orm": "^0.33.0",
+		"lucide-svelte": "^0.474.0",
 		"pg": "^8.12.0",
 		"svelte-maplibre": "^0.9.13",
 		"svelte-portal": "^2.2.1"

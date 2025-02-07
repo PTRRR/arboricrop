@@ -9,6 +9,7 @@
 	import { DROPDOWN_PORTAL } from '../../components/mobile-layout/Dropdown.svelte';
 	import Button from '../../components/mobile-layout/Button.svelte';
 	import { addEllipsis } from '../../utils/strings';
+	import { LIVE_DATA_PORTAL } from '../../components/mobile-layout/LiveData.svelte';
 
 	let data: { children: Snippet } = $props();
 	let showSplashscreen = $state(true);
@@ -111,6 +112,7 @@
 
 		<div class="mobile-layout__action-menu" use:createPortal={ACTION_MENU_PORTAL}></div>
 		<div class="mobile-layout__dropdown" use:createPortal={DROPDOWN_PORTAL}></div>
+		<div class="mobile-layout__live-data" use:createPortal={LIVE_DATA_PORTAL}></div>
 	</div>
 </Mobile>
 
@@ -394,7 +396,7 @@
 		}
 
 		&__action-menu {
-			z-index: 6;
+			z-index: 15;
 			position: absolute;
 			bottom: 1.5rem;
 			right: 1.5rem;

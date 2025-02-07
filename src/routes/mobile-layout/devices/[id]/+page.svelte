@@ -26,8 +26,8 @@
 	import SaveMenu from '../../../../components/mobile-layout/SaveMenu.svelte';
 	import { getLocationDelta } from '../../../../utils/locations';
 	import type { IconName } from '../../../../components/mobile-layout/Icon.svelte';
-	import { getCss } from '../../../../utils/css';
 	import { addEllipsis } from '../../../../utils/strings';
+	import LiveData from '../../../../components/mobile-layout/LiveData.svelte';
 
 	const { preventNavigationHistory, navigateToPreviousPage } = useNavigationHistory();
 	const { setVisibility, reset, setUsb, setJack, setBlink, setOn } = useDeviceIllustration();
@@ -41,6 +41,7 @@
 	let location = $state<LngLatLike | undefined>(undefined);
 	let name = $state<string | undefined>(undefined);
 	let notes = $state<string | undefined>(undefined);
+	let isTerminalVisible = $state(false);
 
 	const hasChanged = $derived(location || name || notes);
 	const device = $derived($devices.find((it) => it.id === $page.params.id));
@@ -199,7 +200,7 @@
 				onChange={(value) => {
 					if (device.location) {
 						const delta = getLocationDelta(value, device.location);
-						if (delta > 0.0001) {
+						if (delta > 0.0002) {
 							location = value;
 						}
 					}
@@ -233,7 +234,7 @@
 	{#if $page.data.connected}
 		<Section label="Advanced">
 			<Button icon="warning">Upgrate firmware</Button>
-			<Button icon="navigate">See live data</Button>
+			<LiveData bind:opened={isTerminalVisible} subTitle={`ID: ${device.id}`} />
 		</Section>
 	{/if}
 
@@ -252,7 +253,7 @@
 		</Button>
 	</Section>
 
-	{#if hasChanged}
+	{#if hasChanged && !isTerminalVisible}
 		<SaveMenu
 			onsave={() => {
 				updateDevice({

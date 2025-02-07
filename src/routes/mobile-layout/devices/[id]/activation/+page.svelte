@@ -29,6 +29,7 @@
 	import Table from '../../../../../components/mobile-layout/Table.svelte';
 	import ActionMenu from '../../../../../components/mobile-layout/ActionMenu.svelte';
 	import SaveMenu from '../../../../../components/mobile-layout/SaveMenu.svelte';
+	import LiveData from '../../../../../components/mobile-layout/LiveData.svelte';
 
 	const { data }: { data: PageData } = $props();
 
@@ -55,6 +56,7 @@
 
 	let map: Map | undefined = $state(undefined);
 	let selectedField: Field | undefined = $state(undefined);
+	let isLiveDataVisible = $state(false);
 
 	const stepIndex = $derived(($page.data.step || 0) as number);
 	const currentStep = $derived(steps[stepIndex]);
@@ -140,7 +142,7 @@
 {#if data.advanced && device}
 	{#snippet advancedActivationTitle()}
 		<span>Device Activation</span>
-		<Button icon="navigate" iconOrder="inverted">Live Data</Button>
+		<LiveData iconOrder="inverted" bind:opened={isLiveDataVisible} />
 	{/snippet}
 
 	<PageHeader title={advancedActivationTitle} />
@@ -212,17 +214,19 @@
 			<Dropdown label="Add media" icon="add" items={mediaOptions} renderItem={mediaOptionItem} />
 		{/if}
 
-		<SaveMenu
-			onsave={() => {
-				if (device) {
-					updateDevice({
-						...device,
-						status: 'active'
-					});
-					goto(`/mobile-layout/devices/${device?.id}?connected=true`);
-				}
-			}}
-		/>
+		{#if !isLiveDataVisible}
+			<SaveMenu
+				onsave={() => {
+					if (device) {
+						updateDevice({
+							...device,
+							status: 'active'
+						});
+						goto(`/mobile-layout/devices/${device?.id}?connected=true`);
+					}
+				}}
+			/>
+		{/if}
 	</Section>
 {:else if $page.data.selectField}
 	<Section label="Available fields">
@@ -273,9 +277,12 @@
 				]}
 			/>
 		</Section>
-		<ActionMenu>
-			<Button icon="navigate" iconSize="large" href={nextHref}></Button>
-		</ActionMenu>
+
+		{#if !isLiveDataVisible}
+			<ActionMenu>
+				<Button icon="navigate" iconSize="large" href={nextHref}></Button>
+			</ActionMenu>
+		{/if}
 	{:else if stepIndex === 1}
 		<Section>
 			<Image
@@ -292,15 +299,18 @@
 				]}
 			/>
 		</Section>
-		<ActionMenu>
-			<Button
-				icon="back"
-				iconSize="large"
-				href={previousHref}
-				iconBackgroundColor="var(--dark-grey)"
-			></Button>
-			<Button icon="navigate" iconSize="large" href={nextHref}></Button>
-		</ActionMenu>
+
+		{#if !isLiveDataVisible}
+			<ActionMenu>
+				<Button
+					icon="back"
+					iconSize="large"
+					href={previousHref}
+					iconBackgroundColor="var(--dark-grey)"
+				></Button>
+				<Button icon="navigate" iconSize="large" href={nextHref}></Button>
+			</ActionMenu>
+		{/if}
 	{:else if stepIndex === 2}
 		<Section>
 			<Map
@@ -327,16 +337,19 @@
 				}}>Validate</Button
 			>
 		</Section>
-		<ActionMenu>
-			<Button
-				icon="back"
-				iconSize="large"
-				href={previousHref}
-				iconBackgroundColor="var(--dark-grey)"
-			></Button>
-			<Button icon="navigate" iconSize="large" disabled={!device?.location} href={nextHref}
-			></Button>
-		</ActionMenu>
+
+		{#if !isLiveDataVisible}
+			<ActionMenu>
+				<Button
+					icon="back"
+					iconSize="large"
+					href={previousHref}
+					iconBackgroundColor="var(--dark-grey)"
+				></Button>
+				<Button icon="navigate" iconSize="large" disabled={!device?.location} href={nextHref}
+				></Button>
+			</ActionMenu>
+		{/if}
 	{:else if stepIndex === 3 && device}
 		<Section>
 			<TextareaInput
@@ -372,27 +385,29 @@
 			{/if}
 		</Section>
 
-		<ActionMenu>
-			<Button
-				icon="back"
-				iconSize="large"
-				href={previousHref}
-				iconBackgroundColor="var(--dark-grey)"
-			></Button>
-			<Button
-				icon="check"
-				iconSize="large"
-				iconBackgroundColor="var(--green)"
-				href={`/mobile-layout/devices/${device?.id}?connected=true`}
-				onclick={() => {
-					if (device) {
-						updateDevice({
-							...device,
-							status: 'active'
-						});
-					}
-				}}
-			></Button>
-		</ActionMenu>
+		{#if !isLiveDataVisible}
+			<ActionMenu>
+				<Button
+					icon="back"
+					iconSize="large"
+					href={previousHref}
+					iconBackgroundColor="var(--dark-grey)"
+				></Button>
+				<Button
+					icon="check"
+					iconSize="large"
+					iconBackgroundColor="var(--green)"
+					href={`/mobile-layout/devices/${device?.id}?connected=true`}
+					onclick={() => {
+						if (device) {
+							updateDevice({
+								...device,
+								status: 'active'
+							});
+						}
+					}}
+				></Button>
+			</ActionMenu>
+		{/if}
 	{/if}
 {/if}

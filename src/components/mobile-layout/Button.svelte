@@ -1,3 +1,8 @@
+<script module lang="ts">
+	export type ButtonIconOrder = 'inverted';
+	export type ButtonSize = 'small' | 'normal' | 'big';
+</script>
+
 <script lang="ts">
 	import { Button, type Builder } from 'bits-ui';
 	import type { Snippet } from 'svelte';
@@ -12,7 +17,6 @@
 		disabled = false,
 		onclick = undefined,
 		preventHistory = undefined,
-		type = 'normal',
 		builders = undefined,
 		size = 'normal',
 		selected = false,
@@ -32,16 +36,15 @@
 		disabled?: boolean;
 		onclick?: () => void;
 		preventHistory?: boolean;
-		type?: 'normal' | 'error';
 		builders?: Builder[];
-		size?: 'small' | 'normal' | 'big';
+		size?: ButtonSize;
 		selected?: boolean;
 		icon?: IconName;
 		iconColor?: string;
 		iconSize?: IconSize;
 		iconBackgroundColor?: string;
 		backgroundColor?: string;
-		iconOrder?: 'inverted';
+		iconOrder?: ButtonIconOrder;
 		padding?: boolean | string;
 		color?: string;
 		fontSize?: string;
