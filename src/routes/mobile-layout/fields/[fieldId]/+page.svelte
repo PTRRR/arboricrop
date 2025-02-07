@@ -86,19 +86,21 @@
 	{#if field}
 		{#snippet fieldHeaderTitle()}
 			<span>{field.name}</span>
-			<Button
-				padding
-				icon="navigate"
-				backgroundColor="var(--grey)"
-				iconOrder="inverted"
-				onclick={() => {
-					const randomDeviceIndex = Math.floor(Math.random() * $devices.length);
-					const device = $devices[randomDeviceIndex];
-					goto(`/mobile-layout/devices/pairing?deviceId=${device?.id}`);
-				}}
-			>
-				pair device
-			</Button>
+			{#if $devices.length > 0}
+				<Button
+					padding
+					icon="navigate"
+					backgroundColor="var(--grey)"
+					iconOrder="inverted"
+					onclick={() => {
+						const randomDeviceIndex = Math.floor(Math.random() * $devices.length);
+						const device = $devices[randomDeviceIndex];
+						goto(`/mobile-layout/devices/pairing?deviceId=${device?.id}`);
+					}}
+				>
+					pair device
+				</Button>
+			{/if}
 		{/snippet}
 		<PageHeader title={fieldHeaderTitle} subTitle={`Devices: ${$devices.length}`} />
 		<Section>

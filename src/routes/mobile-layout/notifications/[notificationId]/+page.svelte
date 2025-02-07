@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 	import Button from '../../../../components/mobile-layout/Button.svelte';
 	import Image from '../../../../components/mobile-layout/Image.svelte';
-	import { useNotifications, useReturnButton } from '../../../../stores';
+	import { useDevices, useNotifications, useReturnButton } from '../../../../stores';
 	import { formatDateToDDMMYYYY } from '../../../../utils/dates';
 	import Section from '../../../../components/mobile-layout/Section.svelte';
 	import PageHeader from '../../../../components/mobile-layout/PageHeader.svelte';
@@ -16,6 +16,8 @@
 	const returnButton = useReturnButton();
 	const notifications = useNotifications();
 	const notification = $derived($notifications.find((it) => it.id === $page.params.notificationId));
+	const { devices } = useDevices();
+	const activeDevices = $derived($devices.filter((it) => it.status === 'active'));
 
 	const infoRows: Row[] = $derived([
 		{
@@ -105,8 +107,13 @@
 	<Section label="Actionable insights">
 		<Image ratio={1} placeholder="Comprehensive schema / animation explaining how to proceed" />
 		<p style={getCss({ fontWeight: 'normal' })}>{notification?.actionableInsight}</p>
-		<Button icon="navigate" href={`/mobile-layout/devices/${notification?.deviceId}`}
-			>See device</Button
+		<Button
+			icon="navigate"
+			onclick={() => {
+				const randomDeviceIndex = Math.floor(Math.random() * activeDevices.length);
+				const device = activeDevices[randomDeviceIndex];
+				goto(`/mobile-layout/devices/${device.id}`);
+			}}>See device</Button
 		>
 	</Section>
 {/if}
