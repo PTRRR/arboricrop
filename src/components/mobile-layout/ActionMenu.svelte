@@ -1,16 +1,13 @@
-<script module lang="ts">
-	export const ACTION_MENU_PORTAL = 'action-menu';
-</script>
-
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import { portal } from '../../utils/portal';
 	import { useAppMenu } from '../../stores';
+	import { LAYOUT_PORTAL } from '../../routes/mobile-layout/+layout.svelte';
 	const { children }: { children?: Snippet } = $props();
 	const { showAppMenu } = useAppMenu();
 </script>
 
-<div class="action-menu" class:action-menu--hidden={$showAppMenu} use:portal={ACTION_MENU_PORTAL}>
+<div class="action-menu" class:action-menu--hidden={$showAppMenu} use:portal={LAYOUT_PORTAL}>
 	{@render children?.()}
 </div>
 

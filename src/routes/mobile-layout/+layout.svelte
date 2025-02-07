@@ -1,15 +1,16 @@
+<script module lang="ts">
+	export const LAYOUT_PORTAL = 'layout-portal';
+</script>
+
 <script lang="ts">
 	import { onMount, type Snippet } from 'svelte';
 	import Mobile from '../../components/Mobile.svelte';
 	import { iphone } from '../../utils/phones';
 	import { goto } from '$app/navigation';
 	import { createPortal } from '../../utils/portal';
-	import { ACTION_MENU_PORTAL } from '../../components/mobile-layout/ActionMenu.svelte';
 	import { useAppMenu, useNotifications, useReturnButton } from '../../stores';
-	import { DROPDOWN_PORTAL } from '../../components/mobile-layout/Dropdown.svelte';
 	import Button from '../../components/mobile-layout/Button.svelte';
 	import { addEllipsis } from '../../utils/strings';
-	import { LIVE_DATA_PORTAL } from '../../components/mobile-layout/LiveData.svelte';
 
 	let data: { children: Snippet } = $props();
 	let showSplashscreen = $state(true);
@@ -111,9 +112,7 @@
 			</div>
 		</div>
 
-		<div class="mobile-layout__portal" use:createPortal={ACTION_MENU_PORTAL}></div>
-		<div class="mobile-layout__portal" use:createPortal={DROPDOWN_PORTAL}></div>
-		<div class="mobile-layout__portal" use:createPortal={LIVE_DATA_PORTAL}></div>
+		<div class="mobile-layout__portal" use:createPortal={LAYOUT_PORTAL}></div>
 	</div>
 </Mobile>
 

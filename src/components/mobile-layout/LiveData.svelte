@@ -1,8 +1,5 @@
-<script module lang="ts">
-	export const LIVE_DATA_PORTAL = 'live-data-portal';
-</script>
-
 <script lang="ts">
+	import { LAYOUT_PORTAL } from '../../routes/mobile-layout/+layout.svelte';
 	import { portal } from '../../utils/portal';
 	import Spacer from '../Spacer.svelte';
 	import ActionMenu from './ActionMenu.svelte';
@@ -32,7 +29,7 @@
 	}}>Live Data</Button
 >
 
-<div class="live-data" class:live-data--opened={opened} use:portal={LIVE_DATA_PORTAL}>
+<div class="live-data" class:live-data--opened={opened} use:portal={LAYOUT_PORTAL}>
 	<div class="live-data__content">
 		<PageHeader title="Live Data" {subTitle} />
 		<Spacer />

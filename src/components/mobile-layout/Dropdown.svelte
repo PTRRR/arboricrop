@@ -1,12 +1,9 @@
-<script module lang="ts">
-	export const DROPDOWN_PORTAL = 'dropdown';
-</script>
-
 <script lang="ts">
 	import Button from './Button.svelte';
 	import type { Snippet } from 'svelte';
 	import type { IconName } from './Icon.svelte';
 	import { portal } from '../../utils/portal';
+	import { LAYOUT_PORTAL } from '../../routes/mobile-layout/+layout.svelte';
 
 	type T = $$Generic;
 
@@ -31,7 +28,7 @@
 
 <div class="dropdown">
 	<Button {icon} onclick={() => (opened = !opened)}>{label}</Button>
-	<div class="dropdown__portal" class:dropdown--opened={opened} use:portal={DROPDOWN_PORTAL}>
+	<div class="dropdown__portal" class:dropdown--opened={opened} use:portal={LAYOUT_PORTAL}>
 		<div class="dropdown__overlay"></div>
 		{#each items as item}
 			<!-- svelte-ignore a11y_click_events_have_key_events -->
