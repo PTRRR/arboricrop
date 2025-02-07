@@ -84,7 +84,23 @@
 
 <div class="field">
 	{#if field}
-		<PageHeader title={field.name} subTitle={`Devices: ${$devices.length}`} />
+		{#snippet fieldHeaderTitle()}
+			<span>{field.name}</span>
+			<Button
+				padding
+				icon="navigate"
+				backgroundColor="var(--grey)"
+				iconOrder="inverted"
+				onclick={() => {
+					const randomDeviceIndex = Math.floor(Math.random() * $devices.length);
+					const device = $devices[randomDeviceIndex];
+					goto(`/mobile-layout/devices/pairing?deviceId=${device?.id}`);
+				}}
+			>
+				pair device
+			</Button>
+		{/snippet}
+		<PageHeader title={fieldHeaderTitle} subTitle={`Devices: ${$devices.length}`} />
 		<Section>
 			<TextInput
 				label="Name"
