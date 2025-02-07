@@ -118,23 +118,27 @@
 
 {#if device}
 	{#snippet deviceName()}
-		<span>{addEllipsis(device.name || '', 8)}</span>
-		<Button
-			padding
-			icon={actionButtonIcon}
-			iconBackgroundColor={actionButtonIconBackgroundColor}
-			backgroundColor={actionButtonBackgroundColor}
-			iconOrder="inverted"
-			onclick={() => {
-				if ($page.data.connected && device.status === 'active') {
-					updateDevice({ ...device, status: 'unactive' });
-				} else {
-					goto(actionButtonLink);
-				}
-			}}
-		>
-			{actionButtonLabel}
-		</Button>
+		{#if !$page.data.connected || device.status !== 'active'}
+			<span>{addEllipsis(device.name || '', 8)}</span>
+			<Button
+				padding
+				icon={actionButtonIcon}
+				iconBackgroundColor={actionButtonIconBackgroundColor}
+				backgroundColor={actionButtonBackgroundColor}
+				iconOrder="inverted"
+				onclick={() => {
+					if ($page.data.connected && device.status === 'active') {
+						updateDevice({ ...device, status: 'unactive' });
+					} else {
+						goto(actionButtonLink);
+					}
+				}}
+			>
+				{actionButtonLabel}
+			</Button>
+		{:else}
+			<span>{device.name}</span>
+		{/if}
 	{/snippet}
 
 	{#snippet deviceStatus()}
@@ -239,18 +243,36 @@
 	{/if}
 
 	<Section label="Danger zone">
-		<Button
-			padding
-			icon="cross"
-			iconBackgroundColor="var(--red)"
-			backgroundColor="var(--light-red)"
-			onclick={() => {
-				$preventNavigationHistory = true;
-				devices.set([...$devices.filter((it) => it.id !== device.id)]);
-				navigateToPreviousPage();
-			}}
-			>Delete Permanently
-		</Button>
+		{#if $page.data.connected && device.status === 'active'}
+			<Button
+				padding
+				icon={actionButtonIcon}
+				iconBackgroundColor={actionButtonIconBackgroundColor}
+				backgroundColor={actionButtonBackgroundColor}
+				onclick={() => {
+					if ($page.data.connected && device.status === 'active') {
+						updateDevice({ ...device, status: 'unactive' });
+					} else {
+						goto(actionButtonLink);
+					}
+				}}
+			>
+				{actionButtonLabel}
+			</Button>
+		{:else}
+			<Button
+				padding
+				icon="cross"
+				iconBackgroundColor="var(--red)"
+				backgroundColor="var(--light-red)"
+				onclick={() => {
+					$preventNavigationHistory = true;
+					devices.set([...$devices.filter((it) => it.id !== device.id)]);
+					navigateToPreviousPage();
+				}}
+				>Delete Permanently
+			</Button>
+		{/if}
 	</Section>
 
 	{#if hasChanged && !isTerminalVisible}
