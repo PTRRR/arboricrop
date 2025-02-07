@@ -1,42 +1,57 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
-	const props: {
+	let {
+		name,
+		label,
+		defaultValue,
+		value = $bindable(undefined),
+		placeholder,
+		autoFocus,
+		readonly,
+		onvalue,
+		type
+	}: {
 		name?: string;
 		label?: string;
 		defaultValue?: string;
+		value?: string;
 		placeholder?: string;
 		autoFocus?: boolean;
 		readonly?: boolean;
 		onvalue?: (value: string) => void;
+		type?: 'text' | 'password';
 	} = $props();
 
-	let value = $state(props.defaultValue || '');
 	let input: HTMLInputElement | null = $state(null);
 
+	if (defaultValue) {
+		value = defaultValue;
+	}
+
 	onMount(() => {
-		if (props.autoFocus) {
+		if (autoFocus) {
 			input?.focus();
 		}
 
-		if (props.onvalue && props.defaultValue) {
-			props.onvalue(props.defaultValue);
+		if (onvalue && defaultValue) {
+			onvalue(defaultValue);
 		}
 	});
 </script>
 
 <div class="text-input">
-	{#if props.label}
-		<label for={props.name}>{props.label}</label>
+	{#if label}
+		<label for={name}>{label}</label>
 	{/if}
 	<input
 		bind:value
 		bind:this={input}
-		oninput={() => props.onvalue?.(value)}
-		name={props.name}
-		placeholder={props.placeholder}
-		type="text"
-		class:text-input--readonly={props.readonly}
+		oninput={() => onvalue?.(value || '')}
+		{name}
+		{placeholder}
+		{type}
+		class:text-input--readonly={readonly}
 	/>
 </div>
 

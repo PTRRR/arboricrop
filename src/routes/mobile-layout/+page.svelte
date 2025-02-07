@@ -3,17 +3,33 @@
 	import Card from '../../components/mobile-layout/Card.svelte';
 	import Section from '../../components/mobile-layout/Section.svelte';
 	import TextInput from '../../components/mobile-layout/TextInput.svelte';
-	import { useDevices, useFields, useNotifications, useReturnButton } from '../../stores';
+	import {
+		useDevices,
+		useFields,
+		useNotifications,
+		useOrganisation,
+		useOrganisations,
+		useReturnButton,
+		useUser
+	} from '../../stores';
 	import PageHeader from '../../components/mobile-layout/PageHeader.svelte';
 	import { shuffle } from '../../utils/arrays';
 	import NotificationCard from '../../components/mobile-layout/NotificationCard.svelte';
 	import SaveMenu from '../../components/mobile-layout/SaveMenu.svelte';
 	import { goto } from '$app/navigation';
+	import ActionMenu from '../../components/mobile-layout/ActionMenu.svelte';
+	import Table from '../../components/mobile-layout/Table.svelte';
 
 	const { devices } = useDevices();
 	const { fields } = useFields();
 	const notifications = useNotifications();
-	let newFieldName = $state<string | number>('');
+	const { email } = useUser();
+	const { organisations } = useOrganisations();
+	const organisation = useOrganisation();
+
+	let newEmail = $state('');
+	let newFieldName = $state<string>('');
+	let newSelectedOrganisation = $state($organisation);
 
 	const returnButton = useReturnButton();
 	returnButton.set({
@@ -27,16 +43,56 @@
 	const getFieldDeviceCount = (fieldId: string) => {
 		return $devices.filter((it) => it.fieldId === fieldId).length;
 	};
+
+	const stage = $derived(
+		!$email
+			? 'login'
+			: $organisations.length > 0 && typeof $organisation === 'undefined'
+				? 'select-organisation'
+				: $fields.length === 0
+					? 'new-field'
+					: 'final'
+	);
 </script>
 
-{#if $fields.length === 0}
+{#if stage === 'login'}
+	<PageHeader title="Login" />
+	<Section>
+		<TextInput label="Email" bind:value={newEmail} />
+		<TextInput label="Password" type="password" />
+		<Button icon="navigate">Sign Up</Button>
+		<SaveMenu hidden={!newEmail} onsave={() => ($email = newEmail)} />
+	</Section>
+{:else if stage === 'select-organisation'}
+	<PageHeader title="Select Organisation" />
+	<Section>
+		<Table
+			headers={[{ label: 'Name' }]}
+			rows={[
+				{
+					onclick: () => (newSelectedOrganisation = null),
+					cells: [{ label: 'None' }]
+				},
+				...$organisations.map((it) => ({
+					onclick: () => (newSelectedOrganisation = it),
+					selected: newSelectedOrganisation === it,
+					cells: [{ label: it }]
+				}))
+			]}
+		/>
+		<SaveMenu
+			hidden={typeof newSelectedOrganisation === 'undefined'}
+			onsave={() => ($organisation = newSelectedOrganisation)}
+		/>
+	</Section>
+{:else if stage === 'new-field'}
 	<PageHeader title="Create field" description="You don't have any field yet" />
 	<Section>
-		<TextInput label="Name" onvalue={(name) => (newFieldName = name)} />
-
-		{#if newFieldName}
-			<SaveMenu onsave={() => goto(`/mobile-layout/fields/new/?name=${newFieldName}`)} />
-		{/if}
+		<TextInput label="Name" bind:value={newFieldName} />
+		<SaveMenu
+			hidden={!newFieldName}
+			onsave={() => goto(`/mobile-layout/fields/new/?name=${newFieldName}`)}
+		/>
 	</Section>
 {:else}
 	{#snippet notificationsTitle()}

@@ -166,7 +166,7 @@ export const useOrganisations = () => {
 	};
 };
 export const useOrganisation = () =>
-	useWritable<string | undefined>('organisation', undefined, true);
+	useWritable<string | undefined | null>('organisation', undefined, true);
 export const useIsOrganisation = () => useWritable('is-organisation', false, true);
 export const useOrganisationName = () => useWritable('organisation-name', '', true);
 export const useInvitedUsers = () => useWritable<string[]>('invited-users', [], true);
@@ -379,5 +379,15 @@ export const useApp = () => {
 	return {
 		showAppMenu,
 		hideContent
+	};
+};
+
+export const useUser = () => {
+	const email = useWritable<string>('user-email', '', true);
+	const name = useWritable<string>('user-name', '', true);
+
+	return {
+		email,
+		name
 	};
 };
