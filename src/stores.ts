@@ -371,3 +371,11 @@ export const useNavigationHistory = () => {
 		navigateToPreviousPage
 	};
 };
+
+export const useAppMenu = () => {
+	const showAppMenu = useWritable<boolean>('show-app-menu', false, false);
+
+	return {
+		showAppMenu
+	};
+};

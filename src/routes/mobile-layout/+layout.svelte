@@ -5,7 +5,7 @@
 	import { goto } from '$app/navigation';
 	import { createPortal } from '../../utils/portal';
 	import { ACTION_MENU_PORTAL } from '../../components/mobile-layout/ActionMenu.svelte';
-	import { useNotifications, useReturnButton } from '../../stores';
+	import { useAppMenu, useNotifications, useReturnButton } from '../../stores';
 	import { DROPDOWN_PORTAL } from '../../components/mobile-layout/Dropdown.svelte';
 	import Button from '../../components/mobile-layout/Button.svelte';
 	import { addEllipsis } from '../../utils/strings';
@@ -14,11 +14,11 @@
 	let data: { children: Snippet } = $props();
 	let showSplashscreen = $state(true);
 	let showBreadcrumb = $state(false);
-	let hideContent = $state(false);
 	let menuMode = $state<'default' | 'scrolled'>('default');
 	const notifications = useNotifications();
 	const pendingNotifications = $derived($notifications.filter((it) => it.status === 'pending'));
 	const returnButton = useReturnButton();
+	const { showAppMenu } = useAppMenu();
 
 	const breadcrumbIcon = $derived(
 		!showBreadcrumb ? undefined : $returnButton?.backHref ? 'back' : undefined
@@ -53,7 +53,7 @@
 	<div
 		class="mobile-layout"
 		class:mobile-layout--init={showSplashscreen}
-		class:mobile-layout--hide-content={hideContent}
+		class:mobile-layout--show-app-menu={$showAppMenu}
 		class:mobile-layout--scrolled={menuMode === 'scrolled'}
 	>
 		<div class="mobile-layout__breadcrumb">
@@ -71,7 +71,7 @@
 				</div>
 			</Button>
 		</div>
-		<!-- <a class="mobile-layout__breadcrumb" href="/mobile-layout">vita/hub</a> -->
+
 		<img class="mobile-layout__logo" src="/images/logo.svg" alt="" />
 
 		{#if pendingNotifications.length > 0}
@@ -89,7 +89,7 @@
 
 		<!-- svelte-ignore a11y_click_events_have_key_events -->
 		<!-- svelte-ignore a11y_no_static_element_interactions -->
-		<div class="mobile-layout__hamburger" onclick={() => (hideContent = !hideContent)}>
+		<div class="mobile-layout__hamburger" onclick={() => ($showAppMenu = !$showAppMenu)}>
 			<div class="mobile-layout__hamburger-inner">
 				<div class="mobile-layout__hamburger-line"></div>
 				<div class="mobile-layout__hamburger-line"></div>
@@ -98,10 +98,11 @@
 		</div>
 
 		<div class="mobile-layout__links">
-			<a href="/mobile-layout" onclick={() => (hideContent = false)}>Fields</a>
-			<a href="/mobile-layout/notifications" onclick={() => (hideContent = false)}>Notifications</a>
-			<a href="/mobile-layout/settings" onclick={() => (hideContent = false)}>Settings</a>
-			<a href="/mobile-layout/account" onclick={() => (hideContent = false)}>Account</a>
+			<a href="/mobile-layout" onclick={() => ($showAppMenu = false)}>Fields</a>
+			<a href="/mobile-layout/notifications" onclick={() => ($showAppMenu = false)}>Notifications</a
+			>
+			<a href="/mobile-layout/settings" onclick={() => ($showAppMenu = false)}>Settings</a>
+			<a href="/mobile-layout/account" onclick={() => ($showAppMenu = false)}>Account</a>
 		</div>
 
 		<div class="mobile-layout__wrapper">
@@ -110,9 +111,9 @@
 			</div>
 		</div>
 
-		<div class="mobile-layout__action-menu" use:createPortal={ACTION_MENU_PORTAL}></div>
-		<div class="mobile-layout__dropdown" use:createPortal={DROPDOWN_PORTAL}></div>
-		<div class="mobile-layout__live-data" use:createPortal={LIVE_DATA_PORTAL}></div>
+		<div class="mobile-layout__portal" use:createPortal={ACTION_MENU_PORTAL}></div>
+		<div class="mobile-layout__portal" use:createPortal={DROPDOWN_PORTAL}></div>
+		<div class="mobile-layout__portal" use:createPortal={LIVE_DATA_PORTAL}></div>
 	</div>
 </Mobile>
 
@@ -247,7 +248,7 @@
 			}
 		}
 
-		&--hide-content {
+		&--show-app-menu {
 			#{$this}__wrapper {
 				pointer-events: none;
 			}
@@ -395,20 +396,8 @@
 			transform: translate(-50%, 0);
 		}
 
-		&__action-menu {
-			z-index: 15;
-			position: absolute;
-			bottom: 1.5rem;
-			right: 1.5rem;
-			transition:
-				opacity 0.3s ease-in-out,
-				transform 0.7s cubic-bezier(0.83, 0, 0.17, 1);
-			transform: translate(0, 0);
-
-			#{$this}--hide-content & {
-				opacity: 0;
-				pointer-events: none;
-			}
+		&__portal {
+			display: contents;
 		}
 	}
 </style>
