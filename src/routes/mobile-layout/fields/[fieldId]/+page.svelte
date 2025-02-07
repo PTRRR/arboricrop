@@ -154,8 +154,8 @@
 
 		{#snippet addLayer()}
 			<SubPage icon="add">
-				<PageHeader title="Field Layers" />
-				<Section hidden={!addLayer} actions={[{ label: 'Import', onclick: () => {} }]}>
+				<PageHeader title="Available Layers" />
+				<Section>
 					<Table headers={layersHeaders} rows={availableLayersRows} />
 				</Section>
 			</SubPage>

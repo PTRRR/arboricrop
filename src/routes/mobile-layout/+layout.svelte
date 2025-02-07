@@ -7,7 +7,7 @@
 	import { onMount, type Snippet } from 'svelte';
 	import Mobile from '../../components/Mobile.svelte';
 	import { iphone } from '../../utils/phones';
-	import { goto } from '$app/navigation';
+	import { goto, onNavigate } from '$app/navigation';
 	import { createPortal } from '../../utils/portal';
 	import { useApp, useNotifications, useReturnButton } from '../../stores';
 	import Button from '../../components/mobile-layout/Button.svelte';
@@ -22,6 +22,10 @@
 	const pendingNotifications = $derived($notifications.filter((it) => it.status === 'pending'));
 	const returnButton = useReturnButton();
 	const { showAppMenu, hideContent } = useApp();
+
+	onNavigate(() => {
+		$hideContent = false;
+	});
 
 	const breadcrumbIcon = $derived(
 		!showBreadcrumb ? undefined : $returnButton?.backHref ? 'back' : undefined
