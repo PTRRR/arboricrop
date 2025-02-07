@@ -1,8 +1,7 @@
-<script lang="ts">
-	import { getCss } from '../../utils/css';
-
+<script module lang="ts">
 	export interface Cell {
-		label: string;
+		label?: string;
+		renderHandler?: Snippet<[cell: Cell]>;
 		width?: string;
 		multiline?: boolean;
 	}
@@ -13,6 +12,11 @@
 		selected?: boolean;
 		cells: Cell[];
 	}
+</script>
+
+<script lang="ts">
+	import type { Snippet } from 'svelte';
+	import { getCss } from '../../utils/css';
 
 	const {
 		headers,
@@ -38,7 +42,11 @@
 				flex: cell.multiline ? 'initial' : undefined
 			})}
 		>
-			<span>{cell.label}</span>
+			{#if cell.renderHandler}
+				{@render cell.renderHandler(cell)}
+			{:else}
+				<span>{cell.label}</span>
+			{/if}
 		</div>
 	{/each}
 {/snippet}

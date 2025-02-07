@@ -15,6 +15,7 @@
 	import SaveMenu from '../../../../components/mobile-layout/SaveMenu.svelte';
 	import SubPage from '../../../../components/mobile-layout/SubPage.svelte';
 	import type { GeoJSONFeature } from '../../../../utils/types';
+	import StatusDot from '../../../../components/mobile-layout/StatusDot.svelte';
 
 	const fieldId = $page.params.fieldId;
 	const { devices } = useDevices();
@@ -43,17 +44,6 @@
 		{ label: 'Status', width: '30%' },
 		{ label: 'Battery', width: '20%' }
 	];
-
-	const devicesRows: Row[] = $derived(
-		fieldDevices.map((it) => ({
-			href: `/mobile-layout/devices/${it.id}`,
-			cells: [
-				{ label: it.name || it.id },
-				{ label: it.status || '' },
-				{ label: `${it.battery || '0'}%` }
-			]
-		}))
-	);
 
 	const layersHeaders: Cell[] = [
 		{ label: 'Layer name', width: '80%' },
@@ -115,6 +105,16 @@
 				}}
 			/>
 		</Section>
+
+		{#snippet statusCell(cell: Cell)}
+			<div class="field__status-cell">
+				<div class="field__status-dot">
+					<StatusDot status={cell.label === 'active' ? 'success' : 'neutral'} />
+				</div>
+				<span>{cell.label}</span>
+			</div>
+		{/snippet}
+
 		<Section
 			label="Devices"
 			actions={fieldDevices.length > 0
@@ -131,7 +131,17 @@
 					Add device
 				</Button>
 			{:else}
-				<Table headers={devicesHeaders} rows={devicesRows} />
+				<Table
+					headers={devicesHeaders}
+					rows={fieldDevices.map((it) => ({
+						href: `/mobile-layout/devices/${it.id}`,
+						cells: [
+							{ label: it.name || it.id },
+							{ label: it.status || '', renderHandler: statusCell },
+							{ label: `${it.battery || '0'}%` }
+						]
+					}))}
+				/>
 			{/if}
 		</Section>
 		<Section label="Location">
@@ -213,3 +223,18 @@
 		{/if}
 	{/if}
 </div>
+
+<style lang="scss">
+	.field {
+		&__status-cell {
+			display: flex;
+			align-items: center;
+			gap: 0.3rem;
+		}
+
+		&__status-dot {
+			display: block;
+			transform: translate(0, 10%);
+		}
+	}
+</style>

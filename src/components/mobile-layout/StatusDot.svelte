@@ -1,5 +1,5 @@
 <script lang="ts">
-	export type Status = 'error' | 'warning' | 'normal' | 'success';
+	export type Status = 'error' | 'warning' | 'normal' | 'success' | 'neutral';
 	const { status = 'normal' }: { status: Status } = $props();
 </script>
 
@@ -9,6 +9,7 @@
 	class:status-dot--error={status === 'error'}
 	class:status-dot--warning={status === 'warning'}
 	class:status-dot--success={status === 'success'}
+	class:status-dot--neutral={status === 'neutral'}
 ></div>
 
 <style lang="scss">
@@ -32,6 +33,10 @@
 
 		&--warning {
 			background-color: var(--yellow);
+		}
+
+		&--neutral {
+			background-color: var(--grey);
 		}
 	}
 </style>
