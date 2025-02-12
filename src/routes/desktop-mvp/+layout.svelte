@@ -4,6 +4,9 @@
 	import TextInput from '../../components/layout/TextInput.svelte';
 	import Button from '../../components/layout/Button.svelte';
 	import { useUser } from '../../stores';
+	import Stack from '../../components/desktop/Stack.svelte';
+	import StepSeparation from '../../components/layout/StepSeparation.svelte';
+	import Spacer from '../../components/Spacer.svelte';
 
 	interface Props {
 		children: Snippet;
@@ -17,17 +20,14 @@
 
 <div class="desktop-mvp">
 	<div class="desktop-mvp__inner">
-		<Section sticky="0.5rem" zIndex="10" padding="0.5rem 2rem" backgroundColor="var(--green)">
+		<Section
+			sticky="calc(1rem - var(--section-padding))"
+			zIndex="10"
+			padding="0.5rem 1rem"
+			backgroundColor="var(--green)"
+		>
 			<div class="desktop-mvp__main-menu">
 				<a class="desktop-mvp__home-button" href="/desktop-mvp">vita/dashboard</a>
-
-				{#if $email}
-					<div class="desktop-mvp__sub-menu">
-						<a href="/desktop-mvp/devices">Devices</a>
-						<a href="/desktop-mvp/fields">Fields</a>
-						<a href="/desktop-mvp/settings">Settings</a>
-					</div>
-				{/if}
 			</div>
 		</Section>
 
@@ -40,11 +40,32 @@
 				</div>
 			</Section>
 		{:else}
-			{@render children()}
+			<Stack direction="horizontal">
+				<Section
+					width="15rem"
+					height="var(--content-min-height)"
+					sticky="var(--content-offset-top)"
+					backgroundColor="var(--light-grey)"
+					innerStyle={{ justifyContent: 'space-between' }}
+				>
+					<Stack gap="0.5rem">
+						<StepSeparation label="Entities" />
+						<Button href="/desktop-mvp/devices">Devices</Button>
+						<Button href="/desktop-mvp/fields">Projects</Button>
+						<Button href="/desktop-mvp/settings">Trials</Button>
+						<Spacer />
+						<StepSeparation label="Account" />
+						<Button>Settings</Button>
+						<Button>Account</Button>
+					</Stack>
+
+					<a href="https://vivent-biosignals.com/">
+						<img class="desktop-mvp__logo" src="/images/logo-black.svg" alt="" />
+					</a>
+				</Section>
+				{@render children()}
+			</Stack>
 		{/if}
-		<Section>
-			<img class="desktop-mvp__logo" src="/images/logo-black.svg" alt="" />
-		</Section>
 	</div>
 </div>
 
@@ -52,7 +73,13 @@
 	:global(html, body) {
 		font-family: Rubik;
 		font-weight: 500;
-		/* background-color: var(--light-grey); */
+		background-color: var(--white);
+	}
+
+	:root {
+		--section-padding: 0.3rem;
+		--content-offset-top: calc(2rem + var(--section-padding) + var(--big-font-size));
+		--content-min-height: calc(100vh - 3rem - var(--big-font-size));
 	}
 
 	* {
@@ -68,13 +95,13 @@
 		align-items: center;
 
 		&__inner {
-			width: calc(100% + 1rem);
-			max-width: 100rem;
+			width: calc(100% + 2 * var(--section-padding));
+			/* max-width: 100rem; */
 			height: 100%;
 			flex: 1 1 auto;
 			display: flex;
 			flex-direction: column;
-			margin: -0.5rem;
+			margin: calc(var(--section-padding) * -1);
 		}
 
 		&__main-menu {
@@ -82,10 +109,6 @@
 			justify-content: space-between;
 			align-items: center;
 			width: 100%;
-
-			a {
-				color: var(--white);
-			}
 		}
 
 		&__login-form {
@@ -96,29 +119,18 @@
 			padding: 2rem;
 		}
 
-		&__sub-menu {
-			display: flex;
-			gap: 1rem;
-
-			a {
-				text-decoration: none;
-				font-size: var(--mid-font-size);
-
-				&:hover {
-					color: var(--grey);
-				}
-			}
-		}
-
 		&__home-button {
-			color: var(--green);
+			display: block;
+			color: var(--white);
 			text-decoration: none;
 			font-size: var(--big-font-size);
+			height: var(--big-font-size);
+			line-height: 1;
 		}
 
 		&__logo {
-			height: 4rem;
-			width: 7rem;
+			height: 3rem;
+			width: 5rem;
 		}
 	}
 </style>

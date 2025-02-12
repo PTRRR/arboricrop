@@ -13,34 +13,52 @@
 		backgroundColor?: string;
 		fill?: boolean;
 		width?: string;
+		height?: string;
+		innerStyle?: Partial<CSSStyleDeclaration>;
 	}
 
 	const {
 		children,
 		label,
 		alignItems,
-		padding,
+		padding = '1rem',
 		sticky,
 		zIndex,
 		backgroundColor,
 		fill,
-		width
+		width,
+		height,
+		innerStyle
 	}: Props = $props();
+
+	const computedStyle = $derived(
+		getCss({
+			position: Boolean(sticky) ? 'sticky' : undefined,
+			alignSelf: Boolean(sticky) ? 'flex-start' : undefined,
+			top: sticky,
+			zIndex,
+			width,
+			height,
+			flex: width ? '0 0 auto' : undefined
+		})
+	);
+
+	const computedInnerStyle = $derived(
+		getCss({
+			...innerStyle,
+			padding,
+			backgroundColor
+		})
+	);
 </script>
 
 <div
 	class="section"
 	class:section--align-end={alignItems === 'flex-end'}
 	class:section--fill={fill}
-	style={getCss({
-		position: Boolean(sticky) ? 'sticky' : undefined,
-		alignSelf: Boolean(sticky) ? 'flex-start' : undefined,
-		top: sticky,
-		zIndex,
-		width
-	})}
+	style={computedStyle}
 >
-	<div class="section__inner" style={getCss({ padding, backgroundColor })}>
+	<div class="section__inner" style={computedInnerStyle}>
 		{#if label}
 			<StepSeparation {label} />
 		{/if}
@@ -51,10 +69,12 @@
 <style lang="scss">
 	.section {
 		$this: &;
-		padding: 0.5rem;
+		padding: var(--section-padding);
 		position: relative;
 		width: 100%;
 		box-sizing: border-box;
+		display: flex;
+		flex-direction: column;
 
 		&--fill {
 			flex: 1 1 auto;
@@ -64,14 +84,14 @@
 			overflow: hidden;
 			position: relative;
 			background-color: var(--white);
-			border-radius: 0.5rem;
+			border-radius: 0.8rem;
 			padding: 0.5rem;
 			display: flex;
 			flex-direction: column;
 			gap: 1.5rem;
-			/* border: solid 1px var(--grey); */
+			/* border: solid 1px var(--light-grey); */
 			box-sizing: border-box;
-			background-color: var(--light-grey);
+			height: 100%;
 
 			#{$this}--align-end & {
 				align-items: flex-end;

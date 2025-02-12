@@ -73,7 +73,7 @@
 	</div>
 {/snippet}
 
-<Stack direction="horizontal">
+<Stack direction="horizontal" style={{ width: '100%' }}>
 	<Section label="Available Devices" padding="1rem" fill>
 		<div>
 			<TextInput label="Filter" />
@@ -95,10 +95,11 @@
 
 	{#if selectedDevices.size > 0}
 		<Section
-			sticky="5.5rem"
-			width="50%"
+			sticky="var(--content-offset-top)"
+			width="30%"
 			padding="1rem"
 			label={`${selectedDevices.size} Selected Devices`}
+			backgroundColor="var(--light-grey)"
 		>
 			<div>
 				<TextInput label="Search Account" />

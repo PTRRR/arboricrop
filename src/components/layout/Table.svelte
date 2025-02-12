@@ -125,12 +125,16 @@
 			cursor: pointer;
 
 			&:hover {
-				background-color: var(--grey);
+				background-color: var(--light-grey);
 			}
 		}
 
 		&--selected {
 			background-color: var(--grey);
+
+			&:hover {
+				background-color: var(--grey);
+			}
 
 			& + #{$this}__row {
 				&::before {

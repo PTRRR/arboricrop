@@ -78,8 +78,8 @@
 		--yellow: #fecc00;
 		--blue: #009fe3;
 		--black: #000000;
-		--light-grey: #f8f8f8;
-		--grey: #dadada;
+		--light-grey: #f7f7f7;
+		--grey: #c0c0c0;
 		--dark-grey: #878787;
 		--white: white;
 	}
