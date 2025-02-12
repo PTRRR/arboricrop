@@ -7,7 +7,7 @@
 	import Button from '../../../components/layout/Button.svelte';
 	import Spacer from '../../../components/Spacer.svelte';
 	import Checkbox from '../../../components/mobile-layout/Checkbox.svelte';
-	import type { Device } from '../../../utils/types';
+	import type { Account, Device } from '../../../utils/types';
 	import Stack from '../../../components/desktop/Stack.svelte';
 	import { useAccounts, useDevices } from '../../../stores';
 
@@ -17,6 +17,7 @@
 	const devicesRows = $derived<Row[]>(
 		$devices
 			.filter((it) => !it.accountId)
+			.slice(0, 30)
 			.map((device) => ({
 				selected: selectedDevices.has(device),
 				onclick: () => {
@@ -37,15 +38,15 @@
 	);
 
 	const { accounts } = useAccounts();
-	let selectedEmail: string | undefined = $state(undefined);
+	let selectedAccount: Account | undefined = $state(undefined);
 	const accountsRows = $derived<Row[]>(
 		$accounts.slice(0, 10).map((account) => ({
-			selected: selectedEmail === account.email,
+			selected: selectedAccount?.id === account.id,
 			onclick: () => {
-				if (selectedEmail === account.email) {
-					selectedEmail = undefined;
+				if (selectedAccount?.id === account.id) {
+					selectedAccount = undefined;
 				} else {
-					selectedEmail = account.email;
+					selectedAccount = account;
 				}
 			},
 			cells: [{ label: '' }, { label: account.organizationName }, { label: account.email }]
@@ -115,20 +116,18 @@
 			<Pagination pages={4} />
 			<Button
 				icon="check"
-				backgroundColor={selectedEmail ? 'var(--light-green)' : 'var(--grey)'}
+				backgroundColor={selectedAccount ? 'var(--light-green)' : 'var(--grey)'}
 				iconBackgroundColor="var(--green)"
 				padding
-				disabled={!selectedEmail}
+				disabled={!selectedAccount}
 				onclick={() => {
-					const account = $accounts.find((it) => it.email === selectedEmail);
-
-					if (account) {
+					if (selectedAccount) {
 						updateDevices(
-							Array.from(selectedDevices).map((it) => ({ ...it, accountId: account.id }))
+							Array.from(selectedDevices).map((it) => ({ ...it, accountId: selectedAccount?.id }))
 						);
 
 						selectedDevices = new Set();
-						selectedEmail = undefined;
+						selectedAccount = undefined;
 					}
 				}}
 			>
