@@ -10,6 +10,7 @@
 	import type { Account, Device } from '../../../utils/types';
 	import Stack from '../../../components/desktop/Stack.svelte';
 	import { useAccounts, useDevices } from '../../../stores';
+	import PageHeader from '../../../components/mobile-layout/PageHeader.svelte';
 
 	const { devices, updateDevices } = useDevices();
 	let selectedDevices = $state(new Set<Device>());
@@ -74,23 +75,26 @@
 {/snippet}
 
 <Stack direction="horizontal" style={{ width: '100%' }}>
-	<Section label="Available Devices" padding="1rem" fill>
-		<Stack gap="0.5rem">
-			<TextInput label="Search" />
-			<Button icon="navigate">Submit</Button>
-		</Stack>
-		<Table
-			style={getCss({ width: '100%' })}
-			headers={[
-				{ label: '', width: '5%' },
-				{ label: 'ID', width: '25%' },
-				{ label: 'Firmware Version', width: '20%' },
-				{ label: 'Creation Date' }
-			]}
-			rows={rowsWithRenderHandler(devicesRows, selectCell)}
-		/>
-		<Pagination pages={10} />
-	</Section>
+	<Stack style={{ width: '100%', padding: '1rem' }}>
+		<PageHeader title="Earmark Devices" subTitle={`${devicesRows.length} Available Devices`} />
+		<Section padding="0" fill>
+			<!-- <Stack gap="0.5rem">
+				<TextInput label="Search" />
+				<Button icon="navigate">Submit</Button>
+			</Stack> -->
+			<Table
+				style={getCss({ width: '100%' })}
+				headers={[
+					{ label: '', width: '5%' },
+					{ label: 'ID', width: '25%' },
+					{ label: 'Firmware Version', width: '20%' },
+					{ label: 'Creation Date' }
+				]}
+				rows={rowsWithRenderHandler(devicesRows, selectCell)}
+			/>
+			<Pagination pages={10} />
+		</Section>
+	</Stack>
 
 	{#if selectedDevices.size > 0}
 		<Section

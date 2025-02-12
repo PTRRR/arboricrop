@@ -11,6 +11,7 @@
 	import { changinCenter, swissBounds } from '../../../utils/dummyData';
 	import { getLocationDelta } from '../../../utils/locations';
 	import TrialCard from '../../../components/desktop/TrialCard.svelte';
+	import PageHeader from '../../../components/mobile-layout/PageHeader.svelte';
 
 	const { trials, addTrial } = useTrials();
 	const { currentAccount } = useCurrentAccount();
@@ -34,36 +35,39 @@
 	});
 </script>
 
-<Stack direction="horizontal" style={{ width: '100%' }}>
-	<Section
-		label="Trials"
-		actions={accountTrials.length > 0
-			? [
-					{
-						label: 'Create',
-						icon: 'add',
-						iconOrder: 'inverted',
-						onclick: createTrial
-					}
-				]
-			: []}
-		fill
-	>
-		{#if accountTrials.length === 0}
-			<Button icon="add" onclick={createTrial}>Create Trial</Button>
-		{:else}
-			<Stack gap="0.5rem">
-				<TextInput label="Search" />
-				<Button icon="navigate">Submit</Button>
-			</Stack>
+<Stack direction="horizontal" style={{ width: '100%', padding: '1rem' }}>
+	<Stack style={{ width: '100%' }}>
+		<PageHeader title="Trials" subTitle={`${accountTrials.length} Active Trials`} />
+		<Section
+			padding="0"
+			actions={accountTrials.length > 0
+				? [
+						{
+							label: 'Create',
+							icon: 'add',
+							iconOrder: 'inverted',
+							onclick: createTrial
+						}
+					]
+				: []}
+			fill
+		>
+			{#if accountTrials.length === 0}
+				<Button icon="add" onclick={createTrial}>Create Trial</Button>
+			{:else}
+				<Stack gap="0.5rem">
+					<TextInput label="Search" />
+					<Button icon="navigate">Submit</Button>
+				</Stack>
 
-			<div class="trials__grid">
-				{#each accountTrials as trial}
-					<TrialCard {trial} />
-				{/each}
-			</div>
-		{/if}
-	</Section>
+				<div class="trials__grid">
+					{#each accountTrials as trial}
+						<TrialCard {trial} />
+					{/each}
+				</div>
+			{/if}
+		</Section>
+	</Stack>
 
 	{#if newTrial}
 		<Section label="New Trial" backgroundColor="var(--light-grey)" width="35%">
