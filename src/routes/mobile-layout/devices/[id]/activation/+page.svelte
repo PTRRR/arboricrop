@@ -6,7 +6,7 @@
 	import Button from '../../../../../components/layout/Button.svelte';
 	import Checklist from '../../../../../components/mobile-layout/Checklist.svelte';
 	import Dropdown from '../../../../../components/mobile-layout/Dropdown.svelte';
-	import Map from '../../../../../components/mobile-layout/Map.svelte';
+	import Map from '../../../../../components/layout/Map.svelte';
 	import ButtonList from '../../../../../components/wireframe/ButtonList.svelte';
 	import Image from '../../../../../components/mobile-layout/Image.svelte';
 	import SaveSection from '../../../../../components/wireframe/SaveSection.svelte';

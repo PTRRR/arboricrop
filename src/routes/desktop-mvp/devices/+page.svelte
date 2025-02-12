@@ -74,7 +74,7 @@
 			headers={[
 				{ label: 'ID', width: '25%' },
 				{ label: 'name', width: '15%' },
-				{ label: 'status', width: '10%' },
+				{ label: 'status', width: '15%' },
 				{ label: 'battery', width: '10%' }
 			]}
 			rows={getRowsWithRenderHandler(rows, statusCell)}

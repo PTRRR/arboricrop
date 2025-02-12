@@ -30,6 +30,7 @@ export type Device = {
 	firmwareVersion?: string;
 	medias: Media[];
 	fieldId?: string;
+	parentId?: string;
 	battery?: number;
 	status: Status;
 	location?: LngLatLike;
@@ -44,13 +45,25 @@ export type Account = {
 };
 
 export type Field = {
+	id: string;
 	area: string;
 	center: LngLatLike;
-	id: string;
 	layers: GeoJSONFeature[];
 	loraConfigId: string;
 	name: string;
 	type: string;
+};
+
+export type Project = {
+	id: string;
+	name: string;
+	accountId: string;
+	description?: string;
+};
+
+export type Trial = Field & {
+	accountId: string;
+	parentId?: string;
 };
 
 export type NotificationType = 'notification' | 'warning' | 'alert';

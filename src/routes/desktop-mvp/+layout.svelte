@@ -70,7 +70,7 @@
 						<Spacer />
 						<StepSeparation label="Entities" />
 						<Button href="/desktop-mvp/fields">Projects</Button>
-						<Button href="/desktop-mvp/settings">Trials</Button>
+						<Button href="/desktop-mvp/trials">Trials</Button>
 						<Button href="/desktop-mvp/devices">Devices</Button>
 						<Spacer />
 						<StepSeparation label="Account" />

@@ -17,7 +17,9 @@ import type {
 	GeoJSONFeature,
 	LoRaConfiguration,
 	Metric,
-	PartialBy
+	PartialBy,
+	Project,
+	Trial
 } from './utils/types';
 import { filterByUniqueAttribute, filterDuplicate } from './utils/arrays';
 import { createId } from '@paralleldrive/cuid2';
@@ -430,5 +432,23 @@ export const useCurrentAccount = () => {
 
 	return {
 		currentAccount
+	};
+};
+
+export const useTrials = () => {
+	const trials = useWritable<Trial[]>('trials', [], true);
+	const addTrial = (trial: Trial) => trials.update((trials) => [...trials, trial]);
+
+	return {
+		trials,
+		addTrial
+	};
+};
+
+export const useProjects = () => {
+	const projects = useWritable<Project[]>('projects', [], true);
+
+	return {
+		projects
 	};
 };

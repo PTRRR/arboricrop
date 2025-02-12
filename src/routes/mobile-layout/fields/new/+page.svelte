@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Section from '../../../../components/mobile-layout/Section.svelte';
 	import TextInput from '../../../../components/layout/TextInput.svelte';
-	import Map from '../../../../components/mobile-layout/Map.svelte';
+	import Map from '../../../../components/layout/Map.svelte';
 	import { changinCenter, swissBounds } from '../../../../utils/dummyData';
 	import type { Field, GeoJSONFeature } from '../../../../utils/types';
 	import { createId } from '@paralleldrive/cuid2';

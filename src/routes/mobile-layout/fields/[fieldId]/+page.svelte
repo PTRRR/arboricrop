@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 	import Button from '../../../../components/layout/Button.svelte';
 	import Section from '../../../../components/mobile-layout/Section.svelte';
-	import Map from '../../../../components/mobile-layout/Map.svelte';
+	import Map from '../../../../components/layout/Map.svelte';
 	import { useDevices, useFields, useGeoJSONFeatures, useReturnButton } from '../../../../stores';
 	import { swissBounds } from '../../../../utils/dummyData';
 	import TextInput from '../../../../components/layout/TextInput.svelte';

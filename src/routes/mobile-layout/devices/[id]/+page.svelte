@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import Button from '../../../../components/layout/Button.svelte';
-	import Map from '../../../../components/mobile-layout/Map.svelte';
+	import Map from '../../../../components/layout/Map.svelte';
 	import Section from '../../../../components/mobile-layout/Section.svelte';
 	import {
 		useDeviceIllustration,
