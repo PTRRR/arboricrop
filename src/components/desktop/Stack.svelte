@@ -7,13 +7,24 @@
 		direction?: 'vertical' | 'horizontal';
 		style?: Partial<CSSStyleDeclaration>;
 		gap?: CSSStyleDeclaration['gap'];
+		justifyContent?: CSSStyleDeclaration['justifyContent'];
+		alignItems?: CSSStyleDeclaration['alignItems'];
 	}
 
-	const { children, direction = 'vertical', style, gap = '1rem' }: Props = $props();
+	const {
+		children,
+		direction = 'vertical',
+		style,
+		gap = '1rem',
+		justifyContent,
+		alignItems
+	}: Props = $props();
 
 	const computedStyle = $derived(
 		getCss({
 			gap,
+			justifyContent,
+			alignItems,
 			...(style || {})
 		})
 	);

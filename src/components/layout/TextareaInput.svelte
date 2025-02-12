@@ -1,42 +1,55 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
-	const props: {
+	let {
+		name,
+		label,
+		defaultValue,
+		value = $bindable(),
+		placeholder,
+		autoFocus,
+		readonly,
+		onvalue
+	}: {
 		name?: string;
 		label?: string;
 		defaultValue?: string;
+		value?: string;
 		placeholder?: string;
 		autoFocus?: boolean;
 		readonly?: boolean;
 		onvalue?: (value: string) => void;
 	} = $props();
 
-	let value = $state(props.defaultValue || '');
 	let input: HTMLTextAreaElement | null = $state(null);
 
+	if (defaultValue) {
+		value = defaultValue;
+	}
+
 	onMount(() => {
-		if (props.autoFocus) {
+		if (autoFocus) {
 			input?.focus();
 		}
 
-		if (props.onvalue && props.defaultValue) {
-			props.onvalue(props.defaultValue);
+		if (onvalue && defaultValue) {
+			onvalue(defaultValue);
 		}
 	});
 </script>
 
 <div class="textarea-input">
-	{#if props.label}
-		<label for={props.name}>{props.label}</label>
+	{#if label}
+		<label for={name}>{label}</label>
 	{/if}
 	<textarea
 		bind:value
 		bind:this={input}
 		spellcheck="false"
-		oninput={() => props.onvalue?.(value)}
-		name={props.name}
-		placeholder={props.placeholder}
-		class:textarea-input--readonly={props.readonly}
+		oninput={() => onvalue?.(value || '')}
+		{name}
+		{placeholder}
+		class:textarea-input--readonly={readonly}
 	></textarea>
 </div>
 

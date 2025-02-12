@@ -424,3 +424,11 @@ export const useAccounts = () => {
 		accounts
 	};
 };
+
+export const useCurrentAccount = () => {
+	const currentAccount = useWritable<Account | undefined>('current-account', undefined, true);
+
+	return {
+		currentAccount
+	};
+};

@@ -16,7 +16,7 @@
 	import type { Device, MediaType } from '../../../../utils/types';
 	import { onMount } from 'svelte';
 	import TextInput from '../../../../components/layout/TextInput.svelte';
-	import TextareaInput from '../../../../components/mobile-layout/TextareaInput.svelte';
+	import TextareaInput from '../../../../components/layout/TextareaInput.svelte';
 	import PageHeader from '../../../../components/mobile-layout/PageHeader.svelte';
 	import { goto } from '$app/navigation';
 	import Table from '../../../../components/layout/Table.svelte';

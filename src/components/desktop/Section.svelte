@@ -1,11 +1,11 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
-	import StepSeparation from '../layout/StepSeparation.svelte';
+	import StepSeparation, { type StepSeparationAction } from '../layout/StepSeparation.svelte';
 	import { getCss } from '../../utils/css';
 
 	interface Props {
 		children?: Snippet;
-		label?: string;
+		label?: string | Snippet;
 		alignItems?: 'flex-end';
 		padding?: string;
 		sticky?: string;
@@ -14,7 +14,9 @@
 		fill?: boolean;
 		width?: string;
 		height?: string;
+		style?: Partial<CSSStyleDeclaration>;
 		innerStyle?: Partial<CSSStyleDeclaration>;
+		actions?: StepSeparationAction[];
 	}
 
 	const {
@@ -28,7 +30,9 @@
 		fill,
 		width,
 		height,
-		innerStyle
+		style,
+		innerStyle,
+		actions
 	}: Props = $props();
 
 	const computedStyle = $derived(
@@ -39,15 +43,16 @@
 			zIndex,
 			width,
 			height,
-			flex: width ? '0 0 auto' : undefined
+			flex: width ? '0 0 auto' : undefined,
+			...style
 		})
 	);
 
 	const computedInnerStyle = $derived(
 		getCss({
-			...innerStyle,
 			padding,
-			backgroundColor
+			backgroundColor,
+			...innerStyle
 		})
 	);
 </script>
@@ -60,8 +65,9 @@
 >
 	<div class="section__inner" style={computedInnerStyle}>
 		{#if label}
-			<StepSeparation {label} />
+			<StepSeparation {label} {actions} />
 		{/if}
+
 		{@render children?.()}
 	</div>
 </div>

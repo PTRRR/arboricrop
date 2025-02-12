@@ -3,11 +3,12 @@
 	import Section from '../../components/desktop/Section.svelte';
 	import TextInput from '../../components/layout/TextInput.svelte';
 	import Button from '../../components/layout/Button.svelte';
-	import { useAccounts, useUser } from '../../stores';
+	import { useAccounts, useCurrentAccount, useUser } from '../../stores';
 	import Stack from '../../components/desktop/Stack.svelte';
 	import StepSeparation from '../../components/layout/StepSeparation.svelte';
 	import Spacer from '../../components/Spacer.svelte';
 	import { createId } from '@paralleldrive/cuid2';
+	import { goto } from '$app/navigation';
 
 	interface Props {
 		children: Snippet;
@@ -15,6 +16,7 @@
 
 	const { children }: Props = $props();
 	const { accounts } = useAccounts();
+	const { currentAccount } = useCurrentAccount();
 
 	const { email } = useUser();
 	let newEmail = $state('');
@@ -38,7 +40,7 @@
 			</div>
 		</Section>
 
-		{#if !$email}
+		{#if !$currentAccount}
 			<Section backgroundColor="var(--light-grey)" height="var(--content-min-height)">
 				<Stack style={{ width: '100%', maxWidth: '50rem' }}>
 					<TextInput label="email" name={createId()} bind:value={newEmail} />
@@ -46,7 +48,10 @@
 					<Button
 						icon="navigate"
 						disabled={!newEmail || !password}
-						onclick={() => ($email = newEmail)}>Login</Button
+						onclick={() => {
+							const account = $accounts.find((it) => it.email === newEmail);
+							$currentAccount = account;
+						}}>Login</Button
 					>
 				</Stack>
 			</Section>
@@ -69,7 +74,7 @@
 						<Button href="/desktop-mvp/devices">Devices</Button>
 						<Spacer />
 						<StepSeparation label="Account" />
-						<Button>Settings</Button>
+						<Button href="/desktop-mvp/settings">Settings</Button>
 						<Button>Account</Button>
 						<Button onclick={() => ($email = '')}>Logout</Button>
 					</Stack>
@@ -84,11 +89,31 @@
 	</div>
 </div>
 
+<button
+	class="clear-local-storage"
+	onclick={async () => {
+		if (typeof Storage !== 'undefined') {
+			// Reload the page
+			await goto('/desktop-mvp');
+			localStorage.clear();
+			window.location.reload();
+		} else {
+			console.log('localStorage is not supported in this browser');
+		}
+	}}
+>
+	Reset DB
+</button>
+
 <style lang="scss">
 	:global(html, body) {
-		font-family: Rubik;
-		font-weight: 500;
 		background-color: var(--white);
+	}
+
+	.clear-local-storage {
+		position: fixed;
+		bottom: 1rem;
+		right: 1rem;
 	}
 
 	:root {
@@ -102,6 +127,8 @@
 	}
 
 	.desktop-mvp {
+		font-family: Rubik, Arial, Helvetica, sans-serif;
+		font-weight: 500;
 		padding: 1rem;
 		min-height: 100svh;
 		box-sizing: border-box;

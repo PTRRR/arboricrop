@@ -75,11 +75,10 @@
 
 <Stack direction="horizontal" style={{ width: '100%' }}>
 	<Section label="Available Devices" padding="1rem" fill>
-		<div>
-			<TextInput label="Filter" />
-			<Spacer />
-			<Button icon="navigate">Search</Button>
-		</div>
+		<Stack gap="0.5rem">
+			<TextInput label="Search" />
+			<Button icon="navigate">Submit</Button>
+		</Stack>
 		<Table
 			style={getCss({ width: '100%' })}
 			headers={[

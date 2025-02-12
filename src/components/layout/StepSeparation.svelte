@@ -13,7 +13,7 @@
 	};
 
 	const props: {
-		label?: string | number;
+		label?: string | number | Snippet;
 		description?: string | undefined;
 		actions?: StepSeparationAction[];
 	} = $props();
@@ -22,7 +22,13 @@
 <div class="step-separation">
 	{#if props.label || typeof props.label === 'number'}
 		<div class="step-separation__heading">
-			<div class="step-separation__label">{props.label}</div>
+			<div class="step-separation__label">
+				{#if typeof props.label === 'string' || typeof props.label === 'number'}
+					{props.label}
+				{:else}
+					{@render props.label()}
+				{/if}
+			</div>
 			{#each props.actions || [] as action}
 				{#if action.label}
 					<Button

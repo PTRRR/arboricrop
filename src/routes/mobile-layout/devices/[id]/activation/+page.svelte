@@ -25,7 +25,7 @@
 	import type { PageData } from './$types';
 	import StepSeparation from '../../../../../components/layout/StepSeparation.svelte';
 	import PageHeader from '../../../../../components/mobile-layout/PageHeader.svelte';
-	import TextareaInput from '../../../../../components/mobile-layout/TextareaInput.svelte';
+	import TextareaInput from '../../../../../components/layout/TextareaInput.svelte';
 	import Table from '../../../../../components/layout/Table.svelte';
 	import ActionMenu from '../../../../../components/mobile-layout/ActionMenu.svelte';
 	import SaveMenu from '../../../../../components/mobile-layout/SaveMenu.svelte';
