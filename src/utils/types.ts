@@ -34,6 +34,13 @@ export type Device = {
 	status: Status;
 	location?: LngLatLike;
 	creationDate?: string;
+	accountId?: string;
+};
+
+export type Account = {
+	id: string;
+	email: string;
+	organizationName?: string;
 };
 
 export type Field = {

@@ -9,39 +9,37 @@
 	import Checkbox from '../../../components/mobile-layout/Checkbox.svelte';
 	import type { Device } from '../../../utils/types';
 	import Stack from '../../../components/desktop/Stack.svelte';
-	import {
-		generateEmailOrgList,
-		generateRandomDevices,
-		type EmailOrg
-	} from '../../../utils/dummyData';
+	import { useAccounts, useDevices } from '../../../stores';
 
-	const devices = $state(generateRandomDevices(30));
+	const { devices, updateDevices } = useDevices();
 	let selectedDevices = $state(new Set<Device>());
 
 	const devicesRows = $derived<Row[]>(
-		devices.map((device) => ({
-			selected: selectedDevices.has(device),
-			onclick: () => {
-				if (selectedDevices.has(device)) {
-					selectedDevices.delete(device);
-				} else {
-					selectedDevices.add(device);
-				}
-				selectedDevices = new Set(selectedDevices);
-			},
-			cells: [
-				{ label: '' },
-				{ label: device.id },
-				{ label: device.firmwareVersion },
-				{ label: device.creationDate }
-			]
-		}))
+		$devices
+			.filter((it) => !it.accountId)
+			.map((device) => ({
+				selected: selectedDevices.has(device),
+				onclick: () => {
+					if (selectedDevices.has(device)) {
+						selectedDevices.delete(device);
+					} else {
+						selectedDevices.add(device);
+					}
+					selectedDevices = new Set(selectedDevices);
+				},
+				cells: [
+					{ label: '' },
+					{ label: device.id },
+					{ label: device.firmwareVersion },
+					{ label: device.creationDate }
+				]
+			}))
 	);
 
-	const accounts = generateEmailOrgList(10);
+	const { accounts } = useAccounts();
 	let selectedEmail: string | undefined = $state(undefined);
 	const accountsRows = $derived<Row[]>(
-		accounts.map((account) => ({
+		$accounts.slice(0, 10).map((account) => ({
 			selected: selectedEmail === account.email,
 			onclick: () => {
 				if (selectedEmail === account.email) {
@@ -50,7 +48,7 @@
 					selectedEmail = account.email;
 				}
 			},
-			cells: [{ label: '' }, { label: account.organization }, { label: account.email }]
+			cells: [{ label: '' }, { label: account.organizationName }, { label: account.email }]
 		}))
 	);
 
@@ -121,6 +119,18 @@
 				iconBackgroundColor="var(--green)"
 				padding
 				disabled={!selectedEmail}
+				onclick={() => {
+					const account = $accounts.find((it) => it.email === selectedEmail);
+
+					if (account) {
+						updateDevices(
+							Array.from(selectedDevices).map((it) => ({ ...it, accountId: account.id }))
+						);
+
+						selectedDevices = new Set();
+						selectedEmail = undefined;
+					}
+				}}
 			>
 				Assign {selectedDevices.size} devices to account
 			</Button>

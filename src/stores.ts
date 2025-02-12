@@ -1,8 +1,16 @@
 import { get, readable, writable, type Writable } from 'svelte/store';
 import { getContext, hasContext, setContext } from 'svelte';
-import { getDevices, getNotifications, loraNetworks, features } from './utils/dummyData';
+import {
+	getDevices,
+	getNotifications,
+	loraNetworks,
+	features,
+	generateAccounts,
+	generateRandomDevices
+} from './utils/dummyData';
 import type { comment } from './db/schema';
 import type {
+	Account,
 	Alarm,
 	Device,
 	Field,
@@ -15,7 +23,7 @@ import { filterByUniqueAttribute, filterDuplicate } from './utils/arrays';
 import { createId } from '@paralleldrive/cuid2';
 import { goto } from '$app/navigation';
 
-const STORE_VERSION = 'v15';
+const STORE_VERSION = 'v16';
 const dummyDevices = getDevices(30);
 const dummyNotifications = getNotifications(dummyDevices);
 
@@ -74,10 +82,27 @@ export const useGettingStarted = () => {
 	};
 };
 export const useDevices = () => {
-	const devices = useWritable<Device[]>('devices', [], true);
+	const devices = useWritable<Device[]>('devices', generateRandomDevices(200), true);
+	const updateDevice = (device: Device) => {
+		devices.update((devices) => {
+			const deviceIndex = devices.findIndex((it) => it.id === device.id);
+
+			if (deviceIndex > -1) {
+				const newDevices = [...devices];
+				newDevices[deviceIndex] = { ...newDevices[deviceIndex], ...device };
+				return newDevices;
+			}
+
+			return devices;
+		});
+	};
+
+	const updateDevices = (devices: Device[]) => devices.forEach((device) => updateDevice(device));
 
 	return {
-		devices
+		devices,
+		updateDevice,
+		updateDevices
 	};
 };
 export const useNotifications = () => useWritable('notifications', dummyNotifications, true);
@@ -389,5 +414,13 @@ export const useUser = () => {
 	return {
 		email,
 		name
+	};
+};
+
+export const useAccounts = () => {
+	const accounts = useWritable<Account[]>('accounts', generateAccounts(20), true);
+
+	return {
+		accounts
 	};
 };

@@ -1,5 +1,5 @@
 import { createId } from '@paralleldrive/cuid2';
-import type { Device, Field, Notification } from './types';
+import type { Account, Device, Field, Notification } from './types';
 import type { GeoJSON as GeoJSONType } from 'geojson';
 import { shuffle } from './arrays';
 import { formatDateToDDMMYYYY, getRandomDateRange } from './dates';
@@ -484,11 +484,6 @@ export const plantationMetrics: string[] = [
 	'Carbon Sequestration'
 ];
 
-export interface EmailOrg {
-	email: string;
-	organization: string;
-}
-
 // Common company suffixes
 const companySuffixes = [
 	'Inc',
@@ -567,16 +562,17 @@ export function generateEmail(companyName: string): string {
 	return `${prefix}@${domain}.com`;
 }
 
-export function generateEmailOrgList(count: number): EmailOrg[] {
-	const list: EmailOrg[] = [];
+export function generateAccounts(count: number): Account[] {
+	const list: Account[] = [];
 
 	for (let i = 0; i < count; i++) {
-		const organization = generateCompanyName();
-		const email = generateEmail(organization);
+		const organizationName = generateCompanyName();
+		const email = generateEmail(organizationName);
 
 		list.push({
+			id: `acc-${createId()}`,
 			email,
-			organization
+			organizationName
 		});
 	}
 
@@ -603,10 +599,13 @@ export function generateRandomDevices(count: number): Device[] {
 	for (let i = 0; i < count; i++) {
 		const device: Device = {
 			id: createId(),
+			name: `Device ${i.toString().padStart(3, '0')}`,
+			battery: Math.floor(Math.random() * 100),
 			firmwareVersion: generateRandomVersion(),
 			status: 'unactive',
 			creationDate: formatDateToDDMMYYYY(getRandomDate()),
-			medias: []
+			medias: [],
+			location: undefined
 		};
 
 		devices.push(device);
