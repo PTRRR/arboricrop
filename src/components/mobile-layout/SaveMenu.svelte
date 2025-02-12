@@ -1,6 +1,6 @@
 <script lang="ts">
 	import ActionMenu from './ActionMenu.svelte';
-	import Button from './Button.svelte';
+	import Button from '../layout/Button.svelte';
 
 	const {
 		onsave,

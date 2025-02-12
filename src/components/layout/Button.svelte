@@ -8,7 +8,7 @@
 	import type { Snippet } from 'svelte';
 	import { useNavigationHistory } from '../../stores';
 	import { getCss } from '../../utils/css';
-	import Icon, { type IconName, type IconSize } from './Icon.svelte';
+	import Icon, { type IconName, type IconSize } from '../mobile-layout/Icon.svelte';
 
 	const {
 		children,

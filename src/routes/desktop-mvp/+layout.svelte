@@ -2,7 +2,7 @@
 	import type { Snippet } from 'svelte';
 	import Section from '../../components/desktop/Section.svelte';
 	import TextInput from '../../components/layout/TextInput.svelte';
-	import Button from '../../components/mobile-layout/Button.svelte';
+	import Button from '../../components/layout/Button.svelte';
 	import { useUser } from '../../stores';
 
 	interface Props {

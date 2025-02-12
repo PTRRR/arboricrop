@@ -10,7 +10,7 @@
 	import { goto, onNavigate } from '$app/navigation';
 	import { createPortal } from '../../utils/portal';
 	import { useApp, useNotifications, useReturnButton } from '../../stores';
-	import Button from '../../components/mobile-layout/Button.svelte';
+	import Button from '../../components/layout/Button.svelte';
 	import { addEllipsis } from '../../utils/strings';
 	import { getCss } from '../../utils/css';
 

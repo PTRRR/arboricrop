@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Button from '../../components/mobile-layout/Button.svelte';
+	import Button from '../../components/layout/Button.svelte';
 	import Card from '../../components/mobile-layout/Card.svelte';
 	import Section from '../../components/mobile-layout/Section.svelte';
 	import TextInput from '../../components/layout/TextInput.svelte';

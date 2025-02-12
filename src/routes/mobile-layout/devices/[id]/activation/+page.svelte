@@ -3,7 +3,7 @@
 	import { page } from '$app/stores';
 	import { createId } from '@paralleldrive/cuid2';
 
-	import Button from '../../../../../components/mobile-layout/Button.svelte';
+	import Button from '../../../../../components/layout/Button.svelte';
 	import Checklist from '../../../../../components/mobile-layout/Checklist.svelte';
 	import Dropdown from '../../../../../components/mobile-layout/Dropdown.svelte';
 	import Map from '../../../../../components/mobile-layout/Map.svelte';

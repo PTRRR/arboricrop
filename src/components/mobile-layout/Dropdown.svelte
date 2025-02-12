@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Button from './Button.svelte';
+	import Button from '../layout/Button.svelte';
 	import type { Snippet } from 'svelte';
 	import type { IconName } from './Icon.svelte';
 	import { portal } from '../../utils/portal';

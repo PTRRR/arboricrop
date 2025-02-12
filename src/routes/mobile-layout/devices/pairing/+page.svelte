@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Button from '../../../../components/mobile-layout/Button.svelte';
+	import Button from '../../../../components/layout/Button.svelte';
 	import Dropdown from '../../../../components/mobile-layout/Dropdown.svelte';
 	import Image from '../../../../components/mobile-layout/Image.svelte';
 	import { useDeviceIllustration, useNavigationHistory, useReturnButton } from '../../../../stores';

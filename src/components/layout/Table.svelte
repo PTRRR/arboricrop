@@ -18,13 +18,13 @@
 	import type { Snippet } from 'svelte';
 	import { getCss } from '../../utils/css';
 
-	const {
-		headers,
-		rows
-	}: {
+	interface Props {
 		headers?: Cell[];
 		rows: Row[];
-	} = $props();
+		style?: string;
+	}
+
+	const { headers, rows, style }: Props = $props();
 
 	const getHeaderWidth = (cellIndex: number) => {
 		const cell = (headers || [])[cellIndex];
@@ -51,7 +51,7 @@
 	{/each}
 {/snippet}
 
-<div class="table">
+<div class="table" {style}>
 	{#if headers}
 		<div class="table__row table__headers">
 			{#each headers as header}

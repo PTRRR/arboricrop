@@ -11,7 +11,7 @@
 		useLoRaConfigurations,
 		useReturnButton
 	} from '../../../../stores';
-	import Button from '../../../../components/mobile-layout/Button.svelte';
+	import Button from '../../../../components/layout/Button.svelte';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import { getFeatureLayerName } from '../../../../utils/geoJSON';

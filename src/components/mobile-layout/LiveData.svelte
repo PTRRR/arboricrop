@@ -3,7 +3,7 @@
 	import { portal } from '../../utils/portal';
 	import Spacer from '../Spacer.svelte';
 	import ActionMenu from './ActionMenu.svelte';
-	import Button, { type ButtonIconOrder } from './Button.svelte';
+	import Button, { type ButtonIconOrder } from '../layout/Button.svelte';
 	import PageHeader from './PageHeader.svelte';
 	import Terminal from './Terminal.svelte';
 

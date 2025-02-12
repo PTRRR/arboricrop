@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import Button from '../../../../components/mobile-layout/Button.svelte';
+	import Button from '../../../../components/layout/Button.svelte';
 	import Image from '../../../../components/mobile-layout/Image.svelte';
 	import { useDevices, useNotifications, useReturnButton } from '../../../../stores';
 	import { formatDateToDDMMYYYY } from '../../../../utils/dates';

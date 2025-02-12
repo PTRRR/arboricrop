@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import Button from '../../../components/mobile-layout/Button.svelte';
+	import Button from '../../../components/layout/Button.svelte';
 	import { useNotifications, useReturnButton } from '../../../stores';
 	import type { NotificationType } from '../../../utils/types';
 	import Section from '../../../components/mobile-layout/Section.svelte';

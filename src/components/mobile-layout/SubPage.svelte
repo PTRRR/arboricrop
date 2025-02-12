@@ -4,7 +4,7 @@
 	import { useApp } from '../../stores';
 	import { portal } from '../../utils/portal';
 	import ActionMenu from './ActionMenu.svelte';
-	import Button, { type ButtonIconOrder } from './Button.svelte';
+	import Button, { type ButtonIconOrder } from '../layout/Button.svelte';
 	import type { IconName } from './Icon.svelte';
 
 	const { hideContent } = useApp();

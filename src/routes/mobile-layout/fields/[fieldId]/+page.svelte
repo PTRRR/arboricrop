@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import Button from '../../../../components/mobile-layout/Button.svelte';
+	import Button from '../../../../components/layout/Button.svelte';
 	import Section from '../../../../components/mobile-layout/Section.svelte';
 	import Map from '../../../../components/mobile-layout/Map.svelte';
 	import { useDevices, useFields, useGeoJSONFeatures, useReturnButton } from '../../../../stores';
