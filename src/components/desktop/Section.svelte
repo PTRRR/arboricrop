@@ -8,13 +8,24 @@
 		label?: string;
 		alignItems?: 'flex-end';
 		padding?: string;
+		sticky?: string;
+		zIndex?: string;
+		backgroundColor?: string;
 	}
 
-	const { children, label, alignItems, padding }: Props = $props();
+	const { children, label, alignItems, padding, sticky, zIndex, backgroundColor }: Props = $props();
 </script>
 
-<div class="section" class:section--align-end={alignItems === 'flex-end'}>
-	<div class="section__inner" style={getCss({ padding })}>
+<div
+	class="section"
+	class:section--align-end={alignItems === 'flex-end'}
+	style={getCss({
+		position: Boolean(sticky) ? 'sticky' : undefined,
+		top: sticky,
+		zIndex
+	})}
+>
+	<div class="section__inner" style={getCss({ padding, backgroundColor })}>
 		{#if label}
 			<StepSeparation {label} />
 		{/if}
@@ -25,7 +36,8 @@
 <style lang="scss">
 	.section {
 		$this: &;
-		padding: 0.1rem;
+		padding: 0.5rem;
+		position: relative;
 
 		&__inner {
 			overflow: hidden;

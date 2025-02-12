@@ -7,6 +7,7 @@
 		padding?: string;
 		initialChecked?: boolean;
 		onChange?: (checked: boolean) => void;
+		raw?: boolean;
 	}
 
 	let props: Props = $props();
@@ -18,16 +19,20 @@
 	onCheckedChange={(checked) => props.onChange?.(checked === true)}
 >
 	<Checkbox.Indicator class="checkbox__indicator" let:isChecked>
-		<div
-			class="checkbox__content"
-			class:checkbox--checked={isChecked}
-			style={getCss({
-				'--size': props.size ?? '1.8rem',
-				'--padding': props.padding ?? '2px'
-			})}
-		>
-			<div class="checkbox__toggle"></div>
-		</div>
+		{#if props.raw}
+			<input type="checkbox" checked={isChecked} />
+		{:else}
+			<div
+				class="checkbox__content"
+				class:checkbox--checked={isChecked}
+				style={getCss({
+					'--size': props.size ?? '1.8rem',
+					'--padding': props.padding ?? '2px'
+				})}
+			>
+				<div class="checkbox__toggle"></div>
+			</div>
+		{/if}
 	</Checkbox.Indicator>
 </Checkbox.Root>
 

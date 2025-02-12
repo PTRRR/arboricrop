@@ -1,7 +1,7 @@
 <script module lang="ts">
 	export interface Cell {
 		label?: string;
-		renderHandler?: Snippet<[cell: Cell]>;
+		renderHandler?: Snippet<[cell: Cell, row?: Row]>;
 		width?: string;
 		multiline?: boolean;
 	}
@@ -32,7 +32,7 @@
 	};
 </script>
 
-{#snippet innerRow(cells: Cell[])}
+{#snippet innerRow(cells: Cell[], row: Row)}
 	{#each cells as cell, index}
 		<div
 			class="table__cell"
@@ -43,7 +43,7 @@
 			})}
 		>
 			{#if cell.renderHandler}
-				{@render cell.renderHandler(cell)}
+				{@render cell.renderHandler(cell, row)}
 			{:else}
 				<span>{cell.label}</span>
 			{/if}
@@ -70,7 +70,7 @@
 				href={row.href}
 				onclick={row.onclick}
 			>
-				{@render innerRow(row.cells)}
+				{@render innerRow(row.cells, row)}
 			</a>
 		{:else}
 			<!-- svelte-ignore a11y_click_events_have_key_events -->
@@ -81,7 +81,7 @@
 				class:table--selected={row.selected}
 				onclick={row.onclick}
 			>
-				{@render innerRow(row.cells)}
+				{@render innerRow(row.cells, row)}
 			</div>
 		{/if}
 	{/each}
@@ -89,6 +89,7 @@
 
 <style lang="scss">
 	.table {
+		$this: &;
 		background-color: var(--white);
 
 		&__row {
@@ -112,6 +113,12 @@
 					border-top: solid 1px var(--grey);
 				}
 			}
+
+			&#{$this}--selected {
+				&::before {
+					border-top: solid 1px var(--white);
+				}
+			}
 		}
 
 		&--clickable {
@@ -124,6 +131,12 @@
 
 		&--selected {
 			background-color: var(--grey);
+
+			& + #{$this}__row {
+				&::before {
+					border-top: solid 1px var(--white);
+				}
+			}
 		}
 
 		&__headers {

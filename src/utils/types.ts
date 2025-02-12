@@ -33,6 +33,7 @@ export type Device = {
 	battery?: number;
 	status: Status;
 	location?: LngLatLike;
+	creationDate?: string;
 };
 
 export type Field = {

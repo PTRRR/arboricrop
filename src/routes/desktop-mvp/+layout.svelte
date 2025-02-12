@@ -17,7 +17,7 @@
 
 <div class="desktop-mvp">
 	<div class="desktop-mvp__inner">
-		<Section>
+		<Section sticky="1rem" zIndex="10" padding="0.5rem 2rem" backgroundColor="var(--green)">
 			<div class="desktop-mvp__main-menu">
 				<a class="desktop-mvp__home-button" href="/desktop-mvp">vita/dashboard</a>
 
@@ -49,6 +49,7 @@
 	:global(html, body) {
 		font-family: Rubik;
 		font-weight: 500;
+		background-color: var(--light-grey);
 	}
 
 	* {
@@ -56,21 +57,21 @@
 	}
 
 	.desktop-mvp {
-		background-color: var(--light-grey);
 		padding: 1rem;
 		min-height: 100svh;
 		box-sizing: border-box;
 		display: flex;
 		flex-direction: column;
+		align-items: center;
 
 		&__inner {
-			width: 100%;
+			width: calc(100% + 1rem);
 			max-width: 100rem;
-			margin: 0 auto;
 			height: 100%;
 			flex: 1 1 auto;
 			display: flex;
 			flex-direction: column;
+			margin: -0.5rem;
 		}
 
 		&__main-menu {
@@ -78,6 +79,10 @@
 			justify-content: space-between;
 			align-items: center;
 			width: 100%;
+
+			a {
+				color: var(--white);
+			}
 		}
 
 		&__login-form {
@@ -93,12 +98,11 @@
 			gap: 1rem;
 
 			a {
-				color: var(--grey);
 				text-decoration: none;
-				font-size: var(--big-font-size);
+				font-size: var(--mid-font-size);
 
 				&:hover {
-					color: var(--black);
+					color: var(--grey);
 				}
 			}
 		}
