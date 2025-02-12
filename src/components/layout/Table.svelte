@@ -90,7 +90,7 @@
 <style lang="scss">
 	.table {
 		$this: &;
-		background-color: var(--white);
+		/* background-color: var(--white); */
 
 		&__row {
 			position: relative;

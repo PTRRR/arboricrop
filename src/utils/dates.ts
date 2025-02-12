@@ -1,4 +1,4 @@
-export const getRandomDate = (startDate: Date, endDate: Date) => {
+export const getRandomDateRange = (startDate: Date, endDate: Date) => {
 	const startTimestamp = startDate.getTime();
 	const endTimestamp = endDate.getTime();
 	const randomTimestamp = Math.random() * (endTimestamp - startTimestamp) + startTimestamp;

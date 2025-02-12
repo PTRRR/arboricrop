@@ -1,8 +1,6 @@
 <script lang="ts">
-	import { createId } from '@paralleldrive/cuid2';
 	import Section from '../../../components/desktop/Section.svelte';
 	import Table, { type Cell, type Row } from '../../../components/layout/Table.svelte';
-	import { formatDateToDDMMYYYY } from '../../../utils/dates';
 	import Pagination from '../../../components/layout/Pagination.svelte';
 	import { getCss } from '../../../utils/css';
 	import TextInput from '../../../components/layout/TextInput.svelte';
@@ -10,43 +8,17 @@
 	import Spacer from '../../../components/Spacer.svelte';
 	import Checkbox from '../../../components/mobile-layout/Checkbox.svelte';
 	import type { Device } from '../../../utils/types';
-
-	function generateRandomVersion(): string {
-		const major = Math.floor(Math.random() * 5); // 0-4
-		const minor = Math.floor(Math.random() * 10); // 0-9
-		const patch = Math.floor(Math.random() * 10); // 0-9
-		return `v${major}.${minor}.${patch}`;
-	}
-
-	function getRandomDate(): Date {
-		const today = new Date();
-		const lastYear = new Date();
-		lastYear.setFullYear(lastYear.getFullYear() - 1);
-		return new Date(lastYear.getTime() + Math.random() * (today.getTime() - lastYear.getTime()));
-	}
-
-	function generateRandomDevices(count: number): Device[] {
-		const devices: Device[] = [];
-
-		for (let i = 0; i < count; i++) {
-			const device: Device = {
-				id: createId(),
-				firmwareVersion: generateRandomVersion(),
-				status: 'unactive',
-				creationDate: formatDateToDDMMYYYY(getRandomDate()),
-				medias: []
-			};
-
-			devices.push(device);
-		}
-
-		return devices;
-	}
+	import Stack from '../../../components/desktop/Stack.svelte';
+	import {
+		generateEmailOrgList,
+		generateRandomDevices,
+		type EmailOrg
+	} from '../../../utils/dummyData';
 
 	const devices = $state(generateRandomDevices(30));
 	let selectedDevices = $state(new Set<Device>());
 
-	const rows = $derived<Row[]>(
+	const devicesRows = $derived<Row[]>(
 		devices.map((device) => ({
 			selected: selectedDevices.has(device),
 			onclick: () => {
@@ -66,16 +38,33 @@
 		}))
 	);
 
-	const rowsWithRenderHandler = $derived(
-		(rows: Row[], renderHandler: Cell['renderHandler']): Row[] =>
-			rows.map((row) => ({
-				...row,
-				cells: [{ ...row.cells[0], renderHandler }, row.cells[1], row.cells[2], row.cells[3]]
-			}))
+	const accounts = generateEmailOrgList(10);
+	let selectedEmail: string | undefined = $state(undefined);
+	const accountsRows = $derived<Row[]>(
+		accounts.map((account) => ({
+			selected: selectedEmail === account.email,
+			onclick: () => {
+				if (selectedEmail === account.email) {
+					selectedEmail = undefined;
+				} else {
+					selectedEmail = account.email;
+				}
+			},
+			cells: [{ label: '' }, { label: account.organization }, { label: account.email }]
+		}))
 	);
+
+	const rowsWithRenderHandler = (rows: Row[], renderHandler: Cell['renderHandler']): Row[] =>
+		rows.map((row) => {
+			const [firstCell, ...otherCells] = row.cells;
+			return {
+				...row,
+				cells: [{ ...firstCell, renderHandler }, ...otherCells]
+			};
+		});
 </script>
 
-{#snippet selectionCell(cell: Cell, row?: Row)}
+{#snippet selectCell(cell: Cell, row?: Row)}
 	<div style={getCss({ padding: '0 0 0 0.5rem' })}>
 		{#if row?.selected}
 			<Checkbox raw initialChecked />
@@ -85,21 +74,56 @@
 	</div>
 {/snippet}
 
-<Section label="Available Devices" padding="2rem">
-	<div>
-		<TextInput label="Query" />
-		<Spacer />
-		<Button icon="navigate">Search</Button>
-	</div>
-	<Table
-		style={getCss({ width: '100%' })}
-		headers={[
-			{ label: '', width: '5%' },
-			{ label: 'ID', width: '25%' },
-			{ label: 'Firmware Version', width: '20%' },
-			{ label: 'Creation Date' }
-		]}
-		rows={rowsWithRenderHandler(rows, selectionCell)}
-	/>
-	<Pagination pages={10} />
-</Section>
+<Stack direction="horizontal">
+	<Section label="Available Devices" padding="1rem" fill>
+		<div>
+			<TextInput label="Filter" />
+			<Spacer />
+			<Button icon="navigate">Search</Button>
+		</div>
+		<Table
+			style={getCss({ width: '100%' })}
+			headers={[
+				{ label: '', width: '5%' },
+				{ label: 'ID', width: '25%' },
+				{ label: 'Firmware Version', width: '20%' },
+				{ label: 'Creation Date' }
+			]}
+			rows={rowsWithRenderHandler(devicesRows, selectCell)}
+		/>
+		<Pagination pages={10} />
+	</Section>
+
+	{#if selectedDevices.size > 0}
+		<Section
+			sticky="5.5rem"
+			width="50%"
+			padding="1rem"
+			label={`${selectedDevices.size} Selected Devices`}
+		>
+			<div>
+				<TextInput label="Search Account" />
+				<Spacer />
+				<Button icon="navigate">Search</Button>
+			</div>
+			<Table
+				headers={[
+					{ label: '', width: '10%' },
+					{ label: 'Organisation', width: '45%' },
+					{ label: 'Email', width: '45%' }
+				]}
+				rows={rowsWithRenderHandler(accountsRows, selectCell)}
+			/>
+			<Pagination pages={4} />
+			<Button
+				icon="check"
+				backgroundColor={selectedEmail ? 'var(--light-green)' : 'var(--grey)'}
+				iconBackgroundColor="var(--green)"
+				padding
+				disabled={!selectedEmail}
+			>
+				Assign {selectedDevices.size} devices to account
+			</Button>
+		</Section>
+	{/if}
+</Stack>

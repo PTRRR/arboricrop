@@ -51,12 +51,14 @@
 	} = $props();
 
 	const { preventNavigationHistory } = useNavigationHistory();
-	const buttonStyle = getCss({
-		backgroundColor,
-		padding: typeof padding === 'string' ? padding : undefined,
-		color,
-		fontSize
-	});
+	const buttonStyle = $derived(
+		getCss({
+			backgroundColor,
+			padding: typeof padding === 'string' ? padding : undefined,
+			color,
+			fontSize
+		})
+	);
 </script>
 
 {#snippet innerButton()}

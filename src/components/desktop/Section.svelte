@@ -11,18 +11,33 @@
 		sticky?: string;
 		zIndex?: string;
 		backgroundColor?: string;
+		fill?: boolean;
+		width?: string;
 	}
 
-	const { children, label, alignItems, padding, sticky, zIndex, backgroundColor }: Props = $props();
+	const {
+		children,
+		label,
+		alignItems,
+		padding,
+		sticky,
+		zIndex,
+		backgroundColor,
+		fill,
+		width
+	}: Props = $props();
 </script>
 
 <div
 	class="section"
 	class:section--align-end={alignItems === 'flex-end'}
+	class:section--fill={fill}
 	style={getCss({
 		position: Boolean(sticky) ? 'sticky' : undefined,
+		alignSelf: Boolean(sticky) ? 'flex-start' : undefined,
 		top: sticky,
-		zIndex
+		zIndex,
+		width
 	})}
 >
 	<div class="section__inner" style={getCss({ padding, backgroundColor })}>
@@ -38,6 +53,12 @@
 		$this: &;
 		padding: 0.5rem;
 		position: relative;
+		width: 100%;
+		box-sizing: border-box;
+
+		&--fill {
+			flex: 1 1 auto;
+		}
 
 		&__inner {
 			overflow: hidden;
@@ -48,6 +69,9 @@
 			display: flex;
 			flex-direction: column;
 			gap: 1.5rem;
+			/* border: solid 1px var(--grey); */
+			box-sizing: border-box;
+			background-color: var(--light-grey);
 
 			#{$this}--align-end & {
 				align-items: flex-end;

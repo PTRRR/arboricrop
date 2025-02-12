@@ -2,7 +2,7 @@ import { createId } from '@paralleldrive/cuid2';
 import type { Device, Field, Notification } from './types';
 import type { GeoJSON as GeoJSONType } from 'geojson';
 import { shuffle } from './arrays';
-import { getRandomDate } from './dates';
+import { formatDateToDDMMYYYY, getRandomDateRange } from './dates';
 import type { LngLatBoundsLike, LngLatLike } from 'svelte-maplibre';
 import { getGeoJSONFeatures } from './geoJSON';
 
@@ -253,7 +253,7 @@ export const getNotifications = (devices: Device[]): Notification[] => {
 		return {
 			id: `not-${createId()}`,
 			deviceId: it.id,
-			date: getRandomDate(new Date('2024-08-01'), new Date('2024-08-30')).toISOString(),
+			date: getRandomDateRange(new Date('2024-08-01'), new Date('2024-08-30')).toISOString(),
 			...randomContent
 		};
 	});
@@ -483,3 +483,134 @@ export const plantationMetrics: string[] = [
 	'Soil pH Levels',
 	'Carbon Sequestration'
 ];
+
+export interface EmailOrg {
+	email: string;
+	organization: string;
+}
+
+// Common company suffixes
+const companySuffixes = [
+	'Inc',
+	'LLC',
+	'Corp',
+	'Solutions',
+	'Technologies',
+	'Group',
+	'Labs',
+	'Systems'
+];
+
+// Industry-related words for company names
+const industryWords = [
+	'Tech',
+	'Data',
+	'Cloud',
+	'Digital',
+	'Cyber',
+	'Net',
+	'Smart',
+	'AI',
+	'Web',
+	'Soft',
+	'Logic',
+	'Code',
+	'Dev',
+	'Innovation',
+	'Future',
+	'Meta'
+];
+
+// Common words for company names
+const baseWords = [
+	'Blue',
+	'Red',
+	'Green',
+	'Silver',
+	'Gold',
+	'Peak',
+	'Summit',
+	'Nova',
+	'Alpha',
+	'Beta',
+	'Delta',
+	'Omega',
+	'First',
+	'Prime',
+	'Core',
+	'Next'
+];
+
+export function generateCompanyName(): string {
+	const useIndustryWord = Math.random() > 0.5;
+	const firstWord = baseWords[Math.floor(Math.random() * baseWords.length)];
+	const secondWord = useIndustryWord
+		? industryWords[Math.floor(Math.random() * industryWords.length)]
+		: baseWords[Math.floor(Math.random() * baseWords.length)];
+	const suffix = companySuffixes[Math.floor(Math.random() * companySuffixes.length)];
+
+	return `${firstWord}${secondWord} ${suffix}`;
+}
+
+export function generateEmail(companyName: string): string {
+	// Convert company name to domain format
+	const domain = companyName
+		.toLowerCase()
+		.replace(/[^\w\s]/g, '') // Remove special characters
+		.replace(/\s+/g, '') // Remove spaces
+		.replace(/(inc|llc|corp|solutions|technologies|group|labs|systems)$/i, ''); // Remove suffix
+
+	// Common email prefixes
+	const emailPrefixes = ['info', 'contact', 'support', 'hello', 'admin', 'sales'];
+	const prefix = emailPrefixes[Math.floor(Math.random() * emailPrefixes.length)];
+
+	return `${prefix}@${domain}.com`;
+}
+
+export function generateEmailOrgList(count: number): EmailOrg[] {
+	const list: EmailOrg[] = [];
+
+	for (let i = 0; i < count; i++) {
+		const organization = generateCompanyName();
+		const email = generateEmail(organization);
+
+		list.push({
+			email,
+			organization
+		});
+	}
+
+	return list;
+}
+
+export function generateRandomVersion(): string {
+	const major = Math.floor(Math.random() * 5); // 0-4
+	const minor = Math.floor(Math.random() * 10); // 0-9
+	const patch = Math.floor(Math.random() * 10); // 0-9
+	return `v${major}.${minor}.${patch}`;
+}
+
+export function getRandomDate(): Date {
+	const today = new Date();
+	const lastYear = new Date();
+	lastYear.setFullYear(lastYear.getFullYear() - 1);
+	return new Date(lastYear.getTime() + Math.random() * (today.getTime() - lastYear.getTime()));
+}
+
+export function generateRandomDevices(count: number): Device[] {
+	const devices: Device[] = [];
+
+	for (let i = 0; i < count; i++) {
+		const device: Device = {
+			id: createId(),
+			firmwareVersion: generateRandomVersion(),
+			status: 'unactive',
+			creationDate: formatDateToDDMMYYYY(getRandomDate()),
+			medias: []
+		};
+
+		devices.push(device);
+	}
+
+	return devices;
+}

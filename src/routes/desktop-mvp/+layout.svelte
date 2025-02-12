@@ -17,7 +17,7 @@
 
 <div class="desktop-mvp">
 	<div class="desktop-mvp__inner">
-		<Section sticky="1rem" zIndex="10" padding="0.5rem 2rem" backgroundColor="var(--green)">
+		<Section sticky="0.5rem" zIndex="10" padding="0.5rem 2rem" backgroundColor="var(--green)">
 			<div class="desktop-mvp__main-menu">
 				<a class="desktop-mvp__home-button" href="/desktop-mvp">vita/dashboard</a>
 
@@ -42,6 +42,9 @@
 		{:else}
 			{@render children()}
 		{/if}
+		<Section>
+			<img class="desktop-mvp__logo" src="/images/logo-black.svg" alt="" />
+		</Section>
 	</div>
 </div>
 
@@ -49,7 +52,7 @@
 	:global(html, body) {
 		font-family: Rubik;
 		font-weight: 500;
-		background-color: var(--light-grey);
+		/* background-color: var(--light-grey); */
 	}
 
 	* {
@@ -111,6 +114,11 @@
 			color: var(--green);
 			text-decoration: none;
 			font-size: var(--big-font-size);
+		}
+
+		&__logo {
+			height: 4rem;
+			width: 7rem;
 		}
 	}
 </style>
