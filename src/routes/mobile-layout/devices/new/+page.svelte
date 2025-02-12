@@ -11,7 +11,7 @@
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import type { PageData } from '../$types';
-	import TextInput from '../../../../components/mobile-layout/TextInput.svelte';
+	import TextInput from '../../../../components/layout/TextInput.svelte';
 	import PageHeader from '../../../../components/mobile-layout/PageHeader.svelte';
 	import SaveMenu from '../../../../components/mobile-layout/SaveMenu.svelte';
 

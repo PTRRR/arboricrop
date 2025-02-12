@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
-	import Button from './Button.svelte';
-	import type { IconName } from './Icon.svelte';
+	import Button from '../mobile-layout/Button.svelte';
+	import type { IconName } from '../mobile-layout/Icon.svelte';
 
 	export type StepSeparationAction = {
 		label?: string | Snippet;

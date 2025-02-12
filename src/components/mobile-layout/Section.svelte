@@ -1,5 +1,5 @@
 <script lang="ts">
-	import StepSeparation, { type StepSeparationAction } from './StepSeparation.svelte';
+	import StepSeparation, { type StepSeparationAction } from '../layout/StepSeparation.svelte';
 	import Spacer from '../Spacer.svelte';
 	import type { Snippet } from 'svelte';
 

@@ -5,8 +5,8 @@
 	import Map from '../../../../components/mobile-layout/Map.svelte';
 	import { useDevices, useFields, useGeoJSONFeatures, useReturnButton } from '../../../../stores';
 	import { swissBounds } from '../../../../utils/dummyData';
-	import TextInput from '../../../../components/mobile-layout/TextInput.svelte';
-	import Table, { type Cell, type Row } from '../../../../components/mobile-layout/Table.svelte';
+	import TextInput from '../../../../components/layout/TextInput.svelte';
+	import Table, { type Cell, type Row } from '../../../../components/layout/Table.svelte';
 	import { goto } from '$app/navigation';
 	import { getLocationDelta } from '../../../../utils/locations';
 	import { getFeatureLayerName } from '../../../../utils/geoJSON';

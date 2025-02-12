@@ -15,11 +15,11 @@
 	import { swissBounds } from '../../../../utils/dummyData';
 	import type { Device, MediaType } from '../../../../utils/types';
 	import { onMount } from 'svelte';
-	import TextInput from '../../../../components/mobile-layout/TextInput.svelte';
+	import TextInput from '../../../../components/layout/TextInput.svelte';
 	import TextareaInput from '../../../../components/mobile-layout/TextareaInput.svelte';
 	import PageHeader from '../../../../components/mobile-layout/PageHeader.svelte';
 	import { goto } from '$app/navigation';
-	import Table from '../../../../components/mobile-layout/Table.svelte';
+	import Table from '../../../../components/layout/Table.svelte';
 	import Dropdown from '../../../../components/mobile-layout/Dropdown.svelte';
 	import { createId } from '@paralleldrive/cuid2';
 	import type { LngLatLike } from 'svelte-maplibre';

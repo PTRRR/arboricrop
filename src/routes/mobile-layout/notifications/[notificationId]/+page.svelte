@@ -7,7 +7,7 @@
 	import Section from '../../../../components/mobile-layout/Section.svelte';
 	import PageHeader from '../../../../components/mobile-layout/PageHeader.svelte';
 	import TextareaInput from '../../../../components/mobile-layout/TextareaInput.svelte';
-	import Table, { type Row } from '../../../../components/mobile-layout/Table.svelte';
+	import Table, { type Row } from '../../../../components/layout/Table.svelte';
 	import StatusDot, { type Status } from '../../../../components/mobile-layout/StatusDot.svelte';
 	import { getCss } from '../../../../utils/css';
 	import SaveMenu from '../../../../components/mobile-layout/SaveMenu.svelte';

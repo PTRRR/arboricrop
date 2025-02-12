@@ -2,7 +2,7 @@
 	import Button from '../../components/mobile-layout/Button.svelte';
 	import Card from '../../components/mobile-layout/Card.svelte';
 	import Section from '../../components/mobile-layout/Section.svelte';
-	import TextInput from '../../components/mobile-layout/TextInput.svelte';
+	import TextInput from '../../components/layout/TextInput.svelte';
 	import {
 		useDevices,
 		useFields,
@@ -18,7 +18,7 @@
 	import SaveMenu from '../../components/mobile-layout/SaveMenu.svelte';
 	import { goto } from '$app/navigation';
 	import ActionMenu from '../../components/mobile-layout/ActionMenu.svelte';
-	import Table from '../../components/mobile-layout/Table.svelte';
+	import Table from '../../components/layout/Table.svelte';
 
 	const { devices } = useDevices();
 	const { fields } = useFields();

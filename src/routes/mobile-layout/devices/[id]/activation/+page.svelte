@@ -23,10 +23,10 @@
 	import { createUrlBuilder } from '../../../../../utils/urls';
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
-	import StepSeparation from '../../../../../components/mobile-layout/StepSeparation.svelte';
+	import StepSeparation from '../../../../../components/layout/StepSeparation.svelte';
 	import PageHeader from '../../../../../components/mobile-layout/PageHeader.svelte';
 	import TextareaInput from '../../../../../components/mobile-layout/TextareaInput.svelte';
-	import Table from '../../../../../components/mobile-layout/Table.svelte';
+	import Table from '../../../../../components/layout/Table.svelte';
 	import ActionMenu from '../../../../../components/mobile-layout/ActionMenu.svelte';
 	import SaveMenu from '../../../../../components/mobile-layout/SaveMenu.svelte';
 	import LiveData from '../../../../../components/mobile-layout/LiveData.svelte';

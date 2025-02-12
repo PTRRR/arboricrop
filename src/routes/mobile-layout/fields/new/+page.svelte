@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Section from '../../../../components/mobile-layout/Section.svelte';
-	import TextInput from '../../../../components/mobile-layout/TextInput.svelte';
+	import TextInput from '../../../../components/layout/TextInput.svelte';
 	import Map from '../../../../components/mobile-layout/Map.svelte';
 	import { changinCenter, swissBounds } from '../../../../utils/dummyData';
 	import type { Field, GeoJSONFeature } from '../../../../utils/types';
@@ -15,7 +15,7 @@
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import { getFeatureLayerName } from '../../../../utils/geoJSON';
-	import Table, { type Cell, type Row } from '../../../../components/mobile-layout/Table.svelte';
+	import Table, { type Cell, type Row } from '../../../../components/layout/Table.svelte';
 	import { createUrlBuilder } from '../../../../utils/urls';
 	import PageHeader from '../../../../components/mobile-layout/PageHeader.svelte';
 	import SaveMenu from '../../../../components/mobile-layout/SaveMenu.svelte';

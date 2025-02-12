@@ -3,7 +3,7 @@
 	import PageHeader from '../../../components/mobile-layout/PageHeader.svelte';
 	import SaveMenu from '../../../components/mobile-layout/SaveMenu.svelte';
 	import Section from '../../../components/mobile-layout/Section.svelte';
-	import TextInput from '../../../components/mobile-layout/TextInput.svelte';
+	import TextInput from '../../../components/layout/TextInput.svelte';
 	import { useReturnButton } from '../../../stores';
 
 	const returnButton = useReturnButton();
