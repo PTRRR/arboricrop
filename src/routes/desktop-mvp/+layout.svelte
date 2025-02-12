@@ -1,21 +1,28 @@
 <script lang="ts">
-	import type { Snippet } from 'svelte';
+	import { onMount, type Snippet } from 'svelte';
 	import Section from '../../components/desktop/Section.svelte';
 	import TextInput from '../../components/layout/TextInput.svelte';
 	import Button from '../../components/layout/Button.svelte';
-	import { useUser } from '../../stores';
+	import { useAccounts, useUser } from '../../stores';
 	import Stack from '../../components/desktop/Stack.svelte';
 	import StepSeparation from '../../components/layout/StepSeparation.svelte';
 	import Spacer from '../../components/Spacer.svelte';
+	import { createId } from '@paralleldrive/cuid2';
 
 	interface Props {
 		children: Snippet;
 	}
 
 	const { children }: Props = $props();
+	const { accounts } = useAccounts();
 
 	const { email } = useUser();
 	let newEmail = $state('');
+	let password = $state('');
+
+	onMount(() => {
+		newEmail = $accounts[0].email;
+	});
 </script>
 
 <div class="desktop-mvp">
@@ -32,31 +39,39 @@
 		</Section>
 
 		{#if !$email}
-			<Section>
-				<div class="desktop-mvp__login-form">
-					<TextInput label="email" bind:value={newEmail} />
-					<TextInput type="password" label="password" />
-					<Button icon="navigate" onclick={() => ($email = newEmail)}>Login</Button>
-				</div>
+			<Section backgroundColor="var(--light-grey)" height="var(--content-min-height)">
+				<Stack style={{ width: '100%', maxWidth: '50rem' }}>
+					<TextInput label="email" name={createId()} bind:value={newEmail} />
+					<TextInput type="password" label="password" bind:value={password} />
+					<Button
+						icon="navigate"
+						disabled={!newEmail || !password}
+						onclick={() => ($email = newEmail)}>Login</Button
+					>
+				</Stack>
 			</Section>
 		{:else}
 			<Stack direction="horizontal">
 				<Section
-					width="15rem"
+					width="20rem"
 					height="var(--content-min-height)"
 					sticky="var(--content-offset-top)"
 					backgroundColor="var(--light-grey)"
 					innerStyle={{ justifyContent: 'space-between' }}
 				>
 					<Stack gap="0.5rem">
+						<StepSeparation label="Admin Settings" />
+						<Button href="/desktop-mvp/earmark-devices">Earmark Devices</Button>
+						<Spacer />
 						<StepSeparation label="Entities" />
-						<Button href="/desktop-mvp/devices">Devices</Button>
 						<Button href="/desktop-mvp/fields">Projects</Button>
 						<Button href="/desktop-mvp/settings">Trials</Button>
+						<Button href="/desktop-mvp/devices">Devices</Button>
 						<Spacer />
 						<StepSeparation label="Account" />
 						<Button>Settings</Button>
 						<Button>Account</Button>
+						<Button onclick={() => ($email = '')}>Logout</Button>
 					</Stack>
 
 					<a href="https://vivent-biosignals.com/">
@@ -109,14 +124,6 @@
 			justify-content: space-between;
 			align-items: center;
 			width: 100%;
-		}
-
-		&__login-form {
-			max-width: 50rem;
-			display: flex;
-			flex-direction: column;
-			gap: 1rem;
-			padding: 2rem;
 		}
 
 		&__home-button {

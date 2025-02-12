@@ -9,12 +9,12 @@
 		gap?: CSSStyleDeclaration['gap'];
 	}
 
-	const { children, direction = 'vertical', style, gap }: Props = $props();
+	const { children, direction = 'vertical', style, gap = '1rem' }: Props = $props();
 
 	const computedStyle = $derived(
 		getCss({
-			...(style || {}),
-			gap
+			gap,
+			...(style || {})
 		})
 	);
 </script>

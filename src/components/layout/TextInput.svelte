@@ -34,8 +34,8 @@
 			input?.focus();
 		}
 
-		if (onvalue && defaultValue) {
-			onvalue(defaultValue);
+		if (onvalue && value) {
+			onvalue(value);
 		}
 	});
 </script>
