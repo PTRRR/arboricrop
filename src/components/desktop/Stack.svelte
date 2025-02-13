@@ -15,7 +15,7 @@
 		children,
 		direction = 'vertical',
 		style,
-		gap = '1rem',
+		gap,
 		justifyContent,
 		alignItems
 	}: Props = $props();

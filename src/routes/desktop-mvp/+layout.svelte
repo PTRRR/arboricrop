@@ -28,18 +28,13 @@
 </script>
 
 <div class="desktop-mvp">
-	<div class="desktop-mvp__inner">
-		<Section
-			sticky="calc(1rem - var(--section-padding))"
-			zIndex="10"
-			padding="0.5rem 1rem"
-			backgroundColor="var(--green)"
-		>
-			<div class="desktop-mvp__main-menu">
-				<a class="desktop-mvp__home-button" href="/desktop-mvp">vita/dashboard</a>
-			</div>
-		</Section>
+	<Section sticky="0px" padding="0.5rem 1rem" backgroundColor="transparent">
+		<div class="desktop-mvp__main-menu">
+			<a class="desktop-mvp__home-button" href="/desktop-mvp">vita/dashboard</a>
+		</div>
+	</Section>
 
+	<div class="desktop-mvp__inner">
 		{#if !$currentAccount}
 			<Section backgroundColor="var(--light-grey)" height="var(--content-min-height)">
 				<Stack style={{ width: '100%', maxWidth: '50rem' }}>
@@ -87,6 +82,13 @@
 			</Stack>
 		{/if}
 	</div>
+	<div class="desktop-mvp__footer">
+		<p>
+			Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad accusamus dolorum eos atque libero
+			repellendus sit consequatur tenetur eveniet totam reprehenderit adipisci sapiente, similique
+			maxime magnam delectus harum rem possimus!
+		</p>
+	</div>
 </div>
 
 <button
@@ -107,7 +109,7 @@
 
 <style lang="scss">
 	:global(html, body) {
-		background-color: var(--white);
+		background-color: var(--green);
 	}
 
 	.clear-local-storage {
@@ -117,9 +119,8 @@
 	}
 
 	:root {
-		--section-padding: 0.3rem;
-		--content-offset-top: calc(2rem + var(--section-padding) + var(--big-font-size));
-		--content-min-height: calc(100vh - 3rem - var(--big-font-size));
+		--content-offset-top: 1rem;
+		--content-min-height: calc(100vh - 2rem);
 	}
 
 	* {
@@ -129,7 +130,7 @@
 	.desktop-mvp {
 		font-family: Rubik, Arial, Helvetica, sans-serif;
 		font-weight: 500;
-		padding: 1rem;
+
 		min-height: 100svh;
 		box-sizing: border-box;
 		display: flex;
@@ -137,13 +138,18 @@
 		align-items: center;
 
 		&__inner {
-			width: calc(100% + 2 * var(--section-padding));
+			// width: calc(100% + 2 * var(--section-padding));
+			width: 100%;
 			/* max-width: 100rem; */
 			height: 100%;
 			flex: 1 1 auto;
 			display: flex;
 			flex-direction: column;
-			margin: calc(var(--section-padding) * -1);
+			padding: 1rem;
+			// margin: calc(var(--section-padding) * -1);
+			background-color: var(--white);
+			border-radius: 2rem;
+			box-sizing: border-box;
 		}
 
 		&__main-menu {
@@ -165,6 +171,18 @@
 		&__logo {
 			height: 3rem;
 			width: 5rem;
+		}
+
+		&__footer {
+			padding: 1rem;
+			text-align: left;
+			width: 100%;
+			box-sizing: border-box;
+
+			p {
+				max-width: 40rem;
+				color: var(--white);
+			}
 		}
 	}
 </style>

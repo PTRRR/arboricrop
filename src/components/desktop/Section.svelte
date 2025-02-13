@@ -75,7 +75,6 @@
 <style lang="scss">
 	.section {
 		$this: &;
-		padding: var(--section-padding);
 		position: relative;
 		width: 100%;
 		box-sizing: border-box;
@@ -87,7 +86,6 @@
 		}
 
 		&__inner {
-			overflow: hidden;
 			position: relative;
 			background-color: var(--white);
 			border-radius: 0.8rem;

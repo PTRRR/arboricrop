@@ -18,7 +18,7 @@
 	const devicesRows = $derived<Row[]>(
 		$devices
 			.filter((it) => !it.accountId)
-			.slice(0, 30)
+			.slice(0, 60)
 			.map((device) => ({
 				selected: selectedDevices.has(device),
 				onclick: () => {
