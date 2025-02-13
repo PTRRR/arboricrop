@@ -4,7 +4,7 @@
 	import Spacer from '../Spacer.svelte';
 	import ActionMenu from './ActionMenu.svelte';
 	import Button, { type ButtonIconOrder } from '../layout/Button.svelte';
-	import PageHeader from './PageHeader.svelte';
+	import PageHeader from '../layout/PageHeader.svelte';
 	import Terminal from './Terminal.svelte';
 
 	let {

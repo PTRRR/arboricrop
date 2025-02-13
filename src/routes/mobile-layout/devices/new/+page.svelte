@@ -12,7 +12,7 @@
 	import { onMount } from 'svelte';
 	import type { PageData } from '../$types';
 	import TextInput from '../../../../components/layout/TextInput.svelte';
-	import PageHeader from '../../../../components/mobile-layout/PageHeader.svelte';
+	import PageHeader from '../../../../components/layout/PageHeader.svelte';
 	import SaveMenu from '../../../../components/mobile-layout/SaveMenu.svelte';
 
 	export let data: PageData;

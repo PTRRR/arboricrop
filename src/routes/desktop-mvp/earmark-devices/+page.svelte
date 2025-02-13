@@ -7,7 +7,7 @@
 	import type { Account, Device } from '../../../utils/types';
 	import Stack from '../../../components/desktop/Stack.svelte';
 	import { useAccounts, useDevices } from '../../../stores';
-	import PageHeader from '../../../components/mobile-layout/PageHeader.svelte';
+	import PageHeader from '../../../components/layout/PageHeader.svelte';
 	import SearchBar from '../../../components/desktop/SearchBar.svelte';
 	import Validation from '../../../components/desktop/Validation.svelte';
 
@@ -78,7 +78,6 @@
 		<PageHeader title="Earmark Devices" subTitle={`${devicesRows.length} Available Devices`} />
 		<SearchBar />
 		<Table
-			borders={false}
 			style={getCss({ width: '100%' })}
 			headers={[
 				{ label: '', width: '5%' },

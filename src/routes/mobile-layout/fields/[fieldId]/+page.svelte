@@ -10,7 +10,7 @@
 	import { goto } from '$app/navigation';
 	import { getLocationDelta } from '../../../../utils/locations';
 	import { getFeatureLayerName } from '../../../../utils/geoJSON';
-	import PageHeader from '../../../../components/mobile-layout/PageHeader.svelte';
+	import PageHeader from '../../../../components/layout/PageHeader.svelte';
 	import type { LngLatLike } from 'svelte-maplibre';
 	import SaveMenu from '../../../../components/mobile-layout/SaveMenu.svelte';
 	import SubPage from '../../../../components/mobile-layout/SubPage.svelte';

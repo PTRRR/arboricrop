@@ -12,7 +12,7 @@
 		useReturnButton,
 		useUser
 	} from '../../stores';
-	import PageHeader from '../../components/mobile-layout/PageHeader.svelte';
+	import PageHeader from '../../components/layout/PageHeader.svelte';
 	import { shuffle } from '../../utils/arrays';
 	import NotificationCard from '../../components/mobile-layout/NotificationCard.svelte';
 	import SaveMenu from '../../components/mobile-layout/SaveMenu.svelte';

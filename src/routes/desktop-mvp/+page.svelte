@@ -1,11 +1,89 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import Grid from '../../components/desktop/Grid.svelte';
+	import ProjectCard from '../../components/desktop/ProjectCard.svelte';
 	import Section from '../../components/desktop/Section.svelte';
+	import Stack from '../../components/desktop/Stack.svelte';
+	import TrialCard from '../../components/desktop/TrialCard.svelte';
+	import PageHeader from '../../components/layout/PageHeader.svelte';
+	import { useCurrentAccount, useProjects, useTrials } from '../../stores';
+	import { shuffle } from '../../utils/arrays';
+	import { changinCenter, dummyProjects, dummyTrials } from '../../utils/dummyData';
+	import { createId } from '@paralleldrive/cuid2';
+	import type { Project } from '../../utils/types';
+
+	const { trials, addTrial } = useTrials();
+	const { projects, addProject } = useProjects();
+	const { currentAccount } = useCurrentAccount();
+	const accountTrials = $derived($trials.filter((it) => it.accountId === $currentAccount?.id));
+	const accountProjects = $derived($projects.filter((it) => it.accountId === $currentAccount?.id));
+
+	onMount(() => {
+		if (accountTrials.length === 0) {
+			shuffle(dummyTrials)
+				.slice(0, 8)
+				.forEach((trial) =>
+					addTrial({
+						...trial,
+						id: `tri-${createId()}`,
+						center: changinCenter,
+						layers: [],
+						loraConfigId: '',
+						type: '',
+						area: '',
+						parentId: undefined,
+						accountId: $currentAccount?.id || ''
+					})
+				);
+		}
+
+		onMount(() => {
+			if ($currentAccount && accountProjects.length === 0) {
+				const newProjects: Project[] = shuffle(dummyProjects)
+					.slice(0, 10)
+					.map((it) => ({
+						id: `proj-${createId()}`,
+						name: it.name,
+						description: it.description,
+						accountId: $currentAccount.id
+					}));
+
+				for (const project of newProjects) {
+					addProject(project);
+				}
+			}
+		});
+	});
 </script>
 
-<Section>
-	<h1>sdkjhfasdlkjfh</h1>
-</Section>
+<Stack style={{ width: '100%' }}>
+	<Section>
+		<PageHeader title="Dashboard" />
+	</Section>
 
-<Section>
-	<h1>sdkjhfasdlkjfh</h1>
-</Section>
+	<Section
+		label="Recent Projects"
+		actions={[
+			{ label: 'All', icon: 'navigate', iconOrder: 'inverted', href: '/desktop-mvp/projects' }
+		]}
+	>
+		<Grid>
+			{#each shuffle(accountProjects).slice(0, 6) as project}
+				<ProjectCard {project} />
+			{/each}
+		</Grid>
+	</Section>
+
+	<Section
+		label="Recent trials"
+		actions={[
+			{ label: 'All', icon: 'navigate', iconOrder: 'inverted', href: '/desktop-mvp/trials' }
+		]}
+	>
+		<Grid>
+			{#each shuffle(accountTrials).slice(0, 3) as trial}
+				<TrialCard {trial} />
+			{/each}
+		</Grid>
+	</Section>
+</Stack>

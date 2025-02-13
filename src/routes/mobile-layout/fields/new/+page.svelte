@@ -17,7 +17,7 @@
 	import { getFeatureLayerName } from '../../../../utils/geoJSON';
 	import Table, { type Cell, type Row } from '../../../../components/layout/Table.svelte';
 	import { createUrlBuilder } from '../../../../utils/urls';
-	import PageHeader from '../../../../components/mobile-layout/PageHeader.svelte';
+	import PageHeader from '../../../../components/layout/PageHeader.svelte';
 	import SaveMenu from '../../../../components/mobile-layout/SaveMenu.svelte';
 
 	const defaultName = $page.url.searchParams.get('name') || '';

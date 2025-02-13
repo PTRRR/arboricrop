@@ -5,7 +5,7 @@
 	import { useDevices, useNotifications, useReturnButton } from '../../../../stores';
 	import { formatDateToDDMMYYYY } from '../../../../utils/dates';
 	import Section from '../../../../components/mobile-layout/Section.svelte';
-	import PageHeader from '../../../../components/mobile-layout/PageHeader.svelte';
+	import PageHeader from '../../../../components/layout/PageHeader.svelte';
 	import TextareaInput from '../../../../components/layout/TextareaInput.svelte';
 	import Table, { type Row } from '../../../../components/layout/Table.svelte';
 	import StatusDot, { type Status } from '../../../../components/mobile-layout/StatusDot.svelte';

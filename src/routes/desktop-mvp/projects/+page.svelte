@@ -2,7 +2,7 @@
 	import { createId } from '@paralleldrive/cuid2';
 	import Section from '../../../components/desktop/Section.svelte';
 	import Button from '../../../components/layout/Button.svelte';
-	import PageHeader from '../../../components/mobile-layout/PageHeader.svelte';
+	import PageHeader from '../../../components/layout/PageHeader.svelte';
 	import { useCurrentAccount, useProjects } from '../../../stores';
 	import type { Project } from '../../../utils/types';
 	import Stack from '../../../components/desktop/Stack.svelte';

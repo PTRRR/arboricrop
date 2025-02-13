@@ -10,7 +10,7 @@
 	import Section from '../../../../components/mobile-layout/Section.svelte';
 	import type { PageData } from './$types';
 	import CenteredWrapper from '../../../../components/mobile-layout/CenteredWrapper.svelte';
-	import PageHeader from '../../../../components/mobile-layout/PageHeader.svelte';
+	import PageHeader from '../../../../components/layout/PageHeader.svelte';
 
 	const { data }: { data: PageData } = $props();
 

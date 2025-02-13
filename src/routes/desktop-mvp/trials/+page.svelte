@@ -11,7 +11,7 @@
 	import { changinCenter, dummyTrials, swissBounds } from '../../../utils/dummyData';
 	import { getLocationDelta } from '../../../utils/locations';
 	import TrialCard from '../../../components/desktop/TrialCard.svelte';
-	import PageHeader from '../../../components/mobile-layout/PageHeader.svelte';
+	import PageHeader from '../../../components/layout/PageHeader.svelte';
 	import SearchBar from '../../../components/desktop/SearchBar.svelte';
 	import Grid from '../../../components/desktop/Grid.svelte';
 	import { onMount } from 'svelte';

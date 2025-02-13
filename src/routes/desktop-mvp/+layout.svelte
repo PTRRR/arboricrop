@@ -9,6 +9,7 @@
 	import Spacer from '../../components/Spacer.svelte';
 	import { createId } from '@paralleldrive/cuid2';
 	import { goto } from '$app/navigation';
+	import PageHeader from '../../components/layout/PageHeader.svelte';
 
 	interface Props {
 		children: Snippet;
@@ -36,8 +37,9 @@
 
 	<div class="desktop-mvp__inner">
 		{#if !$currentAccount}
-			<Section backgroundColor="var(--light-grey)" height="var(--content-min-height)">
-				<Stack style={{ width: '100%', maxWidth: '50rem' }}>
+			<Section>
+				<PageHeader title="Login" />
+				<Stack style={{ width: '100%', maxWidth: '50rem' }} gap="1rem">
 					<TextInput label="email" name={createId()} bind:value={newEmail} />
 					<TextInput type="password" label="password" bind:value={password} />
 					<Button

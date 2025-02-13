@@ -54,7 +54,7 @@
 
 <div class="table" {style}>
 	{#if headers}
-		<div class="table__row table__headers">
+		<div class="table__row table__headers" class:table--borders={borders}>
 			{#each headers as header}
 				<div class="table__cell" style={getCss({ width: header.width })}>
 					<span>{header.label}</span>
@@ -162,6 +162,7 @@
 				display: block;
 				overflow: hidden;
 				text-overflow: ellipsis;
+				font-weight: 500;
 			}
 		}
 

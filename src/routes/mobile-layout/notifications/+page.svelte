@@ -5,7 +5,7 @@
 	import type { NotificationType } from '../../../utils/types';
 	import Section from '../../../components/mobile-layout/Section.svelte';
 	import NotificationCard from '../../../components/mobile-layout/NotificationCard.svelte';
-	import PageHeader from '../../../components/mobile-layout/PageHeader.svelte';
+	import PageHeader from '../../../components/layout/PageHeader.svelte';
 
 	const returnButton = useReturnButton();
 	const notifications = useNotifications();

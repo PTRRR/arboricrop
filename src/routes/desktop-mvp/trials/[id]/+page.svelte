@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import Section from '../../../../components/desktop/Section.svelte';
-	import PageHeader from '../../../../components/mobile-layout/PageHeader.svelte';
+	import PageHeader from '../../../../components/layout/PageHeader.svelte';
 	import Map from '../../../../components/layout/Map.svelte';
 	import { useCurrentAccount, useDevices, useTrials } from '../../../../stores';
 	import { swissBounds } from '../../../../utils/dummyData';

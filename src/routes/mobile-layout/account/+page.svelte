@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import PageHeader from '../../../components/mobile-layout/PageHeader.svelte';
+	import PageHeader from '../../../components/layout/PageHeader.svelte';
 	import SaveMenu from '../../../components/mobile-layout/SaveMenu.svelte';
 	import Section from '../../../components/mobile-layout/Section.svelte';
 	import TextInput from '../../../components/layout/TextInput.svelte';

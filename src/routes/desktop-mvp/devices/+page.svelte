@@ -6,7 +6,7 @@
 	import Stack from '../../../components/desktop/Stack.svelte';
 	import TextInput from '../../../components/layout/TextInput.svelte';
 	import TextareaInput from '../../../components/layout/TextareaInput.svelte';
-	import PageHeader from '../../../components/mobile-layout/PageHeader.svelte';
+	import PageHeader from '../../../components/layout/PageHeader.svelte';
 	import DevicesList from '../../../components/desktop/DevicesList.svelte';
 	import SearchBar from '../../../components/desktop/SearchBar.svelte';
 	import Validation from '../../../components/desktop/Validation.svelte';

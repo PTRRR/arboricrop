@@ -8,7 +8,7 @@
 	import TextareaInput from '../../../../components/layout/TextareaInput.svelte';
 	import TextInput from '../../../../components/layout/TextInput.svelte';
 	import Checkbox from '../../../../components/mobile-layout/Checkbox.svelte';
-	import PageHeader from '../../../../components/mobile-layout/PageHeader.svelte';
+	import PageHeader from '../../../../components/layout/PageHeader.svelte';
 	import { useCurrentAccount, useDevices, useProjects, useTrials } from '../../../../stores';
 	import type { Trial } from '../../../../utils/types';
 	import TrialCard from '../../../../components/desktop/TrialCard.svelte';
@@ -122,7 +122,6 @@
 		{:else if editingTrials}
 			<Section label="Trials" backgroundColor="var(--light-grey)">
 				<Table
-					borders={false}
 					headers={[
 						{ label: '', width: '7%' },
 						{ label: 'Name', width: '30%' },
