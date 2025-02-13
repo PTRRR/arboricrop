@@ -78,7 +78,11 @@
 	</Section>
 
 	{#if newTrial}
-		<Section label="New Trial" backgroundColor="var(--light-grey)" width="35%">
+		<Section
+			label="New Trial"
+			backgroundColor="var(--light-grey)"
+			sticky="var(--content-offset-top)"
+		>
 			<TextInput
 				label="Name"
 				defaultValue={newTrial.name}

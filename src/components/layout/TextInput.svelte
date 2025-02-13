@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { getCss } from '../../utils/css';
 
 	let {
 		name,
@@ -10,7 +11,8 @@
 		autoFocus,
 		readonly,
 		onvalue,
-		type
+		type,
+		style
 	}: {
 		name?: string;
 		label?: string;
@@ -21,6 +23,7 @@
 		readonly?: boolean;
 		onvalue?: (value: string) => void;
 		type?: 'text' | 'password';
+		style?: Partial<CSSStyleDeclaration>;
 	} = $props();
 
 	let input: HTMLInputElement | null = $state(null);
@@ -40,7 +43,7 @@
 	});
 </script>
 
-<div class="text-input">
+<div class="text-input" style={getCss(style || {})}>
 	{#if label}
 		<label for={name}>{label}</label>
 	{/if}
@@ -72,7 +75,7 @@
 			font-weight: inherit;
 			text-transform: lowercase;
 			padding: 0.5rem;
-			height: calc(var(--main-font-size) + 1rem);
+			height: 1rem;
 			border: none;
 			background-color: rgb(235, 235, 235);
 			border-radius: 5px;

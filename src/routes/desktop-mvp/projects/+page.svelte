@@ -73,7 +73,11 @@
 	</Section>
 
 	{#if newProject}
-		<Section label="New Project" backgroundColor="var(--light-grey)">
+		<Section
+			label="New Project"
+			backgroundColor="var(--light-grey)"
+			sticky="var(--content-offset-top)"
+		>
 			<TextInput
 				label="Name"
 				onvalue={(value) => {
