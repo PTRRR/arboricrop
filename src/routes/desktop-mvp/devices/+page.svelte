@@ -5,11 +5,11 @@
 	import StatusDot from '../../../components/mobile-layout/StatusDot.svelte';
 	import Stack from '../../../components/desktop/Stack.svelte';
 	import TextInput from '../../../components/layout/TextInput.svelte';
-	import Button from '../../../components/layout/Button.svelte';
 	import TextareaInput from '../../../components/layout/TextareaInput.svelte';
 	import PageHeader from '../../../components/mobile-layout/PageHeader.svelte';
 	import DevicesList from '../../../components/desktop/DevicesList.svelte';
 	import SearchBar from '../../../components/desktop/SearchBar.svelte';
+	import Validation from '../../../components/desktop/Validation.svelte';
 
 	const { devices, updateDevice } = useDevices();
 	const { currentAccount } = useCurrentAccount();
@@ -61,37 +61,22 @@
 			<TextInput label="Version" value={selectedDevice.firmwareVersion} readonly />
 			<TextInput label="Name" bind:value={deviceName} />
 			<TextareaInput label="Note" bind:value={deviceNote} />
+			<Validation
+				validateLabel="Save"
+				validateDisabled={!selectedDeviceHasChanges}
+				onvalidate={() => {
+					if (!selectedDevice) return;
 
-			<Stack gap="0.5rem" direction="horizontal">
-				<Button
-					icon="check"
-					disabled={!selectedDeviceHasChanges}
-					backgroundColor="var(--light-green)"
-					iconBackgroundColor="var(--green)"
-					padding
-					onclick={() => {
-						if (!selectedDevice) return;
+					updateDevice({
+						...selectedDevice,
+						name: deviceName,
+						note: deviceNote
+					});
 
-						updateDevice({
-							...selectedDevice,
-							name: deviceName,
-							note: deviceNote
-						});
-
-						selectedDevice = accountDevices.find((it) => it.id === selectedDevice?.id);
-					}}
-				>
-					Save
-				</Button>
-				<Button
-					icon="cross"
-					backgroundColor="var(--grey)"
-					padding
-					onclick={() => (selectedDevice = undefined)}
-				>
-					Close
-				</Button>
-			</Stack>
+					selectedDevice = accountDevices.find((it) => it.id === selectedDevice?.id);
+				}}
+				oncancel={() => (selectedDevice = undefined)}
+			/>
 		</Section>
 	{/if}
 </Stack>

@@ -17,7 +17,7 @@
 		validateLabel = 'Add',
 		validateDisabled,
 		cancelDisabled,
-		cancelLabel = 'Cancal'
+		cancelLabel = 'Cancel'
 	}: Props = $props();
 </script>
 

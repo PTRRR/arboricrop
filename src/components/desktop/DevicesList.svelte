@@ -115,8 +115,4 @@
 	</Stack>
 {/snippet}
 
-<Table
-	{headers}
-	rows={getRows(rows, statusCell, onselect ? selectCell : undefined)}
-	borders={false}
-/>
+<Table {headers} rows={getRows(rows, statusCell, onselect ? selectCell : undefined)} />
