@@ -8,12 +8,14 @@
 	import TextInput from '../../../components/layout/TextInput.svelte';
 	import Map from '../../../components/layout/Map.svelte';
 	import Button from '../../../components/layout/Button.svelte';
-	import { changinCenter, swissBounds } from '../../../utils/dummyData';
+	import { changinCenter, dummyTrials, swissBounds } from '../../../utils/dummyData';
 	import { getLocationDelta } from '../../../utils/locations';
 	import TrialCard from '../../../components/desktop/TrialCard.svelte';
 	import PageHeader from '../../../components/mobile-layout/PageHeader.svelte';
 	import SearchBar from '../../../components/desktop/SearchBar.svelte';
 	import Grid from '../../../components/desktop/Grid.svelte';
+	import { onMount } from 'svelte';
+	import { shuffle } from '../../../utils/arrays';
 
 	const { trials, addTrial } = useTrials();
 	const { currentAccount } = useCurrentAccount();
@@ -34,6 +36,26 @@
 			parentId: undefined,
 			accountId: $currentAccount?.id || ''
 		};
+	});
+
+	onMount(() => {
+		if (accountTrials.length === 0) {
+			shuffle(dummyTrials)
+				.slice(0, 8)
+				.forEach((trial) =>
+					addTrial({
+						...trial,
+						id: `tri-${createId()}`,
+						center: changinCenter,
+						layers: [],
+						loraConfigId: '',
+						type: '',
+						area: '',
+						parentId: undefined,
+						accountId: $currentAccount?.id || ''
+					})
+				);
+		}
 	});
 </script>
 
@@ -82,6 +104,7 @@
 			label="New Trial"
 			backgroundColor="var(--light-grey)"
 			sticky="var(--content-offset-top)"
+			width="40%"
 		>
 			<TextInput
 				label="Name"

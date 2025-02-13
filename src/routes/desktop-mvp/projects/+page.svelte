@@ -77,6 +77,7 @@
 			label="New Project"
 			backgroundColor="var(--light-grey)"
 			sticky="var(--content-offset-top)"
+			width="40%"
 		>
 			<TextInput
 				label="Name"

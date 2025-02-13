@@ -51,6 +51,7 @@ export type Field = {
 	layers: GeoJSONFeature[];
 	loraConfigId: string;
 	name: string;
+  description?: string;
 	type: string;
 };
 

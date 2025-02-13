@@ -736,3 +736,126 @@ export const dummyProjects = [
     description: "Large-scale sweet potato cultivation with storage facilities"
   }
 ];
+
+export const dummyTrials = [
+  {
+    name: "Soil Moisture Network",
+    description: "Grid of 20 moisture sensors monitoring irrigation efficiency"
+  },
+  {
+    name: "Growth Rate Tracking",
+    description: "Height sensors and time-lapse cameras monitoring plant development"
+  },
+  {
+    name: "Water Level Control",
+    description: "Automated water depth sensors across field sections"
+  },
+  {
+    name: "Temperature Impact Study",
+    description: "Thermal sensors monitoring day-night temperature effects"
+  },
+  {
+    name: "Drought Resistance",
+    description: "Soil moisture and plant stress sensors in different irrigation zones"
+  },
+  {
+    name: "Growth Stage Monitor",
+    description: "NDVI sensors tracking crop development stages"
+  },
+  {
+    name: "Pest Detection Grid",
+    description: "Network of insect traps with image recognition"
+  },
+  {
+    name: "Nutrient Uptake Study",
+    description: "NPK sensors monitoring soil nutrient levels"
+  },
+  {
+    name: "Root Development",
+    description: "Underground sensors tracking root system growth"
+  },
+  {
+    name: "Soil Temperature Grid",
+    description: "Temperature probes at different soil depths"
+  },
+  {
+    name: "Yield Prediction Network",
+    description: "Multi-sensor system estimating potential harvest yields"
+  },
+  {
+    name: "Photosynthesis Monitor",
+    description: "Chlorophyll fluorescence sensors tracking plant health"
+  },
+  {
+    name: "Weather Impact Analysis",
+    description: "Mini weather stations correlating climate with growth"
+  },
+  {
+    name: "Irrigation Efficiency Study",
+    description: "Water flow sensors measuring absorption rates"
+  },
+  {
+    name: "Soil Compaction Monitor",
+    description: "Pressure sensors tracking soil density changes"
+  },
+  {
+    name: "Disease Early Warning",
+    description: "Multispectral cameras detecting early signs of plant stress"
+  },
+  {
+    name: "Pollinator Activity Tracking",
+    description: "Camera system monitoring insect visitation patterns"
+  },
+  {
+    name: "Leaf Area Index Study",
+    description: "Optical sensors measuring canopy development"
+  },
+  {
+    name: "Root Zone Monitor",
+    description: "Soil probes tracking moisture at root depth"
+  },
+  {
+    name: "Nutrient Leaching Control",
+    description: "Deep soil sensors monitoring fertilizer movement"
+  },
+  {
+    name: "Microclimate Analysis",
+    description: "Environmental sensor network for local conditions"
+  },
+  {
+    name: "Growth Pattern Study",
+    description: "3D scanning system tracking plant architecture"
+  },
+  {
+    name: "Soil Biology Monitor",
+    description: "Chemical sensors tracking microbial activity"
+  },
+  {
+    name: "Frost Risk Detection",
+    description: "Temperature sensor array for frost prevention"
+  },
+  {
+    name: "Harvest Timing Optimizer",
+    description: "Multi-parameter system for optimal harvest scheduling"
+  },
+  {
+    name: "Carbon Sequestration Study",
+    description: "Soil carbon content monitoring system"
+  },
+  {
+    name: "Water Stress Detection",
+    description: "Infrared sensors monitoring plant water status"
+  },
+  {
+    name: "Wind Impact Analysis",
+    description: "Anemometers studying wind effects on growth"
+  },
+  {
+    name: "Salinity Management",
+    description: "Electrical conductivity sensors tracking soil salt levels"
+  },
+  {
+    name: "Crop Quality Monitor",
+    description: "Spectral sensors analyzing plant tissue development"
+  }
+];

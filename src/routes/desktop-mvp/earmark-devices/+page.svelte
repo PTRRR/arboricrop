@@ -99,6 +99,7 @@
 			padding="1rem"
 			label="Accounts"
 			backgroundColor="var(--light-grey)"
+			width="40%"
 		>
 			<SearchBar />
 			<Table

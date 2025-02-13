@@ -54,7 +54,7 @@
 			label={deviceLabel}
 			description={selectedDevice.status}
 			backgroundColor="var(--light-grey)"
-			width="30%"
+			width="40%"
 			sticky="var(--content-offset-top)"
 		>
 			<TextInput label="ID" value={selectedDevice.id} readonly />

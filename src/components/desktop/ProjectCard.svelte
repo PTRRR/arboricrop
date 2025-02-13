@@ -15,9 +15,7 @@
 	const projectTrials = $derived($trials.filter((it) => it.parentId === project.id));
 	const projectTrailsIds = $derived(projectTrials.map((it) => it.id));
 	const projectActiveDevices = $derived(
-		$devices.filter(
-			(it) => it.parentId && projectTrailsIds.includes(it.parentId) && it.status === 'active'
-		)
+		$devices.filter((it) => it.parentId && projectTrailsIds.includes(it.parentId))
 	);
 </script>
 
@@ -26,7 +24,7 @@
 		<span class="project-card__title">{project.name}</span>
 		<span class="project-card__description">{project.description}</span>
 		<Spacer size="1.5rem" />
-		<span class="project-card__devices">{`${projectActiveDevices.length} Active Devices`}</span>
+		<span class="project-card__devices">{`${projectActiveDevices.length} Devices`}</span>
 		<Stack direction="horizontal" alignItems="center" gap="0.5rem">
 			<StatusDot status="success" />
 			<span>No issues</span>
