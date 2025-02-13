@@ -9,18 +9,31 @@
 	import TextInput from '../../../../components/layout/TextInput.svelte';
 	import Checkbox from '../../../../components/mobile-layout/Checkbox.svelte';
 	import PageHeader from '../../../../components/layout/PageHeader.svelte';
-	import { useCurrentAccount, useDevices, useProjects, useTrials } from '../../../../stores';
+	import {
+		useCurrentAccount,
+		useDevices,
+		useNotifications,
+		useProjects,
+		useTrials
+	} from '../../../../stores';
 	import type { Trial } from '../../../../utils/types';
 	import TrialCard from '../../../../components/desktop/TrialCard.svelte';
 	import Grid from '../../../../components/desktop/Grid.svelte';
 	import Validation from '../../../../components/desktop/Validation.svelte';
+	import { getCss } from '../../../../utils/css';
+	import { shuffle } from '../../../../utils/arrays';
+	import NotificationCard from '../../../../components/desktop/NotificationCard.svelte';
 
 	const projectId = $page.params.id;
 	const { projects } = useProjects();
 	const { devices } = useDevices();
 	const { trials, updateTrials } = useTrials();
 	const { currentAccount } = useCurrentAccount();
+	const notifications = useNotifications();
 
+	const randomNotifications = $derived(
+		shuffle($notifications).slice(0, Math.floor(Math.random() * 5 + 2))
+	);
 	const project = $derived($projects.find((it) => it.id === projectId));
 	const accountTrials = $derived(
 		$trials.filter((it) => !it.parentId && it.accountId === $currentAccount?.id)
@@ -59,7 +72,7 @@
 					iconOrder="inverted"
 					onclick={() => (editingProject = !editingProject)}
 				>
-					Edit
+					Settings
 				</Button>
 			{/if}
 		</Stack>
@@ -76,8 +89,20 @@
 	<Stack direction="horizontal" style={{ width: '100%' }}>
 		<Stack style={{ width: '100%' }}>
 			<Section>
-				<PageHeader {title} subTitle={project.description} />
+				<Stack gap="0.5rem">
+					<PageHeader {title} subTitle={project.description} />
+					<span style={getCss({ color: 'var(--black)' })}>LoRa — Europe</span>
+				</Stack>
 			</Section>
+
+			<Section label="Notifications">
+				<Grid>
+					{#each randomNotifications as notification}
+						<NotificationCard {notification} />
+					{/each}
+				</Grid>
+			</Section>
+
 			<Section
 				label="Trials"
 				actions={editing
@@ -110,10 +135,15 @@
 		</Stack>
 
 		{#if editingProject}
-			<Section label="Edit" backgroundColor="var(--light-grey)">
+			<Section
+				label="Settings"
+				backgroundColor="var(--light-grey)"
+				sticky="var(--content-offset-top)"
+			>
 				<TextInput label="Name" defaultValue={project.name} />
 				<TextareaInput label="Description" defaultValue={project.description} />
 				<Validation
+					onvalidate={() => (editingProject = false)}
 					oncancel={() => {
 						editingProject = false;
 					}}

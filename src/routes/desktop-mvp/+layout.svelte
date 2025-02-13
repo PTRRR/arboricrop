@@ -70,7 +70,12 @@
 						<StepSeparation label="Account" />
 						<Button href="/desktop-mvp/settings">Settings</Button>
 						<Button>Account</Button>
-						<Button onclick={() => ($email = '')}>Logout</Button>
+						<Button
+							onclick={() => {
+								$email = '';
+								$currentAccount = null;
+							}}>Logout</Button
+						>
 						<Spacer />
 						<StepSeparation label="Admin" />
 						<Button href="/desktop-mvp/earmark-devices">Earmark</Button>

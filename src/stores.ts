@@ -428,7 +428,7 @@ export const useAccounts = () => {
 };
 
 export const useCurrentAccount = () => {
-	const currentAccount = useWritable<Account | undefined>('current-account', undefined, true);
+	const currentAccount = useWritable<Account | undefined | null>('current-account', undefined, true);
 
 	return {
 		currentAccount

@@ -69,13 +69,13 @@
 		&__subtitle {
 			font-size: var(--main-font-size);
 			font-weight: 500;
-			color: lightgray;
+			color: var(--grey);
 		}
 
 		&__description {
 			font-size: var(--main-font-size);
 			font-weight: 500;
-			color: lightgray;
+			color: var(--grey);
 		}
 	}
 </style>

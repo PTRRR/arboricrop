@@ -76,6 +76,7 @@
 		--red: #ff2900;
 		--light-red: #ffd5cc;
 		--yellow: #fecc00;
+		--light-yellow: #ffec9f;
 		--blue: #009fe3;
 		--black: #000000;
 		--light-grey: #f6f6f6;
