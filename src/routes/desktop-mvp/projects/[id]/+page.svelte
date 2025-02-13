@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { halfvec } from 'drizzle-orm/pg-core';
 	import DevicesList from '../../../../components/desktop/DevicesList.svelte';
 	import Section from '../../../../components/desktop/Section.svelte';
 	import Stack from '../../../../components/desktop/Stack.svelte';
@@ -14,6 +13,7 @@
 	import type { Trial } from '../../../../utils/types';
 	import TrialCard from '../../../../components/desktop/TrialCard.svelte';
 	import Grid from '../../../../components/desktop/Grid.svelte';
+	import Validation from '../../../../components/desktop/Validation.svelte';
 
 	const projectId = $page.params.id;
 	const { projects } = useProjects();
@@ -113,15 +113,11 @@
 			<Section label="Edit" backgroundColor="var(--light-grey)">
 				<TextInput label="Name" defaultValue={project.name} />
 				<TextareaInput label="Description" defaultValue={project.description} />
-				<Stack direction="horizontal" gap="0.5rem">
-					<Button icon="check">Add</Button>
-					<Button
-						icon="cross"
-						onclick={() => {
-							editingProject = false;
-						}}>Cancel</Button
-					>
-				</Stack>
+				<Validation
+					oncancel={() => {
+						editingProject = false;
+					}}
+				/>
 			</Section>
 		{:else if editingTrials}
 			<Section label="Trials" backgroundColor="var(--light-grey)">
@@ -150,22 +146,14 @@
 						]
 					}))}
 				/>
-				<Stack direction="horizontal" gap="0.5rem">
-					<Button
-						icon="check"
-						onclick={() =>
-							updateTrials(
-								Array.from(selectedTrials).map((it) => ({ ...it, parentId: project.id }))
-							)}>Add</Button
-					>
-					<Button
-						icon="cross"
-						onclick={() => {
-							selectedTrials.clear();
-							editingTrials = false;
-						}}>Cancel</Button
-					>
-				</Stack>
+				<Validation
+					onvalidate={() =>
+						updateTrials(Array.from(selectedTrials).map((it) => ({ ...it, parentId: project.id })))}
+					oncancel={() => {
+						selectedTrials.clear();
+						editingTrials = false;
+					}}
+				/>
 			</Section>
 		{/if}
 	</Stack>

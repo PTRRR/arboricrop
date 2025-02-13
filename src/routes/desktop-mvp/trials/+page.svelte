@@ -16,6 +16,7 @@
 	import Grid from '../../../components/desktop/Grid.svelte';
 	import { onMount } from 'svelte';
 	import { shuffle } from '../../../utils/arrays';
+	import Validation from '../../../components/desktop/Validation.svelte';
 
 	const { trials, addTrial } = useTrials();
 	const { currentAccount } = useCurrentAccount();
@@ -137,30 +138,15 @@
 					// if (delta > 0.000001) coords = value;
 				}}
 			/>
-			<Stack gap="0.5rem">
-				<Button
-					icon="check"
-					backgroundColor="var(--light-green)"
-					iconBackgroundColor="var(--green)"
-					padding
-					onclick={() => {
-						if (!newTrial) return;
-						addTrial(newTrial);
-						newTrial = undefined;
-					}}
-				>
-					Save
-				</Button>
-				<Button
-					icon="cross"
-					backgroundColor="var(--light-red)"
-					iconBackgroundColor="var(--red)"
-					padding
-					onclick={() => (newTrial = undefined)}
-				>
-					Close
-				</Button>
-			</Stack>
+
+			<Validation
+				onvalidate={() => {
+					if (!newTrial) return;
+					addTrial(newTrial);
+					newTrial = undefined;
+				}}
+				oncancel={() => (newTrial = undefined)}
+			/>
 		</Section>
 	{/if}
 </Stack>

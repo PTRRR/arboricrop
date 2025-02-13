@@ -3,15 +3,13 @@
 	import Table, { type Cell, type Row } from '../../../components/layout/Table.svelte';
 	import Pagination from '../../../components/layout/Pagination.svelte';
 	import { getCss } from '../../../utils/css';
-	import TextInput from '../../../components/layout/TextInput.svelte';
-	import Button from '../../../components/layout/Button.svelte';
-	import Spacer from '../../../components/Spacer.svelte';
 	import Checkbox from '../../../components/mobile-layout/Checkbox.svelte';
 	import type { Account, Device } from '../../../utils/types';
 	import Stack from '../../../components/desktop/Stack.svelte';
 	import { useAccounts, useDevices } from '../../../stores';
 	import PageHeader from '../../../components/mobile-layout/PageHeader.svelte';
 	import SearchBar from '../../../components/desktop/SearchBar.svelte';
+	import Validation from '../../../components/desktop/Validation.svelte';
 
 	const { devices, updateDevices } = useDevices();
 	let selectedDevices = $state(new Set<Device>());
@@ -111,11 +109,11 @@
 				rows={rowsWithRenderHandler(accountsRows, selectCell)}
 			/>
 			<Pagination pages={4} />
-			<Button
-				icon="check"
-				iconBackgroundColor="var(--green)"
-				disabled={!selectedAccount}
-				onclick={() => {
+
+			<Validation
+				validateLabel={`Assign ${selectedDevices.size} devices to account`}
+				validateDisabled={!selectedAccount}
+				onvalidate={() => {
 					if (selectedAccount) {
 						updateDevices(
 							Array.from(selectedDevices).map((it) => ({ ...it, accountId: selectedAccount?.id }))
@@ -125,9 +123,7 @@
 						selectedAccount = undefined;
 					}
 				}}
-			>
-				Assign {selectedDevices.size} devices to account
-			</Button>
+			/>
 		</Section>
 	{/if}
 </Stack>

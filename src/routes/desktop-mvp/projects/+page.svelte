@@ -14,6 +14,7 @@
 	import { dummyProjects } from '../../../utils/dummyData';
 	import { shuffle } from '../../../utils/arrays';
 	import SearchBar from '../../../components/desktop/SearchBar.svelte';
+	import Validation from '../../../components/desktop/Validation.svelte';
 
 	const { projects, addProject } = useProjects();
 	const { currentAccount } = useCurrentAccount();
@@ -94,10 +95,7 @@
 				}}
 			/>
 
-			<Stack gap="0.5rem" direction="horizontal">
-				<Button icon="add" onclick={() => newProject && addProject(newProject)}>Create</Button>
-				<Button icon="cross">Cancel</Button>
-			</Stack>
+			<Validation onvalidate={() => newProject && addProject(newProject)} oncancel={() => {}} />
 		</Section>
 	{/if}
 </Stack>
