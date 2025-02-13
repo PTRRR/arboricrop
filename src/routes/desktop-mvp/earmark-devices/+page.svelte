@@ -11,6 +11,7 @@
 	import Stack from '../../../components/desktop/Stack.svelte';
 	import { useAccounts, useDevices } from '../../../stores';
 	import PageHeader from '../../../components/mobile-layout/PageHeader.svelte';
+	import SearchBar from '../../../components/desktop/SearchBar.svelte';
 
 	const { devices, updateDevices } = useDevices();
 	let selectedDevices = $state(new Set<Device>());
@@ -75,41 +76,31 @@
 {/snippet}
 
 <Stack direction="horizontal" style={{ width: '100%' }}>
-	<Stack style={{ width: '100%', padding: '1rem' }}>
+	<Section fill>
 		<PageHeader title="Earmark Devices" subTitle={`${devicesRows.length} Available Devices`} />
-		<Section padding="0" fill>
-			<!-- <Stack gap="0.5rem">
-				<TextInput label="Search" />
-				<Button icon="navigate">Submit</Button>
-			</Stack> -->
-			<Table
-				borders={false}
-				style={getCss({ width: '100%' })}
-				headers={[
-					{ label: '', width: '5%' },
-					{ label: 'ID', width: '25%' },
-					{ label: 'Firmware Version', width: '20%' },
-					{ label: 'Creation Date' }
-				]}
-				rows={rowsWithRenderHandler(devicesRows, selectCell)}
-			/>
-			<Pagination pages={10} />
-		</Section>
-	</Stack>
+		<SearchBar />
+		<Table
+			borders={false}
+			style={getCss({ width: '100%' })}
+			headers={[
+				{ label: '', width: '5%' },
+				{ label: 'ID', width: '40%' },
+				{ label: 'Firmware Version', width: '20%' },
+				{ label: 'Creation Date' }
+			]}
+			rows={rowsWithRenderHandler(devicesRows, selectCell)}
+		/>
+		<Pagination pages={10} />
+	</Section>
 
 	{#if selectedDevices.size > 0}
 		<Section
 			sticky="var(--content-offset-top)"
-			width="30%"
 			padding="1rem"
-			label={`${selectedDevices.size} Selected Devices`}
+			label="Accounts"
 			backgroundColor="var(--light-grey)"
 		>
-			<div>
-				<TextInput label="Search Account" />
-				<Spacer />
-				<Button icon="navigate">Search</Button>
-			</div>
+			<SearchBar />
 			<Table
 				headers={[
 					{ label: '', width: '10%' },
@@ -121,9 +112,7 @@
 			<Pagination pages={4} />
 			<Button
 				icon="check"
-				backgroundColor={selectedAccount ? 'var(--light-green)' : 'var(--grey)'}
 				iconBackgroundColor="var(--green)"
-				padding
 				disabled={!selectedAccount}
 				onclick={() => {
 					if (selectedAccount) {

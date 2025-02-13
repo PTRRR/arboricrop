@@ -28,7 +28,7 @@
 </script>
 
 <div class="desktop-mvp">
-	<Section sticky="0px" padding="0.5rem 1rem" backgroundColor="transparent">
+	<Section sticky="0px" padding="1rem 1rem" backgroundColor="transparent">
 		<div class="desktop-mvp__main-menu">
 			<a class="desktop-mvp__home-button" href="/desktop-mvp">vita/dashboard</a>
 		</div>

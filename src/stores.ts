@@ -438,10 +438,27 @@ export const useCurrentAccount = () => {
 export const useTrials = () => {
 	const trials = useWritable<Trial[]>('trials', [], true);
 	const addTrial = (trial: Trial) => trials.update((trials) => [...trials, trial]);
+  const updateTrial = (trial: Trial) => {
+		trials.update((trials) => {
+			const trialIndex = trials.findIndex((it) => it.id === trial.id);
+
+			if (trialIndex > -1) {
+				const newTrials = [...trials];
+				newTrials[trialIndex] = { ...newTrials[trialIndex], ...trial };
+				return newTrials;
+			}
+
+			return trials;
+		});
+	};
+
+	const updateTrials = (trials: Trial[]) => trials.forEach((trial) => updateTrial(trial));
 
 	return {
 		trials,
-		addTrial
+		addTrial,
+    updateTrial,
+    updateTrials
 	};
 };
 

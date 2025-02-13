@@ -40,6 +40,8 @@
 	const rows = $derived<Row[]>(
 		devices.map((device) => ({
 			onclick: () => {
+				if (!onselect) return;
+
 				if (hasDevice(device)) {
 					selectedDevices.delete(device);
 				} else {
@@ -48,7 +50,7 @@
 				}
 
 				selectedDevices = new Set(selectedDevices);
-				onselect?.(Array.from(selectedDevices));
+				onselect(Array.from(selectedDevices));
 			},
 			selected: hasDevice(device),
 			cells: onselect
