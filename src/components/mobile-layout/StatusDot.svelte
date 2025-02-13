@@ -18,6 +18,7 @@
 		height: 10px;
 		border-radius: 100%;
 		flex: 0 0 auto;
+		border: solid 1px rgba(100, 100, 100, 0.4);
 
 		&--success {
 			background-color: var(--green);

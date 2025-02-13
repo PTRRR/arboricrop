@@ -8,14 +8,16 @@
 	import type { Snippet } from 'svelte';
 
 	interface Props {
-		select?: boolean;
+		unique?: boolean;
+		onselect?: (devices: Device[]) => void;
 		devices?: Device[];
 	}
 
-	const { select, devices = [] }: Props = $props();
+	const { onselect, unique, devices = [] }: Props = $props();
+	let selectedDevices = $state<Set<Device>>(new Set());
 
 	const headers = $derived(
-		select
+		onselect
 			? [
 					{ label: '', width: '7%' },
 					{ label: 'ID', width: '30%' },
@@ -33,16 +35,20 @@
 
 	const rows = $derived<Row[]>(
 		devices.map((device) => ({
-			// onclick: () => {
-			// 	if (selectedDevices.has(device)) {
-			// 		selectedDevices.delete(device);
-			// 	} else {
-			// 		selectedDevices.add(device);
-			// 	}
-			// 	selectedDevices = new Set(selectedDevices);
-			// },
-			// selected: selectedDevices.has(device),
-			cells: select
+			onclick: () => {
+				if (unique) selectedDevices.clear();
+
+				if (selectedDevices.has(device)) {
+					selectedDevices.delete(device);
+				} else {
+					selectedDevices.add(device);
+				}
+
+				selectedDevices = new Set(selectedDevices);
+				onselect?.(Array.from(selectedDevices));
+			},
+			selected: selectedDevices.has(device),
+			cells: onselect
 				? [
 						{ label: '' },
 						{ label: device.id },
@@ -97,11 +103,11 @@
 	</div>
 {/snippet}
 
-{#snippet statusCell(cell: Cell, row?: Row)}
+{#snippet statusCell(cell: Cell)}
 	<Stack direction="horizontal" gap="0.5rem" justifyContent="center" alignItems="center">
-		<StatusDot status="error" />
+		<StatusDot status={cell.label === 'unactive' ? 'neutral' : 'success'} />
 		{cell.label}
 	</Stack>
 {/snippet}
 
-<Table {headers} rows={getRows(rows, statusCell, select ? selectCell : undefined)} />
+<Table {headers} rows={getRows(rows, statusCell, onselect ? selectCell : undefined)} />
