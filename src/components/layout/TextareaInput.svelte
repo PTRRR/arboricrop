@@ -79,7 +79,6 @@
 			outline: none;
 			box-sizing: border-box;
 			resize: vertical;
-			font-weight: normal;
 		}
 
 		&--readonly {

@@ -447,8 +447,10 @@ export const useTrials = () => {
 
 export const useProjects = () => {
 	const projects = useWritable<Project[]>('projects', [], true);
+  const addProject = (project: Project) => projects.update((projects) => [...projects, project]);
 
 	return {
-		projects
+		projects,
+    addProject
 	};
 };

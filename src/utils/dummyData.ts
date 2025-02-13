@@ -613,3 +613,126 @@ export function generateRandomDevices(count: number): Device[] {
 
 	return devices;
 }
+
+export const dummyProjects = [
+  {
+    name: "Golden Wheat Fields",
+    description: "Large-scale wheat cultivation using precision agriculture techniques"
+  },
+  {
+    name: "Sunrise Rice Paddy",
+    description: "Traditional rice farming with modern water management systems"
+  },
+  {
+    name: "Sweet Corn Valley",
+    description: "Integrated corn plantation with automated irrigation"
+  },
+  {
+    name: "Green Bean Haven",
+    description: "Organic soybean and green bean cultivation project"
+  },
+  {
+    name: "Potato Paradise",
+    description: "Highland potato farm using terraced farming methods"
+  },
+  {
+    name: "Sugarcane Plains",
+    description: "Extended sugarcane plantation with efficient harvesting systems"
+  },
+  {
+    name: "Tomato Gardens",
+    description: "Greenhouse tomato production with hydroponic systems"
+  },
+  {
+    name: "Cassava Fields",
+    description: "Large-scale cassava cultivation for starch production"
+  },
+  {
+    name: "Sunflower Meadows",
+    description: "Sunflower plantation for oil production and bee farming"
+  },
+  {
+    name: "Cotton Belt Project",
+    description: "Sustainable cotton farming with drip irrigation"
+  },
+  {
+    name: "Mango Grove",
+    description: "High-density mango orchard with integrated pest management"
+  },
+  {
+    name: "Banana Republic",
+    description: "Export-quality banana plantation using organic methods"
+  },
+  {
+    name: "Avocado Hills",
+    description: "Water-efficient avocado orchard with soil moisture monitoring"
+  },
+  {
+    name: "Berry Fields Forever",
+    description: "Mixed berry cultivation using protective tunnels"
+  },
+  {
+    name: "Citrus Valley",
+    description: "Orange and lemon grove with frost protection systems"
+  },
+  {
+    name: "Grape Escape",
+    description: "Table grape vineyard with modern trellis systems"
+  },
+  {
+    name: "Pineapple Point",
+    description: "Tropical pineapple farm with rotation cropping"
+  },
+  {
+    name: "Olive Grove",
+    description: "High-density olive plantation for oil production"
+  },
+  {
+    name: "Apple Acres",
+    description: "Modern apple orchard with hail protection nets"
+  },
+  {
+    name: "Pepper Plains",
+    description: "Bell pepper greenhouse project with climate control"
+  },
+  {
+    name: "Onion Fields",
+    description: "Large-scale onion cultivation with storage facilities"
+  },
+  {
+    name: "Carrot Canyon",
+    description: "Organic carrot production with advanced sorting systems"
+  },
+  {
+    name: "Lettuce Lands",
+    description: "Hydroponic lettuce production in controlled environment"
+  },
+  {
+    name: "Melon Matrix",
+    description: "Cantaloupe and watermelon fields with drip irrigation"
+  },
+  {
+    name: "Cabbage Creek",
+    description: "Year-round cabbage production with crop rotation"
+  },
+  {
+    name: "Strawberry Fields",
+    description: "Vertical strawberry farming with automated fertigation"
+  },
+  {
+    name: "Pumpkin Patch",
+    description: "Mixed squash and pumpkin cultivation project"
+  },
+  {
+    name: "Asparagus Valley",
+    description: "Specialized asparagus farm with processing facility"
+  },
+  {
+    name: "Broccoli Banks",
+    description: "Cool-weather broccoli production with irrigation systems"
+  },
+  {
+    name: "Sweet Potato Fields",
+    description: "Large-scale sweet potato cultivation with storage facilities"
+  }
+];

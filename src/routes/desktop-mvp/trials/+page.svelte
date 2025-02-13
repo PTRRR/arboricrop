@@ -13,6 +13,7 @@
 	import TrialCard from '../../../components/desktop/TrialCard.svelte';
 	import PageHeader from '../../../components/mobile-layout/PageHeader.svelte';
 	import SearchBar from '../../../components/desktop/SearchBar.svelte';
+	import Grid from '../../../components/desktop/Grid.svelte';
 
 	const { trials, addTrial } = useTrials();
 	const { currentAccount } = useCurrentAccount();
@@ -68,11 +69,11 @@
 		{:else}
 			<SearchBar />
 
-			<div class="trials__grid">
+			<Grid>
 				{#each accountTrials as trial}
 					<TrialCard {trial} />
 				{/each}
-			</div>
+			</Grid>
 		{/if}
 	</Section>
 
@@ -136,13 +137,3 @@
 		</Section>
 	{/if}
 </Stack>
-
-<style lang="scss">
-	.trials {
-		&__grid {
-			display: grid;
-			grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
-			gap: 1rem;
-		}
-	}
-</style>

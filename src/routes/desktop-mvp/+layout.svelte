@@ -60,11 +60,8 @@
 					innerStyle={{ justifyContent: 'space-between' }}
 				>
 					<Stack gap="0.5rem">
-						<StepSeparation label="Admin Settings" />
-						<Button href="/desktop-mvp/earmark-devices">Earmark Devices</Button>
-						<Spacer />
 						<StepSeparation label="Entities" />
-						<Button href="/desktop-mvp/fields">Projects</Button>
+						<Button href="/desktop-mvp/projects">Projects</Button>
 						<Button href="/desktop-mvp/trials">Trials</Button>
 						<Button href="/desktop-mvp/devices">Devices</Button>
 						<Spacer />
@@ -72,6 +69,9 @@
 						<Button href="/desktop-mvp/settings">Settings</Button>
 						<Button>Account</Button>
 						<Button onclick={() => ($email = '')}>Logout</Button>
+						<Spacer />
+						<StepSeparation label="Admin" />
+						<Button href="/desktop-mvp/earmark-devices">Earmark</Button>
 					</Stack>
 
 					<a href="https://vivent-biosignals.com/">

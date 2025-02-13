@@ -29,7 +29,7 @@
 
 <Stack direction="horizontal" style={{ width: '100%' }} alignItems="flex-start">
 	<Section fill>
-		<PageHeader title="Account Devices" subTitle={`${accountDevices.length} Available Devices`} />
+		<PageHeader title="Devices" subTitle={`${accountDevices.length} Available Devices`} />
 		<SearchBar />
 		<DevicesList
 			devices={accountDevices}
