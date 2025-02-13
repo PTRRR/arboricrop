@@ -18,6 +18,7 @@
 		style?: Partial<CSSStyleDeclaration>;
 		innerStyle?: Partial<CSSStyleDeclaration>;
 		actions?: StepSeparationAction[];
+		border?: boolean;
 	}
 
 	const {
@@ -25,7 +26,7 @@
 		label,
 		description,
 		alignItems,
-		padding = '1rem',
+		padding = '1rem 1rem',
 		sticky,
 		zIndex,
 		backgroundColor,
@@ -34,7 +35,8 @@
 		height,
 		style,
 		innerStyle,
-		actions
+		actions,
+		border
 	}: Props = $props();
 
 	const computedStyle = $derived(
@@ -63,6 +65,7 @@
 	class="section"
 	class:section--align-end={alignItems === 'flex-end'}
 	class:section--fill={fill}
+	class:section--border={border}
 	style={computedStyle}
 >
 	<div class="section__inner" style={computedInnerStyle}>
@@ -101,6 +104,17 @@
 
 			#{$this}--align-end & {
 				align-items: flex-end;
+			}
+
+			#{$this}--border & {
+				&::before {
+					content: '';
+					position: absolute;
+					top: 0;
+					left: 1rem;
+					width: calc(100% - 2rem);
+					border-top: solid 1px var(--grey);
+				}
 			}
 		}
 	}
