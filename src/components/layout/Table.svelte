@@ -22,9 +22,10 @@
 		headers?: Cell[];
 		rows: Row[];
 		style?: string;
+		borders?: boolean;
 	}
 
-	const { headers, rows, style }: Props = $props();
+	const { headers, rows, style, borders = true }: Props = $props();
 
 	const getHeaderWidth = (cellIndex: number) => {
 		const cell = (headers || [])[cellIndex];
@@ -66,6 +67,7 @@
 		{#if row.href}
 			<a
 				class="table__row table__data table--clickable"
+				class:table--borders={borders}
 				class:table--selected={row.selected}
 				href={row.href}
 				onclick={row.onclick}
@@ -77,6 +79,7 @@
 			<!-- svelte-ignore a11y_no_static_element_interactions -->
 			<div
 				class="table__row table__data"
+				class:table--borders={borders}
 				class:table--clickable={row.onclick}
 				class:table--selected={row.selected}
 				onclick={row.onclick}
@@ -90,9 +93,9 @@
 <style lang="scss">
 	.table {
 		$this: &;
-		/* background-color: var(--white); */
 
 		&__row {
+			$row: &;
 			position: relative;
 			display: flex;
 			padding: 0.5rem 0;
@@ -102,15 +105,17 @@
 			border-radius: 5px;
 			width: 100%;
 
-			& + & {
-				&::before {
-					position: absolute;
-					top: 0;
-					left: 0;
-					width: 100%;
-					display: block;
-					content: '';
-					border-top: solid 1px var(--grey);
+			&#{$this}--borders {
+				& + & {
+					&::before {
+						border-top: solid 1px var(--grey);
+						position: absolute;
+						top: 0;
+						left: 0;
+						width: 100%;
+						display: block;
+						content: '';
+					}
 				}
 			}
 

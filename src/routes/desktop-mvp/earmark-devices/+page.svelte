@@ -83,6 +83,7 @@
 				<Button icon="navigate">Submit</Button>
 			</Stack> -->
 			<Table
+				borders={false}
 				style={getCss({ width: '100%' })}
 				headers={[
 					{ label: '', width: '5%' },

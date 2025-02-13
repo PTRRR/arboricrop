@@ -50,10 +50,11 @@
 		}
 
 		&__name {
-			font-size: var(--mid-font-size);
+			font-size: var(--big-font-size);
 		}
 
 		&__sub-title {
+			font-size: var(--mid-font-size);
 			color: var(--grey);
 		}
 	}
