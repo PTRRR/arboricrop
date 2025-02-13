@@ -6,6 +6,7 @@
 	interface Props {
 		children?: Snippet;
 		label?: string | Snippet;
+		description?: string;
 		alignItems?: 'flex-end';
 		padding?: string;
 		sticky?: string;
@@ -22,6 +23,7 @@
 	const {
 		children,
 		label,
+		description,
 		alignItems,
 		padding = '1rem',
 		sticky,
@@ -65,7 +67,7 @@
 >
 	<div class="section__inner" style={computedInnerStyle}>
 		{#if label}
-			<StepSeparation {label} {actions} />
+			<StepSeparation {label} {description} {actions} />
 		{/if}
 
 		{@render children?.()}
@@ -88,7 +90,7 @@
 		&__inner {
 			position: relative;
 			background-color: var(--white);
-			border-radius: 0.8rem;
+			border-radius: 1rem;
 			padding: 0.5rem;
 			display: flex;
 			flex-direction: column;

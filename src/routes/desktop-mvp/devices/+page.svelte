@@ -1,16 +1,15 @@
 <script lang="ts">
 	import type { Device } from '../../../utils/types';
 	import { useCurrentAccount, useDevices } from '../../../stores';
-	import type { Cell, Row } from '../../../components/layout/Table.svelte';
 	import Section from '../../../components/desktop/Section.svelte';
-	import Table from '../../../components/layout/Table.svelte';
-	import Pagination from '../../../components/layout/Pagination.svelte';
-	import type { Snippet } from 'svelte';
 	import StatusDot from '../../../components/mobile-layout/StatusDot.svelte';
 	import Stack from '../../../components/desktop/Stack.svelte';
 	import TextInput from '../../../components/layout/TextInput.svelte';
 	import Button from '../../../components/layout/Button.svelte';
 	import TextareaInput from '../../../components/layout/TextareaInput.svelte';
+	import PageHeader from '../../../components/mobile-layout/PageHeader.svelte';
+	import DevicesList from '../../../components/desktop/DevicesList.svelte';
+	import SearchBar from '../../../components/desktop/SearchBar.svelte';
 
 	const { devices, updateDevice } = useDevices();
 	const { currentAccount } = useCurrentAccount();
@@ -26,72 +25,34 @@
 	const accountDevices = $derived(
 		$devices.filter((it) => it.accountId === $currentAccount?.id).slice(0, 30)
 	);
-
-	const rows = $derived<Row[]>(
-		accountDevices.map((device) => ({
-			onclick: () => {
-				selectedDevice = selectedDevice?.id === device.id ? undefined : device;
-				deviceName = selectedDevice?.name || '';
-				deviceNote = selectedDevice?.note || '';
-			},
-			selected: selectedDevice?.id === device.id,
-			cells: [
-				{ label: device.id },
-				{ label: device.name },
-				{ label: device.status },
-				{ label: `${device.battery}%` }
-			]
-		}))
-	);
-
-	const getRowsWithRenderHandler = (
-		rows: Row[],
-		renderHandler: Snippet<[cell: Cell, row?: Row]>
-	): Row[] =>
-		rows.map((row) => {
-			const [idCell, nameCell, statusCell, ...cells] = row.cells;
-			return {
-				...row,
-				cells: [idCell, nameCell, { ...statusCell, renderHandler }, ...cells]
-			};
-		});
 </script>
 
-{#snippet statusCell(cell: Cell, row?: Row)}
-	<Stack direction="horizontal" gap="0.5rem" justifyContent="center" alignItems="center">
-		<StatusDot status="error" />
-		{cell.label}
-	</Stack>
-{/snippet}
-
 <Stack direction="horizontal" style={{ width: '100%' }} alignItems="flex-start">
-	<Section label="Account devices" fill>
-		<Stack gap="0.5rem">
-			<TextInput label="Search" />
-			<Button icon="navigate">Submit</Button>
-		</Stack>
-		<Table
-			headers={[
-				{ label: 'ID', width: '25%' },
-				{ label: 'name', width: '15%' },
-				{ label: 'status', width: '15%' },
-				{ label: 'battery', width: '10%' }
-			]}
-			rows={getRowsWithRenderHandler(rows, statusCell)}
+	<Section fill>
+		<PageHeader title="Account Devices" subTitle={`${accountDevices.length} Available Devices`} />
+		<SearchBar />
+		<DevicesList
+			devices={accountDevices}
+			multi={false}
+			onselect={([device]) => {
+				selectedDevice = selectedDevice?.id === device?.id ? undefined : device;
+				deviceName = selectedDevice?.name || '';
+				deviceNote = selectedDevice?.note || '';
+			}}
 		/>
-		<Pagination pages={10} />
 	</Section>
 
 	{#if selectedDevice}
 		{#snippet deviceLabel()}
 			<Stack direction="horizontal" gap="0.5rem" alignItems="center">
-				<StatusDot status="error" />
+				<StatusDot status={selectedDevice?.status === 'active' ? 'success' : 'neutral'} />
 				{selectedDevice?.name}
 			</Stack>
 		{/snippet}
 
 		<Section
 			label={deviceLabel}
+			description={selectedDevice.status}
 			backgroundColor="var(--light-grey)"
 			width="30%"
 			sticky="var(--content-offset-top)"
@@ -101,7 +62,7 @@
 			<TextInput label="Name" bind:value={deviceName} />
 			<TextareaInput label="Note" bind:value={deviceNote} />
 
-			<Stack gap="0.5rem">
+			<Stack gap="0.5rem" direction="horizontal">
 				<Button
 					icon="check"
 					disabled={!selectedDeviceHasChanges}
@@ -124,8 +85,7 @@
 				</Button>
 				<Button
 					icon="cross"
-					backgroundColor="var(--light-red)"
-					iconBackgroundColor="var(--red)"
+					backgroundColor="var(--grey)"
 					padding
 					onclick={() => (selectedDevice = undefined)}
 				>

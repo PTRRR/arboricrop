@@ -8,12 +8,12 @@
 	import type { Snippet } from 'svelte';
 
 	interface Props {
-		unique?: boolean;
+		multi?: boolean;
 		onselect?: (devices: Device[]) => void;
 		devices?: Device[];
 	}
 
-	const { onselect, unique, devices = [] }: Props = $props();
+	const { onselect, multi = true, devices = [] }: Props = $props();
 	let selectedDevices = $state<Set<Device>>(new Set());
 
 	const headers = $derived(
@@ -33,21 +33,24 @@
 				]
 	);
 
+	const hasDevice = $derived((device: Device) =>
+		Boolean(Array.from(selectedDevices).find((it) => it.id === device.id))
+	);
+
 	const rows = $derived<Row[]>(
 		devices.map((device) => ({
 			onclick: () => {
-				if (unique) selectedDevices.clear();
-
-				if (selectedDevices.has(device)) {
+				if (hasDevice(device)) {
 					selectedDevices.delete(device);
 				} else {
+					if (!multi) selectedDevices.clear();
 					selectedDevices.add(device);
 				}
 
 				selectedDevices = new Set(selectedDevices);
 				onselect?.(Array.from(selectedDevices));
 			},
-			selected: selectedDevices.has(device),
+			selected: hasDevice(device),
 			cells: onselect
 				? [
 						{ label: '' },

@@ -12,6 +12,7 @@
 	import { getLocationDelta } from '../../../utils/locations';
 	import TrialCard from '../../../components/desktop/TrialCard.svelte';
 	import PageHeader from '../../../components/mobile-layout/PageHeader.svelte';
+	import SearchBar from '../../../components/desktop/SearchBar.svelte';
 
 	const { trials, addTrial } = useTrials();
 	const { currentAccount } = useCurrentAccount();
@@ -35,39 +36,45 @@
 	});
 </script>
 
-<Stack direction="horizontal" style={{ width: '100%', padding: '1rem' }}>
-	<Stack style={{ width: '100%' }}>
-		<PageHeader title="Trials" subTitle={`${accountTrials.length} Active Trials`} />
-		<Section
-			padding="0"
-			actions={accountTrials.length > 0
-				? [
-						{
-							label: 'Create',
-							icon: 'add',
-							iconOrder: 'inverted',
-							onclick: createTrial
-						}
-					]
-				: []}
-			fill
-		>
-			{#if accountTrials.length === 0}
-				<Button icon="add" onclick={createTrial}>Create Trial</Button>
-			{:else}
-				<Stack gap="0.5rem">
-					<TextInput label="Search" />
-					<Button icon="navigate">Submit</Button>
-				</Stack>
-
-				<div class="trials__grid">
-					{#each accountTrials as trial}
-						<TrialCard {trial} />
-					{/each}
-				</div>
-			{/if}
-		</Section>
+{#snippet title()}
+	<Stack
+		direction="horizontal"
+		alignItems="center"
+		justifyContent="space-between"
+		style={{ width: '100%' }}
+	>
+		Trials
+		<Button icon="add" iconOrder="inverted" onclick={createTrial}>Create</Button>
 	</Stack>
+{/snippet}
+
+<Stack direction="horizontal" style={{ width: '100%' }}>
+	<Section
+		actions={accountTrials.length > 0
+			? [
+					{
+						label: 'Create',
+						icon: 'add',
+						iconOrder: 'inverted',
+						onclick: createTrial
+					}
+				]
+			: []}
+		fill
+	>
+		<PageHeader {title} subTitle={`${accountTrials.length} Active Trials`} />
+		{#if accountTrials.length === 0}
+			<Button icon="add" onclick={createTrial}>Create Trial</Button>
+		{:else}
+			<SearchBar />
+
+			<div class="trials__grid">
+				{#each accountTrials as trial}
+					<TrialCard {trial} />
+				{/each}
+			</div>
+		{/if}
+	</Section>
 
 	{#if newTrial}
 		<Section label="New Trial" backgroundColor="var(--light-grey)" width="35%">
@@ -135,7 +142,7 @@
 		&__grid {
 			display: grid;
 			grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
-			gap: calc(var(--section-padding) * 2);
+			gap: 1rem;
 		}
 	}
 </style>

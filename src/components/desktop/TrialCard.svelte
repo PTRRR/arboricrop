@@ -24,8 +24,6 @@
 			zoom={15}
 			minZoom={3}
 			maxZoom={18}
-			showTarget
-			markers={[{ lngLat: trial.center }]}
 			geoJSONs={trial.layers}
 		/>
 	</div>
