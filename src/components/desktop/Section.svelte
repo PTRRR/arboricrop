@@ -78,6 +78,10 @@
 </div>
 
 <style lang="scss">
+	:global(.section + .section) {
+		margin-top: 3rem;
+	}
+
 	.section {
 		$this: &;
 		position: relative;

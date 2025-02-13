@@ -95,7 +95,7 @@
 				</Stack>
 			</Section>
 
-			<Section label="Notifications" border>
+			<Section label="Notifications">
 				<Grid>
 					{#each randomNotifications as notification}
 						<NotificationCard {notification} />
@@ -105,7 +105,6 @@
 
 			<Section
 				label="Trials"
-				border
 				actions={editing
 					? []
 					: [
@@ -129,7 +128,7 @@
 			</Section>
 
 			{#if projectDevices.length > 0}
-				<Section label="Devices" border>
+				<Section label="Devices">
 					<DevicesList devices={projectDevices} />
 				</Section>
 			{/if}
