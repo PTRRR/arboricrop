@@ -6,20 +6,29 @@
 	import Section from '../../../components/mobile-layout/Section.svelte';
 	import NotificationCard from '../../../components/mobile-layout/NotificationCard.svelte';
 	import PageHeader from '../../../components/layout/PageHeader.svelte';
+	import type { LayoutData } from './$types';
+
+	interface Props {
+		data: LayoutData;
+	}
+
+	const { data }: Props = $props();
 
 	const returnButton = useReturnButton();
 	const notifications = useNotifications();
 
-	$: filter = $page.data.filter as NotificationType;
-	$: aknowledgedNotifications = $notifications.filter((it) => it.status !== 'acknowledged');
+	const filter = $derived($page.data.filter as NotificationType);
+	const aknowledgedNotifications = $derived(
+		$notifications.filter((it) => it.status !== 'acknowledged')
+	);
 
-	$: filteredNotifications = filter
-		? aknowledgedNotifications.filter((it) => it.type === filter)
-		: aknowledgedNotifications;
+	const filteredNotifications = $derived(
+		filter ? aknowledgedNotifications.filter((it) => it.type === filter) : aknowledgedNotifications
+	);
 
 	returnButton.set({
 		label: '',
-		backHref: '/mobile-layout'
+		backHref: data.baseUrl
 	});
 </script>
 
@@ -62,7 +71,7 @@
 
 <Section>
 	{#each filteredNotifications as notification}
-		<NotificationCard {notification} />
+		<NotificationCard {notification} baseUrl={data.baseUrl} />
 	{/each}
 </Section>
 

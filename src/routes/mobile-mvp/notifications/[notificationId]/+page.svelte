@@ -12,6 +12,13 @@
 	import { getCss } from '../../../../utils/css';
 	import SaveMenu from '../../../../components/mobile-layout/SaveMenu.svelte';
 	import { goto } from '$app/navigation';
+	import type { PageData } from './$types';
+
+	interface Props {
+		data: PageData;
+	}
+
+	const { data }: Props = $props();
 
 	const returnButton = useReturnButton();
 	const notifications = useNotifications();
@@ -50,8 +57,8 @@
 			returnButton.set({
 				label: $page.data.acknowledge ? 'Notification' : 'Notifications',
 				backHref: $page.data.acknowledge
-					? `/mobile-layout/notifications/${notification.id}`
-					: '/mobile-layout/notifications'
+					? `${data.baseUrl}/notifications/${notification.id}`
+					: `${data.baseUrl}/notifications`
 			});
 		}
 	});
@@ -75,7 +82,7 @@
 					}
 				}
 
-				goto('/mobile-layout/notifications');
+				goto(`${data.baseUrl}/notifications`);
 			}}
 		/>
 	</Section>

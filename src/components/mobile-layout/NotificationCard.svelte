@@ -4,11 +4,11 @@
 	import Card from './Card.svelte';
 	import StatusDot from './StatusDot.svelte';
 
-	const { notification }: { notification: Notification } = $props();
+	const { notification, baseUrl }: { notification: Notification; baseUrl?: string } = $props();
 </script>
 
 {#if notification}
-	<Card href={`/mobile-layout/notifications/${notification.id}`}>
+	<Card href={`${baseUrl || '/mobile-layout'}/notifications/${notification.id}`}>
 		<div class="home__info">
 			<p>{notification.title}</p>
 			<p

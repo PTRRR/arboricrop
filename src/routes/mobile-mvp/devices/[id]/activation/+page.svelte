@@ -67,12 +67,12 @@
 		if (device) {
 			returnButton.set({
 				label: `Device`,
-				backHref: `/mobile-layout/devices/${device.id}?connected=true`
+				backHref: `${data.baseUrl}/devices/${device.id}?connected=true`
 			});
 		} else {
 			returnButton.set({
 				label: 'Device Unknown',
-				href: `/mobile-wireframe/devices`
+				href: `${data.baseUrl}/devices`
 			});
 		}
 	});
@@ -222,7 +222,7 @@
 							...device,
 							status: 'active'
 						});
-						goto(`/mobile-layout/devices/${device?.id}?connected=true`);
+						goto(`${data.baseUrl}/devices/${device?.id}?connected=true`);
 					}
 				}}
 			/>
@@ -397,7 +397,7 @@
 					icon="check"
 					iconSize="large"
 					iconBackgroundColor="var(--green)"
-					href={`/mobile-layout/devices/${device?.id}?connected=true`}
+					href={`${data.baseUrl}/devices/${device?.id}?connected=true`}
 					onclick={() => {
 						if (device) {
 							updateDevice({

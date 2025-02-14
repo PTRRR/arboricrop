@@ -31,7 +31,7 @@
 	const { data }: Prop = $props();
 
 	const trialId = $page.params.trialId;
-	const { devices } = useDevices();
+	const { devices, updateDevice } = useDevices();
 	const { fields, getFieldById, deleteField, updateField } = useFields();
 	const { trials } = useTrials();
 	const returnButton = useReturnButton();
@@ -109,6 +109,11 @@
 					onclick={() => {
 						const randomDeviceIndex = Math.floor(Math.random() * $devices.length);
 						const device = $devices[randomDeviceIndex];
+						updateDevice({
+							...device,
+							parentId: trial.id
+						});
+
 						goto(`${data.baseUrl}/devices/pairing?deviceId=${device?.id}`);
 					}}
 				>
@@ -203,7 +208,7 @@
 			</SubPage>
 		{/snippet}
 
-		<Section label="Layers" actions={selectedLayersRows.length > 0 ? [{ label: addLayer }] : []}>
+		<!-- <Section label="Layers" actions={selectedLayersRows.length > 0 ? [{ label: addLayer }] : []}>
 			{#if selectedLayersRows.length > 0}
 				<Table headers={layersHeaders} rows={selectedLayersRows} />
 			{:else}
@@ -211,13 +216,15 @@
 					<PageHeader title="LoRa configuration" />
 				</SubPage>
 			{/if}
-		</Section>
-		<Section label="LoRa">
+		</Section> -->
+
+		<!-- <Section label="LoRa">
 			<SubPage label="Add configuration" icon="navigate">
 				<PageHeader title="LoRa configuration" />
 			</SubPage>
-		</Section>
-		<Section label="Danger Zone">
+		</Section> -->
+
+		<!-- <Section label="Danger Zone">
 			<Button
 				icon="cross"
 				iconBackgroundColor="var(--red)"
@@ -230,7 +237,7 @@
 			>
 				Delete Permanently
 			</Button>
-		</Section>
+		</Section> -->
 
 		{#if hasChanged}
 			<SaveMenu

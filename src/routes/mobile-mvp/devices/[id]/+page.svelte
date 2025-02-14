@@ -249,7 +249,7 @@
 		</Section>
 	{/if}
 
-	<Section label="Danger zone">
+	<!-- <Section label="Danger zone">
 		{#if $page.data.connected && device.status === 'active'}
 			<Button
 				padding
@@ -280,7 +280,7 @@
 				>Delete Permanently
 			</Button>
 		{/if}
-	</Section>
+	</Section> -->
 
 	{#if hasChanged && !isTerminalVisible}
 		<SaveMenu

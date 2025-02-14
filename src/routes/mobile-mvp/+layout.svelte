@@ -106,7 +106,7 @@
 		</div>
 
 		<div class="mobile-layout__links">
-			<a href={`${data.baseUrl}`} onclick={() => ($showAppMenu = false)}>Fields</a>
+			<a href={`${data.baseUrl}`} onclick={() => ($showAppMenu = false)}>Trials</a>
 			<a href={`${data.baseUrl}/notifications`} onclick={() => ($showAppMenu = false)}
 				>Notifications</a
 			>

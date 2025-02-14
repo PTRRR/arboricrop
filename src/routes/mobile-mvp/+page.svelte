@@ -32,6 +32,7 @@
 	const organisation = useOrganisation();
 	const { accounts, addAccount } = useAccounts();
 	const { currentAccount } = useCurrentAccount();
+	const accountTrials = $derived($trials.filter((it) => it.accountId === $currentAccount?.id));
 
 	interface Props {
 		data: PageData;
@@ -62,7 +63,7 @@
 			? 'login'
 			: $organisations.length > 0 && typeof $organisation === 'undefined'
 				? 'select-organisation'
-				: $trials.length === 0
+				: accountTrials.length === 0
 					? 'new-trial'
 					: 'final'
 	);
@@ -133,9 +134,9 @@
 {:else}
 	{#snippet notificationsTitle()}
 		<span>Notifications</span>
-		<Button href={`${data.baseUrl}/notifications`} icon="navigate" iconOrder="inverted" padding
-			>All</Button
-		>
+		<Button href={`${data.baseUrl}/notifications`} icon="navigate" iconOrder="inverted" padding>
+			All
+		</Button>
 	{/snippet}
 
 	{#snippet notificationsSubTitle()}
@@ -150,7 +151,7 @@
 	<PageHeader title={notificationsTitle} subTitle={notificationsSubTitle} />
 	<Section>
 		{#each selectedNotifications as notification}
-			<NotificationCard {notification} />
+			<NotificationCard {notification} baseUrl={data.baseUrl} />
 		{/each}
 	</Section>
 
@@ -161,7 +162,7 @@
 
 	<PageHeader title={fieldsHeader} />
 	<Section>
-		{#each $trials as trial}
+		{#each accountTrials as trial}
 			<Card
 				href={`${data.baseUrl}/trials/${trial.id}`}
 				imageUrl="/images/map.png"
