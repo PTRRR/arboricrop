@@ -23,9 +23,10 @@
 	import { getCss } from '../../../../utils/css';
 	import { shuffle } from '../../../../utils/arrays';
 	import NotificationCard from '../../../../components/desktop/NotificationCard.svelte';
+	import Dropdown from '../../../../components/desktop/Dropdown.svelte';
 
 	const projectId = $page.params.id;
-	const { projects } = useProjects();
+	const { projects, updateProject } = useProjects();
 	const { devices } = useDevices();
 	const { trials, updateTrials } = useTrials();
 	const { currentAccount } = useCurrentAccount();
@@ -50,7 +51,23 @@
 		$devices.filter((it) => it.parentId === trial.id)
 	);
 
-	let editingProject = $state(false);
+	interface LoRaConfiguration {
+		label: string;
+	}
+
+	const loraConfigurations: LoRaConfiguration[] = [
+		{
+			label: 'Europe'
+		},
+		{
+			label: 'United States'
+		},
+		{
+			label: 'Asia'
+		}
+	];
+
+	let editingProject = $state(true);
 	let editingTrials = $state(false);
 	let selectedTrials = $state<Set<Trial>>(new Set());
 
@@ -86,12 +103,24 @@
 		{/if}
 	{/snippet}
 
+	{#snippet dropdownItem(item: LoRaConfiguration)}
+		<Button
+			backgroundColor="var(--white)"
+			padding
+			onclick={() => updateProject({ ...project, loraConfiguration: item.label })}
+		>
+			{item.label}
+		</Button>
+	{/snippet}
+
 	<Stack direction="horizontal" style={{ width: '100%' }}>
 		<Stack style={{ width: '100%' }}>
 			<Section>
 				<Stack gap="0.5rem">
 					<PageHeader {title} subTitle={project.description} />
-					<span style={getCss({ color: 'var(--black)' })}>LoRa — Europe</span>
+					<span style={getCss({ color: 'var(--black)' })}
+						>LoRa Settings — {project.loraConfiguration || 'Europe'}</span
+					>
 				</Stack>
 			</Section>
 
@@ -142,6 +171,13 @@
 			>
 				<TextInput label="Name" defaultValue={project.name} />
 				<TextareaInput label="Description" defaultValue={project.description} />
+				<Stack direction="horizontal">
+					<Dropdown
+						label={`LoRa Settings — ${project.loraConfiguration || 'Europe'}`}
+						items={loraConfigurations}
+						itemSnippet={dropdownItem}
+					/>
+				</Stack>
 				<Validation
 					onvalidate={() => (editingProject = false)}
 					oncancel={() => {

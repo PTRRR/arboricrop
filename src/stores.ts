@@ -465,9 +465,26 @@ export const useTrials = () => {
 export const useProjects = () => {
 	const projects = useWritable<Project[]>('projects', [], true);
   const addProject = (project: Project) => projects.update((projects) => [...projects, project]);
+  const updateProject = (project: Project) => {
+		projects.update((projects) => {
+			const projectIndex = projects.findIndex((it) => it.id === project.id);
+
+			if (projectIndex > -1) {
+				const newProject = [...projects];
+				newProject[projectIndex] = { ...newProject[projectIndex], ...project };
+				return newProject;
+			}
+
+			return projects;
+		});
+	};
+
+	const updateProjects = (projects: Project[]) => projects.forEach((project) => updateProject(project));
 
 	return {
 		projects,
-    addProject
+    addProject,
+    updateProject,
+    updateProjects
 	};
 };

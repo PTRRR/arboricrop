@@ -60,6 +60,7 @@ export type Project = {
 	name: string;
 	accountId: string;
 	description?: string;
+  loraConfiguration?: string;
 };
 
 export type Trial = Field & {
