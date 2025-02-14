@@ -75,7 +75,7 @@
 					iconOrder="inverted"
 					onclick={() => (editingProject = !editingProject)}
 				>
-					Settings
+					Edit
 				</Button>
 			{/if}
 		</Stack>
@@ -158,7 +158,7 @@
 
 		{#if editingProject}
 			<Section
-				label="Settings"
+				label="Project Settings"
 				backgroundColor="var(--light-grey)"
 				sticky="var(--content-offset-top)"
 			>

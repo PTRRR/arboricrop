@@ -42,6 +42,7 @@ export type Account = {
 	id: string;
 	email: string;
 	organizationName?: string;
+  invitedAccounts?: string[];
 };
 
 export type Field = {

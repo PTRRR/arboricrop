@@ -62,7 +62,9 @@
 		justifyContent="space-between"
 	>
 		Projects
-		<Button icon="add" iconOrder="inverted" onclick={createProject}>Create</Button>
+		{#if !newProject}
+			<Button icon="add" iconOrder="inverted" onclick={createProject}>Create</Button>
+		{/if}
 	</Stack>
 {/snippet}
 
@@ -122,7 +124,16 @@
 				/>
 			</Stack>
 
-			<Validation onvalidate={() => newProject && addProject(newProject)} oncancel={() => {}} />
+			<Validation
+				validateDisabled={!newProject.name}
+				onvalidate={() => {
+					newProject && addProject(newProject);
+					newProject = undefined;
+				}}
+				oncancel={() => {
+					newProject = undefined;
+				}}
+			/>
 		</Section>
 	{/if}
 </Stack>

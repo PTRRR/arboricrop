@@ -422,10 +422,26 @@ export const useUser = () => {
 export const useAccounts = () => {
 	const accounts = useWritable<Account[]>('accounts', generateAccounts(20), true);
   const addAccount = (account: Account) => accounts.update((accounts) => [...accounts, account]);
+  const updateAccount = (account: Account) => {
+		accounts.update((accounts) => {
+			const accountIndex = accounts.findIndex((it) => it.id === account.id);
+
+      console.log(accountIndex, account)
+
+			if (accountIndex > -1) {
+				const newAccounts = [...accounts];
+				newAccounts[accountIndex] = { ...newAccounts[accountIndex], ...account };
+				return newAccounts;
+			}
+
+			return accounts;
+		});
+	};
 
 	return {
 		accounts,
-    addAccount
+    addAccount,
+    updateAccount
 	};
 };
 
