@@ -67,7 +67,7 @@
 		}
 	];
 
-	let editingProject = $state(true);
+	let editingProject = $state(false);
 	let editingTrials = $state(false);
 	let selectedTrials = $state<Set<Trial>>(new Set());
 
