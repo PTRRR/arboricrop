@@ -46,15 +46,18 @@
 	});
 </script>
 
+{#if device.name}
+	<SaveMenu
+		onsaveHref={`${data.baseUrl}/devices/${device.id}?connected=true`}
+		onsave={() => {
+			$preventNavigationHistory = true;
+			devices.set([...$devices, device]);
+		}}
+	/>
+{/if}
+
 <PageHeader title="New Device" />
 <Section>
 	<TextInput label="id" defaultValue={device.id} readonly />
 	<TextInput label="name" autoFocus onvalue={(value) => (device.name = value)} />
 </Section>
-<SaveMenu
-	onsave={() => {
-		$preventNavigationHistory = true;
-		devices.set([...$devices, device]);
-		goto(`${data.baseUrl}/devices/${device.id}?connected=true`);
-	}}
-/>

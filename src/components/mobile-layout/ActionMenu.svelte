@@ -13,8 +13,8 @@
 	class="action-menu"
 	class:action-menu--hidden={$showAppMenu || hidden}
 	use:portal={LAYOUT_PORTAL}
-	in:fly={{ y: 50, duration: 300, opacity: 0, delay: 300 }}
-	out:fly={{ y: 50, duration: 300, opacity: 0 }}
+	in:fly={{ y: 50, duration: 300, opacity: 0, delay: 400 }}
+	out:fly={{ y: 50, duration: 300, opacity: 0, delay: 100 }}
 >
 	{@render children?.()}
 </div>

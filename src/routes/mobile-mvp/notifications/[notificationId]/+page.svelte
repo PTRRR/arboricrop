@@ -66,26 +66,28 @@
 </script>
 
 {#if $page.data.acknowledge}
+	<SaveMenu
+		onsaveHref={`${data.baseUrl}/notifications`}
+		onsave={async () => {
+			if (notification) {
+				const notificationIndex = $notifications.findIndex((it) => it.id === notification.id);
+				if (notificationIndex > -1) {
+					const newNotifications = [...$notifications];
+					newNotifications[notificationIndex] = {
+						...newNotifications[notificationIndex],
+						status: 'acknowledged'
+					};
+					notifications.set(newNotifications);
+				}
+			}
+		}}
+	/>
+{/if}
+
+{#if $page.data.acknowledge}
 	<PageHeader title="Review" subTitle={notification?.title} />
 	<Section>
 		<TextareaInput placeholder="Personal note" />
-		<SaveMenu
-			onsave={() => {
-				if (notification) {
-					const notificationIndex = $notifications.findIndex((it) => it.id === notification.id);
-					if (notificationIndex > -1) {
-						const newNotifications = [...$notifications];
-						newNotifications[notificationIndex] = {
-							...newNotifications[notificationIndex],
-							status: 'acknowledged'
-						};
-						notifications.set(newNotifications);
-					}
-				}
-
-				goto(`${data.baseUrl}/notifications`);
-			}}
-		/>
 	</Section>
 {:else}
 	{#snippet pageTitle()}
