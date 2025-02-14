@@ -4,17 +4,18 @@
 	import Button from '../../../components/layout/Button.svelte';
 	import PageHeader from '../../../components/layout/PageHeader.svelte';
 	import { useCurrentAccount, useProjects } from '../../../stores';
-	import type { Project } from '../../../utils/types';
+	import type { LoRaConfiguration, Project } from '../../../utils/types';
 	import Stack from '../../../components/desktop/Stack.svelte';
 	import TextInput from '../../../components/layout/TextInput.svelte';
 	import TextareaInput from '../../../components/layout/TextareaInput.svelte';
 	import ProjectCard from '../../../components/desktop/ProjectCard.svelte';
 	import Grid from '../../../components/desktop/Grid.svelte';
 	import { onMount } from 'svelte';
-	import { dummyProjects } from '../../../utils/dummyData';
+	import { dummyProjects, loraConfigurations } from '../../../utils/dummyData';
 	import { shuffle } from '../../../utils/arrays';
 	import SearchBar from '../../../components/desktop/SearchBar.svelte';
 	import Validation from '../../../components/desktop/Validation.svelte';
+	import Dropdown from '../../../components/desktop/Dropdown.svelte';
 
 	const { projects, addProject } = useProjects();
 	const { currentAccount } = useCurrentAccount();
@@ -28,7 +29,10 @@
 			name: '',
 			accountId: $currentAccount?.id,
 			id: `proj-${createId()}`,
-			description: ''
+			description: '',
+			loraConfiguration: {
+				name: 'Europe'
+			}
 		};
 	};
 
@@ -60,6 +64,20 @@
 		Projects
 		<Button icon="add" iconOrder="inverted" onclick={createProject}>Create</Button>
 	</Stack>
+{/snippet}
+
+{#snippet dropdownItem(item: LoRaConfiguration)}
+	<Button
+		backgroundColor="var(--white)"
+		padding
+		onclick={() => {
+			if (newProject) {
+				newProject.loraConfiguration = item;
+			}
+		}}
+	>
+		{item.name}
+	</Button>
 {/snippet}
 
 <Stack direction="horizontal" style={{ width: '100%' }} alignItems="flex-start">
@@ -94,6 +112,15 @@
 					newProject.description = value;
 				}}
 			/>
+			<Stack gap="0.5rem">
+				<span>Lora Settings</span>
+				<Dropdown
+					icon="navigate"
+					label={newProject.loraConfiguration?.name || 'Europe'}
+					items={loraConfigurations}
+					itemSnippet={dropdownItem}
+				/>
+			</Stack>
 
 			<Validation onvalidate={() => newProject && addProject(newProject)} oncancel={() => {}} />
 		</Section>

@@ -58,7 +58,7 @@
 <style lang="scss">
 	.dropdown {
 		&__content {
-			background-color: var(--grey);
+			background-color: var(--light-grey);
 			padding: 0.8rem;
 			border-radius: 1rem;
 			font-family: Rubik;

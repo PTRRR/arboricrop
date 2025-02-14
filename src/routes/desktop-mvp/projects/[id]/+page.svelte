@@ -16,7 +16,7 @@
 		useProjects,
 		useTrials
 	} from '../../../../stores';
-	import type { Trial } from '../../../../utils/types';
+	import type { LoRaConfiguration, Trial } from '../../../../utils/types';
 	import TrialCard from '../../../../components/desktop/TrialCard.svelte';
 	import Grid from '../../../../components/desktop/Grid.svelte';
 	import Validation from '../../../../components/desktop/Validation.svelte';
@@ -24,6 +24,7 @@
 	import { shuffle } from '../../../../utils/arrays';
 	import NotificationCard from '../../../../components/desktop/NotificationCard.svelte';
 	import Dropdown from '../../../../components/desktop/Dropdown.svelte';
+	import { loraConfigurations } from '../../../../utils/dummyData';
 
 	const projectId = $page.params.id;
 	const { projects, updateProject } = useProjects();
@@ -51,25 +52,10 @@
 		$devices.filter((it) => it.parentId === trial.id)
 	);
 
-	interface LoRaConfiguration {
-		label: string;
-	}
-
-	const loraConfigurations: LoRaConfiguration[] = [
-		{
-			label: 'Europe'
-		},
-		{
-			label: 'United States'
-		},
-		{
-			label: 'Asia'
-		}
-	];
-
 	let editingProject = $state(false);
 	let editingTrials = $state(false);
 	let selectedTrials = $state<Set<Trial>>(new Set());
+	let newProjectName = $state('');
 
 	const editing = $derived(editingProject || editingTrials);
 </script>
@@ -107,9 +93,16 @@
 		<Button
 			backgroundColor="var(--white)"
 			padding
-			onclick={() => updateProject({ ...project, loraConfiguration: item.label })}
+			onclick={() =>
+				updateProject({
+					...project,
+					loraConfiguration: {
+						...(project.loraConfiguration || {}),
+						name: item.name
+					}
+				})}
 		>
-			{item.label}
+			{item.name}
 		</Button>
 	{/snippet}
 
@@ -119,7 +112,7 @@
 				<Stack gap="0.5rem">
 					<PageHeader {title} subTitle={project.description} />
 					<span style={getCss({ color: 'var(--black)' })}
-						>LoRa Settings — {project.loraConfiguration || 'Europe'}</span
+						>LoRa Settings — {project.loraConfiguration?.name || 'Europe'}</span
 					>
 				</Stack>
 			</Section>
@@ -169,17 +162,23 @@
 				backgroundColor="var(--light-grey)"
 				sticky="var(--content-offset-top)"
 			>
-				<TextInput label="Name" defaultValue={project.name} />
+				<TextInput label="Name" defaultValue={project.name} bind:value={newProjectName} />
 				<TextareaInput label="Description" defaultValue={project.description} />
-				<Stack direction="horizontal">
+				<Stack gap="0.5rem">
+					<span>Lora Settings</span>
 					<Dropdown
-						label={`LoRa Settings — ${project.loraConfiguration || 'Europe'}`}
+						icon="navigate"
+						label={project.loraConfiguration?.name || 'Europe'}
 						items={loraConfigurations}
 						itemSnippet={dropdownItem}
 					/>
 				</Stack>
 				<Validation
-					onvalidate={() => (editingProject = false)}
+					validateLabel="Save"
+					onvalidate={() => {
+						updateProject({ ...project, name: newProjectName });
+						editingProject = false;
+					}}
 					oncancel={() => {
 						editingProject = false;
 					}}

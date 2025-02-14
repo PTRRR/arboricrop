@@ -16,7 +16,7 @@
 	}
 
 	const { children }: Props = $props();
-	const { accounts } = useAccounts();
+	const { accounts, addAccount } = useAccounts();
 	const { currentAccount } = useCurrentAccount();
 
 	const { email } = useUser();
@@ -47,7 +47,18 @@
 						disabled={!newEmail || !password}
 						onclick={() => {
 							const account = $accounts.find((it) => it.email === newEmail);
-							$currentAccount = account;
+
+							if (!account) {
+								const newAccount = {
+									id: `acc-${createId()}`,
+									email: newEmail
+								};
+
+								addAccount(newAccount);
+								$currentAccount = newAccount;
+							} else {
+								$currentAccount = account;
+							}
 						}}>Login</Button
 					>
 				</Stack>
@@ -62,23 +73,26 @@
 					innerStyle={{ justifyContent: 'space-between' }}
 				>
 					<Stack gap="0.5rem">
+						<Button href="/desktop-mvp">Dashboard</Button>
+						<Spacer />
 						<StepSeparation label="Entities" />
 						<Button href="/desktop-mvp/projects">Projects</Button>
 						<Button href="/desktop-mvp/trials">Trials</Button>
 						<Button href="/desktop-mvp/devices">Devices</Button>
 						<Spacer />
-						<StepSeparation label="Account" />
-						<Button href="/desktop-mvp/settings">Settings</Button>
-						<Button>Account</Button>
+						<StepSeparation label="Settings" />
+						<Button href="/desktop-mvp/account">Account</Button>
 						<Button
 							onclick={() => {
 								$email = '';
 								$currentAccount = null;
 							}}>Logout</Button
 						>
-						<Spacer />
-						<StepSeparation label="Admin" />
-						<Button href="/desktop-mvp/earmark-devices">Earmark</Button>
+						{#if $currentAccount.email.includes('vivent')}
+							<Spacer />
+							<StepSeparation label="Admin" />
+							<Button href="/desktop-mvp/earmark-devices">Earmark</Button>
+						{/if}
 					</Stack>
 
 					<a href="https://vivent-biosignals.com/">

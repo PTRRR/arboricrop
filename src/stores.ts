@@ -421,9 +421,11 @@ export const useUser = () => {
 
 export const useAccounts = () => {
 	const accounts = useWritable<Account[]>('accounts', generateAccounts(20), true);
+  const addAccount = (account: Account) => accounts.update((accounts) => [...accounts, account]);
 
 	return {
-		accounts
+		accounts,
+    addAccount
 	};
 };
 

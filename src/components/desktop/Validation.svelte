@@ -27,6 +27,12 @@
 	{/if}
 
 	{#if oncancel}
-		<Button icon="cross" disabled={cancelDisabled} onclick={oncancel}>{cancelLabel}</Button>
+		<Button
+			icon="cross"
+			iconBackgroundColor="var(--grey)"
+			iconColor="var(--black)"
+			disabled={cancelDisabled}
+			onclick={oncancel}>{cancelLabel}</Button
+		>
 	{/if}
 </Stack>

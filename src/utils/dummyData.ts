@@ -1,5 +1,5 @@
 import { createId } from '@paralleldrive/cuid2';
-import type { Account, Device, Field, Notification } from './types';
+import type { Account, Device, Field, LoRaConfiguration, Notification } from './types';
 import type { GeoJSON as GeoJSONType } from 'geojson';
 import { shuffle } from './arrays';
 import { formatDateToDDMMYYYY, getRandomDateRange } from './dates';
@@ -565,6 +565,12 @@ export function generateEmail(companyName: string): string {
 export function generateAccounts(count: number): Account[] {
 	const list: Account[] = [];
 
+  // list.push({
+  //   id: `acc-${createId()}`,
+  //   email: "superadmin@vivent.com",
+  //   organizationName: "Vivent"
+  // })
+
 	for (let i = 0; i < count; i++) {
 		const organizationName = generateCompanyName();
 		const email = generateEmail(organizationName);
@@ -857,5 +863,17 @@ export const dummyTrials = [
   {
     name: "Crop Quality Monitor",
     description: "Spectral sensors analyzing plant tissue development"
+  }
+];
+
+export const loraConfigurations: LoRaConfiguration[] = [
+  {
+    name: 'Europe'
+  },
+  {
+    name: 'United States'
+  },
+  {
+    name: 'Asia'
   }
 ];

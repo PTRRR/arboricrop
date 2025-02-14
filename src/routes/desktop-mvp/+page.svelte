@@ -26,7 +26,7 @@
 	onMount(() => {
 		if (accountTrials.length === 0) {
 			shuffle(dummyTrials)
-				.slice(0, 8)
+				.slice(0, 4)
 				.forEach((trial) =>
 					addTrial({
 						...trial,
@@ -45,7 +45,7 @@
 		onMount(() => {
 			if ($currentAccount && accountProjects.length === 0) {
 				const newProjects: Project[] = shuffle(dummyProjects)
-					.slice(0, 10)
+					.slice(0, 5)
 					.map((it) => ({
 						id: `proj-${createId()}`,
 						name: it.name,

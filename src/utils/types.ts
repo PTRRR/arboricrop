@@ -60,7 +60,7 @@ export type Project = {
 	name: string;
 	accountId: string;
 	description?: string;
-  loraConfiguration?: string;
+  loraConfiguration?: LoRaConfiguration;
 };
 
 export type Trial = Field & {
@@ -109,14 +109,15 @@ export type Alarm = {
 
 export type LoRaConfiguration = {
 	name: string;
-	frequency: number;
-	bandwidth: number;
-	spreadingFactor: number;
+	frequency?: number;
+	bandwidth?: number;
+	spreadingFactor?: number;
 	codingRate?: number;
-	deviceEui: string;
-	appEui: string;
-	appKey: string;
+	deviceEui?: string;
+	appEui?: string;
+	appKey?: string;
 	isDefault?: boolean;
 };
 
 export type LoRaConfigurationWithId = LoRaConfiguration & { id: string };
+
