@@ -1,10 +1,10 @@
 <script>
 	import { goto } from '$app/navigation';
-	import AlertDialog from '../../../components/AlertDialog.svelte';
-	import Button from '../../../components/Button.svelte';
-	import Info from '../../../components/Info.svelte';
-	import Input from '../../../components/Input.svelte';
-	import Separation from '../../../components/Separation.svelte';
+	import AlertDialog from '../../../components/wireframe/AlertDialog.svelte';
+	import Button from '../../../components/wireframe/Button.svelte';
+	import Info from '../../../components/wireframe/Info.svelte';
+	import Input from '../../../components/wireframe/Input.svelte';
+	import Separation from '../../../components/wireframe/Separation.svelte';
 	import Spacer from '../../../components/Spacer.svelte';
 	import ButtonList from '../../../components/wireframe/ButtonList.svelte';
 	import SaveSection from '../../../components/wireframe/SaveSection.svelte';

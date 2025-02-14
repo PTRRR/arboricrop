@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import Button from '../../../../components/Button.svelte';
-	import Info from '../../../../components/Info.svelte';
-	import Input from '../../../../components/Input.svelte';
-	import MapV2 from '../../../../components/MapV2.svelte';
+	import Button from '../../../../components/wireframe/Button.svelte';
+	import Info from '../../../../components/wireframe/Info.svelte';
+	import Input from '../../../../components/wireframe/Input.svelte';
+	import MapV2 from '../../../../components/wireframe/MapV2.svelte';
 	import Spacer from '../../../../components/Spacer.svelte';
 	import Section from '../../../../components/wireframe/Section.svelte';
 	import { useDevices, useFields } from '../../../../stores';

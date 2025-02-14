@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import Checkbox from '../../../../../components/Checkbox.svelte';
+	import Checkbox from '../../../../../components/wireframe/Checkbox.svelte';
 	import Spacer from '../../../../../components/Spacer.svelte';
 	import SaveSection from '../../../../../components/wireframe/SaveSection.svelte';
 	import Section from '../../../../../components/wireframe/Section.svelte';

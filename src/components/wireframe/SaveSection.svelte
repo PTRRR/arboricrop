@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Button from '../Button.svelte';
+	import Button from './Button.svelte';
 
 	export let saveLabel: string = 'Save';
 	export let cancelLabel: string = 'Cancel';

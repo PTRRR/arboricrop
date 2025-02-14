@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { changinGeoJson } from '../../utils/dummyData';
 	import type { LngLatLike } from 'maplibre-gl';
-	import MapV2 from '../../components/MapV2.svelte';
+	import MapV2 from '../../components/wireframe/MapV2.svelte';
 
 	const markers: { lngLat: LngLatLike; label?: string }[] = [
 		{ lngLat: [6.230671662475515, 46.39865299101902], label: 'Device 01' },

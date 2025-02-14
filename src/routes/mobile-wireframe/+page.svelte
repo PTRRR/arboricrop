@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Button from '../../components/Button.svelte';
+	import Button from '../../components/wireframe/Button.svelte';
 	import Card from '../../components/wireframe/Card.svelte';
 	import { useDevices, useFields, useReturnButton } from '../../stores';
 	import { shuffle } from '../../utils/arrays';

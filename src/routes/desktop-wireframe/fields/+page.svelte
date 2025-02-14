@@ -1,16 +1,16 @@
 <script lang="ts">
 	import { createId } from '@paralleldrive/cuid2';
-	import AlertDialog from '../../../components/AlertDialog.svelte';
-	import Dialog from '../../../components/Dialog.svelte';
-	import Info from '../../../components/Info.svelte';
-	import Input from '../../../components/Input.svelte';
+	import AlertDialog from '../../../components/wireframe/AlertDialog.svelte';
+	import Dialog from '../../../components/wireframe/Dialog.svelte';
+	import Info from '../../../components/wireframe/Info.svelte';
+	import Input from '../../../components/wireframe/Input.svelte';
 	import Spacer from '../../../components/Spacer.svelte';
 	import Section from '../../../components/wireframe/Section.svelte';
 	import { useDevices, useFields } from '../../../stores';
 	import type { Field } from '../../../utils/types';
 	import { changinCenter } from '../../../utils/dummyData';
 	import { goto } from '$app/navigation';
-	import List from '../../../components/List.svelte';
+	import List from '../../../components/wireframe/List.svelte';
 
 	const { fields, addField } = useFields();
 	const { devices } = useDevices();

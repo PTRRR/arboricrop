@@ -1,6 +1,6 @@
 <script>
-	import Button from '../Button.svelte';
-	import Dropdown from '../Dropdown.svelte';
+	import Button from '../wireframe/Button.svelte';
+	import Dropdown from '../wireframe/Dropdown.svelte';
 </script>
 
 <div class="main-menu">

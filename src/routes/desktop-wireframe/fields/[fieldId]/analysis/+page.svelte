@@ -1,13 +1,13 @@
 <script lang="ts">
-	import Button from '../../../../../components/Button.svelte';
-	import Grid from '../../../../../components/Grid.svelte';
+	import Button from '../../../../../components/wireframe/Button.svelte';
+	import Grid from '../../../../../components/wireframe/Grid.svelte';
 	import Section from '../../../../../components/wireframe/Section.svelte';
 	import { useFields, useMetrics } from '../../../../../stores';
 	import { page } from '$app/stores';
 	import type { Metric } from '../../../../../utils/types';
 	import { goto } from '$app/navigation';
 	import Spacer from '../../../../../components/Spacer.svelte';
-	import Info from '../../../../../components/Info.svelte';
+	import Info from '../../../../../components/wireframe/Info.svelte';
 	import Image from '../../../../../components/wireframe/Image.svelte';
 
 	const { fields } = useFields();

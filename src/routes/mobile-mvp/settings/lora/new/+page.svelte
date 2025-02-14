@@ -7,7 +7,7 @@
 	import Section from '../../../../../components/wireframe/Section.svelte';
 	import { type LoRaConfiguration, type LoRaConfigurationWithId } from '../../../../../utils/types';
 	import { useLoRaConfigurations, useReturnButton } from '../../../../../stores';
-	import Checkbox from '../../../../../components/Checkbox.svelte';
+	import Checkbox from '../../../../../components/wireframe/Checkbox.svelte';
 
 	const returnButton = useReturnButton();
 	const { addConfiguration, loRaConfigurations, updateConfiguration } = useLoRaConfigurations();

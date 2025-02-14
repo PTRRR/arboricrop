@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import Button from '../../../../components/Button.svelte';
-	import Info from '../../../../components/Info.svelte';
-	import MapV2 from '../../../../components/MapV2.svelte';
+	import Button from '../../../../components/wireframe/Button.svelte';
+	import Info from '../../../../components/wireframe/Info.svelte';
+	import MapV2 from '../../../../components/wireframe/MapV2.svelte';
 	import Spacer from '../../../../components/Spacer.svelte';
 	import ButtonList from '../../../../components/wireframe/ButtonList.svelte';
 	import DeviceGeneralSettings from '../../../../components/wireframe/DeviceGeneralSettings.svelte';

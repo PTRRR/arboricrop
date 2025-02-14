@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Spacer from '../Spacer.svelte';
-	import Button from '../Button.svelte';
+	import Button from './Button.svelte';
 	import SaveSection from './SaveSection.svelte';
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
@@ -9,14 +9,14 @@
 	import Image from './Image.svelte';
 	import type { Device, Location } from '../../utils/types';
 	import { useFields, useNetwork } from '../../stores';
-	import Separation from '../Separation.svelte';
-	import Info from '../Info.svelte';
+	import Separation from './Separation.svelte';
+	import Info from './Info.svelte';
 	import { createUrlBuilder } from '../../utils/urls';
 	import DeviceMetadata from './DeviceMetadata.svelte';
 	import CenteredWrapper from './CenteredWrapper.svelte';
 	import ButtonList from './ButtonList.svelte';
 	import Legend from './Legend.svelte';
-	import Checklist from '../Checklist.svelte';
+	import Checklist from './Checklist.svelte';
 	import Pagination from './Pagination.svelte';
 	import type { LngLatLike } from 'svelte-maplibre';
 

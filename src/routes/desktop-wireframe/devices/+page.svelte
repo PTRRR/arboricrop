@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import List from '../../../components/List.svelte';
+	import List from '../../../components/wireframe/List.svelte';
 	import Section from '../../../components/wireframe/Section.svelte';
 	import { useDevices, useFields } from '../../../stores';
 	import { createUrlBuilder } from '../../../utils/urls';

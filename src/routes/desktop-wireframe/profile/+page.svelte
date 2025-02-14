@@ -1,9 +1,9 @@
 <script>
-	import Info from '../../../components/Info.svelte';
-	import Input from '../../../components/Input.svelte';
-	import Dropdown from '../../../components/Dropdown.svelte';
-	import Button from '../../../components/Button.svelte';
-	import Separation from '../../../components/Separation.svelte';
+	import Info from '../../../components/wireframe/Info.svelte';
+	import Input from '../../../components/wireframe/Input.svelte';
+	import Dropdown from '../../../components/wireframe/Dropdown.svelte';
+	import Button from '../../../components/wireframe/Button.svelte';
+	import Separation from '../../../components/wireframe/Separation.svelte';
 	import Spacer from '../../../components/Spacer.svelte';
 	import { useProfile } from '../../../stores';
 	import SaveSection from '../../../components/wireframe/SaveSection.svelte';

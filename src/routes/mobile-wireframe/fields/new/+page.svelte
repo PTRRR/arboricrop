@@ -8,7 +8,7 @@
 		useNavigationHistory,
 		useReturnButton
 	} from '../../../../stores';
-	import Button from '../../../../components/Button.svelte';
+	import Button from '../../../../components/wireframe/Button.svelte';
 	import type { Field, GeoJSONFeature } from '../../../../utils/types';
 	import { createUrlBuilder } from '../../../../utils/urls';
 	import { page } from '$app/stores';
@@ -18,10 +18,10 @@
 	import { changinCenter, swissBounds } from '../../../../utils/dummyData';
 	import { getFeatureLayerName } from '../../../../utils/geoJSON';
 	import FieldGeneralSettings from '../../../../components/wireframe/FieldGeneralSettings.svelte';
-	import MapV2 from '../../../../components/MapV2.svelte';
+	import MapV2 from '../../../../components/wireframe/MapV2.svelte';
 	import SaveSection from '../../../../components/wireframe/SaveSection.svelte';
 	import Section from '../../../../components/wireframe/Section.svelte';
-	import Info from '../../../../components/Info.svelte';
+	import Info from '../../../../components/wireframe/Info.svelte';
 
 	let map: MapV2;
 	let generalSettings: FieldGeneralSettings;

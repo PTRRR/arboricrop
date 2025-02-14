@@ -1,11 +1,11 @@
 <script lang="ts">
-	import Button from '../Button.svelte';
+	import Button from './Button.svelte';
 	import { createId } from '@paralleldrive/cuid2';
 	import type { Field, MapLayer, Marker } from '../../utils/types';
-	import Separation from '../Separation.svelte';
+	import Separation from './Separation.svelte';
 	import Spacer from '../Spacer.svelte';
 	import { useGeoJSONFeatures } from '../../stores';
-	import MapV2 from '../MapV2.svelte';
+	import MapV2 from './MapV2.svelte';
 	import { changinCenter, changinGeoJson } from '../../utils/dummyData';
 
 	export let field: Field | undefined = undefined;

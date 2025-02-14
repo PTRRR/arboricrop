@@ -1,6 +1,6 @@
 <script>
-	import Button from '../../../components/Button.svelte';
-	import Input from '../../../components/Input.svelte';
+	import Button from '../../../components/wireframe/Button.svelte';
+	import Input from '../../../components/wireframe/Input.svelte';
 	import Spacer from '../../../components/Spacer.svelte';
 	import Section from '../../../components/wireframe/Section.svelte';
 </script>

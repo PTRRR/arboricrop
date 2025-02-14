@@ -1,11 +1,11 @@
 <script lang="ts">
-	import Button from '../../../components/Button.svelte';
+	import Button from '../../../components/wireframe/Button.svelte';
 	import Spacer from '../../../components/Spacer.svelte';
 	import { useDevices, useFields } from '../../../stores';
-	import MapV2 from '../../../components/MapV2.svelte';
+	import MapV2 from '../../../components/wireframe/MapV2.svelte';
 	import type { LngLatLike } from 'svelte-maplibre';
 	import Section from '../../../components/wireframe/Section.svelte';
-	import Info from '../../../components/Info.svelte';
+	import Info from '../../../components/wireframe/Info.svelte';
 
 	const { fields } = useFields();
 	const { devices } = useDevices();

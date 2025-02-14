@@ -2,14 +2,14 @@
 	import { page } from '$app/stores';
 	import { useDevices, useFields } from '../../../../stores';
 	import { getDevicesByFieldId } from '../../../../utils/dummyData';
-	import MapV2 from '../../../../components/MapV2.svelte';
+	import MapV2 from '../../../../components/wireframe/MapV2.svelte';
 	import type { LngLatLike } from 'svelte-maplibre';
 	import Section from '../../../../components/wireframe/Section.svelte';
-	import Tabs from '../../../../components/Tabs.svelte';
+	import Tabs from '../../../../components/wireframe/Tabs.svelte';
 	import type { Tab } from '../../../../utils/types';
 	import { goto } from '$app/navigation';
 	import { createUrlBuilder } from '../../../../utils/urls';
-	import Button from '../../../../components/Button.svelte';
+	import Button from '../../../../components/wireframe/Button.svelte';
 	import Spacer from '../../../../components/Spacer.svelte';
 
 	let map: MapV2;

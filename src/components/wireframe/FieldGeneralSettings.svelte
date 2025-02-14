@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Field } from '../../utils/types';
-	import Info from '../Info.svelte';
+	import Info from './Info.svelte';
 
 	let id: HTMLInputElement;
 	let name: HTMLInputElement;

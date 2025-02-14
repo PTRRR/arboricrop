@@ -3,11 +3,11 @@
 	import { page } from '$app/stores';
 	import { createId } from '@paralleldrive/cuid2';
 
-	import Button from '../../../../../components/Button.svelte';
-	import Checklist from '../../../../../components/Checklist.svelte';
-	import Dropdown from '../../../../../components/Dropdown.svelte';
-	import Info from '../../../../../components/Info.svelte';
-	import MapV2 from '../../../../../components/MapV2.svelte';
+	import Button from '../../../../../components/wireframe/Button.svelte';
+	import Checklist from '../../../../../components/wireframe/Checklist.svelte';
+	import Dropdown from '../../../../../components/wireframe/Dropdown.svelte';
+	import Info from '../../../../../components/wireframe/Info.svelte';
+	import MapV2 from '../../../../../components/wireframe/MapV2.svelte';
 	import Spacer from '../../../../../components/Spacer.svelte';
 	import ButtonList from '../../../../../components/wireframe/ButtonList.svelte';
 	import CenteredWrapper from '../../../../../components/wireframe/CenteredWrapper.svelte';
@@ -24,7 +24,7 @@
 	import { swissBounds } from '../../../../../utils/dummyData';
 	import type { Device, Field, MediaType } from '../../../../../utils/types';
 	import { createUrlBuilder } from '../../../../../utils/urls';
-	import Separation from '../../../../../components/Separation.svelte';
+	import Separation from '../../../../../components/wireframe/Separation.svelte';
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
 

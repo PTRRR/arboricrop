@@ -2,9 +2,9 @@
 	import { navigating, page } from '$app/stores';
 	import Comments from '../../components/comments/Comments.svelte';
 	import Mobile from '../../components/Mobile.svelte';
-	import Button from '../../components/Button.svelte';
+	import Button from '../../components/wireframe/Button.svelte';
 	import Chevron from '../../components/wireframe/Chevron.svelte';
-	import Dropdown from '../../components/Dropdown.svelte';
+	import Dropdown from '../../components/wireframe/Dropdown.svelte';
 	import FooterMenu from '../../components/wireframe/FooterMenu.svelte';
 	import Menu from '../../components/wireframe/Menu.svelte';
 	import {
@@ -30,7 +30,7 @@
 	import { iphone } from '../../utils/phones';
 	import type { LayoutData } from './$types';
 	import Portal from 'svelte-portal';
-	import DeviceIllustration from '../../components/DeviceIllustration.svelte';
+	import DeviceIllustration from '../../components/wireframe/DeviceIllustration.svelte';
 	import { onMount, type Snippet } from 'svelte';
 	import { goto } from '$app/navigation';
 	import Image from '../../components/wireframe/Image.svelte';

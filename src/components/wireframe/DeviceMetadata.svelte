@@ -2,11 +2,11 @@
 	import type { Device, Field, Media, MediaType } from '../../utils/types';
 	import { createUrlBuilder } from '../../utils/urls';
 	import Spacer from '../Spacer.svelte';
-	import Button from '../Button.svelte';
-	import Dropdown from '../Dropdown.svelte';
+	import Button from './Button.svelte';
+	import Dropdown from './Dropdown.svelte';
 	import { createId } from '@paralleldrive/cuid2';
 	import { useFields } from '../../stores';
-	import Info from '../Info.svelte';
+	import Info from './Info.svelte';
 	import ButtonList from './ButtonList.svelte';
 
 	export let device: Device;

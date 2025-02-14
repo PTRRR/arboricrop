@@ -3,8 +3,8 @@
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 	import Spacer from '../../../../components/Spacer.svelte';
-	import Button from '../../../../components/Button.svelte';
-	import Line from '../../../../components/Line.svelte';
+	import Button from '../../../../components/wireframe/Button.svelte';
+	import Line from '../../../../components/wireframe/Line.svelte';
 	import {
 		useDevices,
 		useFields,
@@ -18,11 +18,11 @@
 	import type { LngLatLike } from 'svelte-maplibre';
 	import FieldGeneralSettings from '../../../../components/wireframe/FieldGeneralSettings.svelte';
 	import Section from '../../../../components/wireframe/Section.svelte';
-	import MapV2 from '../../../../components/MapV2.svelte';
+	import MapV2 from '../../../../components/wireframe/MapV2.svelte';
 	import SaveSection from '../../../../components/wireframe/SaveSection.svelte';
 	import MapLayers from '../../../../components/wireframe/MapLayers.svelte';
 	import type { Feature, Geometry, GeoJsonProperties } from 'geojson';
-	import Info from '../../../../components/Info.svelte';
+	import Info from '../../../../components/wireframe/Info.svelte';
 
 	const { fields } = useFields();
 	const { devices } = useDevices();
