@@ -1,14 +1,24 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import { getCss } from '../../utils/css';
 
 	interface Props {
 		children?: Snippet;
+		minmax?: string;
+		style?: Partial<CSSStyleDeclaration>;
 	}
 
-	const { children }: Props = $props();
+	const { children, minmax = '26rem', style }: Props = $props();
+
+	const computedStyle = $derived(
+		getCss({
+			gridTemplateColumns: minmax ? `repeat(auto-fill, minmax(${minmax}, 1fr))` : undefined,
+			...style
+		})
+	);
 </script>
 
-<div class="grid">
+<div class="grid" style={computedStyle}>
 	{#if children}
 		{@render children()}
 	{/if}
@@ -17,7 +27,6 @@
 <style lang="scss">
 	.grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(26rem, 1fr));
 		gap: 1rem;
 	}
 </style>

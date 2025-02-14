@@ -63,11 +63,8 @@
 
 <Stack style={{ width: '100%' }}>
 	<Section>
-		<PageHeader title="Dashboard" />
-	</Section>
-
-	<Section label="Notifications">
-		<Grid>
+		<PageHeader title="Dashboard" subTitle="Notifications" />
+		<Grid minmax="20rem">
 			{#each randomNotifications as notification}
 				<NotificationCard {notification} />
 			{/each}
@@ -93,7 +90,7 @@
 			{ label: 'All', icon: 'navigate', iconOrder: 'inverted', href: '/desktop-mvp/trials' }
 		]}
 	>
-		<Grid>
+		<Grid minmax="20rem">
 			{#each shuffle(accountTrials).slice(0, 3) as trial}
 				<TrialCard {trial} />
 			{/each}

@@ -67,7 +67,7 @@
 		}
 
 		&__subtitle {
-			font-size: var(--main-font-size);
+			font-size: var(--mid-font-size);
 			font-weight: 500;
 			color: var(--grey);
 		}

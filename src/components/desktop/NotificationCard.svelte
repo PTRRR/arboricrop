@@ -11,7 +11,7 @@
 </script>
 
 <a
-	href={`desktop-mvp/nofitications/${notification.id}`}
+	href={`/desktop-mvp/notifications?id=${notification.id}`}
 	class="notification-card"
 	class:notification-card--alert={notification.type === 'alert'}
 	class:notification-card--notification={notification.type === 'notification'}

@@ -74,6 +74,7 @@
 				>
 					<Stack gap="0.5rem">
 						<Button href="/desktop-mvp">Dashboard</Button>
+						<Button href="/desktop-mvp/notifications">Notifications</Button>
 						<Spacer />
 						<StepSeparation label="Entities" />
 						<Button href="/desktop-mvp/projects">Projects</Button>
