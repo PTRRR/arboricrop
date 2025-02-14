@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Button, type Builder } from 'bits-ui';
 	import ButtonInner from './ButtonInner.svelte';
-	import { useNavigationHistory } from '../stores';
+	import { useNavigationHistory } from '../../stores';
 
 	export let type: 'button' | 'submit' | 'reset' | null | undefined = undefined;
 	export let tabIndex: number = 1;

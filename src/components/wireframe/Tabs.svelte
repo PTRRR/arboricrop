@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { Tab } from '../utils/types';
-	import Spacer from './Spacer.svelte';
+	import type { Tab } from '../../utils/types';
+	import Spacer from '../Spacer.svelte';
 	import Button from './Button.svelte';
 
 	type T = $$Generic;

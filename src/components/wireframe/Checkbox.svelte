@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Checkbox } from 'bits-ui';
-	import { getCss } from '../utils/css';
+	import { getCss } from '../../utils/css';
 
 	interface Props {
 		size?: string;

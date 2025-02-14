@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { ScrollArea } from 'bits-ui';
-	import { useScrollLock } from '../stores';
+	import { useScrollLock } from '../../stores';
 	import { onMount, type Snippet } from 'svelte';
 
 	const props: { children?: Snippet; onscroll?: (scrollValue: number) => void } = $props();

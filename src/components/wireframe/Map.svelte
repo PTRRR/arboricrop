@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { getCss } from '../utils/css';
-	import { clamp } from '../utils/math';
-	import type { Location, MapLayer } from '../utils/types';
-	import { useScrollLock } from '../stores';
+	import { getCss } from '../../utils/css';
+	import { clamp } from '../../utils/math';
+	import type { Location, MapLayer } from '../../utils/types';
+	import { useScrollLock } from '../../stores';
 	import Button from './Button.svelte';
-	import Spacer from './Spacer.svelte';
+	import Spacer from '../Spacer.svelte';
 
 	export let locations: Location[] = [];
 	export let layers: MapLayer[] = [];

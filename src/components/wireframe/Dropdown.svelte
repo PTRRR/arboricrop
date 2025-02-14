@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { useBlurApp } from '../stores';
+	import { useBlurApp } from '../../stores';
 
 	import { DropdownMenu } from 'bits-ui';
 	import Button from './Button.svelte';

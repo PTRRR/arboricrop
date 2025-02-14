@@ -2,7 +2,7 @@
 	import { onMount, type Snippet } from 'svelte';
 	import { getCss } from '../utils/css';
 	import type { Phone } from '../utils/phones';
-	import ScrollArea from './ScrollArea.svelte';
+	import ScrollArea from './wireframe/ScrollArea.svelte';
 
 	const props: {
 		phone: Phone;

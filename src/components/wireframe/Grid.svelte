@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getCss } from '../utils/css';
+	import { getCss } from '../../utils/css';
 
 	export let columns: number = 1;
 </script>

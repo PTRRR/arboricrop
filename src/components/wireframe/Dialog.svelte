@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getCss } from '../utils/css';
+	import { getCss } from '../../utils/css';
 
 	export let width: string = '30rem';
 	export let maxWidth: string = 'calc(100svw - 4rem)';

@@ -2,8 +2,8 @@
 	import { AlertDialog } from 'bits-ui';
 	import Button from './Button.svelte';
 	import Separation from './Separation.svelte';
-	import Section from './wireframe/Section.svelte';
-	import { useScrollLock } from '../stores';
+	import Section from './Section.svelte';
+	import { useScrollLock } from '../../stores';
 
 	const scrollLock = useScrollLock();
 

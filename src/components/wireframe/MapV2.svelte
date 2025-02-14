@@ -2,8 +2,8 @@
 	import { MapLibre, GeoJSON, FillLayer, LineLayer, Marker } from 'svelte-maplibre';
 	import type { LngLatLike, LngLatBoundsLike } from 'maplibre-gl';
 	import type { GeoJSON as GeoJSONType } from 'geojson';
-	import { getCss } from '../utils/css';
-	import { getGeoJSONFeatures } from '../utils/geoJSON';
+	import { getCss } from '../../utils/css';
+	import { getGeoJSONFeatures } from '../../utils/geoJSON';
 
 	let map: maplibregl.Map;
 

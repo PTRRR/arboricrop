@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { camelToKebab } from '../utils/strings';
-	import { getCss } from '../utils/css';
+	import { camelToKebab } from '../../utils/strings';
+	import { getCss } from '../../utils/css';
 
 	type T = $$Generic;
 	type HeaderValue = { size?: string; label?: string };

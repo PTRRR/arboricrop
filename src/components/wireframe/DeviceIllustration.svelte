@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { getCss } from '../utils/css';
+	import { getCss } from '../../utils/css';
 
 	export let animate: boolean = true;
 	export let led: boolean = true;
