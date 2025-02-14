@@ -3,6 +3,7 @@
 	import { portal } from '../../utils/portal';
 	import { useApp } from '../../stores';
 	import { LAYOUT_PORTAL } from '../../routes/mobile-layout/+layout.svelte';
+	import { fade, fly } from 'svelte/transition';
 	const { children, hidden = $bindable(false) }: { children?: Snippet; hidden?: boolean } =
 		$props();
 	const { showAppMenu } = useApp();
@@ -12,6 +13,8 @@
 	class="action-menu"
 	class:action-menu--hidden={$showAppMenu || hidden}
 	use:portal={LAYOUT_PORTAL}
+	in:fly={{ y: 50, duration: 300, opacity: 0, delay: 300 }}
+	out:fly={{ y: 50, duration: 300, opacity: 0 }}
 >
 	{@render children?.()}
 </div>
@@ -32,12 +35,12 @@
 		transform: translate(0, 0);
 
 		&--hidden {
-			opacity: 0;
-			pointer-events: none;
-			transform: translate(0, 150%);
-			transition:
-				opacity 0.5s ease-in-out,
-				transform 0.7s cubic-bezier(0.83, 0, 0.17, 1);
+			// opacity: 0;
+			// pointer-events: none;
+			// transform: translate(0, 150%);
+			// transition:
+			// 	opacity 0.5s ease-in-out,
+			// 	transform 0.7s cubic-bezier(0.83, 0, 0.17, 1);
 		}
 	}
 </style>

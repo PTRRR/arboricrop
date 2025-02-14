@@ -3,11 +3,10 @@
 	import TextInput from '../../../../components/layout/TextInput.svelte';
 	import Map from '../../../../components/layout/Map.svelte';
 	import { changinCenter, swissBounds } from '../../../../utils/dummyData';
-	import type { Field, GeoJSONFeature, Trial } from '../../../../utils/types';
+	import type { GeoJSONFeature, Trial } from '../../../../utils/types';
 	import { createId } from '@paralleldrive/cuid2';
 	import {
 		useCurrentAccount,
-		useFields,
 		useGeoJSONFeatures,
 		useLoRaConfigurations,
 		useReturnButton,
@@ -31,7 +30,6 @@
 	const defaultName = $page.url.searchParams.get('name') || '';
 	const addLayer = $derived($page.url.searchParams.get('addLayer') === 'true');
 
-	const { fields } = useFields();
 	const { trials, addTrial } = useTrials();
 	const { loRaConfigurations } = useLoRaConfigurations();
 	const features = useGeoJSONFeatures();
@@ -97,7 +95,7 @@
 
 	returnButton.set({
 		label: '',
-		backHref: '/mobile-layout'
+		backHref: data.baseUrl
 	});
 </script>
 
@@ -134,16 +132,22 @@
 	</Button>
 </Section>
 
-<SaveMenu
-	onsave={() => {
-		addTrial({
-			...trial,
-			name,
-			area,
-			// ...generalSettings.getValues(),
-			layers: selectedFeatures
-		});
+{#if name}
+	<SaveMenu
+		onsave={() => {
+			addTrial({
+				...trial,
+				name,
+				area,
+				// ...generalSettings.getValues(),
+				layers: selectedFeatures
+			});
 
-		goto(data.baseUrl);
-	}}
-/>
+			name = '';
+
+			setTimeout(() => {
+				goto(data.baseUrl);
+			}, 300);
+		}}
+	/>
+{/if}

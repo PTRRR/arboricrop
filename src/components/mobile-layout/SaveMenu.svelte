@@ -4,22 +4,31 @@
 
 	const {
 		onsave,
+		onsaveHref,
 		oncancel,
+		oncancelHref,
 		hidden
-	}: { onsave?: () => void; oncancel?: () => void; hidden?: boolean } = $props();
+	}: {
+		onsave?: () => void;
+		onsaveHref?: string;
+		oncancel?: () => void;
+		oncancelHref?: string;
+		hidden?: boolean;
+	} = $props();
 </script>
 
-<ActionMenu {hidden}>
-	{#if oncancel}
+<ActionMenu>
+	{#if oncancel || oncancelHref}
 		<Button
 			icon="cross"
 			iconBackgroundColor="var(--dark-grey)"
 			iconSize="large"
+			href={oncancelHref}
 			onclick={oncancel}
 		/>
 	{/if}
 
-	{#if onsave}
-		<Button icon="check" iconSize="large" onclick={onsave} />
+	{#if onsave || onsaveHref}
+		<Button icon="check" iconSize="large" onclick={onsave} href={onsaveHref} />
 	{/if}
 </ActionMenu>

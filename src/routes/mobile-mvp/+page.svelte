@@ -18,7 +18,6 @@
 	import { shuffle } from '../../utils/arrays';
 	import NotificationCard from '../../components/mobile-layout/NotificationCard.svelte';
 	import SaveMenu from '../../components/mobile-layout/SaveMenu.svelte';
-	import { goto } from '$app/navigation';
 	import Table from '../../components/layout/Table.svelte';
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
@@ -41,6 +40,7 @@
 	const { data }: Props = $props();
 
 	let newEmail = $state('');
+	let password = $state('');
 	let newTrialName = $state<string>('');
 	let newSelectedOrganisation = $state($organisation);
 
@@ -73,32 +73,39 @@
 	});
 </script>
 
+{#if stage === 'login' && newEmail && password}
+	<SaveMenu
+		onsave={() => {
+			$email = newEmail;
+
+			const account = $accounts.find((it) => it.email === newEmail);
+
+			if (!account) {
+				const newAccount = {
+					id: `acc-${createId()}`,
+					email: newEmail
+				};
+
+				addAccount(newAccount);
+				$currentAccount = newAccount;
+			} else {
+				$currentAccount = account;
+			}
+		}}
+	/>
+{:else if stage === 'new-trial' && newTrialName}
+	<SaveMenu
+		hidden={!newTrialName}
+		onsaveHref={`${data.baseUrl}/trials/new/?name=${newTrialName}`}
+	/>
+{/if}
+
 {#if stage === 'login'}
 	<PageHeader title="Login" />
 	<Section>
 		<TextInput label="Email" bind:value={newEmail} />
-		<TextInput label="Password" type="password" />
+		<TextInput label="Password" type="password" bind:value={password} />
 		<Button icon="navigate">Sign Up</Button>
-		<SaveMenu
-			hidden={!newEmail}
-			onsave={() => {
-				$email = newEmail;
-
-				const account = $accounts.find((it) => it.email === newEmail);
-
-				if (!account) {
-					const newAccount = {
-						id: `acc-${createId()}`,
-						email: newEmail
-					};
-
-					addAccount(newAccount);
-					$currentAccount = newAccount;
-				} else {
-					$currentAccount = account;
-				}
-			}}
-		/>
 	</Section>
 {:else if stage === 'select-organisation'}
 	<PageHeader title="Select Organisation" />
@@ -117,19 +124,11 @@
 				}))
 			]}
 		/>
-		<SaveMenu
-			hidden={typeof newSelectedOrganisation === 'undefined'}
-			onsave={() => ($organisation = newSelectedOrganisation)}
-		/>
 	</Section>
 {:else if stage === 'new-trial'}
 	<PageHeader title="Create trial" description="You don't have any trial yet" />
 	<Section>
 		<TextInput label="Name" bind:value={newTrialName} />
-		<SaveMenu
-			hidden={!newTrialName}
-			onsave={() => goto(`${data.baseUrl}/trials/new/?name=${newTrialName}`)}
-		/>
 	</Section>
 {:else}
 	{#snippet notificationsTitle()}
