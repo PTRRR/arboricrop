@@ -28,7 +28,8 @@
 		iconOrder,
 		padding = false,
 		color,
-		fontSize
+		fontSize,
+		underline
 	}: {
 		children?: Snippet;
 		fitWidth?: boolean;
@@ -48,6 +49,7 @@
 		padding?: boolean | string;
 		color?: string;
 		fontSize?: string;
+		underline?: boolean;
 	} = $props();
 
 	const { preventNavigationHistory } = useNavigationHistory();
@@ -74,6 +76,7 @@
 		class:button--background-color={backgroundColor}
 		class:button--inverted-icon={iconOrder === 'inverted'}
 		class:button--padding={padding}
+		class:button--underline={underline}
 		style={buttonStyle}
 		onclick={() => {
 			if (preventHistory) {
@@ -157,6 +160,10 @@
 
 		&--small {
 			padding: 0.2rem 0.5rem;
+		}
+
+		&--underline {
+			text-decoration: underline;
 		}
 
 		// &--selected,

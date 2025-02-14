@@ -10,6 +10,7 @@
 	import { createId } from '@paralleldrive/cuid2';
 	import { goto } from '$app/navigation';
 	import PageHeader from '../../components/layout/PageHeader.svelte';
+	import { page } from '$app/stores';
 
 	interface Props {
 		children: Snippet;
@@ -73,16 +74,35 @@
 					innerStyle={{ justifyContent: 'space-between' }}
 				>
 					<Stack gap="0.5rem">
-						<Button href="/desktop-mvp">Dashboard</Button>
-						<Button href="/desktop-mvp/notifications">Notifications</Button>
+						<Button href="/desktop-mvp" underline={$page.route.id === '/desktop-mvp'}>
+							Dashboard
+						</Button>
+						<Button
+							href="/desktop-mvp/notifications"
+							underline={$page.route.id?.startsWith('/desktop-mvp/notifications')}
+						>
+							Notifications
+						</Button>
 						<Spacer />
 						<StepSeparation label="Entities" />
-						<Button href="/desktop-mvp/projects">Projects</Button>
-						<Button href="/desktop-mvp/trials">Trials</Button>
-						<Button href="/desktop-mvp/devices">Devices</Button>
+						<Button
+							href="/desktop-mvp/projects"
+							underline={$page.route.id?.startsWith('/desktop-mvp/projects')}>Projects</Button
+						>
+						<Button
+							href="/desktop-mvp/trials"
+							underline={$page.route.id?.startsWith('/desktop-mvp/trials')}>Trials</Button
+						>
+						<Button
+							href="/desktop-mvp/devices"
+							underline={$page.route.id?.startsWith('/desktop-mvp/devices')}>Devices</Button
+						>
 						<Spacer />
 						<StepSeparation label="Settings" />
-						<Button href="/desktop-mvp/account">Account</Button>
+						<Button
+							href="/desktop-mvp/account"
+							underline={$page.route.id?.startsWith('/desktop-mvp/account')}>Account</Button
+						>
 						<Button
 							onclick={() => {
 								$email = '';
@@ -92,7 +112,11 @@
 						{#if $currentAccount.email.includes('vivent')}
 							<Spacer />
 							<StepSeparation label="Admin" />
-							<Button href="/desktop-mvp/earmark-devices">Earmark</Button>
+							<Button
+								href="/desktop-mvp/earmark-devices"
+								underline={$page.route.id?.startsWith('/desktop-mvp/earmark-devices')}
+								>Earmark</Button
+							>
 						{/if}
 					</Stack>
 
