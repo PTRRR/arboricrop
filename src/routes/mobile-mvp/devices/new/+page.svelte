@@ -14,6 +14,8 @@
 	import TextInput from '../../../../components/layout/TextInput.svelte';
 	import PageHeader from '../../../../components/layout/PageHeader.svelte';
 	import SaveMenu from '../../../../components/mobile-layout/SaveMenu.svelte';
+	import ActionMenu from '../../../../components/mobile-layout/ActionMenu.svelte';
+	import ActionButton from '../../../../components/mobile-layout/ActionButton.svelte';
 
 	export let data: PageData;
 
@@ -47,13 +49,21 @@
 </script>
 
 {#if device.name}
-	<SaveMenu
-		onsaveHref={`${data.baseUrl}/devices/${device.id}?connected=true`}
-		onsave={() => {
-			$preventNavigationHistory = true;
-			devices.set([...$devices, device]);
-		}}
-	/>
+	<ActionMenu>
+		<ActionButton
+			icon="check"
+			color="var(--white)"
+			backgroundColor="var(--green)"
+			iconBackgroundColor="var(--green)"
+			href={`${data.baseUrl}/devices/${device.id}?connected=true`}
+			onclick={() => {
+				$preventNavigationHistory = true;
+				devices.set([...$devices, device]);
+			}}
+		>
+			Create
+		</ActionButton>
+	</ActionMenu>
 {/if}
 
 <PageHeader title="New Device" />
