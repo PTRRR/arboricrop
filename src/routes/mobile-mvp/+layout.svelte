@@ -271,7 +271,7 @@
 			#{$this}__action-menu {
 				opacity: 0;
 				pointer-events: none;
-				transform: translate(0, 150%);
+				transform: translate(0, 50px);
 			}
 		}
 
@@ -282,6 +282,12 @@
 
 			#{$this}__content {
 				transform: translate(0, 100%);
+			}
+
+			#{$this}__action-menu {
+				opacity: 0;
+				pointer-events: none;
+				transform: translate(0, 50px);
 			}
 		}
 

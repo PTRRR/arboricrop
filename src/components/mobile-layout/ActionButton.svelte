@@ -21,7 +21,7 @@
 	const {
 		children,
 		onclick,
-		padding = '0 0 0 0.5rem',
+		padding = true,
 		icon = 'navigate',
 		color = 'var(--black)',
 		backgroundColor = 'var(--grey)',

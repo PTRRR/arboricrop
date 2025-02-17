@@ -219,7 +219,9 @@
 			<ActionMenu>
 				<ActionButton
 					icon="check"
-					iconSize="large"
+					color="var(--white)"
+					backgroundColor="var(--green)"
+					iconBackgroundColor="var(--green)"
 					onclick={() => {
 						if (device) {
 							updateDevice({

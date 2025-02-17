@@ -137,6 +137,10 @@
 {#if name}
 	<ActionMenu>
 		<ActionButton
+			icon="check"
+			color="var(--white)"
+			backgroundColor="var(--green)"
+			iconBackgroundColor="var(--green)"
 			onclick={() => {
 				addTrial({
 					...trial,

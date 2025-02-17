@@ -99,22 +99,6 @@
 </script>
 
 <div class="field">
-	<ActionMenu>
-		<ActionButton
-			onclick={() => {
-				const randomDeviceIndex = Math.floor(Math.random() * $devices.length);
-				const device = $devices[randomDeviceIndex];
-				goto(`${data.baseUrl}/devices/pairing?deviceId=${device?.id}`);
-				updateDevice({
-					...device,
-					parentId: trial?.id
-				});
-			}}
-		>
-			pair device
-		</ActionButton>
-	</ActionMenu>
-
 	{#if trial}
 		<PageHeader title={trial.name} subTitle={`Devices: ${$devices.length}`} />
 		<Section>
@@ -254,6 +238,22 @@
 					coords = undefined;
 				}}
 			/>
+		{:else}
+			<ActionMenu>
+				<ActionButton
+					onclick={() => {
+						const randomDeviceIndex = Math.floor(Math.random() * $devices.length);
+						const device = $devices[randomDeviceIndex];
+						goto(`${data.baseUrl}/devices/pairing?deviceId=${device?.id}`);
+						updateDevice({
+							...device,
+							parentId: trial?.id
+						});
+					}}
+				>
+					pair device
+				</ActionButton>
+			</ActionMenu>
 		{/if}
 	{/if}
 </div>

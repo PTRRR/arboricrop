@@ -139,16 +139,9 @@
 
 	{#if newTrialName}
 		<ActionMenu>
-			<Button
-				icon="check"
-				iconSize="large"
-				backgroundColor="var(--grey)"
-				iconOrder="inverted"
-				padding="0 0 0 0.5rem"
-				href={`${data.baseUrl}/trials/new/?name=${newTrialName}`}
-			>
+			<ActionButton href={`${data.baseUrl}/trials/new/?name=${newTrialName}`}>
 				Continue
-			</Button>
+			</ActionButton>
 		</ActionMenu>
 	{/if}
 {:else}

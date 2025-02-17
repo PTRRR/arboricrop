@@ -95,7 +95,13 @@
 {/if}
 
 <ActionMenu>
-	<ActionButton href={data.baseUrl}>Save</ActionButton>
+	<ActionButton
+		icon="check"
+		color="var(--white)"
+		backgroundColor="var(--green)"
+		iconBackgroundColor="var(--green)"
+		href={data.baseUrl}>Save</ActionButton
+	>
 </ActionMenu>
 
 <style lang="scss">
