@@ -14,6 +14,7 @@
 	import { goto } from '$app/navigation';
 	import type { PageData } from './$types';
 	import ActionMenu from '../../../../components/mobile-layout/ActionMenu.svelte';
+	import ActionButton from '../../../../components/mobile-layout/ActionButton.svelte';
 
 	interface Props {
 		data: PageData;
@@ -66,40 +67,34 @@
 </script>
 
 {#if $page.data.acknowledge}
-	<SaveMenu
-		onsaveHref={`${data.baseUrl}/notifications`}
-		onsave={async () => {
-			if (notification) {
-				const notificationIndex = $notifications.findIndex((it) => it.id === notification.id);
-				if (notificationIndex > -1) {
-					const newNotifications = [...$notifications];
-					newNotifications[notificationIndex] = {
-						...newNotifications[notificationIndex],
-						status: 'acknowledged'
-					};
-					notifications.set(newNotifications);
-				}
-			}
-		}}
-	/>
-{/if}
-
-{#if $page.data.acknowledge}
 	<PageHeader title="Review" subTitle={notification?.title} />
 	<Section>
 		<TextareaInput placeholder="Personal note" />
 	</Section>
+	<ActionMenu>
+		<ActionButton
+			icon="check"
+			href={`${data.baseUrl}/notifications`}
+			onclick={async () => {
+				if (notification) {
+					const notificationIndex = $notifications.findIndex((it) => it.id === notification.id);
+					if (notificationIndex > -1) {
+						const newNotifications = [...$notifications];
+						newNotifications[notificationIndex] = {
+							...newNotifications[notificationIndex],
+							status: 'acknowledged'
+						};
+						notifications.set(newNotifications);
+					}
+				}
+			}}
+		>
+			Save
+		</ActionButton>
+	</ActionMenu>
 {:else}
 	{#snippet pageTitle()}
 		<span>{notification?.title}</span>
-		<Button
-			href={`${window.location.pathname}?acknowledge=true`}
-			padding
-			icon="check"
-			iconOrder="inverted"
-			backgroundColor="var(--light-green)"
-			iconBackgroundColor="var(--green)">Review</Button
-		>
 	{/snippet}
 
 	{#snippet pageSubtitle()}
@@ -126,4 +121,10 @@
 			}}>See device</Button
 		>
 	</Section>
+
+	<ActionMenu>
+		<ActionButton icon="navigate" href={`${window.location.pathname}?acknowledge=true`}>
+			Acknowledge
+		</ActionButton>
+	</ActionMenu>
 {/if}

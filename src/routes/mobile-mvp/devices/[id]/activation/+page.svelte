@@ -30,6 +30,7 @@
 	import ActionMenu from '../../../../../components/mobile-layout/ActionMenu.svelte';
 	import SaveMenu from '../../../../../components/mobile-layout/SaveMenu.svelte';
 	import LiveData from '../../../../../components/mobile-layout/LiveData.svelte';
+	import ActionButton from '../../../../../components/mobile-layout/ActionButton.svelte';
 
 	const { data }: { data: PageData } = $props();
 
@@ -142,7 +143,7 @@
 {#if data.advanced && device}
 	{#snippet advancedActivationTitle()}
 		<span>Device Activation</span>
-		<LiveData iconOrder="inverted" bind:opened={isLiveDataVisible} />
+		<!-- <LiveData iconOrder="inverted" bind:opened={isLiveDataVisible} /> -->
 	{/snippet}
 
 	<PageHeader title={advancedActivationTitle} />
@@ -215,17 +216,23 @@
 		{/if}
 
 		{#if !isLiveDataVisible}
-			<SaveMenu
-				onsave={() => {
-					if (device) {
-						updateDevice({
-							...device,
-							status: 'active'
-						});
-						goto(`${data.baseUrl}/devices/${device?.id}?connected=true`);
-					}
-				}}
-			/>
+			<ActionMenu>
+				<ActionButton
+					icon="check"
+					iconSize="large"
+					onclick={() => {
+						if (device) {
+							updateDevice({
+								...device,
+								status: 'active'
+							});
+							goto(`${data.baseUrl}/devices/${device?.id}?connected=true`);
+						}
+					}}
+				>
+					Done
+				</ActionButton>
+			</ActionMenu>
 		{/if}
 	</Section>
 {:else if $page.data.selectField}
@@ -261,7 +268,7 @@
 {:else}
 	{#snippet stepHeader()}
 		<span>{currentStep?.label}</span>
-		<Button padding icon="navigate" iconOrder="inverted">Live Data</Button>
+		<!-- <Button padding icon="navigate" iconOrder="inverted">Live Data</Button> -->
 	{/snippet}
 
 	<PageHeader title={stepHeader} subTitle={`Step ${stepIndex + 1}/${steps.length}`} />
@@ -386,7 +393,8 @@
 		</Section>
 
 		{#if !isLiveDataVisible}
-			<ActionMenu>
+			<ActionButton>Done</ActionButton>
+			<!-- <ActionMenu>
 				<Button
 					icon="back"
 					iconSize="large"
@@ -407,7 +415,7 @@
 						}
 					}}
 				></Button>
-			</ActionMenu>
+			</ActionMenu> -->
 		{/if}
 	{/if}
 {/if}

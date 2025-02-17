@@ -30,6 +30,7 @@
 	import LiveData from '../../../../components/mobile-layout/LiveData.svelte';
 	import type { PageData } from './$types';
 	import ActionMenu from '../../../../components/mobile-layout/ActionMenu.svelte';
+	import ActionButton from '../../../../components/mobile-layout/ActionButton.svelte';
 
 	interface Props {
 		data: PageData;
@@ -65,7 +66,7 @@
 	];
 
 	const actionButtonLabel = $derived(
-		$page.data.connected ? (device?.status === 'active' ? 'Deactivate' : 'Activate') : 'Pair'
+		$page.data.connected ? (device?.status === 'active' ? 'Deactivate' : 'Activate') : 'Connect'
 	);
 	const actionButtonIcon = $derived<IconName>(
 		$page.data.connected ? (device?.status === 'active' ? 'cross' : 'check') : 'navigate'
@@ -306,17 +307,9 @@
 		/>
 	{/if}
 
-	{#if $page.data.connected && device.status !== 'active' && !hasChanged && !isTerminalVisible}
+	{#if device.status !== 'active' && !hasChanged && !isTerminalVisible}
 		<ActionMenu>
-			<Button
-				padding="0 0 0 0.5rem"
-				icon="navigate"
-				color="var(--white)"
-				backgroundColor="var(--green)"
-				iconBackgroundColor="var(--green)"
-				iconColor="var(--white)"
-				iconOrder="inverted"
-				iconSize="large"
+			<ActionButton
 				onclick={() => {
 					if ($page.data.connected && device?.status === 'active') {
 						updateDevice({ ...device, status: 'unactive' });
@@ -326,7 +319,7 @@
 				}}
 			>
 				{actionButtonLabel}
-			</Button>
+			</ActionButton>
 		</ActionMenu>
 	{/if}
 {:else}

@@ -6,11 +6,21 @@
 	import TextInput from '../../../components/layout/TextInput.svelte';
 	import { useReturnButton } from '../../../stores';
 
+	import ActionMenu from '../../../components/mobile-layout/ActionMenu.svelte';
+	import ActionButton from '../../../components/mobile-layout/ActionButton.svelte';
+	import type { PageData } from '../$types';
+
+	interface Props {
+		data: PageData;
+	}
+
+	const { data }: Props = $props();
+
 	const returnButton = useReturnButton();
 
 	returnButton.set({
 		label: ``,
-		backHref: `/mobile-layout`
+		backHref: data.baseUrl
 	});
 </script>
 
@@ -21,4 +31,6 @@
 	<TextInput label="Last name" defaultValue="Doe" />
 </Section>
 
-<SaveMenu onsave={() => goto('/mobile-layout')} />
+<ActionMenu>
+	<ActionButton href={data.baseUrl}>Save</ActionButton>
+</ActionMenu>

@@ -24,6 +24,7 @@
 	import StatusDot from '../../../../components/mobile-layout/StatusDot.svelte';
 	import type { PageData } from './$types';
 	import ActionMenu from '../../../../components/mobile-layout/ActionMenu.svelte';
+	import ActionButton from '../../../../components/mobile-layout/ActionButton.svelte';
 
 	interface Prop {
 		data: PageData;
@@ -98,29 +99,20 @@
 </script>
 
 <div class="field">
-	<ActionMenu hidden={!hasChanged}>
-		<Button
-			padding="0 0 0 0.5rem"
-			icon="navigate"
-			color="var(--white)"
-			backgroundColor="var(--green)"
-			iconBackgroundColor="var(--green)"
-			iconColor="var(--white)"
-			iconOrder="inverted"
-			iconSize="large"
+	<ActionMenu>
+		<ActionButton
 			onclick={() => {
 				const randomDeviceIndex = Math.floor(Math.random() * $devices.length);
 				const device = $devices[randomDeviceIndex];
+				goto(`${data.baseUrl}/devices/pairing?deviceId=${device?.id}`);
 				updateDevice({
 					...device,
 					parentId: trial?.id
 				});
-
-				goto(`${data.baseUrl}/devices/pairing?deviceId=${device?.id}`);
 			}}
 		>
 			pair device
-		</Button>
+		</ActionButton>
 	</ActionMenu>
 
 	{#if trial}

@@ -21,6 +21,8 @@
 	import PageHeader from '../../../../components/layout/PageHeader.svelte';
 	import SaveMenu from '../../../../components/mobile-layout/SaveMenu.svelte';
 	import type { PageData } from './$types';
+	import ActionMenu from '../../../../components/mobile-layout/ActionMenu.svelte';
+	import ActionButton from '../../../../components/mobile-layout/ActionButton.svelte';
 
 	interface Props {
 		data: PageData;
@@ -133,22 +135,25 @@
 </Section>
 
 {#if name}
-	<SaveMenu
-		saveLabel="Save"
-		onsave={() => {
-			addTrial({
-				...trial,
-				name,
-				area,
-				// ...generalSettings.getValues(),
-				layers: selectedFeatures
-			});
+	<ActionMenu>
+		<ActionButton
+			onclick={() => {
+				addTrial({
+					...trial,
+					name,
+					area,
+					// ...generalSettings.getValues(),
+					layers: selectedFeatures
+				});
 
-			name = '';
+				name = '';
 
-			setTimeout(() => {
-				goto(data.baseUrl);
-			}, 300);
-		}}
-	/>
+				setTimeout(() => {
+					goto(data.baseUrl);
+				}, 300);
+			}}
+		>
+			Save
+		</ActionButton>
+	</ActionMenu>
 {/if}

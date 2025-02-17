@@ -25,6 +25,7 @@
 	import Spacer from '../../components/Spacer.svelte';
 	import { getCss } from '../../utils/css';
 	import ActionMenu from '../../components/mobile-layout/ActionMenu.svelte';
+	import ActionButton from '../../components/mobile-layout/ActionButton.svelte';
 
 	const { devices } = useDevices();
 	const { trials } = useTrials();
@@ -88,12 +89,8 @@
 
 	{#if newEmail && password}
 		<ActionMenu>
-			<Button
+			<ActionButton
 				icon="check"
-				iconSize="large"
-				backgroundColor="var(--grey)"
-				iconOrder="inverted"
-				padding="0 0 0 0.5rem"
 				onclick={() => {
 					$email = newEmail;
 
@@ -110,8 +107,10 @@
 					} else {
 						$currentAccount = account;
 					}
-				}}>Login</Button
+				}}
 			>
+				Login
+			</ActionButton>
 		</ActionMenu>
 	{/if}
 {:else if stage === 'select-organisation'}

@@ -11,8 +11,16 @@
 	import Checkbox from '../../../components/mobile-layout/Checkbox.svelte';
 	import Table from '../../../components/layout/Table.svelte';
 	import PageHeader from '../../../components/layout/PageHeader.svelte';
-	import SaveMenu from '../../../components/mobile-layout/SaveMenu.svelte';
 	import SubPage from '../../../components/mobile-layout/SubPage.svelte';
+	import ActionMenu from '../../../components/mobile-layout/ActionMenu.svelte';
+	import ActionButton from '../../../components/mobile-layout/ActionButton.svelte';
+	import type { PageData } from './$types';
+
+	interface Props {
+		data: PageData;
+	}
+
+	const { data }: Props = $props();
 
 	const returnButton = useReturnButton();
 	const organisation = useOrganisation();
@@ -23,7 +31,7 @@
 
 	returnButton.set({
 		label: ``,
-		backHref: `/mobile-layout`
+		backHref: data.baseUrl
 	});
 </script>
 
@@ -86,12 +94,9 @@
 	</Section>
 {/if}
 
-<SaveMenu
-	hidden={switchOrganisation}
-	onsave={() => {
-		goto('/mobile-layout');
-	}}
-/>
+<ActionMenu>
+	<ActionButton href={data.baseUrl}>Save</ActionButton>
+</ActionMenu>
 
 <style lang="scss">
 	.settings {

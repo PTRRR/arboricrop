@@ -76,8 +76,8 @@
 
 		&--large {
 			font-size: var(--big-font-size);
-			width: 38px;
-			height: 38px;
+			width: 34px;
+			height: 34px;
 		}
 
 		&__cross {
