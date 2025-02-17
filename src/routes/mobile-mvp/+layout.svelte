@@ -14,15 +14,15 @@
 	import { addEllipsis } from '../../utils/strings';
 	import { getCss } from '../../utils/css';
 	import type { LayoutData } from './$types';
+	import { fly } from 'svelte/transition';
 
 	let { children, data }: { children: Snippet; data: LayoutData } = $props();
-	let showSplashscreen = $state(true);
 	let showBreadcrumb = $state(false);
 	let menuMode = $state<'default' | 'scrolled'>('default');
 	const notifications = useNotifications();
 	const pendingNotifications = $derived($notifications.filter((it) => it.status === 'pending'));
 	const returnButton = useReturnButton();
-	const { showAppMenu, hideContent } = useApp();
+	const { showAppMenu, hideContent, showSplashscreen, actionMenuSnippets } = useApp();
 
 	onNavigate(() => {
 		$hideContent = false;
@@ -38,7 +38,7 @@
 
 	onMount(() => {
 		setTimeout(() => {
-			showSplashscreen = false;
+			$showSplashscreen = false;
 		}, 2000);
 
 		setTimeout(() => {
@@ -60,7 +60,7 @@
 >
 	<div
 		class="mobile-layout"
-		class:mobile-layout--init={showSplashscreen}
+		class:mobile-layout--init={$showSplashscreen}
 		class:mobile-layout--show-app-menu={$showAppMenu}
 		class:mobile-layout--scrolled={menuMode === 'scrolled'}
 	>
@@ -126,7 +126,20 @@
 			</div>
 		</div>
 
-		<div class="mobile-layout__portal" use:createPortal={LAYOUT_PORTAL}></div>
+		<div class="mobile-layout__portal" use:createPortal={LAYOUT_PORTAL}>
+			{#each $actionMenuSnippets as { id, state, snippet }}
+				{#key id}
+					<div
+						class="mobile-layout__action-menu"
+						class:mobile-layout__action-menu--mount={state === 'mount'}
+						class:mobile-layout__action-menu--mounting={state === 'mounting'}
+						class:mobile-layout__action-menu--unmounting={state === 'unmounting'}
+					>
+						{@render snippet()}
+					</div>
+				{/key}
+			{/each}
+		</div>
 	</div>
 </Mobile>
 
@@ -413,6 +426,34 @@
 
 		&__portal {
 			display: contents;
+		}
+
+		&__action-menu {
+			display: flex;
+			gap: 1rem;
+			padding: 0.5rem;
+			border-radius: 5px;
+			z-index: 15;
+			position: absolute;
+			bottom: 1.5rem;
+			right: 1.5rem;
+			transition:
+				opacity 0.5s cubic-bezier(0.83, 0, 0.17, 1),
+				transform 0.5s cubic-bezier(0.83, 0, 0.17, 1);
+
+			&--mount,
+			&--unmounting {
+				transform: translate(0, 50px);
+				opacity: 0;
+			}
+
+			&--mounting {
+				transition:
+					opacity 0.5s 0.1s cubic-bezier(0.83, 0, 0.17, 1),
+					transform 0.5s 0.1s cubic-bezier(0.83, 0, 0.17, 1);
+				transform: translate(0, 0);
+				opacity: 1;
+			}
 		}
 	}
 </style>

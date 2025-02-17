@@ -23,6 +23,7 @@
 	import type { GeoJSONFeature } from '../../../../utils/types';
 	import StatusDot from '../../../../components/mobile-layout/StatusDot.svelte';
 	import type { PageData } from './$types';
+	import ActionMenu from '../../../../components/mobile-layout/ActionMenu.svelte';
 
 	interface Prop {
 		data: PageData;
@@ -51,7 +52,7 @@
 	let name = $state<string | undefined>(undefined);
 	let area = $state<string | undefined>(undefined);
 	let coords = $state<LngLatLike | undefined>(undefined);
-	const hasChanged = $derived(name || area || coords);
+	const hasChanged = $derived(Boolean(name || area || coords));
 
 	const devicesHeaders: Cell[] = [
 		{ label: 'Name', width: '50%' },
@@ -97,31 +98,33 @@
 </script>
 
 <div class="field">
-	{#if trial}
-		{#snippet fieldHeaderTitle()}
-			<span>{trial.name}</span>
-			{#if $devices.length > 0}
-				<Button
-					padding
-					icon="navigate"
-					backgroundColor="var(--grey)"
-					iconOrder="inverted"
-					onclick={() => {
-						const randomDeviceIndex = Math.floor(Math.random() * $devices.length);
-						const device = $devices[randomDeviceIndex];
-						updateDevice({
-							...device,
-							parentId: trial.id
-						});
+	<ActionMenu hidden={!hasChanged}>
+		<Button
+			padding="0 0 0 0.5rem"
+			icon="navigate"
+			color="var(--white)"
+			backgroundColor="var(--green)"
+			iconBackgroundColor="var(--green)"
+			iconColor="var(--white)"
+			iconOrder="inverted"
+			iconSize="large"
+			onclick={() => {
+				const randomDeviceIndex = Math.floor(Math.random() * $devices.length);
+				const device = $devices[randomDeviceIndex];
+				updateDevice({
+					...device,
+					parentId: trial?.id
+				});
 
-						goto(`${data.baseUrl}/devices/pairing?deviceId=${device?.id}`);
-					}}
-				>
-					pair device
-				</Button>
-			{/if}
-		{/snippet}
-		<PageHeader title={fieldHeaderTitle} subTitle={`Devices: ${$devices.length}`} />
+				goto(`${data.baseUrl}/devices/pairing?deviceId=${device?.id}`);
+			}}
+		>
+			pair device
+		</Button>
+	</ActionMenu>
+
+	{#if trial}
+		<PageHeader title={trial.name} subTitle={`Devices: ${$devices.length}`} />
 		<Section>
 			<TextInput
 				label="Name"
@@ -199,14 +202,14 @@
 			/>
 		</Section>
 
-		{#snippet addLayer()}
+		<!-- {#snippet addLayer()}
 			<SubPage icon="add">
 				<PageHeader title="Available Layers" />
 				<Section>
 					<Table headers={layersHeaders} rows={availableLayersRows} />
 				</Section>
 			</SubPage>
-		{/snippet}
+		{/snippet} -->
 
 		<!-- <Section label="Layers" actions={selectedLayersRows.length > 0 ? [{ label: addLayer }] : []}>
 			{#if selectedLayersRows.length > 0}

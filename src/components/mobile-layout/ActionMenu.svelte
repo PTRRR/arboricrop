@@ -1,46 +1,43 @@
-<script lang="ts">
-	import type { Snippet } from 'svelte';
-	import { portal } from '../../utils/portal';
-	import { useApp } from '../../stores';
-	import { LAYOUT_PORTAL } from '../../routes/mobile-layout/+layout.svelte';
-	import { fade, fly } from 'svelte/transition';
-	const { children, hidden = $bindable(false) }: { children?: Snippet; hidden?: boolean } =
-		$props();
-	const { showAppMenu } = useApp();
+<script module lang="ts">
+	let idlTimeout: NodeJS.Timeout | undefined = undefined;
+	let unmountIds: string[] = [];
 </script>
 
-<div
-	class="action-menu"
-	class:action-menu--hidden={$showAppMenu || hidden}
-	use:portal={LAYOUT_PORTAL}
-	in:fly={{ y: 50, duration: 300, opacity: 0, delay: 400 }}
-	out:fly={{ y: 50, duration: 300, opacity: 0, delay: 100 }}
->
-	{@render children?.()}
-</div>
+<script lang="ts">
+	import { onMount, tick, type Snippet } from 'svelte';
+	import { useApp } from '../../stores';
+	import { createId } from '@paralleldrive/cuid2';
+	const { children, hidden = $bindable(false) }: { children?: Snippet; hidden?: boolean } =
+		$props();
+	const { actionMenuSnippets } = useApp();
 
-<style lang="scss">
-	.action-menu {
-		display: flex;
-		gap: 1rem;
-		padding: 0.5rem;
-		border-radius: 5px;
-		z-index: 15;
-		position: absolute;
-		bottom: 1.5rem;
-		right: 1.5rem;
-		transition:
-			opacity 0.5s 0.3s ease-in-out,
-			transform 0.7s cubic-bezier(0.83, 0, 0.17, 1);
-		transform: translate(0, 0);
+	onMount(() => {
+		if (!children) return;
+		const newId = createId();
+		$actionMenuSnippets = [
+			...$actionMenuSnippets,
+			{ id: newId, state: 'mount', snippet: children }
+		];
 
-		&--hidden {
-			// opacity: 0;
-			// pointer-events: none;
-			// transform: translate(0, 150%);
-			// transition:
-			// 	opacity 0.5s ease-in-out,
-			// 	transform 0.7s cubic-bezier(0.83, 0, 0.17, 1);
-		}
-	}
-</style>
+		setTimeout(() => {
+			$actionMenuSnippets = $actionMenuSnippets.map((it) =>
+				it.id === newId ? { ...it, state: 'mounting' } : it
+			);
+		}, 50);
+
+		return () => {
+			clearTimeout(idlTimeout);
+
+			$actionMenuSnippets = $actionMenuSnippets.map((it) =>
+				it.id === newId ? { ...it, state: 'unmounting' } : it
+			);
+
+			unmountIds.push(newId);
+
+			idlTimeout = setTimeout(() => {
+				$actionMenuSnippets = $actionMenuSnippets.filter((it) => !unmountIds.includes(it.id));
+				unmountIds = [];
+			}, 5000);
+		};
+	});
+</script>

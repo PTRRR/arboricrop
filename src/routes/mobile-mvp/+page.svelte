@@ -22,6 +22,9 @@
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
 	import { createId } from '@paralleldrive/cuid2';
+	import Spacer from '../../components/Spacer.svelte';
+	import { getCss } from '../../utils/css';
+	import ActionMenu from '../../components/mobile-layout/ActionMenu.svelte';
 
 	const { devices } = useDevices();
 	const { trials } = useTrials();
@@ -73,40 +76,44 @@
 	});
 </script>
 
-{#if stage === 'login' && newEmail && password}
-	<SaveMenu
-		onsave={() => {
-			$email = newEmail;
-
-			const account = $accounts.find((it) => it.email === newEmail);
-
-			if (!account) {
-				const newAccount = {
-					id: `acc-${createId()}`,
-					email: newEmail
-				};
-
-				addAccount(newAccount);
-				$currentAccount = newAccount;
-			} else {
-				$currentAccount = account;
-			}
-		}}
-	/>
-{:else if stage === 'new-trial' && newTrialName}
-	<SaveMenu
-		hidden={!newTrialName}
-		onsaveHref={`${data.baseUrl}/trials/new/?name=${newTrialName}`}
-	/>
-{/if}
-
 {#if stage === 'login'}
 	<PageHeader title="Login" />
 	<Section>
 		<TextInput label="Email" bind:value={newEmail} />
 		<TextInput label="Password" type="password" bind:value={password} />
+		<Spacer />
+		<span style={getCss({ color: 'var(--grey)' })}>Don't have an account yet?</span>
 		<Button icon="navigate">Sign Up</Button>
 	</Section>
+
+	{#if newEmail && password}
+		<ActionMenu>
+			<Button
+				icon="check"
+				iconSize="large"
+				backgroundColor="var(--grey)"
+				iconOrder="inverted"
+				padding="0 0 0 0.5rem"
+				onclick={() => {
+					$email = newEmail;
+
+					const account = $accounts.find((it) => it.email === newEmail);
+
+					if (!account) {
+						const newAccount = {
+							id: `acc-${createId()}`,
+							email: newEmail
+						};
+
+						addAccount(newAccount);
+						$currentAccount = newAccount;
+					} else {
+						$currentAccount = account;
+					}
+				}}>Login</Button
+			>
+		</ActionMenu>
+	{/if}
 {:else if stage === 'select-organisation'}
 	<PageHeader title="Select Organisation" />
 	<Section>
@@ -130,6 +137,21 @@
 	<Section>
 		<TextInput label="Name" bind:value={newTrialName} />
 	</Section>
+
+	{#if newTrialName}
+		<ActionMenu>
+			<Button
+				icon="check"
+				iconSize="large"
+				backgroundColor="var(--grey)"
+				iconOrder="inverted"
+				padding="0 0 0 0.5rem"
+				href={`${data.baseUrl}/trials/new/?name=${newTrialName}`}
+			>
+				Continue
+			</Button>
+		</ActionMenu>
+	{/if}
 {:else}
 	{#snippet notificationsTitle()}
 		<span>Notifications</span>

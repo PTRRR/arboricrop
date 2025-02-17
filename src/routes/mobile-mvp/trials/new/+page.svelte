@@ -134,6 +134,7 @@
 
 {#if name}
 	<SaveMenu
+		saveLabel="Save"
 		onsave={() => {
 			addTrial({
 				...trial,

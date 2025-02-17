@@ -29,6 +29,7 @@
 	import { addEllipsis } from '../../../../utils/strings';
 	import LiveData from '../../../../components/mobile-layout/LiveData.svelte';
 	import type { PageData } from './$types';
+	import ActionMenu from '../../../../components/mobile-layout/ActionMenu.svelte';
 
 	interface Props {
 		data: PageData;
@@ -127,7 +128,7 @@
 	{#snippet deviceName()}
 		{#if !$page.data.connected || device.status !== 'active'}
 			<span>{addEllipsis(device.name || '', 8)}</span>
-			<Button
+			<!-- <Button
 				padding
 				icon={actionButtonIcon}
 				iconBackgroundColor={actionButtonIconBackgroundColor}
@@ -142,7 +143,7 @@
 				}}
 			>
 				{actionButtonLabel}
-			</Button>
+			</Button> -->
 		{:else}
 			<span>{device.name}</span>
 		{/if}
@@ -303,6 +304,30 @@
 				location = undefined;
 			}}
 		/>
+	{/if}
+
+	{#if $page.data.connected && device.status !== 'active' && !hasChanged && !isTerminalVisible}
+		<ActionMenu>
+			<Button
+				padding="0 0 0 0.5rem"
+				icon="navigate"
+				color="var(--white)"
+				backgroundColor="var(--green)"
+				iconBackgroundColor="var(--green)"
+				iconColor="var(--white)"
+				iconOrder="inverted"
+				iconSize="large"
+				onclick={() => {
+					if ($page.data.connected && device?.status === 'active') {
+						updateDevice({ ...device, status: 'unactive' });
+					} else {
+						goto(actionButtonLink);
+					}
+				}}
+			>
+				{actionButtonLabel}
+			</Button>
+		</ActionMenu>
 	{/if}
 {:else}
 	<span>Device unknown</span>
