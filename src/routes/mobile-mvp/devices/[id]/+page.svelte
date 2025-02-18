@@ -244,12 +244,12 @@
 		{/if}
 	</Section>
 
-	{#if $page.data.connected}
+	<!-- {#if $page.data.connected}
 		<Section label="Advanced">
 			<Button icon="warning">Upgrate firmware</Button>
 			<LiveData bind:opened={isTerminalVisible} subTitle={`ID: ${device.id}`} />
 		</Section>
-	{/if}
+	{/if} -->
 
 	<!-- <Section label="Danger zone">
 		{#if $page.data.connected && device.status === 'active'}

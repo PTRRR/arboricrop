@@ -18,7 +18,7 @@
 		useNavigationHistory,
 		useReturnButton
 	} from '../../../../../stores';
-	import { swissBounds } from '../../../../../utils/dummyData';
+	import { changinCenter, swissBounds } from '../../../../../utils/dummyData';
 	import type { Device, Field, MediaType } from '../../../../../utils/types';
 	import { createUrlBuilder } from '../../../../../utils/urls';
 	import { onMount } from 'svelte';
@@ -31,6 +31,8 @@
 	import SaveMenu from '../../../../../components/mobile-layout/SaveMenu.svelte';
 	import LiveData from '../../../../../components/mobile-layout/LiveData.svelte';
 	import ActionButton from '../../../../../components/mobile-layout/ActionButton.svelte';
+	import type { LngLatLike } from 'svelte-maplibre';
+	import { dev } from '$app/environment';
 
 	const { data }: { data: PageData } = $props();
 
@@ -58,6 +60,7 @@
 	let map: Map | undefined = $state(undefined);
 	let selectedField: Field | undefined = $state(undefined);
 	let isLiveDataVisible = $state(false);
+	let newLocation = $state<LngLatLike | undefined>(undefined);
 
 	const stepIndex = $derived(($page.data.step || 0) as number);
 	const currentStep = $derived(steps[stepIndex]);
@@ -102,6 +105,18 @@
 		devices.set(newDevices);
 	});
 
+	const locationMarkers = $derived<{ lngLat: LngLatLike }[]>(
+		newLocation
+			? [{ lngLat: newLocation }]
+			: device?.location
+				? [{ lngLat: device.location }]
+				: [{ lngLat: changinCenter }]
+	);
+
+	const locationCenter = $derived(
+		newLocation || device?.location || field?.center || changinCenter
+	);
+
 	$effect(() => {
 		setJack(stepIndex > 0);
 	});
@@ -110,6 +125,7 @@
 		setVisibility(true);
 		setUsb(true);
 		setBlink(true);
+
 		return () => reset();
 	});
 </script>
@@ -163,25 +179,22 @@
 			zoom={15}
 			minZoom={8}
 			maxZoom={18.5}
-			center={device?.location || field?.center}
 			showTarget
-			markers={device?.location ? [{ lngLat: device.location }] : []}
+			center={locationCenter}
+			markers={locationMarkers}
 			geoJSONs={field?.layers}
-		/>
-		<Button
-			icon="check"
-			onclick={() => {
+			onpointerup={() => {
 				const center = map?.getCenter();
-				if (device && center) {
-					updateDevice({
-						...device,
-						location: [center.lng, center.lat]
-					});
+				if (center) {
+					newLocation = [center.lng, center.lat];
 				}
 			}}
-		>
-			Validate location
-		</Button>
+		/>
+
+		{#if newLocation}
+			<Button icon="cross" onclick={() => (newLocation = undefined)}>Reset to GPS</Button>
+		{/if}
+
 		<StepSeparation label="Note" />
 		<TextareaInput
 			placeholder="Your note..."
@@ -222,13 +235,15 @@
 					color="var(--white)"
 					backgroundColor="var(--green)"
 					iconBackgroundColor="var(--green)"
+					href={`${data.baseUrl}/devices/${device?.id}?connected=true`}
 					onclick={() => {
+						const center = map?.getCenter();
 						if (device) {
 							updateDevice({
 								...device,
+								location: center ? [center.lng, center.lat] : device.location,
 								status: 'active'
 							});
-							goto(`${data.baseUrl}/devices/${device?.id}?connected=true`);
 						}
 					}}
 				>

@@ -22,6 +22,7 @@
 		'https://api.maptiler.com/maps/ch-swisstopo-lbm/style.json?key=epJVqnAFN0DeOXvikzSB';
 	export let onChange: ((location: LngLatLike) => void) | undefined = undefined;
 	export let onmoveend: (() => void) | undefined = undefined;
+	export let onpointerup: (() => void) | undefined = undefined;
 	export const getCenter = () => map.getCenter();
 
 	$: features = geoJSONs.map(getGeoJSONFeatures).flat();
@@ -37,7 +38,7 @@
 		'--ratio': ratio.toString()
 	})}
 >
-	<div class="map__wrapper">
+	<div class="map__wrapper" on:pointerup={onpointerup}>
 		{#if showTarget}
 			<div class="map__target"></div>
 		{/if}
