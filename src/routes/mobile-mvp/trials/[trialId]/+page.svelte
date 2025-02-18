@@ -238,7 +238,7 @@
 					coords = undefined;
 				}}
 			/>
-		{:else}
+		{:else if trialDevices.length > 0}
 			<ActionMenu>
 				<ActionButton
 					onclick={() => {

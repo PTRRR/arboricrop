@@ -14,7 +14,6 @@
 	import { addEllipsis } from '../../utils/strings';
 	import { getCss } from '../../utils/css';
 	import type { LayoutData } from './$types';
-	import { fly } from 'svelte/transition';
 
 	let { children, data }: { children: Snippet; data: LayoutData } = $props();
 	let showBreadcrumb = $state(false);
@@ -82,22 +81,13 @@
 
 		<img class="mobile-layout__logo" src="/images/logo.svg" alt="" />
 
-		{#if pendingNotifications.length > 0}
-			<!-- svelte-ignore a11y_click_events_have_key_events -->
-			<!-- svelte-ignore a11y_no_static_element_interactions -->
-			<div
-				class="mobile-layout__notifications"
-				onclick={() => goto('/mobile-layout/notifications')}
-			>
-				<div class="mobile-layout__notifications-inner">
-					{pendingNotifications.length}
-				</div>
-			</div>
-		{/if}
-
 		<!-- svelte-ignore a11y_click_events_have_key_events -->
 		<!-- svelte-ignore a11y_no_static_element_interactions -->
 		<div class="mobile-layout__hamburger" onclick={() => ($showAppMenu = !$showAppMenu)}>
+			{#if pendingNotifications.length > 0}
+				<div class="mobile-layout__notifications-badge"></div>
+			{/if}
+
 			<div class="mobile-layout__hamburger-inner">
 				<div class="mobile-layout__hamburger-line"></div>
 				<div class="mobile-layout__hamburger-line"></div>
@@ -402,6 +392,17 @@
 				width: 1em;
 				text-align: center;
 			}
+		}
+
+		&__notifications-badge {
+			position: absolute;
+			width: 14px;
+			height: 14px;
+			background-color: var(--red);
+			z-index: 10;
+			border-radius: 50%;
+			transform: translate(50%, -50%);
+			right: 0;
 		}
 
 		&__content {
