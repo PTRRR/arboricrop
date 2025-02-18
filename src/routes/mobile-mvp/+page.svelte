@@ -68,9 +68,17 @@
 			: $organisations.length > 0 && typeof $organisation === 'undefined'
 				? 'select-organisation'
 				: accountTrials.length === 0
-					? 'new-trial'
+					? 'login'
 					: 'final'
 	);
+
+	const loginHref = $derived(
+		$organisations.length === 0 ? `${data.baseUrl}/trials/new` : undefined
+	);
+
+	$effect(() => {
+		console.log(loginHref);
+	});
 
 	onMount(() => {
 		newEmail = $accounts[0].email;
@@ -91,6 +99,7 @@
 		<ActionMenu>
 			<ActionButton
 				icon="check"
+				href={loginHref}
 				onclick={() => {
 					$email = newEmail;
 
@@ -131,19 +140,6 @@
 			]}
 		/>
 	</Section>
-{:else if stage === 'new-trial'}
-	<PageHeader title="Create trial" description="You don't have any trial yet" />
-	<Section>
-		<TextInput label="Name" bind:value={newTrialName} />
-	</Section>
-
-	{#if newTrialName}
-		<ActionMenu>
-			<ActionButton href={`${data.baseUrl}/trials/new/?name=${newTrialName}`}>
-				Continue
-			</ActionButton>
-		</ActionMenu>
-	{/if}
 {:else}
 	{#snippet notificationsTitle()}
 		<span>Notifications</span>
