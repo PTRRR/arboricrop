@@ -46,6 +46,10 @@
 		:global(.checkbox__indicator) {
 			display: contents;
 
+			input {
+				margin: 0;
+			}
+
 			.checkbox__content {
 				width: calc(var(--size) * 2);
 				background-color: lightgrey;

@@ -115,7 +115,7 @@
 			$row: &;
 			position: relative;
 			display: flex;
-			padding: 0.6rem 0;
+			padding: 0.7rem 0;
 			color: black;
 			text-decoration: none;
 			box-sizing: border-box;

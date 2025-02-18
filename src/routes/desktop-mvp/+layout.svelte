@@ -97,18 +97,7 @@
 							href="/desktop-mvp/devices"
 							underline={$page.route.id?.startsWith('/desktop-mvp/devices')}>Devices</Button
 						>
-						<Spacer />
-						<StepSeparation label="Settings" />
-						<Button
-							href="/desktop-mvp/account"
-							underline={$page.route.id?.startsWith('/desktop-mvp/account')}>Account</Button
-						>
-						<Button
-							onclick={() => {
-								$email = '';
-								$currentAccount = null;
-							}}>Logout</Button
-						>
+
 						{#if $currentAccount.email.includes('vivent')}
 							<Spacer />
 							<StepSeparation label="Admin" />
@@ -125,6 +114,19 @@
 								Customer Accounts
 							</Button>
 						{/if}
+
+						<Spacer />
+						<StepSeparation label="Settings" />
+						<Button
+							href="/desktop-mvp/account"
+							underline={$page.route.id?.startsWith('/desktop-mvp/account')}>Account</Button
+						>
+						<Button
+							onclick={() => {
+								$email = '';
+								$currentAccount = null;
+							}}>Logout</Button
+						>
 					</Stack>
 
 					<a href="https://vivent-biosignals.com/">
