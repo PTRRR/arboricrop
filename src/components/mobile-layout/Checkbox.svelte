@@ -52,7 +52,6 @@
 				border-radius: 5px;
 				display: flex;
 				align-items: center;
-				padding: var(--padding);
 				cursor: pointer;
 				transition: background-color 0.2s;
 			}
@@ -65,13 +64,13 @@
 				width: var(--size);
 				height: var(--size);
 				background-color: white;
-				border-radius: calc(5px - var(--padding));
+				border-radius: 5px;
 				transition: transform 0.2s;
 				transform: translateX(0);
 			}
 
 			.checkbox--checked .checkbox__toggle {
-				transform: translateX(calc(var(--size)));
+				transform: translateX(101%);
 			}
 		}
 	}

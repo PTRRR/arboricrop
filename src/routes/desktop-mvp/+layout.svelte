@@ -115,8 +115,15 @@
 							<Button
 								href="/desktop-mvp/earmark-devices"
 								underline={$page.route.id?.startsWith('/desktop-mvp/earmark-devices')}
-								>Earmark</Button
 							>
+								Earmark
+							</Button>
+							<Button
+								href="/desktop-mvp/customer-accounts"
+								underline={$page.route.id?.startsWith('/desktop-mvp/customer-accounts')}
+							>
+								Customer Accounts
+							</Button>
 						{/if}
 					</Stack>
 
