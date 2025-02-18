@@ -28,7 +28,7 @@
 		iconBackgroundColor = 'var(--black)',
 		iconColor = 'var(--white)',
 		iconOrder = 'inverted',
-		iconSize = 'large',
+		iconSize = 'normal',
 		href
 	}: Props = $props();
 </script>
