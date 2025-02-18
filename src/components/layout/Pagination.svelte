@@ -1,9 +1,10 @@
 <script lang="ts">
 	interface Props {
 		pages?: number;
+		onselect?: (pageIndex: number) => void;
 	}
 
-	const { pages = 0 }: Props = $props();
+	const { pages = 0, onselect }: Props = $props();
 	let currentPage = $state(0);
 </script>
 
@@ -12,7 +13,10 @@
 		<button
 			class="pagination__page"
 			class:pagination__page--selected={currentPage === i}
-			onclick={() => (currentPage = i)}
+			onclick={() => {
+				currentPage = i;
+				onselect?.(currentPage);
+			}}
 		>
 			{i + 1}
 		</button>

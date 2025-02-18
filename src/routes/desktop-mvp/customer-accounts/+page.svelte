@@ -13,7 +13,6 @@
 	import Spacer from '../../../components/Spacer.svelte';
 	import { useAccounts } from '../../../stores';
 	import type { Account } from '../../../utils/types';
-	import Pagination from '../../../components/layout/Pagination.svelte';
 
 	const { accounts, addAccount } = useAccounts();
 
@@ -63,8 +62,8 @@
 				{ label: 'Email', width: '45%' }
 			]}
 			rows={accountsRows}
+			pageSize={30}
 		/>
-		<Pagination pages={5} />
 	</Section>
 
 	{#if newAccount}

@@ -17,20 +17,32 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import { getCss } from '../../utils/css';
+	import Pagination from './Pagination.svelte';
+	import Spacer from '../Spacer.svelte';
 
 	interface Props {
 		headers?: Cell[];
 		rows: Row[];
 		style?: string;
 		borders?: boolean;
+		pageSize?: number;
 	}
 
-	const { headers, rows, style, borders = true }: Props = $props();
+	const { headers, rows, style, borders = true, pageSize = 0 }: Props = $props();
 
 	const getHeaderWidth = (cellIndex: number) => {
 		const cell = (headers || [])[cellIndex];
 		return cell?.width;
 	};
+
+	let pageIndex = $state(0);
+	const pages = $derived(
+		typeof pageSize === 'number' && pageSize > 0 ? Math.ceil(rows.length / pageSize) : 0
+	);
+
+	const paginatedRows = $derived(
+		pages > 0 ? rows.slice(pageIndex * (pageSize || 0), (pageIndex + 1) * (pageSize || 0)) : rows
+	);
 </script>
 
 {#snippet innerRow(cells: Cell[], row: Row)}
@@ -63,7 +75,7 @@
 		</div>
 	{/if}
 
-	{#each rows as row}
+	{#each paginatedRows as row}
 		{#if row.href}
 			<a
 				class="table__row table__data table--clickable"
@@ -88,6 +100,11 @@
 			</div>
 		{/if}
 	{/each}
+
+	{#if pages > 1}
+		<Spacer size="2rem" />
+		<Pagination onselect={(index) => (pageIndex = index)} {pages} />
+	{/if}
 </div>
 
 <style lang="scss">

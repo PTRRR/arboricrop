@@ -17,7 +17,6 @@
 	const devicesRows = $derived<Row[]>(
 		$devices
 			.filter((it) => !it.accountId)
-			.slice(0, 60)
 			.map((device) => ({
 				selected: selectedDevices.has(device),
 				onclick: () => {
@@ -40,7 +39,7 @@
 	const { accounts } = useAccounts();
 	let selectedAccount: Account | undefined = $state(undefined);
 	const accountsRows = $derived<Row[]>(
-		$accounts.slice(0, 10).map((account) => ({
+		$accounts.map((account) => ({
 			selected: selectedAccount?.id === account.id,
 			onclick: () => {
 				if (selectedAccount?.id === account.id) {
@@ -86,8 +85,8 @@
 				{ label: 'Creation Date' }
 			]}
 			rows={rowsWithRenderHandler(devicesRows, selectCell)}
+			pageSize={50}
 		/>
-		<Pagination pages={10} />
 	</Section>
 
 	{#if selectedDevices.size > 0}
@@ -106,8 +105,8 @@
 					{ label: 'Email', width: '45%' }
 				]}
 				rows={rowsWithRenderHandler(accountsRows, selectCell)}
+				pageSize={10}
 			/>
-			<Pagination pages={4} />
 
 			<Validation
 				validateLabel={`Assign ${selectedDevices.size} devices to account`}
