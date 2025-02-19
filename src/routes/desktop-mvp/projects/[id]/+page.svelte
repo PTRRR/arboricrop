@@ -26,6 +26,7 @@
 	import Dropdown from '../../../../components/desktop/Dropdown.svelte';
 	import { changinCenter, loraConfigurations, swissBounds } from '../../../../utils/dummyData';
 	import { createId } from '@paralleldrive/cuid2';
+	import DangerZone from '../../../../components/desktop/DangerZone.svelte';
 
 	const projectId = $page.params.id;
 	const { projects, updateProject } = useProjects();
@@ -170,7 +171,7 @@
 
 		{#if editingProject}
 			<Section
-				label="Project Settings"
+				label="Edit project"
 				backgroundColor="var(--light-grey)"
 				sticky="var(--content-offset-top)"
 				width="40%"
@@ -197,6 +198,11 @@
 					oncancel={() => {
 						editingProject = false;
 					}}
+				/>
+
+				<DangerZone
+					label="Delete project"
+					description="Permanently delete this project and all of its data. This action cannot be undone."
 				/>
 			</Section>
 		{:else if newTrial}

@@ -15,6 +15,8 @@
 	import { createId } from '@paralleldrive/cuid2';
 	import TextInput from '../../../../components/layout/TextInput.svelte';
 	import TextareaInput from '../../../../components/layout/TextareaInput.svelte';
+	import Button from '../../../../components/layout/Button.svelte';
+	import DangerZone from '../../../../components/desktop/DangerZone.svelte';
 
 	const trialId = $page.params.id;
 	const { trials } = useTrials();
@@ -37,6 +39,8 @@
 	let selectedDevices = $state<Set<Device>>(new Set());
 	let addDevices = $state(false);
 	let newGroup = $state<Group | undefined>(undefined);
+	let editTrial = $state(false);
+	let selectedGroup = $state<Group | undefined>(undefined);
 
 	const createGroup = $derived(() => {
 		newGroup = {
@@ -56,6 +60,14 @@
 
 	const groupsRows = $derived<Row[]>(
 		trialGroups.map((it) => ({
+			onclick: () => {
+				if (selectedGroup?.id === it.id) {
+					selectedGroup = undefined;
+				} else {
+					selectedGroup = it;
+				}
+			},
+			selected: selectedGroup?.id === it.id,
 			cells: [
 				{ label: it.name },
 				{ label: it.description || '-', multiline: true },
@@ -73,14 +85,26 @@
 </script>
 
 {#if trial}
+	{#snippet title()}
+		<Stack
+			direction="horizontal"
+			alignItems="center"
+			justifyContent="space-between"
+			style={{ width: '100%' }}
+		>
+			{trial.name}
+			{#if !editTrial && !selectedGroup && !newGroup}
+				<Button icon="navigate" iconOrder="inverted" onclick={() => (editTrial = !editTrial)}>
+					Edit
+				</Button>
+			{/if}
+		</Stack>
+	{/snippet}
+
 	<Stack style={{ width: '100%' }} direction="horizontal">
 		<Stack style={{ width: '100%' }}>
 			<Section>
-				<PageHeader
-					preTitle="Trial"
-					title={trial.name}
-					subTitle={`${trialDevices.length} Devices`}
-				/>
+				<PageHeader preTitle="Trial" {title} subTitle={`${trialDevices.length} Devices`} />
 				<Map
 					ratio={addDevices ? 2 : 3}
 					bind:this={map}
@@ -100,9 +124,9 @@
 
 			<Section
 				label="Groups"
-				actions={[
-					{ label: 'Create', icon: 'add', iconOrder: 'inverted', onclick: () => createGroup() }
-				]}
+				actions={selectedGroup || newGroup || editTrial
+					? []
+					: [{ label: 'Create', icon: 'add', iconOrder: 'inverted', onclick: () => createGroup() }]}
 			>
 				{#if trialGroups.length > 0}
 					<Table
@@ -164,6 +188,67 @@
 						selectedDevices = new Set();
 						addDevices = false;
 					}}
+				/>
+			</Section>
+		{:else if editTrial}
+			<Section
+				label="Edit Trial"
+				backgroundColor="var(--light-grey)"
+				width="40%"
+				sticky="var(--content-offset-top)"
+			>
+				<TextInput label="Name" defaultValue={trial.name} />
+				<TextareaInput label="Description" defaultValue={trial.description} />
+				<Map
+					bind:this={map}
+					maxBounds={swissBounds}
+					zoom={11}
+					minZoom={3}
+					maxZoom={18}
+					center={trial.center}
+					showTarget
+					markers={[{ lngLat: trial.center }]}
+					geoJSONs={trial.layers}
+					onChange={() => {
+						// const delta = getLocationDelta(value, newTrial.center);
+						// if (delta > 0.000001) coords = value;
+					}}
+				/>
+				<Validation
+					validateLabel="Save"
+					onvalidate={() => {
+						editTrial = false;
+					}}
+					oncancel={() => {
+						editTrial = false;
+					}}
+				/>
+				<DangerZone
+					label="Delete trial"
+					description="Permanently delete this trial and all of its data. This action cannot be undone."
+				/>
+			</Section>
+		{:else if selectedGroup}
+			<Section
+				label="Edit group"
+				backgroundColor="var(--light-grey)"
+				width="40%"
+				sticky="var(--content-offset-top)"
+			>
+				<TextInput label="Name" defaultValue={selectedGroup.name} />
+				<TextareaInput label="Description" defaultValue={selectedGroup.description} />
+				<Validation
+					validateLabel="Save"
+					onvalidate={() => {
+						selectedGroup = undefined;
+					}}
+					oncancel={() => {
+						selectedGroup = undefined;
+					}}
+				/>
+				<DangerZone
+					label="Delete group"
+					description="Permanently delete this group and all of its data. This action cannot be undone."
 				/>
 			</Section>
 		{:else if newGroup}

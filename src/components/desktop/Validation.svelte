@@ -21,7 +21,7 @@
 	}: Props = $props();
 </script>
 
-<Stack direction="horizontal" gap="1rem" style={{ marginTop: '4rem' }}>
+<Stack direction="horizontal" gap="1rem" style={{ marginTop: '3rem' }}>
 	{#if onvalidate}
 		<Button icon="check" disabled={validateDisabled} onclick={onvalidate}>{validateLabel}</Button>
 	{/if}

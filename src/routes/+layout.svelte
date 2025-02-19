@@ -67,7 +67,7 @@
 
 	:root {
 		--main-gap: 1rem;
-		--main-font-size: 1.2rem;
+		--main-font-size: 1rem;
 		--mid-font-size: 1.5rem;
 		--big-font-size: 2.6rem;
 		--layout-margin-top: 6vh;

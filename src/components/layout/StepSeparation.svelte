@@ -16,10 +16,11 @@
 		label?: string | number | Snippet;
 		description?: string | undefined;
 		actions?: StepSeparationAction[];
+		border?: boolean;
 	} = $props();
 </script>
 
-<div class="step-separation">
+<div class="step-separation" class:step-separation--border={props.border}>
 	{#if props.label || typeof props.label === 'number'}
 		<div class="step-separation__heading">
 			<div class="step-separation__label">
@@ -66,6 +67,11 @@
 	.step-separation {
 		width: 100%;
 		color: var(--black);
+
+		&--border {
+			padding-top: 1rem;
+			border-top: solid 1px var(--grey);
+		}
 
 		&__heading {
 			display: flex;
