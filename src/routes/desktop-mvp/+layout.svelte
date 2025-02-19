@@ -167,13 +167,13 @@
 			</Stack>
 		{/if}
 	</div>
-	<div class="desktop-mvp__footer">
+	<!-- <div class="desktop-mvp__footer">
 		<p>
 			Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad accusamus dolorum eos atque libero
 			repellendus sit consequatur tenetur eveniet totam reprehenderit adipisci sapiente, similique
 			maxime magnam delectus harum rem possimus!
 		</p>
-	</div>
+	</div> -->
 </div>
 
 <style lang="scss">
