@@ -11,6 +11,7 @@
 	import { goto } from '$app/navigation';
 	import PageHeader from '../../components/layout/PageHeader.svelte';
 	import { page } from '$app/stores';
+	import { getCss } from '../../utils/css';
 
 	interface Props {
 		children: Snippet;
@@ -23,6 +24,9 @@
 	const { email } = useUser();
 	let newEmail = $state('');
 	let password = $state('');
+	let resetEmail = $state('');
+	let resetPassword = $state('');
+	let resetPasswordState = $state<'email' | 'password' | undefined>(undefined);
 
 	onMount(() => {
 		newEmail = $accounts[0].email;
@@ -37,7 +41,32 @@
 	</Section>
 
 	<div class="desktop-mvp__inner">
-		{#if !$currentAccount}
+		{#if resetPasswordState === 'email'}
+			<Section>
+				<Stack style={{ width: '100%', maxWidth: '50rem' }} gap="1rem">
+					<PageHeader title="Reset Password" />
+					<TextInput label="email address" bind:value={resetEmail} />
+					<Button
+						icon="navigate"
+						onclick={() => (resetPasswordState = 'password')}
+						disabled={!resetEmail}>Sent email</Button
+					>
+				</Stack>
+			</Section>
+		{:else if resetPasswordState === 'password'}
+			<Section>
+				<Stack style={{ width: '100%', maxWidth: '50rem' }} gap="1rem">
+					<PageHeader title="Reset Password" />
+					<TextInput type="password" label="new password" bind:value={resetPassword} />
+					<TextInput type="password" label="repeat password" />
+					<Button
+						icon="check"
+						onclick={() => (resetPasswordState = undefined)}
+						disabled={!resetPassword}>Save</Button
+					>
+				</Stack>
+			</Section>
+		{:else if !$currentAccount}
 			<Section>
 				<PageHeader title="Login" />
 				<Stack style={{ width: '100%', maxWidth: '50rem' }} gap="1rem">
@@ -60,7 +89,14 @@
 							} else {
 								$currentAccount = account;
 							}
-						}}>Login</Button
+						}}
+					>
+						Login
+					</Button>
+					<Spacer size="2rem" />
+					<p style={getCss({ color: 'var(--grey)' })}>Forgot your password?</p>
+					<Button icon="navigate" onclick={() => (resetPasswordState = 'email')}
+						>Reset Password</Button
 					>
 				</Stack>
 			</Section>
