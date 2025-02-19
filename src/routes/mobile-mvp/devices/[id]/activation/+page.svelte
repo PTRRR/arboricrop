@@ -292,7 +292,10 @@
 		<!-- <Button padding icon="navigate" iconOrder="inverted">Live Data</Button> -->
 	{/snippet}
 
-	<PageHeader title={stepHeader} subTitle={`Step ${stepIndex + 1}/${steps.length}`} />
+	<Section>
+		<PageHeader title={stepHeader} subTitle={`Step ${stepIndex + 1}/${steps.length}`} />
+	</Section>
+
 	{#if stepIndex === 0}
 		<Section>
 			<Image ratio={1} placeholder="Schema showing how to attach the device on a plant" />

@@ -63,11 +63,11 @@
 {/snippet}
 
 {#if !data.success}
-	<PageHeader
-		title={`${currentPairingStrategy.label} pairing`}
-		description={currentPairingStrategy.description}
-	/>
 	<Section>
+		<PageHeader
+			title={`${currentPairingStrategy.label} pairing`}
+			description={currentPairingStrategy.description}
+		/>
 		<Image
 			ratio={1}
 			placeholder="Comprehensive schema or tutorial explaining how to proceed"

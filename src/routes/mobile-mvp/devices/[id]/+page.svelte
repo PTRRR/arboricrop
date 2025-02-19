@@ -182,9 +182,8 @@
 		</Button>
 	{/snippet}
 
-	<PageHeader title={deviceName} subTitle={deviceStatus} />
-
 	<Section>
+		<PageHeader title={deviceName} subTitle={deviceStatus} />
 		<TextInput label="Id:" defaultValue={device.id} readonly />
 		<TextInput
 			label="Name:"

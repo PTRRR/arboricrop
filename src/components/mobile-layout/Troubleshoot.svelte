@@ -11,18 +11,21 @@
 		iconOrder,
 		onclick,
 		opened = $bindable(false),
-		subTitle
+		subTitle,
+		padding = true
 	}: {
 		iconOrder?: ButtonIconOrder;
 		onclick?: () => void;
 		opened?: boolean;
 		subTitle?: string;
+		padding?: boolean;
 	} = $props();
 </script>
 
 <Button
-	icon="question"
 	{iconOrder}
+	{padding}
+	icon="question"
 	onclick={() => {
 		opened = !opened;
 		onclick?.();
