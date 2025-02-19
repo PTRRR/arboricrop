@@ -168,8 +168,6 @@
 				minZoom={3}
 				maxZoom={18}
 				center={trial.center}
-				showTarget
-				markers={[{ lngLat: trial.center }]}
 				geoJSONs={trial.layers}
 				onChange={(value) => {
 					const delta = getLocationDelta(value, trial.center);

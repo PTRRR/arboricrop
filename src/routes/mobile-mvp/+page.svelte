@@ -162,7 +162,7 @@
 
 	{#snippet fieldsHeader()}
 		<span>Trials</span>
-		<Button href={`${data.baseUrl}/trials/new`} icon="add" padding />
+		<!-- <Button href={`${data.baseUrl}/trials/new`} icon="add" padding /> -->
 	{/snippet}
 
 	<PageHeader title={fieldsHeader} />
