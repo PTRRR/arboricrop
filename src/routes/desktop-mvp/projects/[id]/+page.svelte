@@ -122,7 +122,7 @@
 			<Section>
 				<Stack gap="0.5rem">
 					<PageHeader
-						preTitle="< Project"
+						preTitle="< Projects"
 						preTitleHref="/desktop-mvp/projects"
 						{title}
 						subTitle={project.description}

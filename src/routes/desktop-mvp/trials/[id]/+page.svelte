@@ -113,7 +113,7 @@
 		<Stack style={{ width: '100%' }}>
 			<Section>
 				<PageHeader
-					preTitle="< Project/Trial"
+					preTitle="< Projects/Trial"
 					preTitleHref={`/desktop-mvp/projects/${project?.id}`}
 					{title}
 					subTitle={`${trialDevices.length} Devices`}
