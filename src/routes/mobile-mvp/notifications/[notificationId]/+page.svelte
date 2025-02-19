@@ -15,6 +15,7 @@
 	import type { PageData } from './$types';
 	import ActionMenu from '../../../../components/mobile-layout/ActionMenu.svelte';
 	import ActionButton from '../../../../components/mobile-layout/ActionButton.svelte';
+	import Stack from '../../../../components/desktop/Stack.svelte';
 
 	interface Props {
 		data: PageData;
@@ -123,8 +124,29 @@
 	</Section>
 
 	<ActionMenu>
-		<ActionButton icon="navigate" href={`${window.location.pathname}?acknowledge=true`}>
-			Acknowledge
-		</ActionButton>
+		<Stack gap="0.5rem">
+			<ActionButton
+				icon="cross"
+				href={`${data.baseUrl}/notifications`}
+				onclick={async () => {
+					if (notification) {
+						const notificationIndex = $notifications.findIndex((it) => it.id === notification.id);
+						if (notificationIndex > -1) {
+							const newNotifications = [...$notifications];
+							newNotifications[notificationIndex] = {
+								...newNotifications[notificationIndex],
+								status: 'acknowledged'
+							};
+							notifications.set(newNotifications);
+						}
+					}
+				}}
+			>
+				Dismiss
+			</ActionButton>
+			<ActionButton icon="navigate" href={`${window.location.pathname}?acknowledge=true`}>
+				Acknowledge
+			</ActionButton>
+		</Stack>
 	</ActionMenu>
 {/if}

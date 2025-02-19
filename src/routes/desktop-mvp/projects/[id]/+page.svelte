@@ -108,14 +108,14 @@
 
 	<Stack direction="horizontal" style={{ width: '100%' }}>
 		<Stack style={{ width: '100%' }}>
-			<Section>
+			<!-- <Section>
 				<Stack gap="0.5rem">
 					<PageHeader {title} subTitle={project.description} />
 					<span style={getCss({ color: 'var(--black)' })}
 						>LoRa Settings — {project.loraConfiguration?.name || 'Europe'}</span
 					>
 				</Stack>
-			</Section>
+			</Section> -->
 
 			<Section label="Notifications">
 				<Grid>

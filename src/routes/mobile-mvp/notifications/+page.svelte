@@ -7,6 +7,8 @@
 	import NotificationCard from '../../../components/mobile-layout/NotificationCard.svelte';
 	import PageHeader from '../../../components/layout/PageHeader.svelte';
 	import type { LayoutData } from './$types';
+	import Stack from '../../../components/desktop/Stack.svelte';
+	import TextInput from '../../../components/layout/TextInput.svelte';
 
 	interface Props {
 		data: LayoutData;
@@ -67,6 +69,11 @@
 			Notifications
 		</Button>
 	</div>
+
+	<Stack gap="1rem">
+		<TextInput />
+		<Button icon="navigate">Search</Button>
+	</Stack>
 </Section>
 
 <Section>

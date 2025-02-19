@@ -114,7 +114,8 @@
 					newProject.description = value;
 				}}
 			/>
-			<Stack gap="0.5rem">
+
+			<!-- <Stack gap="0.5rem">
 				<span>Lora Settings</span>
 				<Dropdown
 					icon="navigate"
@@ -122,7 +123,7 @@
 					items={loraConfigurations}
 					itemSnippet={dropdownItem}
 				/>
-			</Stack>
+			</Stack> -->
 
 			<Validation
 				validateDisabled={!newProject.name}
