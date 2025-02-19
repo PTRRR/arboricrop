@@ -4,11 +4,12 @@
 	import Section from '../../../../components/desktop/Section.svelte';
 	import Stack from '../../../../components/desktop/Stack.svelte';
 	import Button from '../../../../components/layout/Button.svelte';
-	import Table, { type Row, type Cell } from '../../../../components/layout/Table.svelte';
+	import { type Row, type Cell } from '../../../../components/layout/Table.svelte';
 	import TextareaInput from '../../../../components/layout/TextareaInput.svelte';
 	import TextInput from '../../../../components/layout/TextInput.svelte';
 	import Checkbox from '../../../../components/mobile-layout/Checkbox.svelte';
 	import PageHeader from '../../../../components/layout/PageHeader.svelte';
+	import Map from '../../../../components/layout/Map.svelte';
 	import {
 		useCurrentAccount,
 		useDevices,
@@ -20,16 +21,16 @@
 	import TrialCard from '../../../../components/desktop/TrialCard.svelte';
 	import Grid from '../../../../components/desktop/Grid.svelte';
 	import Validation from '../../../../components/desktop/Validation.svelte';
-	import { getCss } from '../../../../utils/css';
 	import { shuffle } from '../../../../utils/arrays';
 	import NotificationCard from '../../../../components/desktop/NotificationCard.svelte';
 	import Dropdown from '../../../../components/desktop/Dropdown.svelte';
-	import { loraConfigurations } from '../../../../utils/dummyData';
+	import { changinCenter, loraConfigurations, swissBounds } from '../../../../utils/dummyData';
+	import { createId } from '@paralleldrive/cuid2';
 
 	const projectId = $page.params.id;
 	const { projects, updateProject } = useProjects();
 	const { devices } = useDevices();
-	const { trials, updateTrials } = useTrials();
+	const { trials, addTrial } = useTrials();
 	const { currentAccount } = useCurrentAccount();
 	const notifications = useNotifications();
 
@@ -37,9 +38,6 @@
 		shuffle($notifications).slice(0, Math.floor(Math.random() * 5 + 2))
 	);
 	const project = $derived($projects.find((it) => it.id === projectId));
-	const accountTrials = $derived(
-		$trials.filter((it) => !it.parentId && it.accountId === $currentAccount?.id)
-	);
 	const projectTrials = $derived($trials.filter((it) => it.parentId === project?.id));
 	const projectTrialsIds = $derived(projectTrials.map((it) => it.id));
 	const projectDevices = $derived(
@@ -48,16 +46,28 @@
 		)
 	);
 
-	const getDevicesForTrial = $derived((trial: Trial) =>
-		$devices.filter((it) => it.parentId === trial.id)
-	);
-
 	let editingProject = $state(false);
-	let editingTrials = $state(false);
+
+	let map = $state<Map | undefined>(undefined);
+	let newTrial = $state<Trial | undefined>(undefined);
 	let selectedTrials = $state<Set<Trial>>(new Set());
 	let newProjectName = $state('');
 
-	const editing = $derived(editingProject || editingTrials);
+	const createTrial = $derived(() => {
+		newTrial = {
+			id: `tri-${createId()}`,
+			name: '',
+			area: '',
+			center: changinCenter,
+			layers: [],
+			loraConfigId: '',
+			type: '',
+			parentId: project?.id,
+			accountId: $currentAccount?.id || ''
+		};
+	});
+
+	const editing = $derived(editingProject || newTrial);
 </script>
 
 {#if project}
@@ -108,14 +118,14 @@
 
 	<Stack direction="horizontal" style={{ width: '100%' }}>
 		<Stack style={{ width: '100%' }}>
-			<!-- <Section>
+			<Section>
 				<Stack gap="0.5rem">
-					<PageHeader {title} subTitle={project.description} />
-					<span style={getCss({ color: 'var(--black)' })}
+					<PageHeader preTitle="Project" {title} subTitle={project.description} />
+					<!-- <span style={getCss({ color: 'var(--black)' })}
 						>LoRa Settings — {project.loraConfiguration?.name || 'Europe'}</span
-					>
+					> -->
 				</Stack>
-			</Section> -->
+			</Section>
 
 			<Section label="Notifications">
 				<Grid>
@@ -131,10 +141,10 @@
 					? []
 					: [
 							{
-								label: 'Add',
+								label: 'Create',
 								icon: 'add',
 								iconOrder: 'inverted',
-								onclick: () => (editingTrials = !editingTrials)
+								onclick: () => createTrial()
 							}
 						]}
 			>
@@ -161,10 +171,12 @@
 				label="Project Settings"
 				backgroundColor="var(--light-grey)"
 				sticky="var(--content-offset-top)"
+				width="40%"
 			>
 				<TextInput label="Name" defaultValue={project.name} bind:value={newProjectName} />
 				<TextareaInput label="Description" defaultValue={project.description} />
-				<Stack gap="0.5rem">
+
+				<!-- <Stack gap="0.5rem">
 					<span>Lora Settings</span>
 					<Dropdown
 						icon="navigate"
@@ -172,7 +184,8 @@
 						items={loraConfigurations}
 						itemSnippet={dropdownItem}
 					/>
-				</Stack>
+				</Stack> -->
+
 				<Validation
 					validateLabel="Save"
 					onvalidate={() => {
@@ -184,38 +197,47 @@
 					}}
 				/>
 			</Section>
-		{:else if editingTrials}
-			<Section label="Trials" backgroundColor="var(--light-grey)">
-				<Table
-					headers={[
-						{ label: '', width: '7%' },
-						{ label: 'Name', width: '30%' },
-						{ label: 'Devices', width: '30%' }
-					]}
-					rows={accountTrials.map((trial) => ({
-						onclick: () => {
-							if (selectedTrials.has(trial)) {
-								selectedTrials.delete(trial);
-							} else {
-								selectedTrials.add(trial);
-							}
-
-							selectedTrials = new Set(selectedTrials);
-						},
-						selected: selectedTrials.has(trial),
-						cells: [
-							{ label: '', renderHandler: selectCell },
-							{ label: trial.name },
-							{ label: getDevicesForTrial(trial).length.toString() }
-						]
-					}))}
+		{:else if newTrial}
+			<Section label="New Trial" backgroundColor="var(--light-grey)" width="40%">
+				<TextInput
+					label="Name"
+					onvalue={(value) => {
+						if (!newTrial) return;
+						newTrial.name = value;
+					}}
+				/>
+				<TextareaInput
+					label="Description"
+					onvalue={(value) => {
+						if (!newTrial) return;
+						newTrial.description = value;
+					}}
+				/>
+				<Map
+					bind:this={map}
+					maxBounds={swissBounds}
+					zoom={11}
+					minZoom={3}
+					maxZoom={18}
+					center={newTrial.center}
+					showTarget
+					markers={[{ lngLat: newTrial.center }]}
+					geoJSONs={newTrial.layers}
+					onChange={() => {
+						// const delta = getLocationDelta(value, newTrial.center);
+						// if (delta > 0.000001) coords = value;
+					}}
 				/>
 				<Validation
-					onvalidate={() =>
-						updateTrials(Array.from(selectedTrials).map((it) => ({ ...it, parentId: project.id })))}
+					validateLabel="Create"
+					onvalidate={() => {
+						if (!newTrial) return;
+						addTrial(newTrial);
+						newTrial = undefined;
+					}}
 					oncancel={() => {
 						selectedTrials.clear();
-						editingTrials = false;
+						newTrial = undefined;
 					}}
 				/>
 			</Section>

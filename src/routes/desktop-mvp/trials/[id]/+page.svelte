@@ -12,10 +12,13 @@
 	import Validation from '../../../../components/desktop/Validation.svelte';
 	import Table, { type Row } from '../../../../components/layout/Table.svelte';
 	import type { LngLatLike } from 'svelte-maplibre';
+	import { createId } from '@paralleldrive/cuid2';
+	import TextInput from '../../../../components/layout/TextInput.svelte';
+	import TextareaInput from '../../../../components/layout/TextareaInput.svelte';
 
 	const trialId = $page.params.id;
 	const { trials } = useTrials();
-	const { groups } = useGroups();
+	const { groups, addGroup } = useGroups();
 	const { devices, updateDevices } = useDevices();
 	const { currentAccount } = useCurrentAccount();
 
@@ -33,6 +36,18 @@
 	let selectedNewDevices = $state<Set<Device>>(new Set());
 	let selectedDevices = $state<Set<Device>>(new Set());
 	let addDevices = $state(false);
+	let newGroup = $state<Group | undefined>(undefined);
+
+	const createGroup = $derived(() => {
+		newGroup = {
+			id: `gr-${createId()}`,
+			name: '',
+			description: '',
+			deviceIds: [],
+			parentId: trial?.id,
+			accountId: $currentAccount?.id || ''
+		};
+	});
 
 	const getGroupDevices = $derived((group: Group) => {
 		const devices = trialDevices.filter((it) => it.parentId === group.id);
@@ -43,7 +58,7 @@
 		trialGroups.map((it) => ({
 			cells: [
 				{ label: it.name },
-				{ label: it.description, multiline: true },
+				{ label: it.description || '-', multiline: true },
 				{ label: getGroupDevices(it).length.toString() }
 			]
 		}))
@@ -61,7 +76,11 @@
 	<Stack style={{ width: '100%' }} direction="horizontal">
 		<Stack style={{ width: '100%' }}>
 			<Section>
-				<PageHeader title={trial.name} subTitle={`${trialDevices.length} Devices`} />
+				<PageHeader
+					preTitle="Trial"
+					title={trial.name}
+					subTitle={`${trialDevices.length} Devices`}
+				/>
 				<Map
 					ratio={addDevices ? 2 : 3}
 					bind:this={map}
@@ -79,7 +98,12 @@
 				/>
 			</Section>
 
-			<Section label="Groups" actions={[{ label: 'Create', icon: 'add', iconOrder: 'inverted' }]}>
+			<Section
+				label="Groups"
+				actions={[
+					{ label: 'Create', icon: 'add', iconOrder: 'inverted', onclick: () => createGroup() }
+				]}
+			>
 				{#if trialGroups.length > 0}
 					<Table
 						headers={[
@@ -139,6 +163,45 @@
 						selectedNewDevices = new Set();
 						selectedDevices = new Set();
 						addDevices = false;
+					}}
+				/>
+			</Section>
+		{:else if newGroup}
+			<Section label="New Group" backgroundColor="var(--light-grey)" width="40%">
+				<!-- <DevicesList
+					devices={accountDevices.slice(0, 15)}
+					onselect={(devices) => {
+						selectedNewDevices = new Set(devices);
+					}}
+				/> -->
+				<!-- <Pagination pages={3} /> -->
+				<TextInput
+					label="Name"
+					onvalue={(value) => {
+						if (!newGroup) return;
+						newGroup.name = value;
+					}}
+				/>
+				<TextareaInput
+					label="Description"
+					onvalue={(value) => {
+						if (!newGroup) return;
+						newGroup.name = value;
+					}}
+				/>
+				<Validation
+					validateLabel="Create"
+					validateDisabled={!newGroup.name}
+					onvalidate={() => {
+						if (!newGroup) return;
+						addGroup(newGroup);
+						newGroup = undefined;
+					}}
+					oncancel={() => {
+						selectedNewDevices = new Set();
+						selectedDevices = new Set();
+						addDevices = false;
+						newGroup = undefined;
 					}}
 				/>
 			</Section>
