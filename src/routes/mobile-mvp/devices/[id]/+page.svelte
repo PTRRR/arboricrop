@@ -128,7 +128,7 @@
 {#if device}
 	{#snippet deviceName()}
 		{#if !$page.data.connected || device.status !== 'active'}
-			<span>{addEllipsis(device.name || '', 8)}</span>
+			<span>{addEllipsis(device.name || '', 12)}</span>
 			<!-- <Button
 				padding
 				icon={actionButtonIcon}

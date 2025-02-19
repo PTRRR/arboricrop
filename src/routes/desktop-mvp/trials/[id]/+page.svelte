@@ -7,10 +7,11 @@
 	import { swissBounds } from '../../../../utils/dummyData';
 	import Stack from '../../../../components/desktop/Stack.svelte';
 	import Pagination from '../../../../components/layout/Pagination.svelte';
-	import type { Device } from '../../../../utils/types';
+	import type { Device, Group } from '../../../../utils/types';
 	import DevicesList from '../../../../components/desktop/DevicesList.svelte';
 	import Validation from '../../../../components/desktop/Validation.svelte';
 	import Table, { type Row } from '../../../../components/layout/Table.svelte';
+	import type { LngLatLike } from 'svelte-maplibre';
 
 	const trialId = $page.params.id;
 	const { trials } = useTrials();
@@ -20,7 +21,10 @@
 
 	const trial = $derived($trials.find((it) => it.id === trialId));
 	const trialGroups = $derived($groups.filter((it) => it.parentId === trial?.id));
-	const trialDevices = $derived($devices.filter((it) => it.parentId === trial?.id));
+	const trialGroupsIds = $derived(trialGroups.map((it) => it.id));
+	const trialDevices = $derived(
+		$devices.filter((it) => it.parentId && trialGroupsIds.includes(it.parentId))
+	);
 	const accountDevices = $derived(
 		$devices.filter((it) => !it.parentId && it.accountId === $currentAccount?.id)
 	);
@@ -30,13 +34,25 @@
 	let selectedDevices = $state<Set<Device>>(new Set());
 	let addDevices = $state(false);
 
+	const getGroupDevices = $derived((group: Group) => {
+		const devices = trialDevices.filter((it) => it.parentId === group.id);
+		return devices;
+	});
+
 	const groupsRows = $derived<Row[]>(
 		trialGroups.map((it) => ({
 			cells: [
 				{ label: it.name },
 				{ label: it.description, multiline: true },
-				{ label: it.deviceIds.length.toString() }
+				{ label: getGroupDevices(it).length.toString() }
 			]
+		}))
+	);
+
+	const deviceMarkers = $derived(
+		trialDevices.map((device) => ({
+			lngLat: device.location as LngLatLike,
+			label: device.name
 		}))
 	);
 </script>
@@ -50,11 +66,11 @@
 					ratio={addDevices ? 2 : 3}
 					bind:this={map}
 					maxBounds={swissBounds}
-					zoom={15}
+					zoom={14}
 					minZoom={3}
 					maxZoom={18}
 					center={trial.center}
-					markers={[]}
+					markers={deviceMarkers}
 					geoJSONs={trial.layers}
 					onChange={(value) => {
 						// const delta = getLocationDelta(value, newTrial.center);

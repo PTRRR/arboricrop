@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { useDevices, useTrials } from '../../stores';
+	import { useDevices, useGroups, useTrials } from '../../stores';
 	import type { Project } from '../../utils/types';
 	import StatusDot from '../mobile-layout/StatusDot.svelte';
 	import Spacer from '../Spacer.svelte';
@@ -12,10 +12,15 @@
 	const { project }: Props = $props();
 	const { trials } = useTrials();
 	const { devices } = useDevices();
+	const { groups } = useGroups();
 	const projectTrials = $derived($trials.filter((it) => it.parentId === project.id));
 	const projectTrailsIds = $derived(projectTrials.map((it) => it.id));
+	const projectGroups = $derived(
+		$groups.filter((it) => projectTrailsIds.includes(it.parentId || ''))
+	);
+	const projectGroursIds = $derived(projectGroups.map((it) => it.id));
 	const projectActiveDevices = $derived(
-		$devices.filter((it) => it.parentId && projectTrailsIds.includes(it.parentId))
+		$devices.filter((it) => it.parentId && projectGroursIds.includes(it.parentId))
 	);
 </script>
 

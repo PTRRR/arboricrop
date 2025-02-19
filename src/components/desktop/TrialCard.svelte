@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { useDevices } from '../../stores';
+	import { useDevices, useGroups } from '../../stores';
 	import { swissBounds } from '../../utils/dummyData';
 	import type { Trial } from '../../utils/types';
 	import Map from '../layout/Map.svelte';
@@ -12,7 +12,12 @@
 
 	const { trial }: Props = $props();
 	const { devices } = useDevices();
-	const trialDevices = $derived($devices.filter((it) => it.parentId === trial.id));
+	const { groups } = useGroups();
+	const trialGroups = $derived($groups.filter((it) => trial.id === it.parentId));
+	const trialGroupsIds = $derived(trialGroups.map((it) => it.id));
+	const trialDevices = $derived(
+		$devices.filter((it) => it.parentId && trialGroupsIds.includes(it.parentId))
+	);
 </script>
 
 <a class="trial" href={`/desktop-mvp/trials/${trial.id}`}>
