@@ -167,14 +167,12 @@
 				/>
 			</Section>
 		{:else if newGroup}
-			<Section label="New Group" backgroundColor="var(--light-grey)" width="40%">
-				<!-- <DevicesList
-					devices={accountDevices.slice(0, 15)}
-					onselect={(devices) => {
-						selectedNewDevices = new Set(devices);
-					}}
-				/> -->
-				<!-- <Pagination pages={3} /> -->
+			<Section
+				label="New Group"
+				backgroundColor="var(--light-grey)"
+				width="40%"
+				sticky="var(--content-offset-top)"
+			>
 				<TextInput
 					label="Name"
 					onvalue={(value) => {
@@ -186,7 +184,7 @@
 					label="Description"
 					onvalue={(value) => {
 						if (!newGroup) return;
-						newGroup.name = value;
+						newGroup.description = value;
 					}}
 				/>
 				<Validation

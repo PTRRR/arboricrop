@@ -10,6 +10,8 @@
 		alignItems?: 'flex-end';
 		padding?: string;
 		sticky?: string;
+		stickyDirection?: 'top' | 'bottom';
+		Direction?: string;
 		zIndex?: string;
 		backgroundColor?: string;
 		fill?: boolean;
@@ -28,6 +30,7 @@
 		alignItems,
 		padding = '1rem 1rem',
 		sticky,
+		stickyDirection = 'top',
 		zIndex,
 		backgroundColor,
 		fill,
@@ -43,7 +46,8 @@
 		getCss({
 			position: Boolean(sticky) ? 'sticky' : undefined,
 			alignSelf: Boolean(sticky) ? 'flex-start' : undefined,
-			top: sticky,
+			top: stickyDirection === 'top' ? sticky : undefined,
+			bottom: stickyDirection === 'bottom' ? sticky : undefined,
 			zIndex,
 			width,
 			height,

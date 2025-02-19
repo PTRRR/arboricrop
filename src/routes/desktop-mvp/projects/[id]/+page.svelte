@@ -127,13 +127,15 @@
 				</Stack>
 			</Section>
 
-			<Section label="Notifications">
-				<Grid>
-					{#each randomNotifications as notification}
-						<NotificationCard {notification} />
-					{/each}
-				</Grid>
-			</Section>
+			{#if projectTrials.length > 0}
+				<Section label="Notifications">
+					<Grid>
+						{#each randomNotifications as notification}
+							<NotificationCard {notification} />
+						{/each}
+					</Grid>
+				</Section>
+			{/if}
 
 			<Section
 				label="Trials"
@@ -198,7 +200,13 @@
 				/>
 			</Section>
 		{:else if newTrial}
-			<Section label="New Trial" backgroundColor="var(--light-grey)" width="40%">
+			<Section
+				label="New Trial"
+				backgroundColor="var(--light-grey)"
+				width="40%"
+				sticky="var(--content-offset-top)"
+				stickyDirection="bottom"
+			>
 				<TextInput
 					label="Name"
 					onvalue={(value) => {
