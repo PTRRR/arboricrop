@@ -3,6 +3,7 @@
 
 	const props: {
 		preTitle?: string | Snippet;
+		preTitleHref?: string;
 		title?: string | Snippet;
 		subTitle?: string | Snippet;
 		description?: string | Snippet;
@@ -11,13 +12,23 @@
 
 <div class="page-header">
 	{#if typeof props.preTitle !== 'undefined'}
-		<div class="page-header__pre-title">
-			{#if typeof props.preTitle === 'string'}
-				<span>{props.preTitle}</span>
-			{:else}
-				{@render props.preTitle()}
-			{/if}
-		</div>
+		{#if props.preTitleHref}
+			<a class="page-header__pre-title" href={props.preTitleHref}>
+				{#if typeof props.preTitle === 'string'}
+					<span>{props.preTitle}</span>
+				{:else}
+					{@render props.preTitle()}
+				{/if}
+			</a>
+		{:else}
+			<div class="page-header__pre-title">
+				{#if typeof props.preTitle === 'string'}
+					<span>{props.preTitle}</span>
+				{:else}
+					{@render props.preTitle()}
+				{/if}
+			</div>
+		{/if}
 	{/if}
 
 	{#if typeof props.title !== 'undefined'}
@@ -76,6 +87,7 @@
 		&__pre-title {
 			font-size: var(--main-font-size);
 			font-weight: 400;
+			color: black;
 			// font-style: italic;
 		}
 

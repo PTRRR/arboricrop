@@ -3,7 +3,13 @@
 	import Section from '../../../../components/desktop/Section.svelte';
 	import PageHeader from '../../../../components/layout/PageHeader.svelte';
 	import Map from '../../../../components/layout/Map.svelte';
-	import { useCurrentAccount, useDevices, useGroups, useTrials } from '../../../../stores';
+	import {
+		useCurrentAccount,
+		useDevices,
+		useGroups,
+		useProjects,
+		useTrials
+	} from '../../../../stores';
 	import { swissBounds } from '../../../../utils/dummyData';
 	import Stack from '../../../../components/desktop/Stack.svelte';
 	import Pagination from '../../../../components/layout/Pagination.svelte';
@@ -20,11 +26,13 @@
 
 	const trialId = $page.params.id;
 	const { trials } = useTrials();
+	const { projects } = useProjects();
 	const { groups, addGroup } = useGroups();
 	const { devices, updateDevices } = useDevices();
 	const { currentAccount } = useCurrentAccount();
 
 	const trial = $derived($trials.find((it) => it.id === trialId));
+	const project = $derived($projects.find((it) => it.id === trial?.parentId));
 	const trialGroups = $derived($groups.filter((it) => it.parentId === trial?.id));
 	const trialGroupsIds = $derived(trialGroups.map((it) => it.id));
 	const trialDevices = $derived(
@@ -104,7 +112,12 @@
 	<Stack style={{ width: '100%' }} direction="horizontal">
 		<Stack style={{ width: '100%' }}>
 			<Section>
-				<PageHeader preTitle="Trial" {title} subTitle={`${trialDevices.length} Devices`} />
+				<PageHeader
+					preTitle="< Project/Trial"
+					preTitleHref={`/desktop-mvp/projects/${project?.id}`}
+					{title}
+					subTitle={`${trialDevices.length} Devices`}
+				/>
 				<Map
 					ratio={addDevices ? 2 : 3}
 					bind:this={map}

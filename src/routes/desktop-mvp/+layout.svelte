@@ -67,7 +67,7 @@
 				</Stack>
 			</Section>
 		{:else if !$currentAccount}
-			<Section>
+			<Section height="var(--content-min-height)">
 				<PageHeader title="Login" />
 				<Stack style={{ width: '100%', maxWidth: '50rem' }} gap="1rem">
 					<TextInput label="email" name={createId()} bind:value={newEmail} />

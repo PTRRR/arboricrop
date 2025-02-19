@@ -121,7 +121,12 @@
 		<Stack style={{ width: '100%' }}>
 			<Section>
 				<Stack gap="0.5rem">
-					<PageHeader preTitle="Project" {title} subTitle={project.description} />
+					<PageHeader
+						preTitle="< Project"
+						preTitleHref="/desktop-mvp/projects"
+						{title}
+						subTitle={project.description}
+					/>
 					<!-- <span style={getCss({ color: 'var(--black)' })}
 						>LoRa Settings — {project.loraConfiguration?.name || 'Europe'}</span
 					> -->
