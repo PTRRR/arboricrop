@@ -1,5 +1,5 @@
 import { createId } from '@paralleldrive/cuid2';
-import type { Account, Device, Field, LoRaConfiguration, Notification } from './types';
+import type { Account, Device, Field, LoRaConfiguration, Notification, RoleName } from './types';
 import type { GeoJSON as GeoJSONType } from 'geojson';
 import { shuffle } from './arrays';
 import { formatDateToDDMMYYYY, getRandomDateRange } from './dates';
@@ -565,20 +565,24 @@ export function generateEmail(companyName: string): string {
 export function generateAccounts(count: number): Account[] {
 	const list: Account[] = [];
 
-  // list.push({
-  //   id: `acc-${createId()}`,
-  //   email: "superadmin@vivent.com",
-  //   organizationName: "Vivent"
-  // })
+	// list.push({
+	//   id: `acc-${createId()}`,
+	//   email: "superadmin@vivent.com",
+	//   organizationName: "Vivent"
+	// })
+
+	const roles: RoleName[] = ['Viv superadmin', 'Distributer', 'Farmer Admin', 'Farmer'];
 
 	for (let i = 0; i < count; i++) {
 		const organizationName = generateCompanyName();
 		const email = generateEmail(organizationName);
+		const role: RoleName = roles[Math.floor(Math.random() * roles.length)];
 
 		list.push({
 			id: `acc-${createId()}`,
 			email,
-			organizationName
+			organizationName,
+			role
 		});
 	}
 
@@ -621,259 +625,259 @@ export function generateRandomDevices(count: number): Device[] {
 }
 
 export const dummyProjects = [
-  {
-    name: "Golden Wheat Fields",
-    description: "Large-scale wheat cultivation using precision agriculture techniques"
-  },
-  {
-    name: "Sunrise Rice Paddy",
-    description: "Traditional rice farming with modern water management systems"
-  },
-  {
-    name: "Sweet Corn Valley",
-    description: "Integrated corn plantation with automated irrigation"
-  },
-  {
-    name: "Green Bean Haven",
-    description: "Organic soybean and green bean cultivation project"
-  },
-  {
-    name: "Potato Paradise",
-    description: "Highland potato farm using terraced farming methods"
-  },
-  {
-    name: "Sugarcane Plains",
-    description: "Extended sugarcane plantation with efficient harvesting systems"
-  },
-  {
-    name: "Tomato Gardens",
-    description: "Greenhouse tomato production with hydroponic systems"
-  },
-  {
-    name: "Cassava Fields",
-    description: "Large-scale cassava cultivation for starch production"
-  },
-  {
-    name: "Sunflower Meadows",
-    description: "Sunflower plantation for oil production and bee farming"
-  },
-  {
-    name: "Cotton Belt Project",
-    description: "Sustainable cotton farming with drip irrigation"
-  },
-  {
-    name: "Mango Grove",
-    description: "High-density mango orchard with integrated pest management"
-  },
-  {
-    name: "Banana Republic",
-    description: "Export-quality banana plantation using organic methods"
-  },
-  {
-    name: "Avocado Hills",
-    description: "Water-efficient avocado orchard with soil moisture monitoring"
-  },
-  {
-    name: "Berry Fields Forever",
-    description: "Mixed berry cultivation using protective tunnels"
-  },
-  {
-    name: "Citrus Valley",
-    description: "Orange and lemon grove with frost protection systems"
-  },
-  {
-    name: "Grape Escape",
-    description: "Table grape vineyard with modern trellis systems"
-  },
-  {
-    name: "Pineapple Point",
-    description: "Tropical pineapple farm with rotation cropping"
-  },
-  {
-    name: "Olive Grove",
-    description: "High-density olive plantation for oil production"
-  },
-  {
-    name: "Apple Acres",
-    description: "Modern apple orchard with hail protection nets"
-  },
-  {
-    name: "Pepper Plains",
-    description: "Bell pepper greenhouse project with climate control"
-  },
-  {
-    name: "Onion Fields",
-    description: "Large-scale onion cultivation with storage facilities"
-  },
-  {
-    name: "Carrot Canyon",
-    description: "Organic carrot production with advanced sorting systems"
-  },
-  {
-    name: "Lettuce Lands",
-    description: "Hydroponic lettuce production in controlled environment"
-  },
-  {
-    name: "Melon Matrix",
-    description: "Cantaloupe and watermelon fields with drip irrigation"
-  },
-  {
-    name: "Cabbage Creek",
-    description: "Year-round cabbage production with crop rotation"
-  },
-  {
-    name: "Strawberry Fields",
-    description: "Vertical strawberry farming with automated fertigation"
-  },
-  {
-    name: "Pumpkin Patch",
-    description: "Mixed squash and pumpkin cultivation project"
-  },
-  {
-    name: "Asparagus Valley",
-    description: "Specialized asparagus farm with processing facility"
-  },
-  {
-    name: "Broccoli Banks",
-    description: "Cool-weather broccoli production with irrigation systems"
-  },
-  {
-    name: "Sweet Potato Fields",
-    description: "Large-scale sweet potato cultivation with storage facilities"
-  }
+	{
+		name: 'Golden Wheat Fields',
+		description: 'Large-scale wheat cultivation using precision agriculture techniques'
+	},
+	{
+		name: 'Sunrise Rice Paddy',
+		description: 'Traditional rice farming with modern water management systems'
+	},
+	{
+		name: 'Sweet Corn Valley',
+		description: 'Integrated corn plantation with automated irrigation'
+	},
+	{
+		name: 'Green Bean Haven',
+		description: 'Organic soybean and green bean cultivation project'
+	},
+	{
+		name: 'Potato Paradise',
+		description: 'Highland potato farm using terraced farming methods'
+	},
+	{
+		name: 'Sugarcane Plains',
+		description: 'Extended sugarcane plantation with efficient harvesting systems'
+	},
+	{
+		name: 'Tomato Gardens',
+		description: 'Greenhouse tomato production with hydroponic systems'
+	},
+	{
+		name: 'Cassava Fields',
+		description: 'Large-scale cassava cultivation for starch production'
+	},
+	{
+		name: 'Sunflower Meadows',
+		description: 'Sunflower plantation for oil production and bee farming'
+	},
+	{
+		name: 'Cotton Belt Project',
+		description: 'Sustainable cotton farming with drip irrigation'
+	},
+	{
+		name: 'Mango Grove',
+		description: 'High-density mango orchard with integrated pest management'
+	},
+	{
+		name: 'Banana Republic',
+		description: 'Export-quality banana plantation using organic methods'
+	},
+	{
+		name: 'Avocado Hills',
+		description: 'Water-efficient avocado orchard with soil moisture monitoring'
+	},
+	{
+		name: 'Berry Fields Forever',
+		description: 'Mixed berry cultivation using protective tunnels'
+	},
+	{
+		name: 'Citrus Valley',
+		description: 'Orange and lemon grove with frost protection systems'
+	},
+	{
+		name: 'Grape Escape',
+		description: 'Table grape vineyard with modern trellis systems'
+	},
+	{
+		name: 'Pineapple Point',
+		description: 'Tropical pineapple farm with rotation cropping'
+	},
+	{
+		name: 'Olive Grove',
+		description: 'High-density olive plantation for oil production'
+	},
+	{
+		name: 'Apple Acres',
+		description: 'Modern apple orchard with hail protection nets'
+	},
+	{
+		name: 'Pepper Plains',
+		description: 'Bell pepper greenhouse project with climate control'
+	},
+	{
+		name: 'Onion Fields',
+		description: 'Large-scale onion cultivation with storage facilities'
+	},
+	{
+		name: 'Carrot Canyon',
+		description: 'Organic carrot production with advanced sorting systems'
+	},
+	{
+		name: 'Lettuce Lands',
+		description: 'Hydroponic lettuce production in controlled environment'
+	},
+	{
+		name: 'Melon Matrix',
+		description: 'Cantaloupe and watermelon fields with drip irrigation'
+	},
+	{
+		name: 'Cabbage Creek',
+		description: 'Year-round cabbage production with crop rotation'
+	},
+	{
+		name: 'Strawberry Fields',
+		description: 'Vertical strawberry farming with automated fertigation'
+	},
+	{
+		name: 'Pumpkin Patch',
+		description: 'Mixed squash and pumpkin cultivation project'
+	},
+	{
+		name: 'Asparagus Valley',
+		description: 'Specialized asparagus farm with processing facility'
+	},
+	{
+		name: 'Broccoli Banks',
+		description: 'Cool-weather broccoli production with irrigation systems'
+	},
+	{
+		name: 'Sweet Potato Fields',
+		description: 'Large-scale sweet potato cultivation with storage facilities'
+	}
 ];
 
 export const dummyTrials = [
-  {
-    name: "Soil Moisture Network",
-    description: "Grid of 20 moisture sensors monitoring irrigation efficiency"
-  },
-  {
-    name: "Growth Rate Tracking",
-    description: "Height sensors and time-lapse cameras monitoring plant development"
-  },
-  {
-    name: "Water Level Control",
-    description: "Automated water depth sensors across field sections"
-  },
-  {
-    name: "Temperature Impact Study",
-    description: "Thermal sensors monitoring day-night temperature effects"
-  },
-  {
-    name: "Drought Resistance",
-    description: "Soil moisture and plant stress sensors in different irrigation zones"
-  },
-  {
-    name: "Growth Stage Monitor",
-    description: "NDVI sensors tracking crop development stages"
-  },
-  {
-    name: "Pest Detection Grid",
-    description: "Network of insect traps with image recognition"
-  },
-  {
-    name: "Nutrient Uptake Study",
-    description: "NPK sensors monitoring soil nutrient levels"
-  },
-  {
-    name: "Root Development",
-    description: "Underground sensors tracking root system growth"
-  },
-  {
-    name: "Soil Temperature Grid",
-    description: "Temperature probes at different soil depths"
-  },
-  {
-    name: "Yield Prediction Network",
-    description: "Multi-sensor system estimating potential harvest yields"
-  },
-  {
-    name: "Photosynthesis Monitor",
-    description: "Chlorophyll fluorescence sensors tracking plant health"
-  },
-  {
-    name: "Weather Impact Analysis",
-    description: "Mini weather stations correlating climate with growth"
-  },
-  {
-    name: "Irrigation Efficiency Study",
-    description: "Water flow sensors measuring absorption rates"
-  },
-  {
-    name: "Soil Compaction Monitor",
-    description: "Pressure sensors tracking soil density changes"
-  },
-  {
-    name: "Disease Early Warning",
-    description: "Multispectral cameras detecting early signs of plant stress"
-  },
-  {
-    name: "Pollinator Activity Tracking",
-    description: "Camera system monitoring insect visitation patterns"
-  },
-  {
-    name: "Leaf Area Index Study",
-    description: "Optical sensors measuring canopy development"
-  },
-  {
-    name: "Root Zone Monitor",
-    description: "Soil probes tracking moisture at root depth"
-  },
-  {
-    name: "Nutrient Leaching Control",
-    description: "Deep soil sensors monitoring fertilizer movement"
-  },
-  {
-    name: "Microclimate Analysis",
-    description: "Environmental sensor network for local conditions"
-  },
-  {
-    name: "Growth Pattern Study",
-    description: "3D scanning system tracking plant architecture"
-  },
-  {
-    name: "Soil Biology Monitor",
-    description: "Chemical sensors tracking microbial activity"
-  },
-  {
-    name: "Frost Risk Detection",
-    description: "Temperature sensor array for frost prevention"
-  },
-  {
-    name: "Harvest Timing Optimizer",
-    description: "Multi-parameter system for optimal harvest scheduling"
-  },
-  {
-    name: "Carbon Sequestration Study",
-    description: "Soil carbon content monitoring system"
-  },
-  {
-    name: "Water Stress Detection",
-    description: "Infrared sensors monitoring plant water status"
-  },
-  {
-    name: "Wind Impact Analysis",
-    description: "Anemometers studying wind effects on growth"
-  },
-  {
-    name: "Salinity Management",
-    description: "Electrical conductivity sensors tracking soil salt levels"
-  },
-  {
-    name: "Crop Quality Monitor",
-    description: "Spectral sensors analyzing plant tissue development"
-  }
+	{
+		name: 'Soil Moisture Network',
+		description: 'Grid of 20 moisture sensors monitoring irrigation efficiency'
+	},
+	{
+		name: 'Growth Rate Tracking',
+		description: 'Height sensors and time-lapse cameras monitoring plant development'
+	},
+	{
+		name: 'Water Level Control',
+		description: 'Automated water depth sensors across field sections'
+	},
+	{
+		name: 'Temperature Impact Study',
+		description: 'Thermal sensors monitoring day-night temperature effects'
+	},
+	{
+		name: 'Drought Resistance',
+		description: 'Soil moisture and plant stress sensors in different irrigation zones'
+	},
+	{
+		name: 'Growth Stage Monitor',
+		description: 'NDVI sensors tracking crop development stages'
+	},
+	{
+		name: 'Pest Detection Grid',
+		description: 'Network of insect traps with image recognition'
+	},
+	{
+		name: 'Nutrient Uptake Study',
+		description: 'NPK sensors monitoring soil nutrient levels'
+	},
+	{
+		name: 'Root Development',
+		description: 'Underground sensors tracking root system growth'
+	},
+	{
+		name: 'Soil Temperature Grid',
+		description: 'Temperature probes at different soil depths'
+	},
+	{
+		name: 'Yield Prediction Network',
+		description: 'Multi-sensor system estimating potential harvest yields'
+	},
+	{
+		name: 'Photosynthesis Monitor',
+		description: 'Chlorophyll fluorescence sensors tracking plant health'
+	},
+	{
+		name: 'Weather Impact Analysis',
+		description: 'Mini weather stations correlating climate with growth'
+	},
+	{
+		name: 'Irrigation Efficiency Study',
+		description: 'Water flow sensors measuring absorption rates'
+	},
+	{
+		name: 'Soil Compaction Monitor',
+		description: 'Pressure sensors tracking soil density changes'
+	},
+	{
+		name: 'Disease Early Warning',
+		description: 'Multispectral cameras detecting early signs of plant stress'
+	},
+	{
+		name: 'Pollinator Activity Tracking',
+		description: 'Camera system monitoring insect visitation patterns'
+	},
+	{
+		name: 'Leaf Area Index Study',
+		description: 'Optical sensors measuring canopy development'
+	},
+	{
+		name: 'Root Zone Monitor',
+		description: 'Soil probes tracking moisture at root depth'
+	},
+	{
+		name: 'Nutrient Leaching Control',
+		description: 'Deep soil sensors monitoring fertilizer movement'
+	},
+	{
+		name: 'Microclimate Analysis',
+		description: 'Environmental sensor network for local conditions'
+	},
+	{
+		name: 'Growth Pattern Study',
+		description: '3D scanning system tracking plant architecture'
+	},
+	{
+		name: 'Soil Biology Monitor',
+		description: 'Chemical sensors tracking microbial activity'
+	},
+	{
+		name: 'Frost Risk Detection',
+		description: 'Temperature sensor array for frost prevention'
+	},
+	{
+		name: 'Harvest Timing Optimizer',
+		description: 'Multi-parameter system for optimal harvest scheduling'
+	},
+	{
+		name: 'Carbon Sequestration Study',
+		description: 'Soil carbon content monitoring system'
+	},
+	{
+		name: 'Water Stress Detection',
+		description: 'Infrared sensors monitoring plant water status'
+	},
+	{
+		name: 'Wind Impact Analysis',
+		description: 'Anemometers studying wind effects on growth'
+	},
+	{
+		name: 'Salinity Management',
+		description: 'Electrical conductivity sensors tracking soil salt levels'
+	},
+	{
+		name: 'Crop Quality Monitor',
+		description: 'Spectral sensors analyzing plant tissue development'
+	}
 ];
 
 export const loraConfigurations: LoRaConfiguration[] = [
-  {
-    name: 'Europe'
-  },
-  {
-    name: 'United States'
-  },
-  {
-    name: 'Asia'
-  }
+	{
+		name: 'Europe'
+	},
+	{
+		name: 'United States'
+	},
+	{
+		name: 'Asia'
+	}
 ];

@@ -45,6 +45,7 @@ export type Account = {
 	password?: string;
 	organizationName?: string;
 	invitedAccounts?: string[];
+	role?: RoleName;
 };
 
 export type Field = {
@@ -123,3 +124,5 @@ export type LoRaConfiguration = {
 };
 
 export type LoRaConfigurationWithId = LoRaConfiguration & { id: string };
+
+export type RoleName = 'Viv superadmin' | 'Distributer' | 'Farmer Admin' | 'Farmer';
