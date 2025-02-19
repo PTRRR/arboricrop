@@ -10,6 +10,7 @@
 		useNotifications,
 		useOrganisation,
 		useOrganisations,
+		useProjects,
 		useReturnButton,
 		useTrials,
 		useUser
@@ -25,10 +26,11 @@
 	import { getCss } from '../../utils/css';
 	import ActionMenu from '../../components/mobile-layout/ActionMenu.svelte';
 	import ActionButton from '../../components/mobile-layout/ActionButton.svelte';
-	import type { Account } from '../../utils/types';
+	import type { Account, Trial } from '../../utils/types';
 
 	const { devices } = useDevices();
 	const { trials } = useTrials();
+	const { projects } = useProjects();
 	const notifications = useNotifications();
 	const { email } = useUser();
 	const { organisations } = useOrganisations();
@@ -60,6 +62,10 @@
 
 	const getTrialDeviceCount = (trialId: string) => {
 		return $devices.filter((it) => it.parentId === trialId).length;
+	};
+
+	const getTrialProject = (trial: Trial) => {
+		return $projects.find((it) => it.id === trial.parentId);
 	};
 
 	const stage = $derived(
@@ -167,6 +173,9 @@
 
 	<Section>
 		<PageHeader title={fieldsHeader} />
+		<TextInput />
+		<Button icon="navigate">Search</Button>
+		<Spacer size="1rem" />
 		{#each accountTrials as trial}
 			<Card
 				href={`${data.baseUrl}/trials/${trial.id}`}
@@ -175,7 +184,7 @@
 			>
 				<div class="home__info">
 					<h3>{trial.name}</h3>
-					<p>Devices: {getTrialDeviceCount(trial.id)}</p>
+					<p>{getTrialProject(trial)?.name || `Devices:${getTrialDeviceCount(trial.id)}`}</p>
 				</div>
 			</Card>
 		{/each}

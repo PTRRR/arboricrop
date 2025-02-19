@@ -15,6 +15,7 @@ import type {
 	Device,
 	Field,
 	GeoJSONFeature,
+	Group,
 	LoRaConfiguration,
 	Metric,
 	PartialBy,
@@ -487,6 +488,33 @@ export const useTrials = () => {
 		addTrial,
 		updateTrial,
 		updateTrials
+	};
+};
+
+export const useGroups = () => {
+	const groups = useWritable<Group[]>('groups', [], true);
+	const addGroup = (group: Group) => groups.update((groups) => [...groups, group]);
+	const updateGroup = (group: Group) => {
+		groups.update((groups) => {
+			const groupIndex = groups.findIndex((it) => it.id === group.id);
+
+			if (groupIndex > -1) {
+				const newGroups = [...groups];
+				newGroups[groupIndex] = { ...newGroups[groupIndex], ...group };
+				return newGroups;
+			}
+
+			return groups;
+		});
+	};
+
+	const updateGroups = (groups: Group[]) => groups.forEach((group) => updateGroup(group));
+
+	return {
+		groups,
+		addGroup,
+		updateGroup,
+		updateGroups
 	};
 };
 

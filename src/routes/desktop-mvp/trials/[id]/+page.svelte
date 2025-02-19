@@ -3,20 +3,23 @@
 	import Section from '../../../../components/desktop/Section.svelte';
 	import PageHeader from '../../../../components/layout/PageHeader.svelte';
 	import Map from '../../../../components/layout/Map.svelte';
-	import { useCurrentAccount, useDevices, useTrials } from '../../../../stores';
+	import { useCurrentAccount, useDevices, useGroups, useTrials } from '../../../../stores';
 	import { swissBounds } from '../../../../utils/dummyData';
 	import Stack from '../../../../components/desktop/Stack.svelte';
 	import Pagination from '../../../../components/layout/Pagination.svelte';
 	import type { Device } from '../../../../utils/types';
 	import DevicesList from '../../../../components/desktop/DevicesList.svelte';
 	import Validation from '../../../../components/desktop/Validation.svelte';
+	import Table, { type Row } from '../../../../components/layout/Table.svelte';
 
 	const trialId = $page.params.id;
 	const { trials } = useTrials();
+	const { groups } = useGroups();
 	const { devices, updateDevices } = useDevices();
 	const { currentAccount } = useCurrentAccount();
 
 	const trial = $derived($trials.find((it) => it.id === trialId));
+	const trialGroups = $derived($groups.filter((it) => it.parentId === trial?.id));
 	const trialDevices = $derived($devices.filter((it) => it.parentId === trial?.id));
 	const accountDevices = $derived(
 		$devices.filter((it) => !it.parentId && it.accountId === $currentAccount?.id)
@@ -26,6 +29,16 @@
 	let selectedNewDevices = $state<Set<Device>>(new Set());
 	let selectedDevices = $state<Set<Device>>(new Set());
 	let addDevices = $state(false);
+
+	const groupsRows = $derived<Row[]>(
+		trialGroups.map((it) => ({
+			cells: [
+				{ label: it.name },
+				{ label: it.description, multiline: true },
+				{ label: it.deviceIds.length.toString() }
+			]
+		}))
+	);
 </script>
 
 {#if trial}
@@ -37,7 +50,7 @@
 					ratio={addDevices ? 2 : 3}
 					bind:this={map}
 					maxBounds={swissBounds}
-					zoom={14}
+					zoom={15}
 					minZoom={3}
 					maxZoom={18}
 					center={trial.center}
@@ -50,7 +63,22 @@
 				/>
 			</Section>
 
-			<Section
+			<Section label="Groups" actions={[{ label: 'Create', icon: 'add', iconOrder: 'inverted' }]}>
+				{#if trialGroups.length > 0}
+					<Table
+						headers={[
+							{ label: 'Name', width: '30%' },
+							{ label: 'description', width: '30%' },
+							{ label: 'Devices count' }
+						]}
+						rows={groupsRows}
+					/>
+				{:else}
+					<p>There are no groups in this trial</p>
+				{/if}
+			</Section>
+
+			<!-- <Section
 				label="Devices"
 				actions={addDevices
 					? []
@@ -71,7 +99,7 @@
 						onselect={(devices) => (selectedDevices = new Set(devices))}
 					/>
 				{/if}
-			</Section>
+			</Section> -->
 		</Stack>
 
 		{#if addDevices}

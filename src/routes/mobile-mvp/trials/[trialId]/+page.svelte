@@ -7,6 +7,7 @@
 		useDevices,
 		useFields,
 		useGeoJSONFeatures,
+		useGroups,
 		useProjects,
 		useReturnButton,
 		useTrials
@@ -21,7 +22,7 @@
 	import type { LngLatLike } from 'svelte-maplibre';
 	import SaveMenu from '../../../../components/mobile-layout/SaveMenu.svelte';
 	import SubPage from '../../../../components/mobile-layout/SubPage.svelte';
-	import type { GeoJSONFeature } from '../../../../utils/types';
+	import type { GeoJSONFeature, Group } from '../../../../utils/types';
 	import StatusDot from '../../../../components/mobile-layout/StatusDot.svelte';
 	import type { PageData } from './$types';
 	import ActionMenu from '../../../../components/mobile-layout/ActionMenu.svelte';
@@ -36,6 +37,7 @@
 	const trialId = $page.params.trialId;
 	const { devices, updateDevice } = useDevices();
 	const { fields, getFieldById, deleteField, updateField } = useFields();
+	const { groups } = useGroups();
 	const { projects } = useProjects();
 	const { trials } = useTrials();
 	const returnButton = useReturnButton();
@@ -48,7 +50,10 @@
 
 	const trial = $derived($trials.find((it) => it.id === trialId));
 	const project = $derived($projects.find((it) => it.id === trial?.parentId));
-	const trialDevices = $derived($devices.filter((it) => it.parentId === trial?.id));
+	const trialGroups = $derived($groups.filter((it) => it.parentId === trial?.id));
+	const trialDevices = $derived(
+		$devices.filter((it) => trialGroups.map((it) => it.id).includes(it.parentId || ''))
+	);
 	let selectedFeaturesSet = $state<Set<GeoJSONFeature>>(new Set());
 	const selectedFeatures = $derived(Array.from(selectedFeaturesSet));
 
@@ -58,11 +63,28 @@
 	let coords = $state<LngLatLike | undefined>(undefined);
 	const hasChanged = $derived(Boolean(name || area || coords));
 
+	const getGroupDevices = $derived((group: Group) => {
+		const devices = trialDevices.filter((device) => device.parentId === group.id);
+		return devices;
+	});
+
 	const devicesHeaders: Cell[] = [
 		{ label: 'Name', width: '50%' },
 		{ label: 'Status', width: '30%' },
 		{ label: 'Battery', width: '20%' }
 	];
+
+	const groupHeaders: Cell[] = [
+		{ label: 'Name', width: '70%' },
+		{ label: 'Devices', width: '30%' }
+	];
+
+	const groupRows = $derived<Row[]>(
+		trialGroups.map((it) => ({
+			href: `${data.baseUrl}/groups/${it.id}`,
+			cells: [{ label: it.name }, { label: getGroupDevices(it).length.toString() }]
+		}))
+	);
 
 	const layersHeaders: Cell[] = [
 		{ label: 'Layer name', width: '80%' },
@@ -137,7 +159,11 @@
 			/>
 		</Section> -->
 
-		{#snippet statusCell(cell: Cell)}
+		<Section label="Groups">
+			<Table headers={groupHeaders} rows={groupRows} />
+		</Section>
+
+		<!-- {#snippet statusCell(cell: Cell)}
 			<div class="field__status-cell">
 				<div class="field__status-dot">
 					<StatusDot status={cell.label === 'active' ? 'success' : 'neutral'} />
@@ -176,7 +202,8 @@
 					}))}
 				/>
 			{/if}
-		</Section>
+		</Section> -->
+
 		<Section label="Location">
 			<Map
 				bind:this={map}
@@ -254,22 +281,6 @@
 					coords = undefined;
 				}}
 			/>
-		{:else if trialDevices.length > 0}
-			<ActionMenu>
-				<ActionButton
-					onclick={() => {
-						const randomDeviceIndex = Math.floor(Math.random() * $devices.length);
-						const device = $devices[randomDeviceIndex];
-						goto(`${data.baseUrl}/devices/pairing?deviceId=${device?.id}`);
-						updateDevice({
-							...device,
-							parentId: trial?.id
-						});
-					}}
-				>
-					pair device
-				</ActionButton>
-			</ActionMenu>
 		{/if}
 	{/if}
 </div>

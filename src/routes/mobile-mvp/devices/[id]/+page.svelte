@@ -93,8 +93,8 @@
 
 	$effect(() => {
 		returnButton.set({
-			label: 'Trials',
-			backHref: `${data.baseUrl}/trials/${device?.parentId}`
+			label: 'Group',
+			backHref: `${data.baseUrl}/groups/${device?.parentId}`
 		});
 	});
 

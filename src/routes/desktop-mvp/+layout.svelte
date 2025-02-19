@@ -114,25 +114,19 @@
 							Dashboard
 						</Button>
 						<Button
-							href="/desktop-mvp/notifications"
-							underline={$page.route.id?.startsWith('/desktop-mvp/notifications')}
-						>
-							Notifications
-						</Button>
-						<Spacer />
-						<StepSeparation label="Entities" />
-						<Button
 							href="/desktop-mvp/projects"
 							underline={$page.route.id?.startsWith('/desktop-mvp/projects')}>Projects</Button
-						>
-						<Button
-							href="/desktop-mvp/trials"
-							underline={$page.route.id?.startsWith('/desktop-mvp/trials')}>Trials</Button
 						>
 						<Button
 							href="/desktop-mvp/devices"
 							underline={$page.route.id?.startsWith('/desktop-mvp/devices')}>Devices</Button
 						>
+						<Button
+							href="/desktop-mvp/notifications"
+							underline={$page.route.id?.startsWith('/desktop-mvp/notifications')}
+						>
+							Notifications
+						</Button>
 
 						{#if $currentAccount.email.includes('vivent')}
 							<Spacer />

@@ -19,10 +19,10 @@
 	const returnButton = useReturnButton();
 
 	returnButton.set({
-		label: data.trial ? 'Trial' : 'Device',
+		label: data.group ? 'Group' : 'Device',
 		href: `${data.baseUrl}/devices`,
-		backHref: data.trial
-			? `${data.baseUrl}/trials/${data.trial}`
+		backHref: data.group
+			? `${data.baseUrl}/groups/${data.group}`
 			: data.deviceId
 				? `${data.baseUrl}/devices/${data.deviceId}`
 				: undefined
@@ -85,8 +85,8 @@
 							newDeviceUrl.resetQueries([
 								{ name: 'connected', value: true },
 								{
-									name: 'trial',
-									value: data.trial || undefined
+									name: 'group',
+									value: data.group || undefined
 								}
 							])
 						);

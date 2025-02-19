@@ -870,6 +870,129 @@ export const dummyTrials = [
 	}
 ];
 
+export const dummyGroups = [
+	{
+		name: 'North Field Sensors',
+		description: 'Collection of sensors in northern quadrant'
+	},
+	{
+		name: 'Irrigation Zone A',
+		description: 'Moisture monitoring cluster near main irrigation line'
+	},
+	{
+		name: 'Ridge Monitors',
+		description: 'Sensors placed along elevated terrain'
+	},
+	{
+		name: 'Block 1 Network',
+		description: 'Primary sensor cluster in first planting block'
+	},
+	{
+		name: 'Weather Station Alpha',
+		description: 'Central weather monitoring station group'
+	},
+	{
+		name: 'Soil Station 1',
+		description: 'Deep soil monitoring cluster'
+	},
+	{
+		name: 'Row 15 Array',
+		description: 'Linear arrangement of sensors along row 15'
+	},
+	{
+		name: 'Gateway Cluster',
+		description: 'Devices near wireless gateway installation'
+	},
+	{
+		name: 'Valley Sensors',
+		description: 'Low-lying area monitoring group'
+	},
+	{
+		name: 'Zone B Peripherals',
+		description: 'Boundary monitoring devices in Zone B'
+	},
+	{
+		name: 'Central Grid',
+		description: 'Core monitoring array in field center'
+	},
+	{
+		name: 'East Wing Network',
+		description: 'Eastern field boundary sensor group'
+	},
+	{
+		name: 'Section 3 Cluster',
+		description: 'Comprehensive monitoring in Section 3'
+	},
+	{
+		name: 'Canopy Level Array',
+		description: 'Above-ground sensor arrangement'
+	},
+	{
+		name: 'Root Zone Grid',
+		description: 'Underground sensor network'
+	},
+	{
+		name: 'Block 4 Station',
+		description: 'Monitoring station in fourth planting block'
+	},
+	{
+		name: 'Drainage Monitors',
+		description: 'Sensors along water drainage paths'
+	},
+	{
+		name: 'South Field Hub',
+		description: 'Southern field monitoring cluster'
+	},
+	{
+		name: 'West Border Array',
+		description: 'Western periphery sensor group'
+	},
+	{
+		name: 'High Point Station',
+		description: 'Elevated terrain monitoring cluster'
+	},
+	{
+		name: 'Zone C Network',
+		description: 'Comprehensive Zone C sensor array'
+	},
+	{
+		name: 'Row 30 Cluster',
+		description: 'Monitoring group along row 30'
+	},
+	{
+		name: 'Block 2 Grid',
+		description: 'Second block sensor arrangement'
+	},
+	{
+		name: 'Weather Station Beta',
+		description: 'Secondary weather monitoring cluster'
+	},
+	{
+		name: 'Soil Station 2',
+		description: 'Secondary soil monitoring group'
+	},
+	{
+		name: 'Irrigation Zone B',
+		description: 'Secondary irrigation monitoring cluster'
+	},
+	{
+		name: 'Field Edge Monitors',
+		description: 'Boundary condition monitoring group'
+	},
+	{
+		name: 'Central Weather Hub',
+		description: 'Main meteorological monitoring station'
+	},
+	{
+		name: 'Low Spot Sensors',
+		description: 'Depression area monitoring cluster'
+	},
+	{
+		name: 'Gateway Beta Group',
+		description: 'Secondary gateway device cluster'
+	}
+];
+
 export const loraConfigurations: LoRaConfiguration[] = [
 	{
 		name: 'Europe'

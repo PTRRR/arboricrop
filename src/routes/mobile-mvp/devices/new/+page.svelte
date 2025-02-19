@@ -25,8 +25,8 @@
 	const { preventNavigationHistory } = useNavigationHistory();
 
 	returnButton.set({
-		label: `Trial`,
-		backHref: `${data.baseUrl}/trials/${data.trial}`
+		label: `Group`,
+		backHref: `${data.baseUrl}/groups/${data.group}`
 	});
 
 	let device: Device = {
@@ -36,7 +36,7 @@
 		status: 'unactive',
 		firmwareVersion: 'v1.0.0',
 		fieldId: data.field || undefined,
-		parentId: data.trial || undefined,
+		parentId: data.group || undefined,
 		battery: Math.floor(Math.random() * 50 + 50)
 	};
 

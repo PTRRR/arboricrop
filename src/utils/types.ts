@@ -126,3 +126,12 @@ export type LoRaConfiguration = {
 export type LoRaConfigurationWithId = LoRaConfiguration & { id: string };
 
 export type RoleName = 'Viv superadmin' | 'Distributer' | 'Farmer Admin' | 'Farmer';
+
+export type Group = {
+	id: string;
+	name: string;
+	accountId?: string;
+	description?: string;
+	parentId?: string;
+	deviceIds: string[];
+};
