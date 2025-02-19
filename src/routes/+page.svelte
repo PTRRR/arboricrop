@@ -1,3 +1,7 @@
+<script>
+	import { goto } from '$app/navigation';
+</script>
+
 <div class="nav">
 	<h1>Arboricrop UX/UI Designs</h1>
 
@@ -10,6 +14,22 @@
 		<a href="/map-system">Map System [research]</a>
 	</div>
 </div>
+
+<button
+	class="clear-local-storage"
+	onclick={async () => {
+		if (typeof Storage !== 'undefined') {
+			// Reload the page
+			await goto('/');
+			localStorage.clear();
+			window.location.reload();
+		} else {
+			console.log('localStorage is not supported in this browser');
+		}
+	}}
+>
+	Reset DB
+</button>
 
 <svelte:head>
 	<title>Arboricrop UX/UI Design</title>
@@ -39,5 +59,11 @@
 
 	a + a {
 		margin-top: 0.5rem;
+	}
+
+	.clear-local-storage {
+		position: fixed;
+		bottom: 1rem;
+		right: 1rem;
 	}
 </style>

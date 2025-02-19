@@ -176,31 +176,9 @@
 	</div>
 </div>
 
-<button
-	class="clear-local-storage"
-	onclick={async () => {
-		if (typeof Storage !== 'undefined') {
-			// Reload the page
-			await goto('/desktop-mvp');
-			localStorage.clear();
-			window.location.reload();
-		} else {
-			console.log('localStorage is not supported in this browser');
-		}
-	}}
->
-	Reset DB
-</button>
-
 <style lang="scss">
 	:global(html, body) {
 		background-color: var(--green);
-	}
-
-	.clear-local-storage {
-		position: fixed;
-		bottom: 1rem;
-		right: 1rem;
 	}
 
 	:root {

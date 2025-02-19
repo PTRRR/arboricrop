@@ -133,22 +133,6 @@
 	</div>
 </Mobile>
 
-<button
-	class="clear-local-storage"
-	onclick={async () => {
-		if (typeof Storage !== 'undefined') {
-			// Reload the page
-			await goto(data.baseUrl);
-			localStorage.clear();
-			window.location.reload();
-		} else {
-			console.log('localStorage is not supported in this browser');
-		}
-	}}
->
-	Reset DB
-</button>
-
 <style lang="scss">
 	/* Rubik Regular */
 	@font-face {
@@ -221,12 +205,6 @@
 		--grey: #dadada;
 		--dark-grey: #878787;
 		--white: white;
-	}
-
-	.clear-local-storage {
-		position: fixed;
-		bottom: 1rem;
-		right: 1rem;
 	}
 
 	.mobile-layout {
