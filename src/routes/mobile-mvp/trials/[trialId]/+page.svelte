@@ -134,6 +134,7 @@
 	{#if trial}
 		<Section>
 			<PageHeader
+				preTitle="Trial"
 				title={trial.name}
 				subTitle={project ? `${project.name}` : `Devices: ${$devices.length}`}
 			/>

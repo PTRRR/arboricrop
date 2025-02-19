@@ -2,6 +2,7 @@
 	import type { Snippet } from 'svelte';
 
 	const props: {
+		preTitle?: string | Snippet;
 		title?: string | Snippet;
 		subTitle?: string | Snippet;
 		description?: string | Snippet;
@@ -9,6 +10,16 @@
 </script>
 
 <div class="page-header">
+	{#if typeof props.preTitle !== 'undefined'}
+		<div class="page-header__pre-title">
+			{#if typeof props.preTitle === 'string'}
+				<span>{props.preTitle}</span>
+			{:else}
+				{@render props.preTitle()}
+			{/if}
+		</div>
+	{/if}
+
 	{#if typeof props.title !== 'undefined'}
 		<div class="page-header__title">
 			{#if typeof props.title === 'string'}
@@ -45,8 +56,9 @@
 		display: flex;
 		flex-direction: column;
 		text-transform: lowercase;
-		gap: 0.4rem;
+		gap: 0.2rem;
 
+		&__pre-title,
 		&__title,
 		&__subtitle,
 		&__description {
@@ -59,6 +71,12 @@
 			* {
 				font-size: inherit;
 			}
+		}
+
+		&__pre-title {
+			font-size: var(--main-font-size);
+			font-weight: 400;
+			// font-style: italic;
 		}
 
 		&__title {

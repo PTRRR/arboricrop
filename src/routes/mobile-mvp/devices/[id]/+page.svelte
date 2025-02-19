@@ -183,7 +183,7 @@
 	{/snippet}
 
 	<Section>
-		<PageHeader title={deviceName} subTitle={deviceStatus} />
+		<PageHeader preTitle="Device" title={deviceName} subTitle={deviceStatus} />
 		<TextInput label="Id:" defaultValue={device.id} readonly />
 		<TextInput
 			label="Name:"

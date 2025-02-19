@@ -32,7 +32,7 @@
 	);
 
 	const breadcrumbContent = $derived(
-		!showBreadcrumb ? 'vita/hub' : addEllipsis($returnButton?.label || 'vita/hub', 10)
+		!showBreadcrumb ? 'vita/hub' : addEllipsis($returnButton?.label || 'vita/hub', 13)
 	);
 
 	onMount(() => {

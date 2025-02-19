@@ -106,7 +106,7 @@
 	{/snippet}
 
 	<Section>
-		<PageHeader title={pageTitle} subTitle={pageSubtitle} />
+		<PageHeader preTitle="Notification" title={pageTitle} subTitle={pageSubtitle} />
 		<Table rows={infoRows} />
 	</Section>
 

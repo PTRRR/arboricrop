@@ -238,7 +238,7 @@
 					color="var(--white)"
 					backgroundColor="var(--green)"
 					iconBackgroundColor="var(--green)"
-					href={`${data.baseUrl}/devices/${device?.id}?connected=true`}
+					href={`${data.baseUrl}/groups/${device.parentId}`}
 					onclick={() => {
 						const center = map?.getCenter();
 						if (device) {
@@ -405,7 +405,7 @@
 						color="var(--white)"
 						backgroundColor="var(--green)"
 						iconBackgroundColor="var(--green)"
-						href={`${data.baseUrl}/devices/${device?.id}?connected=true`}
+						href={`${data.baseUrl}/groups/${device.parentId}`}
 					>
 						Done
 					</ActionButton>

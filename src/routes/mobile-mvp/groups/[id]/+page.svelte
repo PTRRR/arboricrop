@@ -60,7 +60,7 @@
 	{/snippet}
 
 	<Section>
-		<PageHeader title={group.name} subTitle={trial?.name} />
+		<PageHeader preTitle="Group" title={group.name} subTitle={trial?.name} />
 	</Section>
 
 	<Section
