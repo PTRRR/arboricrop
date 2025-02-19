@@ -13,7 +13,9 @@
 </script>
 
 <section class="section" class:section--hidden={props.hidden}>
-	<StepSeparation label={props.label} description={props.description} actions={props.actions} />
+	{#if props.label || props.description || props.actions}
+		<StepSeparation label={props.label} description={props.description} actions={props.actions} />
+	{/if}
 	{@render props.children?.()}
 	<Spacer size="calc(var(--gap) * 3)" />
 </section>

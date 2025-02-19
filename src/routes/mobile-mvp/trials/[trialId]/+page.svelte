@@ -7,6 +7,7 @@
 		useDevices,
 		useFields,
 		useGeoJSONFeatures,
+		useProjects,
 		useReturnButton,
 		useTrials
 	} from '../../../../stores';
@@ -35,6 +36,7 @@
 	const trialId = $page.params.trialId;
 	const { devices, updateDevice } = useDevices();
 	const { fields, getFieldById, deleteField, updateField } = useFields();
+	const { projects } = useProjects();
 	const { trials } = useTrials();
 	const returnButton = useReturnButton();
 	const features = useGeoJSONFeatures();
@@ -45,6 +47,7 @@
 	});
 
 	const trial = $derived($trials.find((it) => it.id === trialId));
+	const project = $derived($projects.find((it) => it.id === trial?.parentId));
 	const trialDevices = $derived($devices.filter((it) => it.parentId === trial?.id));
 	let selectedFeaturesSet = $state<Set<GeoJSONFeature>>(new Set());
 	const selectedFeatures = $derived(Array.from(selectedFeaturesSet));
@@ -107,8 +110,13 @@
 
 <div class="field">
 	{#if trial}
-		<PageHeader title={trial.name} subTitle={`Devices: ${$devices.length}`} />
 		<Section>
+			<PageHeader
+				title={trial.name}
+				subTitle={project ? `${project.name}` : `Devices: ${$devices.length}`}
+			/>
+		</Section>
+		<!-- <Section>
 			<TextInput
 				label="Name"
 				defaultValue={trial.name}
@@ -127,7 +135,7 @@
 					}
 				}}
 			/>
-		</Section>
+		</Section> -->
 
 		{#snippet statusCell(cell: Cell)}
 			<div class="field__status-cell">
@@ -144,6 +152,8 @@
 				? [
 						{
 							icon: 'add',
+							label: 'Add',
+							iconOrder: 'inverted',
 							onclick: () => goto(`${data.baseUrl}/devices/pairing?trial=${trial.id}`)
 						}
 					]

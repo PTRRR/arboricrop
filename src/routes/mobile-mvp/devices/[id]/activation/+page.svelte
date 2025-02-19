@@ -32,8 +32,8 @@
 	import LiveData from '../../../../../components/mobile-layout/LiveData.svelte';
 	import ActionButton from '../../../../../components/mobile-layout/ActionButton.svelte';
 	import type { LngLatLike } from 'svelte-maplibre';
-	import { dev } from '$app/environment';
 	import Troubleshoot from '../../../../../components/mobile-layout/Troubleshoot.svelte';
+	import { getCss } from '../../../../../utils/css';
 
 	const { data }: { data: PageData } = $props();
 
@@ -49,7 +49,7 @@
 		{ label: 'Install device', checked: false },
 		{ label: 'Connect probes', checked: false },
 		{ label: 'Set location', checked: false },
-		{ label: 'Add metadata', checked: false }
+		{ label: 'Metadata', checked: false }
 	];
 
 	const mediaOptions: { label: string; type: MediaType }[] = [
@@ -288,7 +288,7 @@
 {:else}
 	{#snippet stepHeader()}
 		<span>{currentStep?.label}</span>
-		<Button>Help</Button>
+		<Troubleshoot iconOrder="inverted" bind:opened={isTroubleshootVisible} />
 		<!-- <Button padding icon="navigate" iconOrder="inverted">Live Data</Button> -->
 	{/snippet}
 
@@ -306,9 +306,9 @@
 			/>
 		</Section>
 
-		{#if !isLiveDataVisible}
+		{#if !isLiveDataVisible && !isTroubleshootVisible}
 			<ActionMenu>
-				<Button icon="navigate" iconSize="large" href={nextHref}></Button>
+				<ActionButton href={nextHref}>Next</ActionButton>
 			</ActionMenu>
 		{/if}
 	{:else if stepIndex === 1}
@@ -328,15 +328,10 @@
 			/>
 		</Section>
 
-		{#if !isLiveDataVisible}
+		{#if !isLiveDataVisible && !isTroubleshootVisible}
 			<ActionMenu>
-				<Button
-					icon="back"
-					iconSize="large"
-					href={previousHref}
-					iconBackgroundColor="var(--dark-grey)"
-				></Button>
-				<Button icon="navigate" iconSize="large" href={nextHref}></Button>
+				<ActionButton icon="back" iconOrder="normal" href={previousHref}>Back</ActionButton>
+				<ActionButton href={nextHref}>Next</ActionButton>
 			</ActionMenu>
 		{/if}
 	{:else if stepIndex === 2}
@@ -347,41 +342,47 @@
 				zoom={15}
 				minZoom={8}
 				maxZoom={18.5}
-				center={device?.location || field?.center}
 				showTarget
-				markers={device?.location ? [{ lngLat: device.location }] : []}
+				center={locationCenter}
+				markers={locationMarkers}
 				geoJSONs={field?.layers}
-			/>
-			<Button
-				icon="check"
-				onclick={() => {
+				onpointerup={() => {
 					const center = map?.getCenter();
-					if (device && center) {
-						updateDevice({
-							...device,
-							location: [center.lng, center.lat]
-						});
+					if (center) {
+						newLocation = [center.lng, center.lat];
 					}
-				}}>Validate</Button
-			>
+				}}
+			/>
+
+			{#if newLocation}
+				<Button icon="cross" onclick={() => (newLocation = undefined)}>Reset to GPS</Button>
+			{:else}
+				<p style={getCss({ color: 'var(--grey)' })}>Move the location to adjust manually</p>
+			{/if}
 		</Section>
 
-		{#if !isLiveDataVisible}
+		{#if !isLiveDataVisible && !isTroubleshootVisible}
 			<ActionMenu>
-				<Button
-					icon="back"
-					iconSize="large"
-					href={previousHref}
-					iconBackgroundColor="var(--dark-grey)"
-				></Button>
-				<Button icon="navigate" iconSize="large" disabled={!device?.location} href={nextHref}
-				></Button>
+				<ActionButton icon="back" iconOrder="normal" href={previousHref}>Back</ActionButton>
+				<ActionButton
+					href={nextHref}
+					onclick={() => {
+						const center = map?.getCenter();
+						if (device) {
+							updateDevice({
+								...device,
+								location: center ? [center.lng, center.lat] : device.location,
+								status: 'active'
+							});
+						}
+					}}>Next</ActionButton
+				>
 			</ActionMenu>
 		{/if}
 	{:else if stepIndex === 3 && device}
 		<Section>
 			<TextareaInput
-				placeholder="Your note..."
+				label="Notes"
 				defaultValue={device?.note || ''}
 				onvalue={(value) => {
 					if (device) {
@@ -392,6 +393,21 @@
 					}
 				}}
 			/>
+
+			{#if !isLiveDataVisible && !isTroubleshootVisible}
+				<ActionMenu>
+					<ActionButton icon="back" iconOrder="normal" href={previousHref}>Back</ActionButton>
+					<ActionButton
+						icon="check"
+						color="var(--white)"
+						backgroundColor="var(--green)"
+						iconBackgroundColor="var(--green)"
+						href={`${data.baseUrl}/devices/${device?.id}?connected=true`}
+					>
+						Done
+					</ActionButton>
+				</ActionMenu>
+			{/if}
 		</Section>
 
 		<!-- <Section label="Medias" actions={device.medias.length > 0 ? [{ icon: 'add' }] : []}>
@@ -412,31 +428,5 @@
 				<Dropdown label="Add media" icon="add" items={mediaOptions} renderItem={mediaOptionItem} />
 			{/if}
 		</Section> -->
-
-		{#if !isLiveDataVisible}
-			<ActionButton>Done</ActionButton>
-			<!-- <ActionMenu>
-				<Button
-					icon="back"
-					iconSize="large"
-					href={previousHref}
-					iconBackgroundColor="var(--dark-grey)"
-				></Button>
-				<Button
-					icon="check"
-					iconSize="large"
-					iconBackgroundColor="var(--green)"
-					href={`${data.baseUrl}/devices/${device?.id}?connected=true`}
-					onclick={() => {
-						if (device) {
-							updateDevice({
-								...device,
-								status: 'active'
-							});
-						}
-					}}
-				></Button>
-			</ActionMenu> -->
-		{/if}
 	{/if}
 {/if}

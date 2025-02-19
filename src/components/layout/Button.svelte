@@ -1,5 +1,5 @@
 <script module lang="ts">
-	export type ButtonIconOrder = 'inverted';
+	export type ButtonIconOrder = 'inverted' | 'normal';
 	export type ButtonSize = 'small' | 'normal' | 'big';
 </script>
 
@@ -25,7 +25,7 @@
 		iconBackgroundColor,
 		backgroundColor,
 		iconSize,
-		iconOrder,
+		iconOrder = 'normal',
 		padding = false,
 		color,
 		fontSize,
