@@ -194,10 +194,5 @@
 			line-height: 1;
 			white-space: nowrap;
 		}
-
-		span {
-			display: block;
-			line-height: 1;
-		}
 	}
 </style>

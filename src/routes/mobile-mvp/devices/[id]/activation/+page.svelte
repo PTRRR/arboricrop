@@ -33,6 +33,7 @@
 	import ActionButton from '../../../../../components/mobile-layout/ActionButton.svelte';
 	import type { LngLatLike } from 'svelte-maplibre';
 	import { dev } from '$app/environment';
+	import Troubleshoot from '../../../../../components/mobile-layout/Troubleshoot.svelte';
 
 	const { data }: { data: PageData } = $props();
 
@@ -61,6 +62,7 @@
 	let selectedField: Field | undefined = $state(undefined);
 	let isLiveDataVisible = $state(false);
 	let newLocation = $state<LngLatLike | undefined>(undefined);
+	let isTroubleshootVisible = $state(false);
 
 	const stepIndex = $derived(($page.data.step || 0) as number);
 	const currentStep = $derived(steps[stepIndex]);
@@ -159,6 +161,7 @@
 {#if data.advanced && device}
 	{#snippet advancedActivationTitle()}
 		<span>Device Activation</span>
+		<Troubleshoot iconOrder="inverted" bind:opened={isTroubleshootVisible} />
 		<!-- <LiveData iconOrder="inverted" bind:opened={isLiveDataVisible} /> -->
 	{/snippet}
 
@@ -228,7 +231,7 @@
 			<Dropdown label="Add media" icon="add" items={mediaOptions} renderItem={mediaOptionItem} />
 		{/if} -->
 
-		{#if !isLiveDataVisible}
+		{#if !isLiveDataVisible && !isTroubleshootVisible}
 			<ActionMenu>
 				<ActionButton
 					icon="check"
@@ -285,6 +288,7 @@
 {:else}
 	{#snippet stepHeader()}
 		<span>{currentStep?.label}</span>
+		<Button>Help</Button>
 		<!-- <Button padding icon="navigate" iconOrder="inverted">Live Data</Button> -->
 	{/snippet}
 

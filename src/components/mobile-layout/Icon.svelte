@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { getCss } from '../../utils/css';
 
-	export type IconName = 'add' | 'navigate' | 'warning' | 'check' | 'cross' | 'back';
+	export type IconName = 'add' | 'navigate' | 'warning' | 'check' | 'cross' | 'back' | 'question';
 	export type IconSize = 'normal' | 'large';
 
 	const {
@@ -50,6 +50,8 @@
 				</g>
 			</g>
 		</svg>
+	{:else if icon === 'question'}
+		<span>?</span>
 	{:else}
 		<span>+</span>
 	{/if}
