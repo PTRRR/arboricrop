@@ -17,7 +17,6 @@
 	import PageHeader from '../../components/layout/PageHeader.svelte';
 	import { shuffle } from '../../utils/arrays';
 	import NotificationCard from '../../components/mobile-layout/NotificationCard.svelte';
-	import SaveMenu from '../../components/mobile-layout/SaveMenu.svelte';
 	import Table from '../../components/layout/Table.svelte';
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
@@ -26,6 +25,7 @@
 	import { getCss } from '../../utils/css';
 	import ActionMenu from '../../components/mobile-layout/ActionMenu.svelte';
 	import ActionButton from '../../components/mobile-layout/ActionButton.svelte';
+	import type { Account } from '../../utils/types';
 
 	const { devices } = useDevices();
 	const { trials } = useTrials();
@@ -67,18 +67,13 @@
 			? 'login'
 			: $organisations.length > 0 && typeof $organisation === 'undefined'
 				? 'select-organisation'
-				: accountTrials.length === 0
-					? 'login'
-					: 'final'
+				: 'final'
 	);
 
 	const loginHref = $derived(
-		$organisations.length === 0 ? `${data.baseUrl}/trials/new` : undefined
+		undefined
+		// $organisations.length === 0 ? `${data.baseUrl}/trials/new` : undefined
 	);
-
-	$effect(() => {
-		console.log(loginHref);
-	});
 
 	onMount(() => {
 		newEmail = $accounts[0].email;
@@ -106,9 +101,10 @@
 					const account = $accounts.find((it) => it.email === newEmail);
 
 					if (!account) {
-						const newAccount = {
+						const newAccount: Account = {
 							id: `acc-${createId()}`,
-							email: newEmail
+							email: newEmail,
+							role: 'Viv superadmin'
 						};
 
 						addAccount(newAccount);
