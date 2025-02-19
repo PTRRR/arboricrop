@@ -209,7 +209,7 @@
 			}}
 		/>
 
-		<StepSeparation label="Medias" actions={device.medias.length > 0 ? [{ icon: 'add' }] : []} />
+		<!-- <StepSeparation label="Medias" actions={device.medias.length > 0 ? [{ icon: 'add' }] : []} />
 
 		{#if device.medias.length > 0}
 			<Table
@@ -226,7 +226,7 @@
 			/>
 		{:else}
 			<Dropdown label="Add media" icon="add" items={mediaOptions} renderItem={mediaOptionItem} />
-		{/if}
+		{/if} -->
 
 		{#if !isLiveDataVisible}
 			<ActionMenu>
@@ -390,7 +390,7 @@
 			/>
 		</Section>
 
-		<Section label="Medias" actions={device.medias.length > 0 ? [{ icon: 'add' }] : []}>
+		<!-- <Section label="Medias" actions={device.medias.length > 0 ? [{ icon: 'add' }] : []}>
 			{#if device.medias.length > 0}
 				<Table
 					headers={[
@@ -407,7 +407,7 @@
 			{:else}
 				<Dropdown label="Add media" icon="add" items={mediaOptions} renderItem={mediaOptionItem} />
 			{/if}
-		</Section>
+		</Section> -->
 
 		{#if !isLiveDataVisible}
 			<ActionButton>Done</ActionButton>

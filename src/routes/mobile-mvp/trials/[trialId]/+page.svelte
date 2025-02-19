@@ -96,6 +96,13 @@
 			]
 		}))
 	);
+
+	const deviceMarkers = $derived(
+		trialDevices.map((device) => ({
+			lngLat: device.location as LngLatLike,
+			label: device.name
+		}))
+	);
 </script>
 
 <div class="field">
@@ -169,9 +176,10 @@
 				maxZoom={18}
 				center={trial.center}
 				geoJSONs={trial.layers}
+				markers={deviceMarkers}
 				onChange={(value) => {
-					const delta = getLocationDelta(value, trial.center);
-					if (delta > 0.000001) coords = value;
+					// const delta = getLocationDelta(value, trial.center);
+					// if (delta > 0.000001) coords = value;
 				}}
 			/>
 		</Section>

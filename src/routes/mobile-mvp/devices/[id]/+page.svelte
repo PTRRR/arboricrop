@@ -208,21 +208,12 @@
 				maxZoom={18.5}
 				center={device?.location || trial?.center}
 				markers={device?.location ? [{ lngLat: device.location }] : []}
-				showTarget
 				geoJSONs={trial?.layers}
-				onChange={(value) => {
-					if (device.location) {
-						const delta = getLocationDelta(value, device.location);
-						if (delta > 0.0002) {
-							location = value;
-						}
-					}
-				}}
 			/>
 		</Section>
 	{/if}
 
-	<Section
+	<!-- <Section
 		label="Medias"
 		actions={device.medias.length > 0 ? [{ icon: 'add', onclick: () => {} }] : []}
 	>
@@ -242,7 +233,7 @@
 		{:else}
 			<Dropdown label="Add media" icon="add" items={mediaOptions} renderItem={mediaOptionItem} />
 		{/if}
-	</Section>
+	</Section> -->
 
 	<!-- {#if $page.data.connected}
 		<Section label="Advanced">

@@ -94,12 +94,12 @@
 				}, 2000);
 			}}
 		/>
-		<Dropdown
+		<!-- <Dropdown
 			icon="navigate"
 			label="Other pairing strategy"
 			items={strategyOptions}
 			renderItem={dropdownButton}
-		/>
+		/> -->
 	</Section>
 {:else}
 	<CenteredWrapper>

@@ -28,7 +28,7 @@
 	$: features = geoJSONs.map(getGeoJSONFeatures).flat();
 
 	let zoomLevel: number = zoom;
-	$: showMarkerLabels = zoomLevel >= 18;
+	$: showMarkerLabels = zoomLevel >= 15;
 </script>
 
 <div
