@@ -34,9 +34,8 @@
 	});
 </script>
 
-<PageHeader title="Notifications & Alerts" />
-
 <Section>
+	<PageHeader title="Notifications & Alerts" />
 	<div class="notifications_filters">
 		<Button
 			padding="0.5rem"

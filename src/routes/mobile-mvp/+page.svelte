@@ -153,8 +153,8 @@
 		</div>
 	{/snippet}
 
-	<PageHeader title={notificationsTitle} subTitle={notificationsSubTitle} />
 	<Section>
+		<PageHeader title={notificationsTitle} subTitle={notificationsSubTitle} />
 		{#each selectedNotifications as notification}
 			<NotificationCard {notification} baseUrl={data.baseUrl} />
 		{/each}
@@ -165,8 +165,8 @@
 		<!-- <Button href={`${data.baseUrl}/trials/new`} icon="add" padding /> -->
 	{/snippet}
 
-	<PageHeader title={fieldsHeader} />
 	<Section>
+		<PageHeader title={fieldsHeader} />
 		{#each accountTrials as trial}
 			<Card
 				href={`${data.baseUrl}/trials/${trial.id}`}

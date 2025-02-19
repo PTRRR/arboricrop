@@ -68,8 +68,8 @@
 </script>
 
 {#if $page.data.acknowledge}
-	<PageHeader title="Review" subTitle={notification?.title} />
 	<Section>
+		<PageHeader title="Review" subTitle={notification?.title} />
 		<TextareaInput placeholder="Personal note" />
 	</Section>
 	<ActionMenu>
@@ -105,8 +105,8 @@
 		</div>
 	{/snippet}
 
-	<PageHeader title={pageTitle} subTitle={pageSubtitle} />
 	<Section>
+		<PageHeader title={pageTitle} subTitle={pageSubtitle} />
 		<Table rows={infoRows} />
 	</Section>
 
