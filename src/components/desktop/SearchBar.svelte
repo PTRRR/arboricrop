@@ -11,6 +11,10 @@
 </script>
 
 <Stack gap="1rem" style={{ maxWidth: '30rem' }} direction="horizontal" alignItems="flex-end">
-	<TextInput label="Search" style={{ width: '100%' }} bind:value />
+	{#if typeof value !== 'undefined'}
+		<TextInput label="Search" style={{ width: '100%' }} bind:value />
+	{:else}
+		<TextInput label="Search" style={{ width: '100%' }} />
+	{/if}
 	<Button icon="navigate">Submit</Button>
 </Stack>

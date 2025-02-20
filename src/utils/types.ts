@@ -45,6 +45,7 @@ export type Account = {
 	password?: string;
 	organizationName?: string;
 	invitedAccounts?: string[];
+  parentId?: string;
 	role?: RoleName;
 };
 

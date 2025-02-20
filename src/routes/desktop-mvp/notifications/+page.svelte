@@ -155,7 +155,7 @@
 			</Grid>
 		</Section>
 
-		<Section label="Archived Notifications">
+		<!-- <Section label="Archived Notifications">
 			<Grid minmax="15rem">
 				{#each $notifications.slice(0, 4) as notification}
 					<NotificationCard
@@ -164,7 +164,7 @@
 				{/each}
 			</Grid>
 			<Pagination pages={3} />
-		</Section>
+		</Section> -->
 	</Stack>
 
 	{#if selectedNotification}

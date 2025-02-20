@@ -138,10 +138,10 @@
 								Earmark
 							</Button>
 							<Button
-								href="/desktop-mvp/customer-accounts"
-								underline={$page.route.id?.startsWith('/desktop-mvp/customer-accounts')}
+								href="/desktop-mvp/organizations"
+								underline={$page.route.id?.startsWith('/desktop-mvp/organizations')}
 							>
-								Customer Accounts
+								Organizations
 							</Button>
 						{/if}
 

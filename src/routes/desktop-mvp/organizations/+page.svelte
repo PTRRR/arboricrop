@@ -14,21 +14,38 @@
 	import { useAccounts } from '../../../stores';
 	import type { Account, RoleName } from '../../../utils/types';
 	import Dropdown from '../../../components/desktop/Dropdown.svelte';
+	import DangerZone from '../../../components/desktop/DangerZone.svelte';
+	import Grid from '../../../components/desktop/Grid.svelte';
+	import OrganizationCard from '../../../components/desktop/OrganizationCard.svelte';
+	import Pagination from '../../../components/layout/Pagination.svelte';
 
 	const { accounts, addAccount } = useAccounts();
 
 	const accountsRows = $derived<Row[]>(
 		$accounts.map((account) => ({
+			selected: account.id === selectedOrganization?.id,
+			onclick: () =>
+				(selectedOrganization = selectedOrganization?.id === account.id ? undefined : account),
 			cells: [
 				{ label: account.organizationName || account.username || 'Unknown' },
-				{ label: account.email },
-				{ label: account.role || 'Viv superadmin' }
+				{ label: account.email }
 			]
 		}))
 	);
 
 	let newAccount: Account | undefined = $state(undefined);
+	let selectedOrganization = $state<Account | undefined>(undefined);
+	let searchQuery = $state('');
 	let isOrganisation = $state(false);
+
+	const filteredOrganizations = $derived(
+		$accounts.filter((it) =>
+			searchQuery
+				? it.organizationName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+					it.username?.toLowerCase().includes(searchQuery.toLowerCase())
+				: true
+		)
+	);
 </script>
 
 {#snippet title()}
@@ -38,8 +55,8 @@
 		justifyContent="space-between"
 		style={{ width: '100%' }}
 	>
-		Customer Accounts
-		{#if !newAccount}
+		Organizations
+		{#if !newAccount && !selectedOrganization}
 			<Button
 				icon="add"
 				iconOrder="inverted"
@@ -75,25 +92,30 @@
 <Stack direction="horizontal" style={{ width: '100%' }}>
 	<Section>
 		<PageHeader {title} />
-		<SearchBar />
-		<Table
+		<SearchBar bind:value={searchQuery} />
+		<Grid>
+			{#each filteredOrganizations as organization}
+				<OrganizationCard {organization} />
+			{/each}
+		</Grid>
+		<!-- <Table
 			headers={[
 				{ label: 'Organisation', width: '35%' },
-				{ label: 'Email', width: '45%' },
-				{ label: 'Role', width: '10%' }
+				{ label: 'Email', width: '45%' }
 			]}
 			rows={accountsRows}
 			pageSize={30}
-		/>
+		/> -->
+		<Pagination pages={3} />
 	</Section>
 
 	{#if newAccount}
-		<Section label="Account creation" width="40%" backgroundColor="var(--light-grey)">
+		<Section label="New Organization" width="40%" backgroundColor="var(--light-grey)">
 			<TextInput
-				label="Username"
+				label="Organization Name"
 				onvalue={(value) => {
 					if (!newAccount) return;
-					newAccount.username = value;
+					newAccount.organizationName = value;
 				}}
 			/>
 			<TextInput
@@ -113,7 +135,7 @@
 			/>
 			<TextInput type="password" label="Repeat Password" />
 
-			<Stack gap="1rem">
+			<!-- <Stack gap="1rem">
 				<span>Select role</span>
 				<Dropdown
 					label={newAccount.role || 'Role'}
@@ -126,7 +148,7 @@
 					]}
 					itemSnippet={roleSnippet}
 				/>
-			</Stack>
+			</Stack> -->
 
 			<!-- <Spacer />
 			<div>
@@ -146,7 +168,7 @@
 			{/if} -->
 
 			<Validation
-				validateDisabled={!newAccount.email || !newAccount.username || !newAccount.password}
+				validateDisabled={!newAccount.email || !newAccount.organizationName || !newAccount.password}
 				validateLabel="Create"
 				onvalidate={() => {
 					if (!newAccount) return;
@@ -159,5 +181,22 @@
 				}}
 			/>
 		</Section>
+	{:else if selectedOrganization}
+		{#key selectedOrganization.id}
+			<Section label="Edit organisation" width="40%" backgroundColor="var(--light-grey)">
+				<TextInput label="Organization Name" defaultValue={selectedOrganization.organizationName} />
+				<TextInput label="Email" defaultValue={selectedOrganization.email} />
+				<Validation
+					validateLabel="Save"
+					onvalidate={() => (selectedOrganization = undefined)}
+					cancelLabel="Cancel"
+					oncancel={() => (selectedOrganization = undefined)}
+				/>
+				<DangerZone
+					label="Delete Organization"
+					description="Permanently delete this organization and all of its data. This action cannot be undone."
+				/>
+			</Section>
+		{/key}
 	{/if}
 </Stack>
