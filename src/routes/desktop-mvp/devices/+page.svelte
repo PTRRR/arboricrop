@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Device } from '../../../utils/types';
-	import { useCurrentAccount, useDevices } from '../../../stores';
+	import { useCurrentAccount, useDevices, useNotifications } from '../../../stores';
 	import Section from '../../../components/desktop/Section.svelte';
 	import StatusDot from '../../../components/mobile-layout/StatusDot.svelte';
 	import Stack from '../../../components/desktop/Stack.svelte';
@@ -10,9 +10,14 @@
 	import DevicesList from '../../../components/desktop/DevicesList.svelte';
 	import SearchBar from '../../../components/desktop/SearchBar.svelte';
 	import Validation from '../../../components/desktop/Validation.svelte';
+	import { shuffle } from '../../../utils/arrays';
+	import NotificationCard from '../../../components/desktop/NotificationCard.svelte';
+	import Grid from '../../../components/desktop/Grid.svelte';
+	import StepSeparation from '../../../components/layout/StepSeparation.svelte';
 
 	const { devices, updateDevice } = useDevices();
 	const { currentAccount } = useCurrentAccount();
+	const notifications = useNotifications();
 	let selectedDevice = $state<Device | undefined>(undefined);
 	let deviceName = $state('');
 	let deviceNote = $state('');
@@ -61,6 +66,17 @@
 			<TextInput label="Version" value={selectedDevice.firmwareVersion} readonly />
 			<TextInput label="Name" bind:value={deviceName} />
 			<TextareaInput label="Note" bind:value={deviceNote} />
+
+			<StepSeparation label="Historical data" />
+			<Grid minmax="15rem">
+				{#each shuffle($notifications).slice(0, 4) as notification}
+					<NotificationCard
+						selected
+						notification={{ ...notification, status: 'acknowledged', type: 'notification' }}
+					/>
+				{/each}
+			</Grid>
+
 			<Validation
 				validateLabel="Save"
 				validateDisabled={!selectedDeviceHasChanges}
