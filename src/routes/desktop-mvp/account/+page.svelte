@@ -39,11 +39,11 @@
 			<Section label="Settings" style={{ maxWidth: '40rem' }}>
 				<TextInput label="Username" defaultValue="Jon" />
 				<TextInput label="Email" defaultValue={$currentAccount.email} />
-				<TextInput label="Reset Password" />
-				<Button icon="navigate">Reset</Button>
+				<TextInput label="Password" />
+				<Button icon="navigate">Reset Password</Button>
 			</Section>
 
-			<Section label="Organisation" style={{ maxWidth: '40rem' }}>
+			<!-- <Section label="Organisation" style={{ maxWidth: '40rem' }}>
 				<TextInput label="Organisation Name" defaultValue={$currentAccount.organizationName} />
 
 				{#if invitedAccounts.length > 0}
@@ -71,7 +71,7 @@
 				{#if !inviteAccounts}
 					<Button icon="add" onclick={() => (inviteAccounts = true)}>Invite Users</Button>
 				{/if}
-			</Section>
+			</Section> -->
 
 			<Section>
 				<Validation validateLabel="Save" onvalidate={() => {}} />

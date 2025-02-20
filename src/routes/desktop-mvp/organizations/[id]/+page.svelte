@@ -2,6 +2,7 @@
 	import { page } from '$app/state';
 	import DangerZone from '../../../../components/desktop/DangerZone.svelte';
 	import Dropdown from '../../../../components/desktop/Dropdown.svelte';
+	import SearchBar from '../../../../components/desktop/SearchBar.svelte';
 	import Section from '../../../../components/desktop/Section.svelte';
 	import Stack from '../../../../components/desktop/Stack.svelte';
 	import Validation from '../../../../components/desktop/Validation.svelte';
@@ -110,11 +111,12 @@
 				{#if invitedAccounts.length === 0}
 					<p>There are no users yet</p>
 				{:else}
+					<SearchBar />
 					<Table
 						headers={[
-							{ label: 'email', width: '30%' },
-							{ label: 'role', width: '30%' },
-							{ label: 'scope' }
+							{ label: 'email', width: '30%', sortable: true },
+							{ label: 'role', width: '30%', sortable: true },
+							{ label: 'scope', sortable: true }
 						]}
 						rows={invitedAccounts.map((it, index) => ({
 							selected: selectedUser?.id === it.id,
