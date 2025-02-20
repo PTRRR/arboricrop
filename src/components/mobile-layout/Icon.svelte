@@ -1,8 +1,16 @@
 <script lang="ts">
 	import { getCss } from '../../utils/css';
 
-	export type IconName = 'add' | 'navigate' | 'warning' | 'check' | 'cross' | 'back' | 'question';
-	export type IconSize = 'normal' | 'large';
+	export type IconName =
+		| 'add'
+		| 'navigate'
+		| 'down'
+		| 'warning'
+		| 'check'
+		| 'cross'
+		| 'back'
+		| 'question';
+	export type IconSize = 'normal' | 'large' | 'small';
 
 	const {
 		icon,
@@ -19,6 +27,7 @@
 	class="icon"
 	class:icon--normal={size === 'normal'}
 	class:icon--large={size === 'large'}
+	class:icon--small={size === 'small'}
 	style={getCss({ color })}
 >
 	{#if icon === 'add'}
@@ -27,6 +36,8 @@
 		<span>!</span>
 	{:else if icon === 'navigate'}
 		<span>></span>
+	{:else if icon === 'down'}
+		<span class="icon__down">></span>
 	{:else if icon === 'back'}
 		<span>{'<'}</span>
 	{:else if icon === 'cross'}
@@ -72,6 +83,12 @@
 			font-family: inherit;
 		}
 
+		&--small {
+			font-size: 12px;
+			width: calc(1em - 5px);
+			height: calc(1em - 5px);
+		}
+
 		&--normal {
 			font-size: 22px;
 		}
@@ -89,6 +106,10 @@
 		&__check {
 			width: 0.55em;
 			height: 0.55em;
+		}
+
+		&__down {
+			transform: rotate(90deg);
 		}
 	}
 </style>

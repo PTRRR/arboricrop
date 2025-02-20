@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { DropdownMenu } from 'bits-ui';
-	import Button from '../layout/Button.svelte';
+	import Button, { type ButtonIconOrder } from '../layout/Button.svelte';
 	import type { Snippet } from 'svelte';
 	import Stack from './Stack.svelte';
 	import { type IconName } from '../mobile-layout/Icon.svelte';
+	import { getCss } from '../../utils/css';
 
 	type T = $$Generic;
 
@@ -14,8 +15,10 @@
 		align?: 'left' | 'right' | 'center';
 		sameWidth?: boolean;
 		icon?: IconName;
+		iconOrder?: ButtonIconOrder;
 		items?: T[];
 		itemSnippet?: Snippet<[item: T]>;
+		small?: boolean;
 	}
 
 	const {
@@ -26,13 +29,27 @@
 		align = 'left',
 		items = [],
 		itemSnippet,
-		icon
+		icon,
+		iconOrder,
+		small
 	}: Props = $props();
 </script>
 
 <DropdownMenu.Root>
 	<DropdownMenu.Trigger asChild let:builder>
-		<Button {icon} builders={[builder]}>{label}</Button>
+		{#if small}
+			<Button
+				{icon}
+				iconSize="small"
+				iconOrder={iconOrder || 'inverted'}
+				fontSize="var(--main-font-size)"
+				builders={[builder]}
+			>
+				<span style={getCss({ textDecoration: 'underline' })}>{label}</span>
+			</Button>
+		{:else}
+			<Button {icon} {iconOrder} builders={[builder]}>{label}</Button>
+		{/if}
 	</DropdownMenu.Trigger>
 
 	<DropdownMenu.Content {sideOffset} {side} {sameWidth}>

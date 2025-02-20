@@ -166,7 +166,7 @@
 		}
 
 		&__headers {
-			color: var(--grey);
+			color: var(--dark-grey);
 		}
 
 		&__cell {
