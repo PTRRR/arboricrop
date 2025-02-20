@@ -155,28 +155,13 @@
 				{/if}
 			</Section>
 
-			<!-- <Section
-				label="Devices"
-				actions={addDevices
-					? []
-					: [
-							{
-								label: 'Add',
-								icon: 'add',
-								iconOrder: 'inverted',
-								onclick: () => (addDevices = !addDevices)
-							}
-						]}
-			>
+			<Section label="Devices">
 				{#if trialDevices.length === 0}
 					<p>There a no devices in this trial</p>
 				{:else}
-					<DevicesList
-						devices={trialDevices}
-						onselect={(devices) => (selectedDevices = new Set(devices))}
-					/>
+					<DevicesList devices={trialDevices} />
 				{/if}
-			</Section> -->
+			</Section>
 		</Stack>
 
 		{#if addDevices}

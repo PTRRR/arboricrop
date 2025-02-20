@@ -77,7 +77,7 @@
 			padding: 0.5rem;
 			height: 1rem;
 			border: none;
-			background-color: rgb(235, 235, 235);
+			background-color: var(--grey);
 			border-radius: 5px;
 			min-height: 2rem;
 			outline: none;

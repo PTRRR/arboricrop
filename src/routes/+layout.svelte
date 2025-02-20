@@ -79,9 +79,9 @@
 		--light-yellow: #ffec9f;
 		--blue: #009fe3;
 		--black: #000000;
-		--light-grey: #f6f6f6;
-		--grey: #c0c0c0;
-		--dark-grey: #878787;
+		--light-grey: #f3f3f3;
+		--grey: #d8d8d8;
+		--dark-grey: #a5a5a5;
 		--white: white;
 	}
 </style>

@@ -5,9 +5,10 @@
 
 	interface Props {
 		notification: Notification;
+		selected?: boolean;
 	}
 
-	const { notification }: Props = $props();
+	const { notification, selected }: Props = $props();
 </script>
 
 <a
@@ -16,6 +17,7 @@
 	class:notification-card--alert={notification.type === 'alert'}
 	class:notification-card--notification={notification.type === 'notification'}
 	class:notification-card--warning={notification.type === 'warning'}
+	class:notification-card--selected={selected}
 >
 	<Stack gap="0.5rem" justifyContent="space-between" style={{ flex: ' 1 1 auto' }}>
 		<div>
@@ -51,9 +53,10 @@
 		}
 
 		&__description {
-			color: var(--grey);
+			color: var(--dark-grey);
 		}
 
+		&--selected,
 		&:hover {
 			background-color: var(--grey);
 

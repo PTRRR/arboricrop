@@ -72,7 +72,7 @@
 			padding: 0.5rem;
 			height: calc(var(--main-font-size) + 1rem);
 			border: none;
-			background-color: rgb(235, 235, 235);
+			background-color: var(--grey);
 			border-radius: 5px;
 			max-width: 100%;
 			min-height: 10rem;

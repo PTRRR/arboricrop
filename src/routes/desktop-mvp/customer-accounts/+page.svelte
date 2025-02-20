@@ -20,9 +20,9 @@
 	const accountsRows = $derived<Row[]>(
 		$accounts.map((account) => ({
 			cells: [
-				{ label: account.organizationName },
+				{ label: account.organizationName || account.username || 'Unknown' },
 				{ label: account.email },
-				{ label: account.role }
+				{ label: account.role || 'Viv superadmin' }
 			]
 		}))
 	);

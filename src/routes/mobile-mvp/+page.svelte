@@ -69,7 +69,7 @@
 	};
 
 	const stage = $derived(
-		!$email
+		!$email || !$currentAccount
 			? 'login'
 			: $organisations.length > 0 && typeof $organisation === 'undefined'
 				? 'select-organisation'

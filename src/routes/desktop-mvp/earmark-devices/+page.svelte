@@ -48,7 +48,11 @@
 					selectedAccount = account;
 				}
 			},
-			cells: [{ label: '' }, { label: account.organizationName }, { label: account.email }]
+			cells: [
+				{ label: '' },
+				{ label: account.organizationName || account.username || 'Vivent' },
+				{ label: account.email }
+			]
 		}))
 	);
 
@@ -85,7 +89,7 @@
 				{ label: 'Creation Date' }
 			]}
 			rows={rowsWithRenderHandler(devicesRows, selectCell)}
-			pageSize={50}
+			pageSize={20}
 		/>
 	</Section>
 

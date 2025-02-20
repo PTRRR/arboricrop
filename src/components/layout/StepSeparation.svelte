@@ -70,7 +70,7 @@
 
 		&--border {
 			padding-top: 1rem;
-			border-top: solid 1px var(--grey);
+			border-top: solid 1px var(--dark-grey);
 		}
 
 		&__heading {
@@ -82,7 +82,7 @@
 		&__label {
 			font-weight: 500;
 			text-transform: lowercase;
-			color: var(--grey);
+			color: var(--dark-grey);
 			font-size: var(--mid-font-size);
 		}
 
