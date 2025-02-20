@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Table, { type Cell, type Row } from '../layout/Table.svelte';
+	import Table, { type Cell, type HeaderCell, type Row } from '../layout/Table.svelte';
 	import Stack from './Stack.svelte';
 	import type { Device } from '../../utils/types';
 	import { getCss } from '../../utils/css';
@@ -16,20 +16,20 @@
 	const { onselect, multi = true, devices = [] }: Props = $props();
 	let selectedDevices = $state<Set<Device>>(new Set());
 
-	const headers = $derived(
+	const headers = $derived<HeaderCell[]>(
 		onselect
 			? [
 					{ label: '', width: '7%' },
-					{ label: 'ID', width: '30%' },
-					{ label: 'name', width: '20%' },
-					{ label: 'status', width: '20%' },
-					{ label: 'battery', width: '10%' }
+					{ label: 'ID', width: '30%', sortable: true },
+					{ label: 'name', width: '20%', sortable: true },
+					{ label: 'status', width: '20%', sortable: true },
+					{ label: 'battery', width: '10%', sortable: true }
 				]
 			: [
-					{ label: 'ID', width: '30%' },
-					{ label: 'name', width: '20%' },
-					{ label: 'status', width: '20%' },
-					{ label: 'battery', width: '10%' }
+					{ label: 'ID', width: '30%', sortable: true },
+					{ label: 'name', width: '20%', sortable: true },
+					{ label: 'status', width: '20%', sortable: true },
+					{ label: 'battery', width: '10%', sortable: true }
 				]
 	);
 

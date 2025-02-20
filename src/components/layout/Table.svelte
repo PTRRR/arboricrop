@@ -6,6 +6,8 @@
 		multiline?: boolean;
 	}
 
+	export type HeaderCell = Cell & { sortable?: boolean };
+
 	export interface Row {
 		href?: string;
 		onclick?: () => void;
@@ -21,7 +23,7 @@
 	import Spacer from '../Spacer.svelte';
 
 	interface Props {
-		headers?: Cell[];
+		headers?: HeaderCell[];
 		rows: Row[];
 		style?: string;
 		borders?: boolean;
@@ -68,7 +70,11 @@
 	{#if headers}
 		<div class="table__row table__headers" class:table--borders={borders}>
 			{#each headers as header}
-				<div class="table__cell" style={getCss({ width: header.width })}>
+				<div
+					class="table__cell"
+					class:table--sortable={header.sortable}
+					style={getCss({ width: header.width })}
+				>
 					<span>{header.label}</span>
 				</div>
 			{/each}
@@ -174,6 +180,15 @@
 			white-space: nowrap;
 			text-transform: lowercase;
 			flex: 0 0 auto;
+
+			&#{$this}--sortable {
+				// display: none;
+
+				&::before {
+					content: '<>';
+					transform: rotate(90deg) translate(0, 2px);
+				}
+			}
 
 			span {
 				display: block;
