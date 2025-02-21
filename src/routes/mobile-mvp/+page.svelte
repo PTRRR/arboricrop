@@ -49,6 +49,7 @@
 	let password = $state('');
 	let newTrialName = $state<string>('');
 	let newSelectedOrganisation = $state($organisation);
+	let resetPasswordStage = $state<'email' | 'password' | undefined>(undefined);
 
 	const returnButton = useReturnButton();
 	returnButton.set({
@@ -69,11 +70,15 @@
 	};
 
 	const stage = $derived(
-		!$email || !$currentAccount
-			? 'login'
-			: $organisations.length > 0 && typeof $organisation === 'undefined'
-				? 'select-organisation'
-				: 'final'
+		resetPasswordStage === 'email'
+			? 'enter-email'
+			: resetPasswordStage === 'password'
+				? 'enter-password'
+				: !$email || !$currentAccount
+					? 'login'
+					: $organisations.length > 0 && typeof $organisation === 'undefined'
+						? 'select-organisation'
+						: 'final'
 	);
 
 	const loginHref = $derived(
@@ -86,14 +91,27 @@
 	});
 </script>
 
-{#if stage === 'login'}
-	<PageHeader title="Login" />
+{#if stage === 'enter-email'}
 	<Section>
+		<PageHeader title="Reset Password" />
+		<TextInput label="email" />
+		<Button icon="navigate" onclick={() => (resetPasswordStage = 'password')}>Send</Button>
+	</Section>
+{:else if stage === 'enter-password'}
+	<Section>
+		<PageHeader title="Reset Password" />
+		<TextInput type="password" label="New Password" />
+		<TextInput type="password" label="Repeat Password" />
+		<Button icon="navigate" onclick={() => (resetPasswordStage = undefined)}>Reset</Button>
+	</Section>
+{:else if stage === 'login'}
+	<Section>
+		<PageHeader title="Login" />
 		<TextInput label="Email" bind:value={newEmail} />
 		<TextInput label="Password" type="password" bind:value={password} />
 		<Spacer />
-		<span style={getCss({ color: 'var(--grey)' })}>Don't have an account yet?</span>
-		<Button icon="navigate">Sign Up</Button>
+		<span style={getCss({ color: 'var(--grey)' })}>Forgot your password?</span>
+		<Button icon="navigate" onclick={() => (resetPasswordStage = 'email')}>Reset</Button>
 	</Section>
 
 	{#if newEmail && password}
@@ -125,8 +143,8 @@
 		</ActionMenu>
 	{/if}
 {:else if stage === 'select-organisation'}
-	<PageHeader title="Select Organisation" />
 	<Section>
+		<PageHeader title="Select Organisation" />
 		<Table
 			headers={[{ label: 'Name' }]}
 			rows={[
@@ -184,7 +202,8 @@
 			>
 				<div class="home__info">
 					<h3>{trial.name}</h3>
-					<p>{getTrialProject(trial)?.name || `Devices:${getTrialDeviceCount(trial.id)}`}</p>
+					<p>{getTrialProject(trial)?.name}</p>
+					<p>{`${getTrialDeviceCount(trial.id)} Devices`}</p>
 				</div>
 			</Card>
 		{/each}

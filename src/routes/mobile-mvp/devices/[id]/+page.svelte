@@ -154,7 +154,7 @@
 		<div class="device__status">
 			<span class="device__status-dot" class:device__status--active={device.status === 'active'}
 			></span>
-			<span>{device.status}</span>
+			<span>{device.status} — Battery {device.battery || 100}%</span>
 		</div>
 	{/snippet}
 

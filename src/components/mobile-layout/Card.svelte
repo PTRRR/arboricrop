@@ -65,8 +65,8 @@
 
 		&__image {
 			margin: -0.5rem 0 -0.5rem -0.5rem;
-			width: 4.2rem;
-			height: 4.2rem;
+			width: 6rem;
+			height: 6rem;
 			border-radius: 5px;
 			overflow: hidden;
 

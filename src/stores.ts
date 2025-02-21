@@ -482,14 +482,15 @@ export const useTrials = () => {
 	};
 
 	const updateTrials = (trials: Trial[]) => trials.forEach((trial) => updateTrial(trial));
-  const deleteTrial = (trial: Trial) => trials.update((trials) => trials.filter((it) => it.id !== trial.id));
+	const deleteTrial = (trial: Trial) =>
+		trials.update((trials) => trials.filter((it) => it.id !== trial.id));
 
 	return {
 		trials,
 		addTrial,
 		updateTrial,
 		updateTrials,
-    deleteTrial
+		deleteTrial
 	};
 };
 

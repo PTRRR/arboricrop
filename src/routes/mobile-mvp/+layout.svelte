@@ -81,11 +81,16 @@
 
 		<img class="mobile-layout__logo" src="/images/logo.svg" alt="" />
 
+		<!-- <div class="mobile-layout__offline-button">
+			<Button icon="wifi-crossed" iconColor="var(--green)" iconBackgroundColor="var(--white)"
+			></Button>
+		</div> -->
+
 		<!-- svelte-ignore a11y_click_events_have_key_events -->
 		<!-- svelte-ignore a11y_no_static_element_interactions -->
 		<div class="mobile-layout__hamburger" onclick={() => ($showAppMenu = !$showAppMenu)}>
 			{#if pendingNotifications.length > 0}
-				<div class="mobile-layout__notifications-badge"></div>
+				<!-- <div class="mobile-layout__notifications-badge"></div> -->
 			{/if}
 
 			<div class="mobile-layout__hamburger-inner">
@@ -226,7 +231,8 @@
 			}
 
 			#{$this}__notifications,
-			#{$this}__hamburger {
+			#{$this}__hamburger,
+			#{$this}__offline-button {
 				opacity: 0;
 				pointer-events: none;
 			}
@@ -301,7 +307,7 @@
 			position: fixed;
 			line-height: 1;
 			color: var(--white);
-			top: var(--layout-margin-top);
+			top: 62px;
 			left: 1.5rem;
 			white-space: nowrap;
 			transform: translate(0%, 0%);
@@ -370,6 +376,20 @@
 				width: 1em;
 				text-align: center;
 			}
+		}
+
+		&__offline-button {
+			cursor: pointer;
+			z-index: 1;
+			top: var(--layout-margin-top);
+			right: 5rem;
+			height: var(--big-font-size);
+			position: absolute;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: var(--main-font-size);
+			transition: opacity 0.7s cubic-bezier(0.83, 0, 0.17, 1);
 		}
 
 		&__notifications-badge {
