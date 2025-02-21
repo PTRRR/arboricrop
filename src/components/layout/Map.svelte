@@ -22,6 +22,7 @@
 	import { getGeoJSONFeatures } from '../../utils/geoJSON';
 	import { changinCenter, swissBounds } from '../../utils/dummyData';
 	import type { Status, NotificationType } from '../../utils/types';
+	import Stack from '../desktop/Stack.svelte';
 
 	let map = $state<maplibregl.Map | undefined>(undefined);
 
@@ -130,10 +131,12 @@
 					>
 						{#if marker.label && showMarkerLabels}
 							<div class="map__legend">
-								<span class="map__label">{marker.label}</span>
-								{#if marker.battery}
-									<span class="map__battery">Battery {marker.battery}%</span>
-								{/if}
+								<Stack>
+									<span class="map__label">{marker.label}</span>
+									{#if marker.battery}
+										<span class="map__battery">Battery {marker.battery}%</span>
+									{/if}
+								</Stack>
 							</div>
 						{/if}
 					</div>
@@ -159,6 +162,7 @@
 			width: 14px;
 			height: 14px;
 			background-color: var(--dark-grey);
+			border: solid 1px var(--grey);
 
 			&::after {
 				position: absolute;
@@ -207,6 +211,7 @@
 			padding: 0.2rem 0.5rem;
 			border: solid 1px var(--grey);
 			border-radius: 5px;
+			box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 		}
 
 		&__label {
