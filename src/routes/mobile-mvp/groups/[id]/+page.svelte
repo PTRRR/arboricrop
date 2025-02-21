@@ -14,6 +14,7 @@
 	import ActionMenu from '../../../../components/mobile-layout/ActionMenu.svelte';
 	import ActionButton from '../../../../components/mobile-layout/ActionButton.svelte';
 	import Stack from '../../../../components/desktop/Stack.svelte';
+	import type { Marker } from '../../../../utils/types';
 
 	interface Prop {
 		data: PageData;
@@ -30,10 +31,12 @@
 	const group = $derived($groups.find((it) => it.id === groupId));
 	const trial = $derived($trials.find((it) => it.id === group?.parentId));
 	const groupDevices = $derived($devices.filter((it) => it.parentId === group?.id));
-	const deviceMarkers = $derived(
+	const deviceMarkers = $derived<Marker[]>(
 		groupDevices.map((device) => ({
 			lngLat: device.location as LngLatLike,
-			label: device.name
+			label: device.name,
+			status: device.status,
+			battery: device.battery
 		}))
 	);
 
@@ -99,7 +102,7 @@
 		<Map
 			bind:this={map}
 			maxBounds={swissBounds}
-			zoom={14}
+			zoom={16}
 			minZoom={3}
 			maxZoom={18}
 			center={trial?.center}

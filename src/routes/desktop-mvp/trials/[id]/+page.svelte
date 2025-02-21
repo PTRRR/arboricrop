@@ -23,9 +23,10 @@
 	import TextareaInput from '../../../../components/layout/TextareaInput.svelte';
 	import Button from '../../../../components/layout/Button.svelte';
 	import DangerZone from '../../../../components/desktop/DangerZone.svelte';
+	import { goto } from '$app/navigation';
 
 	const trialId = $page.params.id;
-	const { trials } = useTrials();
+	const { trials, deleteTrial } = useTrials();
 	const { projects } = useProjects();
 	const { groups, addGroup } = useGroups();
 	const { devices, updateDevices } = useDevices();
@@ -224,6 +225,11 @@
 				<DangerZone
 					label="Delete trial"
 					description="Permanently delete this trial and all of its data. This action cannot be undone."
+					onclick={() => {
+						const parentId = trial.parentId;
+						deleteTrial(trial);
+						goto(`/desktop-mvp/projects/${parentId}`);
+					}}
 				/>
 			</Section>
 		{:else if selectedGroup}

@@ -1,34 +1,72 @@
+<script module lang="ts">
+	export interface Marker {
+		lngLat: LngLatLike;
+		label?: string;
+		notificationType?: NotificationType;
+		status?: Status;
+		battery?: string;
+	}
+</script>
+
 <script lang="ts">
-	import { MapLibre, GeoJSON, FillLayer, LineLayer, Marker } from 'svelte-maplibre';
+	import {
+		MapLibre,
+		GeoJSON,
+		FillLayer,
+		LineLayer,
+		Marker as MarkerElement
+	} from 'svelte-maplibre';
 	import type { LngLatLike, LngLatBoundsLike } from 'maplibre-gl';
 	import type { GeoJSON as GeoJSONType } from 'geojson';
 	import { getCss } from '../../utils/css';
 	import { getGeoJSONFeatures } from '../../utils/geoJSON';
+	import { changinCenter, swissBounds } from '../../utils/dummyData';
+	import type { Status, NotificationType } from '../../utils/types';
 
-	let map: maplibregl.Map;
+	let map = $state<maplibregl.Map | undefined>(undefined);
 
-	export let showTarget: boolean = false;
-	export let ratio: number = 1;
-	export let center: LngLatLike | undefined = undefined;
-	export let bounds: LngLatBoundsLike | undefined = undefined;
-	export let maxBounds: LngLatBoundsLike | undefined = undefined;
-	export let zoom: number = 1;
-	export let maxZoom: number = zoom;
-	export let minZoom: number = zoom;
-	export let interactive: boolean = true;
-	export let geoJSONs: GeoJSONType[] = [];
-	export let markers: { lngLat: LngLatLike; label?: string }[] = [];
-	export let mapStyle: string =
-		'https://api.maptiler.com/maps/ch-swisstopo-lbm/style.json?key=epJVqnAFN0DeOXvikzSB';
-	export let onChange: ((location: LngLatLike) => void) | undefined = undefined;
-	export let onmoveend: (() => void) | undefined = undefined;
-	export let onpointerup: (() => void) | undefined = undefined;
-	export const getCenter = () => map.getCenter();
+	interface Props {
+		showTarget?: boolean;
+		ratio?: number;
+		center?: LngLatLike;
+		bounds?: LngLatBoundsLike;
+		maxBounds: LngLatBoundsLike;
+		zoom?: number;
+		maxZoom?: number;
+		minZoom?: number;
+		interactive?: boolean;
+		geoJSONs?: GeoJSONType[];
+		markers?: Marker[];
+		mapStyle?: string;
+		onChange?: (location: LngLatLike) => void;
+		onmoveend?: () => void;
+		onpointerup?: () => {};
+	}
 
-	$: features = geoJSONs.map(getGeoJSONFeatures).flat();
+	const {
+		showTarget = false,
+		ratio = 1,
+		center = changinCenter,
+		bounds,
+		maxBounds,
+		zoom = 1,
+		maxZoom = zoom,
+		minZoom = zoom,
+		interactive = true,
+		geoJSONs = [],
+		markers = [],
+		mapStyle = 'https://api.maptiler.com/maps/ch-swisstopo-lbm/style.json?key=epJVqnAFN0DeOXvikzSB',
+		onChange,
+		onmoveend,
+		onpointerup
+	}: Props = $props();
 
-	let zoomLevel: number = zoom;
-	$: showMarkerLabels = zoomLevel >= 15;
+	export const getCenter = () => map?.getCenter();
+
+	const features = $derived(geoJSONs.map(getGeoJSONFeatures).flat());
+
+	let zoomLevel = $state(zoom);
+	const showMarkerLabels = $derived(zoomLevel >= 15);
 </script>
 
 <div
@@ -38,7 +76,7 @@
 		'--ratio': ratio.toString()
 	})}
 >
-	<div class="map__wrapper" on:pointerup={onpointerup}>
+	<div class="map__wrapper" {onpointerup}>
 		{#if showTarget}
 			<div class="map__target"></div>
 		{/if}
@@ -82,21 +120,110 @@
 			{/each}
 
 			{#each markers as marker}
-				<Marker lngLat={marker.lngLat}>
-					<div class="map__point">
+				<MarkerElement lngLat={marker.lngLat}>
+					<div
+						class="map__point"
+						class:map__point--red={marker.notificationType === 'alert'}
+						class:map__point--yellow={marker.notificationType === 'warning'}
+						class:map__point--green={marker.status === 'active'}
+						class:map__point--grey={marker.status === 'unactive'}
+					>
 						{#if marker.label && showMarkerLabels}
-							<span class="map__label">{marker.label}</span>
+							<div class="map__legend">
+								<span class="map__label">{marker.label}</span>
+								{#if marker.battery}
+									<span class="map__battery">Battery {marker.battery}%</span>
+								{/if}
+							</div>
 						{/if}
 					</div>
-				</Marker>
+				</MarkerElement>
 			{/each}
 		</MapLibre>
 	</div>
 </div>
 
-<style>
+<style lang="scss">
 	.map {
 		width: 100%;
+
+		&__point {
+			position: relative;
+			display: block;
+			width: 6px;
+			height: 6px;
+			background-color: black;
+			border-radius: 100%;
+
+			display: block;
+			width: 14px;
+			height: 14px;
+			background-color: var(--dark-grey);
+
+			&::after {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				content: '';
+				display: block;
+				width: 8px;
+				height: 8px;
+				background-color: var(--grey);
+				border-radius: 100%;
+			}
+
+			&--green {
+				background-color: var(--light-green);
+
+				&::after {
+					background-color: var(--green);
+				}
+			}
+
+			&--yellow {
+				background-color: var(--light-yellow);
+
+				&::after {
+					background-color: var(--yellow);
+				}
+			}
+
+			&--red {
+				background-color: var(--light-red);
+
+				&::after {
+					background-color: var(--red);
+				}
+			}
+		}
+
+		&__legend {
+			position: absolute;
+			top: 100%;
+			right: 0;
+			transform: translate(100%, 0);
+			background-color: var(--light-grey);
+			padding: 0.2rem 0.5rem;
+			border: solid 1px var(--grey);
+			border-radius: 5px;
+		}
+
+		&__label {
+			white-space: nowrap;
+			font-family: Rubik;
+			font-weight: 500;
+			font-size: var(--main-font-size);
+		}
+
+		&__battery {
+			white-space: nowrap;
+			white-space: nowrap;
+			font-family: Rubik;
+			font-weight: 500;
+			font-size: var(--small-font-size);
+			color: var(--dark-grey);
+		}
 	}
 
 	.map--non-interactive {
@@ -154,22 +281,5 @@
 
 	:global(.maplibregl-ctrl-attrib) {
 		display: none;
-	}
-
-	.map__point {
-		position: relative;
-		display: block;
-		width: 8px;
-		height: 8px;
-		background-color: black;
-		border-radius: 100%;
-	}
-
-	.map__label {
-		position: absolute;
-		bottom: 0;
-		left: 50%;
-		transform: translate(-50%, 100%);
-		white-space: nowrap;
 	}
 </style>
