@@ -405,8 +405,9 @@ export const useApp = () => {
 	const showSplashscreen = useWritable<boolean>('show-splashscreen', true, false);
 	const hideContent = useWritable<boolean>('hide-content', false, false);
   const isOffline = useWritable<boolean>('is-offline', false, false);
+  const isBlurred = useWritable<boolean>('is-blurred', false, false);
 	const actionMenuSnippets = useWritable<
-		{ id: string; state: 'mount' | 'mounting' | 'unmounting'; snippet: Snippet }[]
+		{ id: string; state: 'mount' | 'mounting' | 'unmounting'; snippet: Snippet, index: number }[]
 	>('action-menu-snippets', [], false);
 
 	return {
@@ -414,7 +415,8 @@ export const useApp = () => {
 		hideContent,
 		showSplashscreen,
 		actionMenuSnippets,
-    isOffline
+    isOffline,
+    isBlurred
 	};
 };
 

@@ -14,6 +14,7 @@
 	import { addEllipsis } from '../../utils/strings';
 	import { getCss } from '../../utils/css';
 	import type { LayoutData } from './$types';
+	import MainMenu from '../../components/mobile-layout/MainMenu.svelte';
 
 	let { children, data }: { children: Snippet; data: LayoutData } = $props();
 	let showBreadcrumb = $state(false);
@@ -21,7 +22,8 @@
 	const notifications = useNotifications();
 	const pendingNotifications = $derived($notifications.filter((it) => it.status === 'pending'));
 	const returnButton = useReturnButton();
-	const { showAppMenu, hideContent, showSplashscreen, actionMenuSnippets, isOffline } = useApp();
+	const { showAppMenu, hideContent, showSplashscreen, actionMenuSnippets, isOffline, isBlurred } =
+		useApp();
 
 	onNavigate(() => {
 		$hideContent = false;
@@ -62,6 +64,7 @@
 		class:mobile-layout--init={$showSplashscreen}
 		class:mobile-layout--show-app-menu={$showAppMenu}
 		class:mobile-layout--scrolled={menuMode === 'scrolled'}
+		class:mobile-layout--blurred={$isBlurred}
 	>
 		<div class="mobile-layout__breadcrumb">
 			<Button
@@ -91,25 +94,25 @@
 		<!-- svelte-ignore a11y_click_events_have_key_events -->
 		<!-- svelte-ignore a11y_no_static_element_interactions -->
 		<div class="mobile-layout__hamburger" onclick={() => ($showAppMenu = !$showAppMenu)}>
-			{#if pendingNotifications.length > 0}
+			<!-- {#if pendingNotifications.length > 0}
 				<div class="mobile-layout__notifications-badge"></div>
-			{/if}
+			{/if} -->
 
-			<div class="mobile-layout__hamburger-inner">
+			<!-- <div class="mobile-layout__hamburger-inner">
 				<div class="mobile-layout__hamburger-line"></div>
 				<div class="mobile-layout__hamburger-line"></div>
 				<div class="mobile-layout__hamburger-line"></div>
-			</div>
+			</div> -->
 		</div>
 
-		<div class="mobile-layout__links">
+		<!-- <div class="mobile-layout__links">
 			<a href={`${data.baseUrl}`} onclick={() => ($showAppMenu = false)}>Trials</a>
 			<a href={`${data.baseUrl}/notifications`} onclick={() => ($showAppMenu = false)}
 				>Notifications</a
 			>
 			<a href={`${data.baseUrl}/settings`} onclick={() => ($showAppMenu = false)}>Settings</a>
 			<a href={`${data.baseUrl}/account`} onclick={() => ($showAppMenu = false)}>Account</a>
-		</div>
+		</div> -->
 
 		<div class="mobile-layout__wrapper">
 			<div class="mobile-layout__content">
@@ -137,6 +140,8 @@
 				{/key}
 			{/each}
 		</div>
+
+		<MainMenu />
 	</div>
 </Mobile>
 
@@ -216,6 +221,7 @@
 
 	.mobile-layout {
 		$this: &;
+		$root: &;
 		font-family: Rubik;
 		font-weight: 500;
 		background-color: var(--green);
@@ -245,9 +251,9 @@
 			}
 
 			#{$this}__action-menu {
-				opacity: 0;
+				opacity: 0 !important;
 				pointer-events: none;
-				transform: translate(0, 50px);
+				transform: translate(0, 50px) !important;
 			}
 		}
 
@@ -261,9 +267,9 @@
 			}
 
 			#{$this}__action-menu {
-				opacity: 0;
+				opacity: 0 !important;
 				pointer-events: none;
-				transform: translate(0, 50px);
+				transform: translate(0, 50px) !important;
 			}
 		}
 
@@ -406,7 +412,10 @@
 		}
 
 		&__content {
-			transition: transform 0.7s cubic-bezier(0.83, 0, 0.17, 1);
+			transition:
+				transform 0.7s cubic-bezier(0.83, 0, 0.17, 1),
+				opacity 0.7s cubic-bezier(0.83, 0, 0.17, 1),
+				filter 0.7s cubic-bezier(0.83, 0, 0.17, 1);
 			position: relative;
 			z-index: 2;
 			background-color: var(--white);
@@ -420,6 +429,24 @@
 			min-height: calc(
 				var(--mobile-app-height) - var(--layout-margin-top) - var(--big-font-size) - 1rem
 			);
+
+			#{$root}--blurred & {
+				opacity: 1;
+				// transform: translate(0, 0) scale(0.9);
+			}
+		}
+
+		&__content-inner {
+			transition:
+				transform 0.7s cubic-bezier(0.83, 0, 0.17, 1),
+				opacity 0.7s cubic-bezier(0.83, 0, 0.17, 1),
+				filter 0.7s cubic-bezier(0.83, 0, 0.17, 1);
+
+			#{$root}--blurred & {
+				transform: translate(0, 0) scale(0.95);
+				opacity: 0.8;
+				filter: blur(10px);
+			}
 		}
 
 		&__logo {
@@ -450,16 +477,23 @@
 
 			&--mount,
 			&--unmounting {
-				transform: translate(0, 50px);
-				opacity: 0;
+				transform: translate(0, 50px) !important;
+				opacity: 0 !important;
 			}
 
-			&--mounting {
-				transition:
-					opacity 0.5s 0.1s cubic-bezier(0.83, 0, 0.17, 1),
-					transform 0.5s 0.1s cubic-bezier(0.83, 0, 0.17, 1);
-				transform: translate(0, 0);
-				opacity: 1;
+			@for $i from 1 through 10 {
+				&:nth-child(#{10 - $i}) {
+					transform: translate(0, #{(10 - $i - 1) * -45px});
+					opacity: 1;
+				}
+
+				&--mounting {
+					transition:
+						opacity 0.5s 0.1s cubic-bezier(0.83, 0, 0.17, 1),
+						transform 0.5s 0.1s cubic-bezier(0.83, 0, 0.17, 1);
+					transform: translate(0, 0);
+					opacity: 1;
+				}
 			}
 		}
 	}

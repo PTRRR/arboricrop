@@ -1,6 +1,7 @@
 <script module lang="ts">
 	let idlTimeout: NodeJS.Timeout | undefined = undefined;
 	let unmountIds: string[] = [];
+	let index = 0;
 </script>
 
 <script lang="ts">
@@ -13,10 +14,11 @@
 
 	onMount(() => {
 		if (!children) return;
+
 		const newId = createId();
 		$actionMenuSnippets = [
 			...$actionMenuSnippets,
-			{ id: newId, state: 'mount', snippet: children }
+			{ id: newId, state: 'mount', snippet: children, index }
 		];
 
 		setTimeout(() => {
@@ -24,6 +26,8 @@
 				it.id === newId ? { ...it, state: 'mounting' } : it
 			);
 		}, 50);
+
+		index++;
 
 		return () => {
 			clearTimeout(idlTimeout);
@@ -37,7 +41,7 @@
 			idlTimeout = setTimeout(() => {
 				$actionMenuSnippets = $actionMenuSnippets.filter((it) => !unmountIds.includes(it.id));
 				unmountIds = [];
-			}, 5000);
+			}, 2000);
 		};
 	});
 </script>

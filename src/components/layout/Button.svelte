@@ -24,6 +24,7 @@
 		iconColor,
 		iconBackgroundColor,
 		backgroundColor,
+		borderColor,
 		iconSize,
 		iconOrder = 'normal',
 		padding = false,
@@ -45,6 +46,7 @@
 		iconSize?: IconSize;
 		iconBackgroundColor?: string;
 		backgroundColor?: string;
+		borderColor?: string;
 		iconOrder?: ButtonIconOrder;
 		padding?: boolean | string;
 		color?: string;
@@ -58,7 +60,8 @@
 			backgroundColor,
 			padding: typeof padding === 'string' ? padding : undefined,
 			color,
-			fontSize
+			fontSize,
+			border: borderColor ? `solid 1px var(--dark-grey) ` : undefined
 		})
 	);
 </script>
