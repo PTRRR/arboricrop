@@ -30,7 +30,9 @@
 		padding = false,
 		color,
 		fontSize,
-		underline
+		underline,
+		style,
+		pointerEvents
 	}: {
 		children?: Snippet;
 		fitWidth?: boolean;
@@ -52,16 +54,19 @@
 		color?: string;
 		fontSize?: string;
 		underline?: boolean;
+		style?: Partial<CSSStyleDeclaration>;
+		pointerEvents?: CSSStyleDeclaration['pointerEvents'];
 	} = $props();
 
 	const { preventNavigationHistory } = useNavigationHistory();
 	const buttonStyle = $derived(
 		getCss({
+			...(style || {}),
 			backgroundColor,
 			padding: typeof padding === 'string' ? padding : undefined,
 			color,
 			fontSize,
-			border: borderColor ? `solid 1px var(--dark-grey) ` : undefined
+			border: borderColor ? `solid 1px ${borderColor}` : undefined
 		})
 	);
 </script>
@@ -103,11 +108,11 @@
 {/snippet}
 
 {#if href}
-	<a {href} class="root-button">
+	<a {href} class="root-button" style={getCss({ pointerEvents })}>
 		{@render innerButton()}
 	</a>
 {:else}
-	<Button.Root class="root-button" {disabled} {builders}>
+	<Button.Root class="root-button" {disabled} {builders} style={getCss({ pointerEvents })}>
 		{@render innerButton()}
 	</Button.Root>
 {/if}
@@ -141,7 +146,7 @@
 		gap: 0.4rem;
 
 		&--padding {
-			padding: 0.5rem 0;
+			padding: 0.7rem 0;
 		}
 
 		&--inverted-icon {

@@ -28,7 +28,6 @@
 	import ActionMenu from '../../components/mobile-layout/ActionMenu.svelte';
 	import ActionButton from '../../components/mobile-layout/ActionButton.svelte';
 	import type { Account, Trial } from '../../utils/types';
-	import MainMenu from '../../components/mobile-layout/MainMenu.svelte';
 
 	const { devices } = useDevices();
 	const { trials } = useTrials();

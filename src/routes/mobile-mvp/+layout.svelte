@@ -14,7 +14,7 @@
 	import { addEllipsis } from '../../utils/strings';
 	import { getCss } from '../../utils/css';
 	import type { LayoutData } from './$types';
-	import MainMenu from '../../components/mobile-layout/MainMenu.svelte';
+	import MainMenu from '../../components/mobile-layout/MainNavigation.svelte';
 
 	let { children, data }: { children: Snippet; data: LayoutData } = $props();
 	let showBreadcrumb = $state(false);
@@ -304,6 +304,11 @@
 			top: 0;
 			border: solid transparent 0.1px;
 			box-sizing: border-box;
+
+			#{$root}--blurred & {
+				pointer-events: none;
+				// transform: translate(0, 0) scale(0.9);
+			}
 		}
 
 		&__breadcrumb {
