@@ -5,6 +5,7 @@
 	import TextInput from '../../components/layout/TextInput.svelte';
 	import {
 		useAccounts,
+		useApp,
 		useCurrentAccount,
 		useDevices,
 		useNotifications,
@@ -33,6 +34,7 @@
 	const { projects } = useProjects();
 	const notifications = useNotifications();
 	const { email } = useUser();
+	const { isOffline } = useApp();
 	const { organisations } = useOrganisations();
 	const organisation = useOrganisation();
 	const { accounts, addAccount } = useAccounts();
@@ -161,28 +163,30 @@
 		/>
 	</Section>
 {:else}
-	{#snippet notificationsTitle()}
-		<span>Notifications</span>
-		<Button href={`${data.baseUrl}/notifications`} icon="navigate" iconOrder="inverted" padding>
-			All
-		</Button>
-	{/snippet}
+	{#if !$isOffline}
+		{#snippet notificationsTitle()}
+			<span>Notifications</span>
+			<Button href={`${data.baseUrl}/notifications`} icon="navigate" iconOrder="inverted" padding>
+				All
+			</Button>
+		{/snippet}
 
-	{#snippet notificationsSubTitle()}
-		<div class="home__notifications-subtitle">
-			<span
-				>{selectedNotifications.length}
-				{selectedNotifications.length > 1 ? 'Issues' : 'Issue'}</span
-			>
-		</div>
-	{/snippet}
+		{#snippet notificationsSubTitle()}
+			<div class="home__notifications-subtitle">
+				<span
+					>{selectedNotifications.length}
+					{selectedNotifications.length > 1 ? 'Issues' : 'Issue'}</span
+				>
+			</div>
+		{/snippet}
 
-	<Section>
-		<PageHeader title={notificationsTitle} subTitle={notificationsSubTitle} />
-		{#each selectedNotifications as notification}
-			<NotificationCard {notification} baseUrl={data.baseUrl} />
-		{/each}
-	</Section>
+		<Section>
+			<PageHeader title={notificationsTitle} subTitle={notificationsSubTitle} />
+			{#each selectedNotifications as notification}
+				<NotificationCard {notification} baseUrl={data.baseUrl} />
+			{/each}
+		</Section>
+	{/if}
 
 	{#snippet fieldsHeader()}
 		<span>Trials</span>

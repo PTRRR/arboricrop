@@ -12,7 +12,7 @@
 		useTrials,
 		useUserMode
 	} from '../../../../stores';
-	import { swissBounds } from '../../../../utils/dummyData';
+	import { getRandomDate, swissBounds } from '../../../../utils/dummyData';
 	import type { Device, MediaType } from '../../../../utils/types';
 	import { onMount } from 'svelte';
 	import TextInput from '../../../../components/layout/TextInput.svelte';
@@ -31,6 +31,9 @@
 	import type { PageData } from './$types';
 	import ActionMenu from '../../../../components/mobile-layout/ActionMenu.svelte';
 	import ActionButton from '../../../../components/mobile-layout/ActionButton.svelte';
+	import { formatDateToDDMMYYYY } from '../../../../utils/dates';
+	import Stack from '../../../../components/desktop/Stack.svelte';
+	import { getCss } from '../../../../utils/css';
 
 	interface Props {
 		data: PageData;
@@ -151,11 +154,22 @@
 	{/snippet}
 
 	{#snippet deviceStatus()}
-		<div class="device__status">
-			<span class="device__status-dot" class:device__status--active={device.status === 'active'}
-			></span>
-			<span>{device.status} — Battery {device.battery || 100}%</span>
-		</div>
+		<Stack gap="0.5rem">
+			<div class="device__status">
+				<span class="device__status-dot" class:device__status--active={device.status === 'active'}
+				></span>
+				<span>{device.status} — Battery {device.battery || 100}%</span>
+			</div>
+			<p
+				style={getCss({
+					fontSize: 'var(--main-font-size)',
+					fontWeight: '400',
+					color: 'var(--black)'
+				})}
+			>
+				Last sync {formatDateToDDMMYYYY(getRandomDate())}
+			</p>
+		</Stack>
 	{/snippet}
 
 	{#snippet mediaOptionItem(item: { label: string; type: MediaType })}
@@ -184,6 +198,7 @@
 
 	<Section>
 		<PageHeader preTitle="Device" title={deviceName} subTitle={deviceStatus} />
+
 		<TextInput label="Id:" defaultValue={device.id} readonly />
 		<TextInput
 			label="Name:"

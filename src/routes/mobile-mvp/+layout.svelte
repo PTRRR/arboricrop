@@ -21,7 +21,7 @@
 	const notifications = useNotifications();
 	const pendingNotifications = $derived($notifications.filter((it) => it.status === 'pending'));
 	const returnButton = useReturnButton();
-	const { showAppMenu, hideContent, showSplashscreen, actionMenuSnippets } = useApp();
+	const { showAppMenu, hideContent, showSplashscreen, actionMenuSnippets, isOffline } = useApp();
 
 	onNavigate(() => {
 		$hideContent = false;
@@ -81,16 +81,18 @@
 
 		<img class="mobile-layout__logo" src="/images/logo.svg" alt="" />
 
-		<!-- <div class="mobile-layout__offline-button">
-			<Button icon="wifi-crossed" iconColor="var(--green)" iconBackgroundColor="var(--white)"
-			></Button>
-		</div> -->
+		{#if $isOffline}
+			<div class="mobile-layout__offline-button">
+				<Button icon="wifi-crossed" iconColor="var(--green)" iconBackgroundColor="var(--white)"
+				></Button>
+			</div>
+		{/if}
 
 		<!-- svelte-ignore a11y_click_events_have_key_events -->
 		<!-- svelte-ignore a11y_no_static_element_interactions -->
 		<div class="mobile-layout__hamburger" onclick={() => ($showAppMenu = !$showAppMenu)}>
 			{#if pendingNotifications.length > 0}
-				<!-- <div class="mobile-layout__notifications-badge"></div> -->
+				<div class="mobile-layout__notifications-badge"></div>
 			{/if}
 
 			<div class="mobile-layout__hamburger-inner">

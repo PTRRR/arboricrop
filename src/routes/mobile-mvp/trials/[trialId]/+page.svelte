@@ -22,7 +22,7 @@
 	import type { LngLatLike } from 'svelte-maplibre';
 	import SaveMenu from '../../../../components/mobile-layout/SaveMenu.svelte';
 	import SubPage from '../../../../components/mobile-layout/SubPage.svelte';
-	import type { GeoJSONFeature, Group } from '../../../../utils/types';
+	import type { GeoJSONFeature, Group, Marker } from '../../../../utils/types';
 	import StatusDot from '../../../../components/mobile-layout/StatusDot.svelte';
 	import type { PageData } from './$types';
 	import ActionMenu from '../../../../components/mobile-layout/ActionMenu.svelte';
@@ -122,10 +122,12 @@
 		}))
 	);
 
-	const deviceMarkers = $derived(
+	const deviceMarkers = $derived<Marker[]>(
 		trialDevices.map((device) => ({
 			lngLat: device.location as LngLatLike,
-			label: device.name
+			label: device.name,
+			status: device.status,
+			battery: device.battery
 		}))
 	);
 </script>

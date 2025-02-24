@@ -69,8 +69,8 @@
 
 {#if $page.data.acknowledge}
 	<Section>
-		<PageHeader title="Review" subTitle={notification?.title} />
-		<TextareaInput placeholder="Personal note" />
+		<PageHeader title="Acknowledge" subTitle={notification?.title} />
+		<TextareaInput label="Note" />
 	</Section>
 	<ActionMenu>
 		<ActionButton
