@@ -98,21 +98,21 @@
 				<div class="mobile-layout__notifications-badge"></div>
 			{/if} -->
 
-			<!-- <div class="mobile-layout__hamburger-inner">
+			<div class="mobile-layout__hamburger-inner">
 				<div class="mobile-layout__hamburger-line"></div>
 				<div class="mobile-layout__hamburger-line"></div>
 				<div class="mobile-layout__hamburger-line"></div>
-			</div> -->
+			</div>
 		</div>
 
-		<!-- <div class="mobile-layout__links">
+		<div class="mobile-layout__links">
 			<a href={`${data.baseUrl}`} onclick={() => ($showAppMenu = false)}>Trials</a>
 			<a href={`${data.baseUrl}/notifications`} onclick={() => ($showAppMenu = false)}
 				>Notifications</a
 			>
 			<a href={`${data.baseUrl}/settings`} onclick={() => ($showAppMenu = false)}>Settings</a>
 			<a href={`${data.baseUrl}/account`} onclick={() => ($showAppMenu = false)}>Account</a>
-		</div> -->
+		</div>
 
 		<div class="mobile-layout__wrapper">
 			<div class="mobile-layout__content">
