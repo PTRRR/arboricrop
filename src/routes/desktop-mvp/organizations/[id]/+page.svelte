@@ -50,8 +50,8 @@
 
 	{#snippet roleItem({ accountId, item }: { accountId: string; item: RoleName })}
 		<Button
-			padding
-			backgroundColor="var(--white)"
+			padding="0.3rem"
+			icon={item === 'Farmer Admin' ? 'admin' : item === 'Distributer' ? 'user' : 'warehouse'}
 			onclick={() => {
 				const acc = invitedUsers.get(accountId);
 				if (acc) {
@@ -71,7 +71,7 @@
 		<Dropdown
 			small
 			sameWidth={false}
-			icon="down"
+			icon="arrow-down"
 			label={accountId && invitedUsers.has(accountId)
 				? invitedUsers.get(accountId)?.role || 'Select Role'
 				: 'Select Role'}

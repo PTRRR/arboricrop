@@ -104,7 +104,13 @@
 		}}
 	>
 		{#if icon}
-			<div class="button__icon" style={getCss({ backgroundColor: iconBackgroundColor })}>
+			<div
+				class="button__icon"
+				style={getCss({
+					backgroundColor: iconBackgroundColor,
+					padding: iconSize === 'small' ? '2px' : undefined
+				})}
+			>
 				<Icon {icon} color={iconColor} size={iconSize} />
 			</div>
 		{/if}
