@@ -62,5 +62,9 @@
 			font-size: var(--main-font-size);
 			color: var(--black);
 		}
+
+		&:hover {
+			background-color: var(--grey);
+		}
 	}
 </style>
