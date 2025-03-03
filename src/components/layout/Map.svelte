@@ -41,7 +41,7 @@
 		mapStyle?: string;
 		onChange?: (location: LngLatLike) => void;
 		onmoveend?: () => void;
-		onpointerup?: () => {};
+		onpointerup?: () => void;
 	}
 
 	const {
@@ -131,8 +131,11 @@
 					>
 						{#if marker.label && showMarkerLabels}
 							<div class="map__legend">
-								<Stack>
+								<Stack gap="0.3rem">
 									<span class="map__label">{marker.label}</span>
+									{#if marker.status}
+										<span class="map__battery">{marker.status}</span>
+									{/if}
 									{#if marker.battery}
 										<span class="map__battery">Battery {marker.battery}%</span>
 									{/if}
@@ -208,7 +211,7 @@
 			right: 0;
 			transform: translate(100%, 0);
 			background-color: var(--light-grey);
-			padding: 0.2rem 0.5rem;
+			padding: 0.4rem 0.5rem;
 			border: solid 1px var(--grey);
 			border-radius: 5px;
 			box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
@@ -220,6 +223,7 @@
 			font-family: Rubik;
 			font-weight: 500;
 			font-size: var(--main-font-size);
+			line-height: 1;
 		}
 
 		&__battery {
@@ -227,7 +231,8 @@
 			white-space: nowrap;
 			font-family: Rubik;
 			font-weight: 500;
-			font-size: var(--small-font-size);
+			font-size: 12px;
+			line-height: 1;
 			color: var(--dark-grey);
 		}
 	}

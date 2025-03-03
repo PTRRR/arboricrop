@@ -13,7 +13,7 @@
 		useUserMode
 	} from '../../../../stores';
 	import { getRandomDate, swissBounds } from '../../../../utils/dummyData';
-	import type { Device, MediaType } from '../../../../utils/types';
+	import type { Device, MediaType, Status } from '../../../../utils/types';
 	import { onMount } from 'svelte';
 	import TextInput from '../../../../components/layout/TextInput.svelte';
 	import TextareaInput from '../../../../components/layout/TextareaInput.svelte';
@@ -61,6 +61,8 @@
 	const loraConfiguration = $derived(
 		$loRaConfigurations.find((it) => it.id === trial?.loraConfigId)
 	);
+
+	let editLocation = $state(false);
 
 	const mediaOptions: { label: string; type: MediaType }[] = [
 		{ label: 'Image', type: 'image' },
@@ -213,7 +215,19 @@
 	</Section>
 
 	{#if device.status === 'active'}
-		<Section label="Location">
+		<Section
+			label="Location"
+			actions={!editLocation
+				? [
+						{
+							label: 'Edit',
+							icon: 'navigate',
+							iconOrder: 'inverted',
+							onclick: () => (editLocation = !editLocation)
+						}
+					]
+				: []}
+		>
 			<Map
 				bind:this={map}
 				maxBounds={swissBounds}
@@ -221,8 +235,30 @@
 				minZoom={8}
 				maxZoom={18.5}
 				center={device?.location || trial?.center}
-				markers={device?.location ? [{ lngLat: device.location }] : []}
+				showTarget={editLocation}
+				markers={device?.location
+					? [
+							!editLocation
+								? {
+										lngLat: device.location as LngLatLike,
+										label: device.name,
+										status: device.status as Status,
+										battery: device.battery?.toString()
+									}
+								: { lngLat: device.location as LngLatLike }
+						]
+					: []}
 				geoJSONs={trial?.layers}
+				onpointerup={() => {
+					if (editLocation) {
+						const newLocation = map?.getCenter();
+
+						if (newLocation) {
+							device.location = newLocation;
+							updateDevice(device);
+						}
+					}
+				}}
 			/>
 		</Section>
 	{/if}
@@ -288,6 +324,12 @@
 			</Button>
 		{/if}
 	</Section> -->
+
+	{#if editLocation}
+		<ActionMenu>
+			<ActionButton onclick={() => (editLocation = false)}>Save</ActionButton>
+		</ActionMenu>
+	{/if}
 
 	{#if hasChanged && !isTerminalVisible}
 		<SaveMenu
