@@ -35,7 +35,7 @@
 </script>
 
 <Section>
-	<PageHeader title="Notifications & Alerts" />
+	<PageHeader title="Notifications" />
 	<div class="notifications_filters">
 		<Button
 			padding="0.5rem"
@@ -71,7 +71,7 @@
 
 	<Stack gap="1rem">
 		<TextInput />
-		<Button icon="navigate">Search</Button>
+		<Button icon="search">Search</Button>
 	</Stack>
 </Section>
 

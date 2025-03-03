@@ -529,10 +529,9 @@
 			z-index: 10;
 			background-color: white;
 			width: 100%;
-			padding: 1rem;
+			padding: 2rem 1rem 7rem 1rem;
 			box-sizing: border-box;
 			border-radius: 1.5rem;
-			padding-bottom: 7rem;
 			transition:
 				opacity 0.5s cubic-bezier(0.83, 0, 0.17, 1),
 				transform 0.5s cubic-bezier(0.83, 0, 0.17, 1);

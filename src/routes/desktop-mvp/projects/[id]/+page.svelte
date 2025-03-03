@@ -82,12 +82,11 @@
 			{project.name}
 			{#if !editing}
 				<Button
-					icon="navigate"
-					iconOrder="inverted"
-					onclick={() => (editingProject = !editingProject)}
+					icon="edit"
+					padding
+					backgroundColor="var(--light-grey)"
+					onclick={() => (editingProject = !editingProject)}>Edit</Button
 				>
-					Edit
-				</Button>
 			{/if}
 		</Stack>
 	{/snippet}
@@ -151,7 +150,8 @@
 							{
 								label: 'Create',
 								icon: 'add',
-								iconOrder: 'inverted',
+								backgroundColor: 'var(--light-grey)',
+								padding: true,
 								onclick: () => createTrial()
 							}
 						]}

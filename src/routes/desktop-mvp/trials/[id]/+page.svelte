@@ -103,9 +103,12 @@
 		>
 			{trial.name}
 			{#if !editTrial && !selectedGroup && !newGroup}
-				<Button icon="navigate" iconOrder="inverted" onclick={() => (editTrial = !editTrial)}>
-					Edit
-				</Button>
+				<Button
+					icon="edit"
+					padding
+					backgroundColor="var(--light-grey)"
+					onclick={() => (editTrial = !editTrial)}>Edit</Button
+				>
 			{/if}
 		</Stack>
 	{/snippet}
@@ -140,7 +143,15 @@
 				label="Groups"
 				actions={selectedGroup || newGroup || editTrial
 					? []
-					: [{ label: 'Create', icon: 'add', iconOrder: 'inverted', onclick: () => createGroup() }]}
+					: [
+							{
+								label: 'Create',
+								icon: 'add',
+								backgroundColor: 'var(--light-grey)',
+								padding: true,
+								onclick: () => createGroup()
+							}
+						]}
 			>
 				{#if trialGroups.length > 0}
 					<Table

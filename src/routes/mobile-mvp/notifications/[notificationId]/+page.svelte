@@ -113,14 +113,17 @@
 	<Section label="Actionable insights">
 		<Image ratio={1} placeholder="Comprehensive schema / animation explaining how to proceed" />
 		<p style={getCss({ fontWeight: 'normal' })}>{notification?.actionableInsight}</p>
-		<Button
-			icon="navigate"
-			onclick={() => {
-				const randomDeviceIndex = Math.floor(Math.random() * activeDevices.length);
-				const device = activeDevices[randomDeviceIndex];
-				goto(`/mobile-layout/devices/${device.id}`);
-			}}>See device</Button
-		>
+		<div>
+			<Button
+				icon="forward"
+				iconOrder="inverted"
+				onclick={() => {
+					const randomDeviceIndex = Math.floor(Math.random() * activeDevices.length);
+					const device = activeDevices[randomDeviceIndex];
+					goto(`/mobile-layout/devices/${device.id}`);
+				}}>See device</Button
+			>
+		</div>
 	</Section>
 
 	<ActionMenu>
@@ -144,7 +147,7 @@
 			>
 				Dismiss
 			</ActionButton>
-			<ActionButton icon="navigate" href={`${window.location.pathname}?acknowledge=true`}>
+			<ActionButton icon="check" href={`${window.location.pathname}?acknowledge=true`}>
 				Acknowledge
 			</ActionButton>
 		</Stack>

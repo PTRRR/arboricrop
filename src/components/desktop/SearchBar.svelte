@@ -16,5 +16,5 @@
 	{:else}
 		<TextInput label="Search" style={{ width: '100%' }} />
 	{/if}
-	<Button icon="navigate">Submit</Button>
+	<Button icon="search">Submit</Button>
 </Stack>

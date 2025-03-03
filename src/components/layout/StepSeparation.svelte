@@ -10,6 +10,8 @@
 		icon?: IconName;
 		iconColor?: string;
 		iconOrder?: 'inverted';
+		padding?: boolean | string;
+		backgroundColor?: string;
 	};
 
 	const props: {
@@ -37,6 +39,8 @@
 						icon={action.icon}
 						iconColor={action.iconColor}
 						iconOrder={action.iconOrder}
+						backgroundColor={action.backgroundColor}
+						padding={action.padding}
 						href={action.href}
 					>
 						{#if typeof action.label === 'string'}

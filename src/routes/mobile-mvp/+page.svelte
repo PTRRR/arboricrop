@@ -110,14 +110,14 @@
 	<Section>
 		<PageHeader title="Reset Password" />
 		<TextInput label="email" />
-		<Button icon="navigate" onclick={() => (resetPasswordStage = 'password')}>Send</Button>
+		<Button icon="forward" onclick={() => (resetPasswordStage = 'password')}>Send</Button>
 	</Section>
 {:else if stage === 'enter-password'}
 	<Section>
 		<PageHeader title="Reset Password" />
 		<TextInput type="password" label="New Password" />
 		<TextInput type="password" label="Repeat Password" />
-		<Button icon="navigate" onclick={() => (resetPasswordStage = undefined)}>Reset</Button>
+		<Button icon="forward" onclick={() => (resetPasswordStage = undefined)}>Reset</Button>
 	</Section>
 {:else if stage === 'login'}
 	<Section>
@@ -126,7 +126,7 @@
 		<TextInput label="Password" type="password" bind:value={password} />
 		<Spacer />
 		<span style={getCss({ color: 'var(--grey)' })}>Forgot your password?</span>
-		<Button icon="navigate" onclick={() => (resetPasswordStage = 'email')}>Reset</Button>
+		<Button icon="forward" onclick={() => (resetPasswordStage = 'email')}>Reset</Button>
 	</Section>
 
 	{#if newEmail && password}
@@ -193,7 +193,7 @@
 	{#if !$isOffline}
 		{#snippet notificationsTitle()}
 			<span>Notifications</span>
-			<Button href={`${data.baseUrl}/notifications`} icon="navigate" iconOrder="inverted" padding>
+			<Button href={`${data.baseUrl}/notifications`} icon="forward" iconOrder="inverted" padding>
 				All
 			</Button>
 		{/snippet}
@@ -223,7 +223,7 @@
 	<Section>
 		<PageHeader title={fieldsHeader} />
 		<TextInput />
-		<Button icon="navigate">Search</Button>
+		<Button icon="search">Search</Button>
 		<Spacer size="1rem" />
 		{#each accountTrials as trial}
 			<Card

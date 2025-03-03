@@ -29,7 +29,7 @@
 		<Button
 			onclick={() => (show = !show)}
 			padding="5px 5px 5px 10px"
-			icon={show ? 'cross' : 'more-vertical'}
+			icon={show ? 'cross' : 'menu'}
 			iconOrder="inverted"
 			color="var(--white)"
 			backgroundColor="var(--black)"

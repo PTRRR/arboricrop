@@ -23,12 +23,21 @@
 
 <Stack direction="horizontal" gap="1rem" style={{ marginTop: '3rem' }}>
 	{#if onvalidate}
-		<Button icon="check" disabled={validateDisabled} onclick={onvalidate}>{validateLabel}</Button>
+		<Button
+			icon="check"
+			padding
+			backgroundColor="var(--light-green)"
+			iconColor="var(--light-green)"
+			disabled={validateDisabled}
+			onclick={onvalidate}>{validateLabel}</Button
+		>
 	{/if}
 
 	{#if oncancel}
 		<Button
 			icon="cross"
+			padding
+			backgroundColor="var(--white)"
 			iconBackgroundColor="var(--grey)"
 			iconColor="var(--black)"
 			disabled={cancelDisabled}

@@ -175,7 +175,9 @@
 			backgroundColor="var(--light-grey)"
 		>
 			<Table rows={infoRows} />
-			<Button icon="navigate">See device</Button>
+			<div>
+				<Button icon="forward" iconOrder="inverted">See device</Button>
+			</div>
 			<Validation
 				validateLabel="Acknowlodge"
 				onvalidate={() => {

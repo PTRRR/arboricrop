@@ -63,7 +63,9 @@
 	>
 		Projects
 		{#if !newProject}
-			<Button icon="add" iconOrder="inverted" onclick={createProject}>Create</Button>
+			<Button icon="add" padding backgroundColor="var(--light-grey)" onclick={createProject}>
+				Create
+			</Button>
 		{/if}
 	</Stack>
 {/snippet}
