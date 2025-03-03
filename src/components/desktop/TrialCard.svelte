@@ -60,7 +60,7 @@
 
 		&__sub-title {
 			font-size: var(--main-font-size);
-			color: var(--grey);
+			color: var(--black);
 		}
 	}
 </style>

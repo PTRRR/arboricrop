@@ -73,6 +73,10 @@
 </script>
 
 {#if project}
+	{#snippet preTitle()}
+		<Button icon="back" iconSize="small" href="/desktop-mvp/projects">Projects</Button>
+	{/snippet}
+
 	{#snippet title()}
 		<Stack
 			direction="horizontal"
@@ -125,12 +129,7 @@
 		<Stack style={{ width: '100%' }}>
 			<Section>
 				<Stack gap="0.5rem">
-					<PageHeader
-						preTitle="< Projects"
-						preTitleHref="/desktop-mvp/projects"
-						{title}
-						subTitle={project.description}
-					/>
+					<PageHeader {preTitle} {title} subTitle={project.description} />
 					<!-- <span style={getCss({ color: 'var(--black)' })}
 						>LoRa Settings — {project.loraConfiguration?.name || 'Europe'}</span
 					> -->

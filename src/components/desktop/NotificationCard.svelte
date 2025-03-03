@@ -19,21 +19,32 @@
 	class:notification-card--warning={notification.type === 'warning'}
 	class:notification-card--selected={selected}
 >
-	<Stack gap="0.5rem" justifyContent="space-between" style={{ flex: ' 1 1 auto' }}>
-		<div>
-			<Stack direction="horizontal" alignItems="center" gap="0.5rem">
-				<StatusDot
-					status={notification.type === 'alert'
-						? 'error'
-						: notification.type === 'warning'
-							? 'warning'
-							: 'neutral'}
-				/>
+	<Stack
+		direction="horizontal"
+		alignItems="flex-start"
+		gap="0.5rem"
+		style={{ flex: ' 1 1 auto', height: '100%' }}
+	>
+		<Stack style={{ paddingTop: '0.6rem' }}>
+			<StatusDot
+				status={notification.type === 'alert'
+					? 'error'
+					: notification.type === 'warning'
+						? 'warning'
+						: 'neutral'}
+			/>
+		</Stack>
+		<Stack
+			gap="0.9rem"
+			justifyContent="space-between"
+			style={{ flex: ' 1 1 auto', height: '100%' }}
+		>
+			<Stack gap="0.1rem">
 				<span class="notification-card__title">{notification.title}</span>
+				<p class="notification-card__description">{notification.text}</p>
 			</Stack>
-			<p class="notification-card__description">{notification.text}</p>
-		</div>
-		<span>{notification.status}</span>
+			<span>{notification.status}</span>
+		</Stack>
 	</Stack>
 </a>
 
@@ -53,16 +64,13 @@
 		}
 
 		&__description {
-			color: var(--dark-grey);
+			color: var(--black);
+			font-weight: 200;
 		}
 
 		&--selected,
 		&:hover {
 			background-color: var(--grey);
-
-			#{$root}__description {
-				color: var(--dark-grey);
-			}
 		}
 	}
 </style>

@@ -95,6 +95,12 @@
 </script>
 
 {#if trial}
+	{#snippet preTitle()}
+		<Button icon="back" iconSize="small" href={`/desktop-mvp/projects/${project?.id}`}
+			>Projects/Trial</Button
+		>
+	{/snippet}
+
 	{#snippet title()}
 		<Stack
 			direction="horizontal"
@@ -121,12 +127,7 @@
 	<Stack style={{ width: '100%' }} direction="horizontal">
 		<Stack style={{ width: '100%' }}>
 			<Section>
-				<PageHeader
-					preTitle="< Projects/Trial"
-					preTitleHref={`/desktop-mvp/projects/${project?.id}`}
-					{title}
-					subTitle={`${trialDevices.length} Devices`}
-				/>
+				<PageHeader {preTitle} {title} subTitle={`${trialDevices.length} Devices`} />
 				<Map
 					ratio={addDevices ? 2 : 3}
 					bind:this={map}

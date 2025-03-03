@@ -37,8 +37,8 @@
 		<Button
 			icon="cross"
 			padding
-			backgroundColor="var(--white)"
-			iconBackgroundColor="var(--grey)"
+			backgroundColor="var(--light-grey)"
+			iconBackgroundColor="var(--dark-grey)"
 			iconColor="var(--black)"
 			disabled={cancelDisabled}
 			onclick={oncancel}>{cancelLabel}</Button

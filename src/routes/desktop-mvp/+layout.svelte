@@ -73,7 +73,7 @@
 					<TextInput label="email" name={createId()} bind:value={newEmail} />
 					<TextInput type="password" label="password" bind:value={password} />
 					<Button
-						icon="navigate"
+						icon="login"
 						disabled={!newEmail || !password}
 						onclick={() => {
 							const account = $accounts.find((it) => it.email === newEmail);
@@ -95,7 +95,7 @@
 					</Button>
 					<Spacer size="2rem" />
 					<p style={getCss({ color: 'var(--grey)' })}>Forgot your password?</p>
-					<Button icon="navigate" onclick={() => (resetPasswordState = 'email')}
+					<Button icon="refresh" onclick={() => (resetPasswordState = 'email')}
 						>Reset Password</Button
 					>
 				</Stack>

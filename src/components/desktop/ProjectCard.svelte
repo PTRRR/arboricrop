@@ -53,15 +53,13 @@
 
 		&__description {
 			font-size: var(--mid-font-size);
-			color: var(--grey);
+			font-weight: 200;
+			color: var(--black);
+			max-width: 25em;
 		}
 
 		&:hover {
 			background-color: var(--grey);
-
-			#{$this}__description {
-				color: var(--dark-grey);
-			}
 		}
 	}
 </style>

@@ -17,7 +17,8 @@
 	<Button
 		icon="cross"
 		backgroundColor="var(--light-red)"
-		iconBackgroundColor="var(--red)"
+		iconBackgroundColor="var(--black)"
+		iconColor="var(--light-red)"
 		padding
 		{onclick}
 	>

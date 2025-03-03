@@ -72,14 +72,14 @@
 		--big-font-size: 2.6rem;
 		--layout-margin-top: 6vh;
 		--green: #00cc5d;
-		--light-green: #dbffeb;
+		--light-green: #bdfad8;
 		--red: #ff2900;
 		--light-red: #ffd5cc;
 		--yellow: #fecc00;
 		--light-yellow: #ffec9f;
 		--blue: #009fe3;
 		--black: #000000;
-		--light-grey: #f3f3f3;
+		--light-grey: #eaeaea;
 		--grey: #d8d8d8;
 		--dark-grey: #a5a5a5;
 		--white: white;
