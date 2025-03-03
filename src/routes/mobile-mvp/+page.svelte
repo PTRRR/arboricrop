@@ -176,17 +176,19 @@
 		/>
 	</Section>
 {:else}
-	<Section>
-		<PageHeader title="All Devices" subTitle={`${accountDevices.length} Devices`} />
-		<Map
-			maxBounds={swissBounds}
-			zoom={15}
-			minZoom={3}
-			maxZoom={18}
-			center={changinCenter}
-			markers={devicesMarkers}
-		/>
-	</Section>
+	{#if accountDevices.length > 0}
+		<Section>
+			<PageHeader title="All Devices" subTitle={`${accountDevices.length} Devices`} />
+			<Map
+				maxBounds={swissBounds}
+				zoom={15}
+				minZoom={3}
+				maxZoom={18}
+				center={changinCenter}
+				markers={devicesMarkers}
+			/>
+		</Section>
+	{/if}
 
 	{#if !$isOffline}
 		{#snippet notificationsTitle()}
