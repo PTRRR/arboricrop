@@ -20,6 +20,7 @@
 	import NotificationCard from '../../components/desktop/NotificationCard.svelte';
 	import Button from '../../components/layout/Button.svelte';
 	import Spacer from '../../components/Spacer.svelte';
+	import EmptyItem from '../../components/layout/EmptyItem.svelte';
 
 	const { trials, addTrial } = useTrials();
 	const { projects, addProject } = useProjects();
@@ -85,7 +86,7 @@
 </script>
 
 <Stack style={{ width: '100%', paddingLeft: '1rem', paddingBottom: '5rem' }}>
-	<Section>
+	<Section innerStyle={{ paddingLeft: '0' }}>
 		<PageHeader
 			title={$currentAccount?.username || $currentAccount?.email || 'Dashboard'}
 			subTitle={$currentAccount?.role}

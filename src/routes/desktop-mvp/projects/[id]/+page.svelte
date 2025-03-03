@@ -28,6 +28,7 @@
 	import { createId } from '@paralleldrive/cuid2';
 	import DangerZone from '../../../../components/desktop/DangerZone.svelte';
 	import SearchBar from '../../../../components/desktop/SearchBar.svelte';
+	import EmptyItem from '../../../../components/layout/EmptyItem.svelte';
 
 	const projectId = $page.params.id;
 	const { projects, updateProject } = useProjects();
@@ -162,7 +163,7 @@
 						]}
 			>
 				{#if projectTrials.length === 0}
-					<p>There are currently no trials for this prioject</p>
+					<EmptyItem label="There are currently no trials for this prioject" />
 				{:else}
 					<Grid>
 						{#each projectTrials as trial}

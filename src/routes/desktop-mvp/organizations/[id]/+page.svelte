@@ -7,6 +7,7 @@
 	import Stack from '../../../../components/desktop/Stack.svelte';
 	import Validation from '../../../../components/desktop/Validation.svelte';
 	import Button from '../../../../components/layout/Button.svelte';
+	import EmptyItem from '../../../../components/layout/EmptyItem.svelte';
 	import PageHeader from '../../../../components/layout/PageHeader.svelte';
 	import Table, { type Cell } from '../../../../components/layout/Table.svelte';
 	import TextInput from '../../../../components/layout/TextInput.svelte';
@@ -115,7 +116,7 @@
 						]}
 			>
 				{#if invitedAccounts.length === 0}
-					<p>There are no users yet</p>
+					<EmptyItem label="There are no users yet" />
 				{:else}
 					<SearchBar />
 					<Table

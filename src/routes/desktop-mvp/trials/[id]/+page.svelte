@@ -25,6 +25,7 @@
 	import DangerZone from '../../../../components/desktop/DangerZone.svelte';
 	import { goto } from '$app/navigation';
 	import SearchBar from '../../../../components/desktop/SearchBar.svelte';
+	import EmptyItem from '../../../../components/layout/EmptyItem.svelte';
 
 	const trialId = $page.params.id;
 	const { trials, deleteTrial } = useTrials();
@@ -170,13 +171,13 @@
 						rows={groupsRows}
 					/>
 				{:else}
-					<p>There are no groups in this trial</p>
+					<EmptyItem label="There are no groups in this trial" />
 				{/if}
 			</Section>
 
 			<Section label="Devices">
 				{#if trialDevices.length === 0}
-					<p>There a no devices in this trial</p>
+					<EmptyItem label="There are no devices in this trial" />
 				{:else}
 					<DevicesList devices={trialDevices} />
 				{/if}

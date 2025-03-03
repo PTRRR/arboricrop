@@ -70,8 +70,8 @@
 
 			#{$root}--minimal & {
 				display: block;
-				height: 90px;
-				width: 90px;
+				height: 80px;
+				width: 80px;
 				flex: 0 0 auto;
 			}
 		}
