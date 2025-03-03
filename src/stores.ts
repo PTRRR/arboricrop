@@ -404,19 +404,23 @@ export const useApp = () => {
 	const showAppMenu = useWritable<boolean>('show-app-menu', false, false);
 	const showSplashscreen = useWritable<boolean>('show-splashscreen', true, false);
 	const hideContent = useWritable<boolean>('hide-content', false, false);
-  const isOffline = useWritable<boolean>('is-offline', false, false);
-  const isBlurred = useWritable<boolean>('is-blurred', false, false);
+	const isOffline = useWritable<boolean>('is-offline', false, false);
+	const isBlurred = useWritable<boolean>('is-blurred', false, false);
 	const actionMenuSnippets = useWritable<
-		{ id: string; state: 'mount' | 'mounting' | 'unmounting'; snippet: Snippet, index: number }[]
+		{ id: string; state: 'mount' | 'mounting' | 'unmounting'; snippet: Snippet; index: number }[]
 	>('action-menu-snippets', [], false);
+	const panelOverlaysSnippets = useWritable<
+		{ id: string; state: 'mount' | 'mounting' | 'unmounting'; snippet: Snippet; index: number }[]
+	>('panel-overlays-snippets', [], false);
 
 	return {
 		showAppMenu,
 		hideContent,
 		showSplashscreen,
 		actionMenuSnippets,
-    isOffline,
-    isBlurred
+		panelOverlaysSnippets,
+		isOffline,
+		isBlurred
 	};
 };
 

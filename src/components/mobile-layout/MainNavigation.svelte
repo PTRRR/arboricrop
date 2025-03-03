@@ -4,20 +4,16 @@
 	import Stack from '../desktop/Stack.svelte';
 	import Button from '../layout/Button.svelte';
 	import ActionMenu from './ActionMenu.svelte';
+	import PanelOverlay from './PanelOverlay.svelte';
+
+	interface Props {
+		baseUrl: string;
+	}
+
+	const { baseUrl }: Props = $props();
 
 	let show = $state(false);
 	const { isBlurred } = useApp();
-
-	const getButtonStyle = $derived((index: number): Partial<CSSStyleDeclaration> => {
-		return {
-			pointerEvents: show ? undefined : 'none',
-			opacity: show ? '1' : '0',
-			transform: show ? 'translate(0, 0)' : 'translate(0, 80%)',
-			transition: show
-				? `opacity 0.5s ${index * 0.1}s cubic-bezier(0.83, 0, 0.17, 1), transform 0.3s ${index * 0.1}s cubic-bezier(0.83, 0, 0.17, 1)`
-				: `opacity 0.5s ${(3 - index) * 0.1}s cubic-bezier(0.83, 0, 0.17, 1), transform 0.3s ${(3 - index) * 0.1 + 1}s cubic-bezier(0.83, 0, 0.17, 1)`
-		};
-	});
 
 	$effect(() => {
 		$isBlurred = show;
@@ -28,35 +24,8 @@
 	});
 </script>
 
-<!-- <ActionMenu>
+<ActionMenu>
 	<Stack gap="0.5rem" alignItems="flex-end">
-		<Button
-			padding
-			icon="user"
-			iconOrder="inverted"
-			backgroundColor="var(--light-grey)"
-			borderColor="var(--grey)"
-			href="/mobile-mvp/account"
-			style={getButtonStyle(2)}>Account</Button
-		>
-		<Button
-			padding
-			icon="gear"
-			iconOrder="inverted"
-			backgroundColor="var(--light-grey)"
-			borderColor="var(--grey)"
-			href="/mobile-mvp/settings"
-			style={getButtonStyle(1)}>Settings</Button
-		>
-		<Button
-			padding
-			icon="notification"
-			iconOrder="inverted"
-			backgroundColor="var(--light-grey)"
-			borderColor="var(--grey)"
-			href="/mobile-mvp/notifications"
-			style={getButtonStyle(0)}>Notifications</Button
-		>
 		<Button
 			onclick={() => (show = !show)}
 			padding="5px 5px 5px 10px"
@@ -64,19 +33,37 @@
 			iconOrder="inverted"
 			color="var(--white)"
 			backgroundColor="var(--black)"
-			borderColor="var(--grey)"
 			iconBackgroundColor="var(--black)"
 			style={{ boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)' }}
 		>
-			More
+			{show ? 'Close' : 'More'}
 		</Button>
 	</Stack>
 </ActionMenu>
 
 {#if show}
-	<ActionMenu></ActionMenu>
+	<PanelOverlay>
+		<div class="panel-overlay__links">
+			<a href={`${baseUrl}/`}>Trials</a>
+			<a href={`${baseUrl}/notifications`}>Notifications</a>
+			<a href={`${baseUrl}/settings`}>Settings</a>
+			<a href={`${baseUrl}/account`}>Account</a>
+		</div>
+	</PanelOverlay>
+{/if}
 
-	<ActionMenu></ActionMenu>
+<style lang="scss">
+	.panel-overlay__links {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		gap: 1rem;
 
-	<ActionMenu></ActionMenu>
-{/if} -->
+		a {
+			color: black;
+			text-decoration: none;
+			font-size: var(--big-font-size);
+		}
+	}
+</style>

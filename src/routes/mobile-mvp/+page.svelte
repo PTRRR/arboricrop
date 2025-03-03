@@ -19,6 +19,7 @@
 	import PageHeader from '../../components/layout/PageHeader.svelte';
 	import { shuffle } from '../../utils/arrays';
 	import NotificationCard from '../../components/mobile-layout/NotificationCard.svelte';
+	import Map from '../../components/layout/Map.svelte';
 	import Table from '../../components/layout/Table.svelte';
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
@@ -27,7 +28,9 @@
 	import { getCss } from '../../utils/css';
 	import ActionMenu from '../../components/mobile-layout/ActionMenu.svelte';
 	import ActionButton from '../../components/mobile-layout/ActionButton.svelte';
-	import type { Account, Trial } from '../../utils/types';
+	import type { Account, Marker, Trial } from '../../utils/types';
+	import { changinCenter, swissBounds } from '../../utils/dummyData';
+	import type { LngLatLike } from 'svelte-maplibre';
 
 	const { devices } = useDevices();
 	const { trials } = useTrials();
@@ -40,6 +43,16 @@
 	const { accounts, addAccount } = useAccounts();
 	const { currentAccount } = useCurrentAccount();
 	const accountTrials = $derived($trials.filter((it) => it.accountId === $currentAccount?.id));
+	const accountDevices = $derived($devices.filter((it) => it.accountId === $currentAccount?.id));
+
+	const devicesMarkers = $derived<Marker[]>(
+		accountDevices.map((device) => ({
+			lngLat: device.location as LngLatLike,
+			label: device.name,
+			status: device.status,
+			battery: device.battery
+		}))
+	);
 
 	interface Props {
 		data: PageData;
@@ -163,6 +176,18 @@
 		/>
 	</Section>
 {:else}
+	<Section>
+		<PageHeader title="All Devices" subTitle={`${accountDevices.length} Devices`} />
+		<Map
+			maxBounds={swissBounds}
+			zoom={15}
+			minZoom={3}
+			maxZoom={18}
+			center={changinCenter}
+			markers={devicesMarkers}
+		/>
+	</Section>
+
 	{#if !$isOffline}
 		{#snippet notificationsTitle()}
 			<span>Notifications</span>

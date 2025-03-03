@@ -2,6 +2,7 @@
 	import { createId } from '@paralleldrive/cuid2';
 	import Section from '../../../../components/mobile-layout/Section.svelte';
 	import {
+		useCurrentAccount,
 		useDeviceIllustration,
 		useDevices,
 		useNavigationHistory,
@@ -22,6 +23,7 @@
 	const { setVisibility, reset, setUsb, setBlink } = useDeviceIllustration();
 	const { devices } = useDevices();
 	const returnButton = useReturnButton();
+	const { currentAccount } = useCurrentAccount();
 	const { preventNavigationHistory } = useNavigationHistory();
 
 	returnButton.set({
@@ -37,7 +39,8 @@
 		firmwareVersion: 'v1.0.0',
 		fieldId: data.field || undefined,
 		parentId: data.group || undefined,
-		battery: Math.floor(Math.random() * 50 + 50)
+		battery: Math.floor(Math.random() * 50 + 50),
+		accountId: $currentAccount?.id
 	};
 
 	onMount(() => {

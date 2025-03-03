@@ -22,8 +22,15 @@
 	const notifications = useNotifications();
 	const pendingNotifications = $derived($notifications.filter((it) => it.status === 'pending'));
 	const returnButton = useReturnButton();
-	const { showAppMenu, hideContent, showSplashscreen, actionMenuSnippets, isOffline, isBlurred } =
-		useApp();
+	const {
+		showAppMenu,
+		hideContent,
+		showSplashscreen,
+		actionMenuSnippets,
+		isOffline,
+		isBlurred,
+		panelOverlaysSnippets
+	} = useApp();
 
 	onNavigate(() => {
 		$hideContent = false;
@@ -98,21 +105,21 @@
 				<div class="mobile-layout__notifications-badge"></div>
 			{/if} -->
 
-			<div class="mobile-layout__hamburger-inner">
+			<!-- <div class="mobile-layout__hamburger-inner">
 				<div class="mobile-layout__hamburger-line"></div>
 				<div class="mobile-layout__hamburger-line"></div>
 				<div class="mobile-layout__hamburger-line"></div>
-			</div>
+			</div> -->
 		</div>
 
-		<div class="mobile-layout__links">
+		<!-- <div class="mobile-layout__links">
 			<a href={`${data.baseUrl}`} onclick={() => ($showAppMenu = false)}>Trials</a>
 			<a href={`${data.baseUrl}/notifications`} onclick={() => ($showAppMenu = false)}
 				>Notifications</a
 			>
 			<a href={`${data.baseUrl}/settings`} onclick={() => ($showAppMenu = false)}>Settings</a>
 			<a href={`${data.baseUrl}/account`} onclick={() => ($showAppMenu = false)}>Account</a>
-		</div>
+		</div> -->
 
 		<div class="mobile-layout__wrapper">
 			<div class="mobile-layout__content">
@@ -139,9 +146,22 @@
 					</div>
 				{/key}
 			{/each}
+
+			{#each $panelOverlaysSnippets as { id, state, snippet }}
+				{#key id}
+					<div
+						class="mobile-layout__panel-overlay"
+						class:mobile-layout__panel-overlay--mount={state === 'mount'}
+						class:mobile-layout__panel-overlay--mounting={state === 'mounting'}
+						class:mobile-layout__panel-overlay--unmounting={state === 'unmounting'}
+					>
+						{@render snippet()}
+					</div>
+				{/key}
+			{/each}
 		</div>
 
-		<MainMenu />
+		<MainMenu baseUrl={data.baseUrl} />
 	</div>
 </Mobile>
 
@@ -436,8 +456,8 @@
 			);
 
 			#{$root}--blurred & {
-				opacity: 1;
-				// transform: translate(0, 0) scale(0.9);
+				opacity: 0.6;
+				transform: translate(0, 0) scale(0.9);
 			}
 		}
 
@@ -448,9 +468,9 @@
 				filter 0.7s cubic-bezier(0.83, 0, 0.17, 1);
 
 			#{$root}--blurred & {
-				transform: translate(0, 0) scale(0.95);
-				opacity: 0.8;
-				filter: blur(10px);
+				transform: translate(0, 0);
+				opacity: 1;
+				// filter: blur(10px);
 			}
 		}
 
@@ -499,6 +519,35 @@
 					transform: translate(0, 0);
 					opacity: 1;
 				}
+			}
+		}
+
+		&__panel-overlay {
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			z-index: 10;
+			background-color: white;
+			width: 100%;
+			padding: 1rem;
+			box-sizing: border-box;
+			border-radius: 1.5rem;
+			padding-bottom: 7rem;
+			transition:
+				opacity 0.5s cubic-bezier(0.83, 0, 0.17, 1),
+				transform 0.5s cubic-bezier(0.83, 0, 0.17, 1);
+
+			&--mount,
+			&--unmounting {
+				transform: translate(0, 100%) !important;
+			}
+
+			&--mounting {
+				transition:
+					opacity 0.5s 0.1s cubic-bezier(0.83, 0, 0.17, 1),
+					transform 0.5s 0.1s cubic-bezier(0.83, 0, 0.17, 1);
+				transform: translate(0, 0);
+				opacity: 1;
 			}
 		}
 	}
