@@ -27,6 +27,7 @@
 	import { changinCenter, loraConfigurations, swissBounds } from '../../../../utils/dummyData';
 	import { createId } from '@paralleldrive/cuid2';
 	import DangerZone from '../../../../components/desktop/DangerZone.svelte';
+	import SearchBar from '../../../../components/desktop/SearchBar.svelte';
 
 	const projectId = $page.params.id;
 	const { projects, updateProject } = useProjects();
@@ -116,6 +117,10 @@
 		</Button>
 	{/snippet}
 
+	{#snippet searchTrial()}
+		<SearchBar />
+	{/snippet}
+
 	<Stack direction="horizontal" style={{ width: '100%' }}>
 		<Stack style={{ width: '100%' }}>
 			<Section>
@@ -147,6 +152,7 @@
 				actions={editing
 					? []
 					: [
+							{ label: searchTrial },
 							{
 								label: 'Create',
 								icon: 'add',

@@ -2,6 +2,7 @@
 	import type { Snippet } from 'svelte';
 	import Button from './Button.svelte';
 	import type { IconName } from '../mobile-layout/Icon.svelte';
+	import Stack from '../desktop/Stack.svelte';
 
 	export type StepSeparationAction = {
 		label?: string | Snippet;
@@ -32,33 +33,36 @@
 					{@render props.label()}
 				{/if}
 			</div>
-			{#each props.actions || [] as action}
-				{#if action.label}
-					<Button
-						onclick={action.onclick}
-						icon={action.icon}
-						iconColor={action.iconColor}
-						iconOrder={action.iconOrder}
-						backgroundColor={action.backgroundColor}
-						padding={action.padding}
-						href={action.href}
-					>
-						{#if typeof action.label === 'string'}
-							{action.label}
-						{:else}
-							{@render action.label()}
-						{/if}
-					</Button>
-				{:else}
-					<Button
-						onclick={action.onclick}
-						icon={action.icon}
-						iconColor={action.iconColor}
-						iconOrder={action.iconOrder}
-						href={action.href}
-					/>
-				{/if}
-			{/each}
+
+			<Stack direction="horizontal" gap="0.5rem" alignItems="center">
+				{#each props.actions || [] as action}
+					{#if action.label}
+						<Button
+							onclick={action.onclick}
+							icon={action.icon}
+							iconColor={action.iconColor}
+							iconOrder={action.iconOrder}
+							backgroundColor={action.backgroundColor}
+							padding={action.padding}
+							href={action.href}
+						>
+							{#if typeof action.label === 'string'}
+								{action.label}
+							{:else}
+								{@render action.label()}
+							{/if}
+						</Button>
+					{:else}
+						<Button
+							onclick={action.onclick}
+							icon={action.icon}
+							iconColor={action.iconColor}
+							iconOrder={action.iconOrder}
+							href={action.href}
+						/>
+					{/if}
+				{/each}
+			</Stack>
 		</div>
 	{/if}
 

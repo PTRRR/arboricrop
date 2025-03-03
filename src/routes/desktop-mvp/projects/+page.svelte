@@ -16,6 +16,7 @@
 	import SearchBar from '../../../components/desktop/SearchBar.svelte';
 	import Validation from '../../../components/desktop/Validation.svelte';
 	import Dropdown from '../../../components/desktop/Dropdown.svelte';
+	import Icon from '../../../components/mobile-layout/Icon.svelte';
 
 	const { projects, addProject } = useProjects();
 	const { currentAccount } = useCurrentAccount();
@@ -62,11 +63,14 @@
 		justifyContent="space-between"
 	>
 		Projects
-		{#if !newProject}
-			<Button icon="add" padding backgroundColor="var(--light-grey)" onclick={createProject}>
-				Create
-			</Button>
-		{/if}
+		<Stack direction="horizontal" alignItems="center" gap="0.5rem">
+			<SearchBar />
+			{#if !newProject}
+				<Button icon="add" padding backgroundColor="var(--light-grey)" onclick={createProject}>
+					Create
+				</Button>
+			{/if}
+		</Stack>
 	</Stack>
 {/snippet}
 
@@ -87,7 +91,6 @@
 <Stack direction="horizontal" style={{ width: '100%' }} alignItems="flex-start">
 	<Section>
 		<PageHeader {title} subTitle={`${accountProjects.length} Projects`} />
-		<SearchBar />
 		<Grid>
 			{#each accountProjects as project}
 				<ProjectCard {project} />

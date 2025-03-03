@@ -70,7 +70,7 @@
 
 		input {
 			line-height: 1;
-			font-size: inherit;
+			font-size: var(--main-font-size);
 			font-family: inherit;
 			font-weight: inherit;
 			text-transform: lowercase;

@@ -36,7 +36,12 @@
 		>
 			{organization.username || organization.organizationName}
 			{#if !editOrganization && invitedUsers.size === 0 && !selectedUser}
-				<Button icon="navigate" iconOrder="inverted" onclick={() => (editOrganization = true)}>
+				<Button
+					icon="edit"
+					padding
+					backgroundColor="var(--light-grey)"
+					onclick={() => (editOrganization = true)}
+				>
 					Edit
 				</Button>
 			{/if}
@@ -97,7 +102,8 @@
 							{
 								label: 'Invite',
 								icon: 'add',
-								iconOrder: 'inverted',
+								padding: true,
+								backgroundColor: 'var(--light-grey)',
 								onclick: () => {
 									shuffle($accounts)
 										.slice(0, 4)
@@ -155,7 +161,9 @@
 		{:else if invitedUsers.size > 0}
 			<Section label="invite users" backgroundColor="var(--light-grey)" width="40%">
 				<TextInput label="email" />
-				<Button icon="add">Add</Button>
+				<div>
+					<Button icon="add" padding backgroundColor="var(--white)">Add to list</Button>
+				</div>
 				<Table
 					headers={[
 						{ label: 'email', width: '40%' },

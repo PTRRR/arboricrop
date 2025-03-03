@@ -9,7 +9,9 @@
 	import Table, { type Cell, type Row } from '../../../components/layout/Table.svelte';
 	import TextInput from '../../../components/layout/TextInput.svelte';
 	import Checkbox from '../../../components/mobile-layout/Checkbox.svelte';
+	import Icon from '../../../components/mobile-layout/Icon.svelte';
 	import { useAccounts, useCurrentAccount } from '../../../stores';
+	import { getCss } from '../../../utils/css';
 
 	const { currentAccount } = useCurrentAccount();
 	const { accounts, updateAccount } = useAccounts();
@@ -39,8 +41,14 @@
 			<Section label="Settings" style={{ maxWidth: '40rem' }}>
 				<TextInput label="Username" defaultValue="Jon" />
 				<TextInput label="Email" defaultValue={$currentAccount.email} />
-				<TextInput label="Password" />
-				<Button icon="navigate">Reset Password</Button>
+
+				<Stack>
+					<TextInput label="Password" />
+					<!-- svelte-ignore a11y_invalid_attribute -->
+					<a href="#" style={getCss({ textDecoration: 'underline', color: 'black' })}>
+						Reset Password
+					</a>
+				</Stack>
 			</Section>
 
 			<!-- <Section label="Organisation" style={{ maxWidth: '40rem' }}>

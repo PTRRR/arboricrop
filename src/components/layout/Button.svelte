@@ -31,6 +31,7 @@
 		color,
 		fontSize,
 		underline,
+		rootStyle,
 		style,
 		pointerEvents
 	}: {
@@ -54,11 +55,20 @@
 		color?: string;
 		fontSize?: string;
 		underline?: boolean;
+		rootStyle?: Partial<CSSStyleDeclaration>;
 		style?: Partial<CSSStyleDeclaration>;
 		pointerEvents?: CSSStyleDeclaration['pointerEvents'];
 	} = $props();
 
 	const { preventNavigationHistory } = useNavigationHistory();
+
+	const rootButtonStyle = $derived(
+		getCss({
+			...(rootStyle || {}),
+			pointerEvents
+		})
+	);
+
 	const buttonStyle = $derived(
 		getCss({
 			...(style || {}),
@@ -108,11 +118,11 @@
 {/snippet}
 
 {#if href}
-	<a {href} class="root-button" style={getCss({ pointerEvents })}>
+	<a {href} class="root-button" style={rootButtonStyle}>
 		{@render innerButton()}
 	</a>
 {:else}
-	<Button.Root class="root-button" {disabled} {builders} style={getCss({ pointerEvents })}>
+	<Button.Root class="root-button" {disabled} {builders} style={rootButtonStyle}>
 		{@render innerButton()}
 	</Button.Root>
 {/if}

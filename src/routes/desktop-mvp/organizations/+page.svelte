@@ -59,7 +59,8 @@
 		{#if !newAccount && !selectedOrganization}
 			<Button
 				icon="add"
-				iconOrder="inverted"
+				padding
+				backgroundColor="var(--light-grey)"
 				onclick={() => {
 					newAccount = {
 						id: createId(),

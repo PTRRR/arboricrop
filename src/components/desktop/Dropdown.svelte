@@ -9,7 +9,7 @@
 	type T = $$Generic;
 
 	interface Props {
-		label: String;
+		label?: string | Snippet;
 		side?: 'top' | 'bottom' | 'left' | 'right';
 		sideOffset?: number;
 		align?: 'left' | 'right' | 'center';
@@ -19,6 +19,8 @@
 		items?: T[];
 		itemSnippet?: Snippet<[item: T]>;
 		small?: boolean;
+		backgroundColor?: string;
+		padding?: string | boolean;
 	}
 
 	const {
@@ -31,24 +33,40 @@
 		itemSnippet,
 		icon,
 		iconOrder,
-		small
+		small,
+		backgroundColor,
+		padding
 	}: Props = $props();
 </script>
+
+{#snippet labelSnippet()}
+	{#if label}
+		{#if typeof label === 'string'}
+			{label}
+		{:else}
+			{@render label()}
+		{/if}
+	{/if}
+{/snippet}
 
 <DropdownMenu.Root>
 	<DropdownMenu.Trigger asChild let:builder>
 		{#if small}
 			<Button
 				{icon}
+				{backgroundColor}
+				{padding}
 				iconSize="small"
 				iconOrder={iconOrder || 'inverted'}
 				fontSize="var(--main-font-size)"
 				builders={[builder]}
 			>
-				<span style={getCss({ textDecoration: 'underline' })}>{label}</span>
+				<span style={getCss({ textDecoration: 'underline' })}>{@render labelSnippet()}</span>
 			</Button>
 		{:else}
-			<Button {icon} {iconOrder} builders={[builder]}>{label}</Button>
+			<Button {icon} {iconOrder} builders={[builder]} {padding} {backgroundColor}
+				>{@render labelSnippet()}</Button
+			>
 		{/if}
 	</DropdownMenu.Trigger>
 
@@ -59,7 +77,7 @@
 			class:dropdown__content--align-right={align === 'right'}
 			class:dropdown__content--align-center={align === 'center'}
 		>
-			<Stack gap="0.5rem">
+			<Stack>
 				{#each items as item}
 					<DropdownMenu.Item>
 						{#if itemSnippet}

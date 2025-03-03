@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import Dropdown from '../../../components/desktop/Dropdown.svelte';
 	import Grid from '../../../components/desktop/Grid.svelte';
 	import NotificationCard from '../../../components/desktop/NotificationCard.svelte';
 	import SearchBar from '../../../components/desktop/SearchBar.svelte';
@@ -12,6 +13,7 @@
 	import Pagination from '../../../components/layout/Pagination.svelte';
 	import type { Row } from '../../../components/layout/Table.svelte';
 	import Table from '../../../components/layout/Table.svelte';
+	import Icon from '../../../components/mobile-layout/Icon.svelte';
 	import StatusDot from '../../../components/mobile-layout/StatusDot.svelte';
 	import Spacer from '../../../components/Spacer.svelte';
 	import { useNotifications } from '../../../stores';
@@ -22,7 +24,12 @@
 
 	let selectedSeverityFilter = $state('');
 	let selectedStatusFilter = $state('');
-	const severityFilters: NotificationType[] = ['alert', 'warning', 'notification'];
+	const severityFilters: (NotificationType | 'clear')[] = [
+		'clear',
+		'alert',
+		'warning',
+		'notification'
+	];
 	const statusFilters: NotificationStatus[] = ['acknowledged', 'archived', 'pending'];
 	let searchQuery = $state('');
 
@@ -79,15 +86,81 @@
 	]);
 </script>
 
+{#snippet filterSnippet(item: { label: string })}
+	{#if item.label === 'clear'}
+		<Button
+			padding="0.5rem 0.5rem 0.5rem 0.3rem"
+			backgroundColor={selectedSeverityFilter === item.label ? 'var(--white)' : undefined}
+			onclick={() => (selectedSeverityFilter = item.label === 'clear' ? '' : item.label)}
+			rootStyle={{ width: '100%' }}
+		>
+			<Stack direction="horizontal" gap="0.5rem" alignItems="center">
+				<Icon icon="backspace" size="normal" color="var(--black)" />
+				{item.label}
+			</Stack>
+		</Button>
+	{:else}
+		<Button
+			padding="0.5rem"
+			backgroundColor={selectedSeverityFilter === item.label ? 'var(--white)' : undefined}
+			onclick={() => (selectedSeverityFilter = item.label === 'clear' ? '' : item.label)}
+			rootStyle={{ width: '100%' }}
+		>
+			<Stack direction="horizontal" gap="0.5rem" alignItems="center">
+				<StatusDot
+					status={item.label === 'alert'
+						? 'error'
+						: item.label === 'warning'
+							? 'warning'
+							: 'neutral'}
+				/>
+				{item.label}
+			</Stack>
+		</Button>
+	{/if}
+{/snippet}
+
+{#snippet selectedFilterSnippet()}
+	<Stack direction="horizontal" gap="0.5rem" alignItems="center">
+		<StatusDot
+			status={selectedSeverityFilter === 'alert'
+				? 'error'
+				: selectedSeverityFilter === 'warning'
+					? 'warning'
+					: 'neutral'}
+		/>
+		{selectedSeverityFilter}
+	</Stack>
+{/snippet}
+
+{#snippet title()}
+	<Stack
+		direction="horizontal"
+		alignItems="center"
+		justifyContent="space-between"
+		style={{ width: '100%' }}
+	>
+		Notifications
+		<Stack direction="horizontal" gap="0.5rem" alignItems="center">
+			<SearchBar bind:value={searchQuery} />
+			<Dropdown
+				label={selectedSeverityFilter ? selectedFilterSnippet : 'Filters'}
+				backgroundColor="var(--light-grey)"
+				icon="filter"
+				items={severityFilters.map((it) => ({ label: it }))}
+				itemSnippet={filterSnippet}
+				padding
+				sameWidth={false}
+			/>
+		</Stack>
+	</Stack>
+{/snippet}
+
 <Stack style={{ width: '100%' }} direction="horizontal">
 	<Stack style={{ width: '100%' }}>
-		<Section>
-			<PageHeader
-				title="Notifications"
-				subTitle={`${$notifications.length} unread notifications`}
-			/>
+		<!-- <Section> -->
 
-			<Stack gap="0.5rem">
+		<!-- <Stack gap="0.5rem">
 				<p>Severity Filters</p>
 				<Grid minmax="12rem">
 					{#each severityFilters as filter}
@@ -118,9 +191,9 @@
 						</Button>
 					{/each}
 				</Grid>
-			</Stack>
+			</Stack> -->
 
-			<!-- <Stack gap="0.5rem">
+		<!-- <Stack gap="0.5rem">
 				<p>Status Filters</p>
 				<Grid minmax="12rem">
 					{#each statusFilters as filter}
@@ -143,11 +216,10 @@
 					{/each}
 				</Grid>
 			</Stack> -->
+		<!-- </Section> -->
 
-			<SearchBar bind:value={searchQuery} />
-		</Section>
-
-		<Section label="Notifications">
+		<Section>
+			<PageHeader {title} subTitle={`${$notifications.length} unread notifications`} />
 			<Grid minmax="20rem">
 				{#each filteredNotifications as notification}
 					<NotificationCard selected={notification.id === selectedNotificationId} {notification} />

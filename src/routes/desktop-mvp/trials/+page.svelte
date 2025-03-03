@@ -68,7 +68,13 @@
 		style={{ width: '100%' }}
 	>
 		Trials
-		<Button icon="add" iconOrder="inverted" onclick={createTrial}>Create</Button>
+		<Stack direction="horizontal" gap="0.5rem">
+			<Stack direction="horizontal" gap="0.5rem">
+				<TextInput placeholder="Search" />
+				<Button icon="search"></Button>
+			</Stack>
+			<Button icon="add" iconOrder="inverted" onclick={createTrial}>Create</Button>
+		</Stack>
 	</Stack>
 {/snippet}
 

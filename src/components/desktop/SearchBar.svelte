@@ -10,11 +10,11 @@
 	let { value = $bindable() }: Props = $props();
 </script>
 
-<Stack gap="1rem" style={{ maxWidth: '30rem' }} direction="horizontal" alignItems="flex-end">
+<Stack gap="0.5rem" style={{ maxWidth: '13rem' }} direction="horizontal" alignItems="flex-end">
 	{#if typeof value !== 'undefined'}
-		<TextInput label="Search" style={{ width: '100%' }} bind:value />
+		<TextInput placeholder="Search" style={{ width: '50%', flex: '1 1 auto' }} bind:value />
 	{:else}
-		<TextInput label="Search" style={{ width: '100%' }} />
+		<TextInput placeholder="Search" style={{ width: '50%', flex: '1 1 auto' }} />
 	{/if}
-	<Button icon="search">Submit</Button>
+	<Button icon="search" size="normal"></Button>
 </Stack>

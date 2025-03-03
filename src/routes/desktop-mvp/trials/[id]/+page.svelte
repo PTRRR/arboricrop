@@ -24,6 +24,7 @@
 	import Button from '../../../../components/layout/Button.svelte';
 	import DangerZone from '../../../../components/desktop/DangerZone.svelte';
 	import { goto } from '$app/navigation';
+	import SearchBar from '../../../../components/desktop/SearchBar.svelte';
 
 	const trialId = $page.params.id;
 	const { trials, deleteTrial } = useTrials();
@@ -113,6 +114,10 @@
 		</Stack>
 	{/snippet}
 
+	{#snippet searchGroup()}
+		<SearchBar />
+	{/snippet}
+
 	<Stack style={{ width: '100%' }} direction="horizontal">
 		<Stack style={{ width: '100%' }}>
 			<Section>
@@ -144,6 +149,7 @@
 				actions={selectedGroup || newGroup || editTrial
 					? []
 					: [
+							{ label: searchGroup },
 							{
 								label: 'Create',
 								icon: 'add',
