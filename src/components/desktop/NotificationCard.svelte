@@ -6,9 +6,10 @@
 	interface Props {
 		notification: Notification;
 		selected?: boolean;
+		mode?: 'minimal' | 'normal';
 	}
 
-	const { notification, selected }: Props = $props();
+	const { notification, selected, mode = 'normal' }: Props = $props();
 </script>
 
 <a
@@ -18,6 +19,7 @@
 	class:notification-card--notification={notification.type === 'notification'}
 	class:notification-card--warning={notification.type === 'warning'}
 	class:notification-card--selected={selected}
+	class:notification-card--minimal={mode === 'minimal'}
 >
 	<Stack
 		direction="horizontal"
@@ -41,9 +43,15 @@
 		>
 			<Stack gap="0.1rem">
 				<span class="notification-card__title">{notification.title}</span>
-				<p class="notification-card__description">{notification.text}</p>
+
+				{#if mode === 'normal'}
+					<p class="notification-card__description">{notification.text}</p>
+				{/if}
 			</Stack>
-			<span>{notification.status}</span>
+
+			{#if mode === 'normal'}
+				<span>{notification.status}</span>
+			{/if}
 		</Stack>
 	</Stack>
 </a>

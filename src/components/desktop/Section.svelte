@@ -7,7 +7,7 @@
 		children?: Snippet;
 		label?: string | Snippet;
 		description?: string;
-		alignItems?: 'flex-end';
+		alignItems?: 'flex-end' | 'flex-start';
 		padding?: string;
 		sticky?: string;
 		stickyDirection?: 'top' | 'bottom';
@@ -68,6 +68,7 @@
 <div
 	class="section"
 	class:section--align-end={alignItems === 'flex-end'}
+	class:section--align-start={alignItems === 'flex-start'}
 	class:section--fill={fill}
 	class:section--border={border}
 	style={computedStyle}
@@ -108,6 +109,10 @@
 
 			#{$this}--align-end & {
 				align-items: flex-end;
+			}
+
+			#{$this}--align-start & {
+				align-items: flex-start;
 			}
 
 			#{$this}--border & {

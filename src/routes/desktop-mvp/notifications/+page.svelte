@@ -245,6 +245,7 @@
 			description={selectedNotification.type}
 			sticky="var(--content-offset-top)"
 			backgroundColor="var(--light-grey)"
+			width="40%"
 		>
 			<Table rows={infoRows} />
 			<div>

@@ -18,6 +18,7 @@
 	import { createId } from '@paralleldrive/cuid2';
 	import type { Group, Project } from '../../utils/types';
 	import NotificationCard from '../../components/desktop/NotificationCard.svelte';
+	import Button from '../../components/layout/Button.svelte';
 
 	const { trials, addTrial } = useTrials();
 	const { projects, addProject } = useProjects();
@@ -82,39 +83,41 @@
 	});
 </script>
 
-<Stack style={{ width: '100%' }}>
-	<Section>
-		<PageHeader title="Dashboard" subTitle="Notifications" />
-		<Grid minmax="20rem">
+<Stack direction="horizontal" style={{ width: '100%' }}>
+	<Stack style={{ width: '80%', flex: '0 0 auto' }}>
+		<Section>
+			<PageHeader
+				title={$currentAccount?.username || $currentAccount?.email || 'Dashboard'}
+				subTitle={$currentAccount?.role}
+			/>
+		</Section>
+		<Section label="Recent Projects" alignItems="flex-start">
+			<Grid minmax="45%" style={{ width: '100%' }}>
+				{#each shuffle(accountProjects).slice(0, 7) as project}
+					<ProjectCard {project} mode="minimal" />
+				{/each}
+			</Grid>
+
+			<div>
+				<Button icon="forward" iconOrder="inverted" href="/desktop-mvp/projects">See all</Button>
+			</div>
+		</Section>
+
+		<Section label="Recent trials" alignItems="flex-start">
+			<Grid minmax="20rem" style={{ width: '100%' }}>
+				{#each shuffle(accountTrials).slice(0, 5) as trial}
+					<TrialCard {trial} mode="minimal" />
+				{/each}
+			</Grid>
+		</Section>
+	</Stack>
+	<Section label="Last Notifications" innerStyle={{ paddingLeft: '0' }}>
+		<Grid minmax="100%">
 			{#each randomNotifications as notification}
-				<NotificationCard {notification} />
+				<NotificationCard {notification} mode="minimal" />
 			{/each}
 		</Grid>
-	</Section>
 
-	<Section
-		label="Recent Projects"
-		actions={[
-			{ label: 'All', icon: 'navigate', iconOrder: 'inverted', href: '/desktop-mvp/projects' }
-		]}
-	>
-		<Grid>
-			{#each shuffle(accountProjects).slice(0, 6) as project}
-				<ProjectCard {project} />
-			{/each}
-		</Grid>
-	</Section>
-
-	<Section
-		label="Recent trials"
-		actions={[
-			{ label: 'All', icon: 'navigate', iconOrder: 'inverted', href: '/desktop-mvp/trials' }
-		]}
-	>
-		<Grid minmax="20rem">
-			{#each shuffle(accountTrials).slice(0, 3) as trial}
-				<TrialCard {trial} />
-			{/each}
-		</Grid>
+		<Button icon="forward" iconOrder="inverted" href="/desktop-mvp/notifications">See all</Button>
 	</Section>
 </Stack>
