@@ -30,7 +30,7 @@
 	href={`/desktop-mvp/projects/${project.id}`}
 	class:project-card--minimal={mode === 'minimal'}
 >
-	<Stack gap="0.4rem">
+	<Stack gap="0.2rem">
 		<span class="project-card__title">{project.name}</span>
 		<span class="project-card__description">{project.description}</span>
 

@@ -44,14 +44,13 @@
 			<Stack gap="0.1rem">
 				<span class="notification-card__title">{notification.title}</span>
 
-				{#if mode === 'normal'}
-					<p class="notification-card__description">{notification.text}</p>
-				{/if}
+				<p class="notification-card__description">{notification.text}</p>
+				{#if mode === 'normal'}{/if}
 			</Stack>
 
-			{#if mode === 'normal'}
+			<!-- {#if mode === 'normal'}
 				<span>{notification.status}</span>
-			{/if}
+			{/if} -->
 		</Stack>
 	</Stack>
 </a>
@@ -79,6 +78,22 @@
 		&--selected,
 		&:hover {
 			background-color: var(--grey);
+		}
+
+		&--warning {
+			background-color: var(--light-yellow);
+
+			&:hover {
+				background-color: var(--yellow);
+			}
+		}
+
+		&--alert {
+			background-color: var(--light-red);
+
+			&:hover {
+				background-color: var(--red);
+			}
 		}
 	}
 </style>

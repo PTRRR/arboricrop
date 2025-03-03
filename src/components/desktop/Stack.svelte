@@ -40,7 +40,7 @@
 </div>
 
 <style lang="scss">
-	:global(.stack--vertical .section + .section) {
+	:global(.stack--vertical > .section + .section) {
 		margin-top: 4rem;
 	}
 
