@@ -14,9 +14,9 @@
 	}
 
 	const { baseUrl }: Props = $props();
-	const { isBlurred, showSplashscreen, showAppMenu } = useApp();
+	const { isBlurred, showSplashscreen, showAppMenu, actionMenuSnippets } = useApp();
 	const show = $derived(!$showSplashscreen && $showAppMenu);
-	const hideButton = $derived($showSplashscreen);
+	const hideButton = $derived($showSplashscreen || $actionMenuSnippets.length > 0);
 
 	$effect(() => {
 		$isBlurred = $showAppMenu;
@@ -30,18 +30,20 @@
 <div class="main-navigation" use:portal={LAYOUT_PORTAL}>
 	<Panel state={show ? 'mounting' : 'unmounting'}>
 		<Button
+			padding
 			style={{
 				position: 'absolute',
 				top: '0',
 				left: '50%',
 				transition: 'transform 0.5s cubic-bezier(0.83, 0, 0.17, 1)',
 				transform: hideButton ? 'translate(-50%, 0)' : 'translate(-50%, calc(-100% - 1.3rem))',
-				boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.3)'
+				boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)'
 			}}
 			icon={show ? 'cross' : 'menu'}
-			iconSize="large"
-			onclick={() => ($showAppMenu = !$showAppMenu)}
-		></Button>
+			iconSize="medium"
+			backgroundColor="var(--light-grey)"
+			onclick={() => ($showAppMenu = !$showAppMenu)}>Menu</Button
+		>
 
 		<div class="main-navigation__links">
 			<a href={`${baseUrl}/`}>Trials</a>

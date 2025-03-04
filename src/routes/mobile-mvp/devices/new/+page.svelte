@@ -55,9 +55,8 @@
 	<ActionMenu>
 		<ActionButton
 			icon="check"
-			color="var(--white)"
-			backgroundColor="var(--green)"
-			iconBackgroundColor="var(--green)"
+			backgroundColor="var(--light-green)"
+			iconColor="var(--light-green)"
 			href={`${data.baseUrl}/devices/${device.id}?connected=true`}
 			onclick={() => {
 				$preventNavigationHistory = true;

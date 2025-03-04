@@ -35,6 +35,7 @@
 
 	onNavigate(() => {
 		$hideContent = false;
+		$isBlurred = false;
 	});
 
 	const breadcrumbIcon = $derived(
@@ -269,7 +270,7 @@
 			#{$this}__action-menu {
 				opacity: 0 !important;
 				pointer-events: none;
-				transform: translate(0, 50px) !important;
+				transform: translate(-50%, 50px) !important;
 			}
 		}
 
@@ -285,7 +286,7 @@
 			#{$this}__action-menu {
 				opacity: 0 !important;
 				pointer-events: none;
-				transform: translate(0, 50px) !important;
+				transform: translate(-50%, 50px) !important;
 			}
 		}
 
@@ -486,35 +487,32 @@
 		&__action-menu {
 			display: flex;
 			gap: 1rem;
-			padding: 0.5rem;
+			padding: 0rem 1.5rem;
+			box-sizing: border-box;
 			border-radius: 5px;
 			z-index: 15;
 			position: absolute;
-			bottom: 1.5rem;
-			right: 1.5rem;
+			bottom: 2rem;
+			width: 100%;
+			left: 50%;
 			transition:
 				opacity 0.5s cubic-bezier(0.83, 0, 0.17, 1),
 				transform 0.5s cubic-bezier(0.83, 0, 0.17, 1);
 
+			transform: translate(-50%, 0);
+
 			&--mount,
 			&--unmounting {
-				transform: translate(0, 50px) !important;
+				transform: translate(-50%, 100%) !important;
 				opacity: 0 !important;
 			}
 
-			@for $i from 1 through 10 {
-				&:nth-child(#{10 - $i}) {
-					transform: translate(0, #{(10 - $i - 1) * -45px});
-					opacity: 1;
-				}
-
-				&--mounting {
-					transition:
-						opacity 0.5s 0.1s cubic-bezier(0.83, 0, 0.17, 1),
-						transform 0.5s 0.1s cubic-bezier(0.83, 0, 0.17, 1);
-					transform: translate(0, 0);
-					opacity: 1;
-				}
+			&--mounting {
+				transition:
+					opacity 0.5s 0.1s cubic-bezier(0.83, 0, 0.17, 1),
+					transform 0.5s 0.1s cubic-bezier(0.83, 0, 0.17, 1);
+				transform: translate(-50%, 0);
+				opacity: 1;
 			}
 		}
 	}

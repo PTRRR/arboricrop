@@ -26,7 +26,7 @@
 		z-index: 10;
 		background-color: white;
 		width: 100%;
-		padding: 2rem 1rem 3rem 1rem;
+		padding: 2rem 1.5rem 5rem 1.5rem;
 		box-sizing: border-box;
 		border-radius: 1.5rem;
 		transition:

@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 	import Button from '../../../../components/layout/Button.svelte';
 	import Image from '../../../../components/mobile-layout/Image.svelte';
-	import { useDevices, useNotifications, useReturnButton } from '../../../../stores';
+	import { useApp, useDevices, useNotifications, useReturnButton } from '../../../../stores';
 	import { formatDateToDDMMYYYY } from '../../../../utils/dates';
 	import Section from '../../../../components/mobile-layout/Section.svelte';
 	import PageHeader from '../../../../components/layout/PageHeader.svelte';
@@ -16,6 +16,7 @@
 	import ActionMenu from '../../../../components/mobile-layout/ActionMenu.svelte';
 	import ActionButton from '../../../../components/mobile-layout/ActionButton.svelte';
 	import Stack from '../../../../components/desktop/Stack.svelte';
+	import PanelOverlay from '../../../../components/mobile-layout/PanelOverlay.svelte';
 
 	interface Props {
 		data: PageData;
@@ -28,6 +29,7 @@
 	const notification = $derived($notifications.find((it) => it.id === $page.params.notificationId));
 	const { devices } = useDevices();
 	const activeDevices = $derived($devices.filter((it) => it.status === 'active'));
+	const { isBlurred } = useApp();
 
 	const infoRows: Row[] = $derived([
 		{
@@ -65,16 +67,81 @@
 			});
 		}
 	});
+
+	$effect(() => {
+		$isBlurred = $page.data.acknowledge;
+	});
 </script>
 
+{#snippet pageTitle()}
+	<span>{notification?.title}</span>
+{/snippet}
+
+{#snippet pageSubtitle()}
+	<div style={getCss({ display: 'flex', alignItems: 'center', gap: '0.5rem' })}>
+		<StatusDot status={notificationStatus} />
+		<span>{notification?.type}</span>
+	</div>
+{/snippet}
+
+<Section>
+	<PageHeader preTitle="Notification" title={pageTitle} subTitle={pageSubtitle} />
+	<Table rows={infoRows} />
+</Section>
+
+<Section label="Actionable insights">
+	<Image ratio={1} placeholder="Comprehensive schema / animation explaining how to proceed" />
+	<p style={getCss({ fontWeight: 'normal' })}>{notification?.actionableInsight}</p>
+	<div>
+		<Button
+			icon="forward"
+			iconOrder="inverted"
+			onclick={() => {
+				const randomDeviceIndex = Math.floor(Math.random() * activeDevices.length);
+				const device = activeDevices[randomDeviceIndex];
+				goto(`/mobile-layout/devices/${device.id}`);
+			}}>See device</Button
+		>
+	</div>
+</Section>
+
 {#if $page.data.acknowledge}
-	<Section>
-		<PageHeader title="Acknowledge" subTitle={notification?.title} />
-		<TextareaInput label="Note" />
-	</Section>
+	<PanelOverlay>
+		<Section>
+			<PageHeader title="Acknowledge" subTitle={notification?.title} />
+			<TextareaInput label="Note" />
+		</Section>
+	</PanelOverlay>
+
 	<ActionMenu>
 		<ActionButton
 			icon="check"
+			href={`${data.baseUrl}/notifications`}
+			backgroundColor="var(--light-green)"
+			iconColor="var(--light-green)"
+			onclick={async () => {
+				if (notification) {
+					const notificationIndex = $notifications.findIndex((it) => it.id === notification.id);
+					if (notificationIndex > -1) {
+						const newNotifications = [...$notifications];
+						newNotifications[notificationIndex] = {
+							...newNotifications[notificationIndex],
+							status: 'acknowledged'
+						};
+						notifications.set(newNotifications);
+					}
+
+					$isBlurred = false;
+				}
+			}}
+		>
+			Save
+		</ActionButton>
+	</ActionMenu>
+{:else}
+	<ActionMenu>
+		<ActionButton
+			icon="cross"
 			href={`${data.baseUrl}/notifications`}
 			onclick={async () => {
 				if (notification) {
@@ -90,66 +157,16 @@
 				}
 			}}
 		>
-			Save
+			Dismiss
 		</ActionButton>
-	</ActionMenu>
-{:else}
-	{#snippet pageTitle()}
-		<span>{notification?.title}</span>
-	{/snippet}
-
-	{#snippet pageSubtitle()}
-		<div style={getCss({ display: 'flex', alignItems: 'center', gap: '0.5rem' })}>
-			<StatusDot status={notificationStatus} />
-			<span>{notification?.type}</span>
-		</div>
-	{/snippet}
-
-	<Section>
-		<PageHeader preTitle="Notification" title={pageTitle} subTitle={pageSubtitle} />
-		<Table rows={infoRows} />
-	</Section>
-
-	<Section label="Actionable insights">
-		<Image ratio={1} placeholder="Comprehensive schema / animation explaining how to proceed" />
-		<p style={getCss({ fontWeight: 'normal' })}>{notification?.actionableInsight}</p>
-		<div>
-			<Button
-				icon="forward"
-				iconOrder="inverted"
-				onclick={() => {
-					const randomDeviceIndex = Math.floor(Math.random() * activeDevices.length);
-					const device = activeDevices[randomDeviceIndex];
-					goto(`/mobile-layout/devices/${device.id}`);
-				}}>See device</Button
-			>
-		</div>
-	</Section>
-
-	<ActionMenu>
-		<Stack gap="0.5rem">
-			<ActionButton
-				icon="cross"
-				href={`${data.baseUrl}/notifications`}
-				onclick={async () => {
-					if (notification) {
-						const notificationIndex = $notifications.findIndex((it) => it.id === notification.id);
-						if (notificationIndex > -1) {
-							const newNotifications = [...$notifications];
-							newNotifications[notificationIndex] = {
-								...newNotifications[notificationIndex],
-								status: 'acknowledged'
-							};
-							notifications.set(newNotifications);
-						}
-					}
-				}}
-			>
-				Dismiss
-			</ActionButton>
-			<ActionButton icon="check" href={`${window.location.pathname}?acknowledge=true`}>
-				Acknowledge
-			</ActionButton>
-		</Stack>
+		<ActionButton
+			icon="check"
+			href={`${window.location.pathname}?acknowledge=true`}
+			backgroundColor="var(--light-green)"
+			iconColor="var(--light-green)"
+			onclick={() => ($isBlurred = true)}
+		>
+			Acknowledge
+		</ActionButton>
 	</ActionMenu>
 {/if}

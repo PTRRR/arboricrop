@@ -41,7 +41,7 @@
 			idlTimeout = setTimeout(() => {
 				$actionMenuSnippets = $actionMenuSnippets.filter((it) => !unmountIds.includes(it.id));
 				unmountIds = [];
-			}, 2000);
+			}, 500);
 		};
 	});
 </script>

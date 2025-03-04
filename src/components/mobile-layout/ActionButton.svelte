@@ -22,13 +22,13 @@
 		children,
 		onclick,
 		padding = true,
-		icon = 'navigate',
+		icon = 'forward',
 		color = 'var(--black)',
 		backgroundColor = 'var(--grey)',
 		iconBackgroundColor = 'var(--black)',
 		iconColor = 'var(--white)',
-		iconOrder = 'inverted',
-		iconSize = 'normal',
+		iconOrder,
+		iconSize = 'medium',
 		href
 	}: Props = $props();
 </script>
@@ -44,6 +44,8 @@
 	{onclick}
 	{iconSize}
 	{href}
+	rootStyle={{ width: '100%' }}
+	style={{ boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)' }}
 >
 	{@render children?.()}
 </Button>
