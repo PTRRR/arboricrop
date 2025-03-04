@@ -15,6 +15,7 @@
 	import { getCss } from '../../utils/css';
 	import type { LayoutData } from './$types';
 	import MainMenu from '../../components/mobile-layout/MainNavigation.svelte';
+	import Panel from '../../components/mobile-layout/Panel.svelte';
 
 	let { children, data }: { children: Snippet; data: LayoutData } = $props();
 	let showBreadcrumb = $state(false);
@@ -149,14 +150,9 @@
 
 			{#each $panelOverlaysSnippets as { id, state, snippet }}
 				{#key id}
-					<div
-						class="mobile-layout__panel-overlay"
-						class:mobile-layout__panel-overlay--mount={state === 'mount'}
-						class:mobile-layout__panel-overlay--mounting={state === 'mounting'}
-						class:mobile-layout__panel-overlay--unmounting={state === 'unmounting'}
-					>
+					<Panel {state}>
 						{@render snippet()}
-					</div>
+					</Panel>
 				{/key}
 			{/each}
 		</div>
@@ -519,34 +515,6 @@
 					transform: translate(0, 0);
 					opacity: 1;
 				}
-			}
-		}
-
-		&__panel-overlay {
-			position: fixed;
-			bottom: 0;
-			left: 0;
-			z-index: 10;
-			background-color: white;
-			width: 100%;
-			padding: 2rem 1rem 7rem 1rem;
-			box-sizing: border-box;
-			border-radius: 1.5rem;
-			transition:
-				opacity 0.5s cubic-bezier(0.83, 0, 0.17, 1),
-				transform 0.5s cubic-bezier(0.83, 0, 0.17, 1);
-
-			&--mount,
-			&--unmounting {
-				transform: translate(0, 100%) !important;
-			}
-
-			&--mounting {
-				transition:
-					opacity 0.5s 0.1s cubic-bezier(0.83, 0, 0.17, 1),
-					transform 0.5s 0.1s cubic-bezier(0.83, 0, 0.17, 1);
-				transform: translate(0, 0);
-				opacity: 1;
 			}
 		}
 	}

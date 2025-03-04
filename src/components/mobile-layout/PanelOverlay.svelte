@@ -11,12 +11,13 @@
 	const { children, hidden = $bindable(false) }: { children?: Snippet; hidden?: boolean } =
 		$props();
 
+	let newId = createId();
 	const { panelOverlaysSnippets } = useApp();
 
-	onMount(() => {
+	const addPanel = () => {
 		if (!children) return;
+		newId = createId();
 
-		const newId = createId();
 		$panelOverlaysSnippets = [
 			...$panelOverlaysSnippets,
 			{ id: newId, state: 'mount', snippet: children, index }
@@ -29,20 +30,30 @@
 		}, 50);
 
 		index++;
+	};
+
+	const removePanel = () => {
+		clearTimeout(idlTimeout);
+
+		$panelOverlaysSnippets = $panelOverlaysSnippets.map((it) =>
+			it.id === newId ? { ...it, state: 'unmounting' } : it
+		);
+
+		unmountIds.push(newId);
+
+		idlTimeout = setTimeout(() => {
+			$panelOverlaysSnippets = $panelOverlaysSnippets.filter((it) => !unmountIds.includes(it.id));
+			unmountIds = [];
+		}, 2000);
+	};
+
+	onMount(() => {
+		if (!children) return;
+
+		addPanel();
 
 		return () => {
-			clearTimeout(idlTimeout);
-
-			$panelOverlaysSnippets = $panelOverlaysSnippets.map((it) =>
-				it.id === newId ? { ...it, state: 'unmounting' } : it
-			);
-
-			unmountIds.push(newId);
-
-			idlTimeout = setTimeout(() => {
-				$panelOverlaysSnippets = $panelOverlaysSnippets.filter((it) => !unmountIds.includes(it.id));
-				unmountIds = [];
-			}, 2000);
+			removePanel();
 		};
 	});
 </script>

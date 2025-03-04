@@ -339,8 +339,8 @@
 
 		&--large {
 			font-size: var(--big-font-size);
-			width: 34px;
-			height: 34px;
+			width: 38px;
+			height: 38px;
 		}
 
 		&__cross {
