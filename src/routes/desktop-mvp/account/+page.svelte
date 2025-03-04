@@ -32,10 +32,17 @@
 		{/if}
 	{/snippet}
 
+	{#snippet title()}
+		<Stack direction="horizontal" style={{ width: '100%' }} justifyContent="space-between">
+			<span>Account</span>
+			<Validation validateLabel="Save" onvalidate={() => {}} />
+		</Stack>
+	{/snippet}
+
 	<Stack style={{ width: '100%' }} direction="horizontal">
 		<Stack style={{ width: '100%' }}>
 			<Section>
-				<PageHeader title="Account" subTitle={$currentAccount.email} />
+				<PageHeader {title} subTitle={$currentAccount.email} />
 			</Section>
 
 			<Section label="Settings" style={{ maxWidth: '40rem' }}>
@@ -80,10 +87,6 @@
 					<Button icon="add" onclick={() => (inviteAccounts = true)}>Invite Users</Button>
 				{/if}
 			</Section> -->
-
-			<Section>
-				<Validation validateLabel="Save" onvalidate={() => {}} />
-			</Section>
 		</Stack>
 
 		{#if inviteAccounts}
