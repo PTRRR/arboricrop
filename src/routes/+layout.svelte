@@ -15,6 +15,23 @@
 	@font-face {
 		font-family: 'Rubik';
 		font-style: normal;
+		font-weight: 300;
+		font-display: swap;
+		src: url(/fonts/Rubik-Light.woff) format('woff2');
+	}
+
+	@font-face {
+		font-family: 'Rubik';
+		font-style: italic;
+		font-weight: 300;
+		font-display: swap;
+		src: url(/fonts/Rubik-LightItalic.woff) format('woff2');
+	}
+
+	/* Rubik Regular */
+	@font-face {
+		font-family: 'Rubik';
+		font-style: normal;
 		font-weight: 400;
 		font-display: swap;
 		src: url(/fonts/Rubik-Regular.woff) format('woff2');

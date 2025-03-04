@@ -115,7 +115,7 @@
 
 <style lang="scss">
 	.table {
-		$this: &;
+		$root: &;
 
 		&__row {
 			$row: &;
@@ -128,7 +128,7 @@
 			border-radius: 5px;
 			width: 100%;
 
-			&#{$this}--borders {
+			&#{$root}--borders {
 				& + & {
 					&::before {
 						border-top: solid 1px var(--grey);
@@ -142,7 +142,7 @@
 				}
 			}
 
-			&#{$this}--selected {
+			&#{$root}--selected {
 				&::before {
 					border-top: solid 1px var(--white);
 				}
@@ -164,7 +164,7 @@
 				background-color: var(--grey);
 			}
 
-			& + #{$this}__row {
+			& + #{$root}__row {
 				&::before {
 					border-top: solid 1px var(--white);
 				}
@@ -181,7 +181,13 @@
 			text-transform: lowercase;
 			flex: 0 0 auto;
 
-			&#{$this}--sortable {
+			#{$root}__headers & {
+				span {
+					font-weight: 400;
+				}
+			}
+
+			&#{$root}--sortable {
 				// display: none;
 
 				&::before {
