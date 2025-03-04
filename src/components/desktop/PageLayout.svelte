@@ -5,7 +5,7 @@
 
 	interface Props {
 		children?: Snippet;
-		label?: string;
+		label?: string | Snippet;
 		actionPanel?: Snippet;
 	}
 

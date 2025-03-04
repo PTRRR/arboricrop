@@ -75,7 +75,7 @@
 >
 	<div class="section__inner" style={computedInnerStyle}>
 		{#if label}
-			<StepSeparation {label} {description} {actions} />
+			<StepSeparation {label} {description} {actions} style={{ width: '100%' }} />
 		{/if}
 
 		{@render children?.()}

@@ -3,6 +3,7 @@
 	import Button from './Button.svelte';
 	import type { IconName } from '../mobile-layout/Icon.svelte';
 	import Stack from '../desktop/Stack.svelte';
+	import { getCss } from '../../utils/css';
 
 	export type StepSeparationAction = {
 		label?: string | Snippet;
@@ -20,10 +21,13 @@
 		description?: string | undefined;
 		actions?: StepSeparationAction[];
 		border?: boolean;
+		style?: Partial<CSSStyleDeclaration>;
 	} = $props();
+
+	const computedStyle = $derived(getCss({ ...(props.style || {}) }));
 </script>
 
-<div class="step-separation" class:step-separation--border={props.border}>
+<div class="step-separation" class:step-separation--border={props.border} style={computedStyle}>
 	{#if props.label || typeof props.label === 'number'}
 		<div class="step-separation__heading">
 			<div class="step-separation__label">
@@ -88,6 +92,7 @@
 		}
 
 		&__label {
+			width: 100%;
 			font-weight: 500;
 			text-transform: lowercase;
 			color: var(--dark-grey);

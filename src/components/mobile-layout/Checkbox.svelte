@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Checkbox } from 'bits-ui';
 	import { getCss } from '../../utils/css';
+	import Icon from './Icon.svelte';
 
 	interface Props {
 		size?: string;
@@ -20,7 +21,11 @@
 >
 	<Checkbox.Indicator class="checkbox__indicator" let:isChecked>
 		{#if props.raw}
-			<input type="checkbox" checked={isChecked} />
+			{#if isChecked}
+				<Icon icon="checkbox" color="var(--black)" size="normal" />
+			{:else}
+				<Icon icon="checkbox-blank" color="var(--black)" size="normal" />
+			{/if}
 		{:else}
 			<div
 				class="checkbox__content"

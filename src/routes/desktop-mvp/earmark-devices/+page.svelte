@@ -10,9 +10,12 @@
 	import PageHeader from '../../../components/layout/PageHeader.svelte';
 	import SearchBar from '../../../components/desktop/SearchBar.svelte';
 	import Validation from '../../../components/desktop/Validation.svelte';
+	import PageLayout from '../../../components/desktop/PageLayout.svelte';
+	import Button from '../../../components/layout/Button.svelte';
 
 	const { devices, updateDevices } = useDevices();
 	let selectedDevices = $state(new Set<Device>());
+	let assignDevices = $state(false);
 
 	const devicesRows = $derived<Row[]>(
 		$devices
@@ -76,10 +79,73 @@
 	</div>
 {/snippet}
 
-<Stack direction="horizontal" style={{ width: '100%' }}>
-	<Section fill>
-		<PageHeader title="Earmark Devices" subTitle={`${devicesRows.length} Available Devices`} />
+{#snippet title()}
+	<Stack
+		direction="horizontal"
+		alignItems="center"
+		justifyContent="space-between"
+		style={{ width: '100%' }}
+	>
+		Earmark Devices
+		<Stack direction="horizontal" alignItems="center" gap="0.5rem">
+			<SearchBar />
+			<Button
+				icon="link"
+				disabled={selectedDevices.size === 0}
+				padding
+				backgroundColor="var(--light-grey)"
+				onclick={() => (assignDevices = !assignDevices)}
+			>
+				Assign {selectedDevices.size || ''} devices
+			</Button>
+		</Stack>
+	</Stack>
+{/snippet}
+
+{#snippet actionPanel()}
+	<Table
+		headers={[
+			{ label: '', width: '10%' },
+			{ label: 'Organisation', width: '45%' },
+			{ label: 'Email', width: '45%' }
+		]}
+		rows={rowsWithRenderHandler(accountsRows, selectCell)}
+		pageSize={10}
+	/>
+
+	<Validation
+		validateLabel={`Assign ${selectedDevices.size} devices`}
+		validateDisabled={!selectedAccount}
+		onvalidate={() => {
+			if (selectedAccount) {
+				updateDevices(
+					Array.from(selectedDevices).map((it) => ({ ...it, accountId: selectedAccount?.id }))
+				);
+
+				selectedDevices = new Set();
+				selectedAccount = undefined;
+				assignDevices = false;
+			}
+		}}
+		oncancel={() => {
+			assignDevices = false;
+		}}
+	/>
+{/snippet}
+
+{#snippet actionPanelLabel()}
+	<Stack direction="horizontal" justifyContent="space-between" style={{ width: '100%' }}>
+		<span>Assign devices</span>
 		<SearchBar />
+	</Stack>
+{/snippet}
+
+<PageLayout
+	actionPanel={assignDevices && selectedDevices.size > 0 ? actionPanel : undefined}
+	label={actionPanelLabel}
+>
+	<Section fill>
+		<PageHeader {title} subTitle={`${devicesRows.length} Available Devices`} />
 		<Table
 			style={getCss({ width: '100%' })}
 			headers={[
@@ -92,40 +158,4 @@
 			pageSize={20}
 		/>
 	</Section>
-
-	{#if selectedDevices.size > 0}
-		<Section
-			sticky="var(--content-offset-top)"
-			padding="1rem"
-			label="Accounts"
-			backgroundColor="var(--light-grey)"
-			width="40%"
-		>
-			<SearchBar />
-			<Table
-				headers={[
-					{ label: '', width: '10%' },
-					{ label: 'Organisation', width: '45%' },
-					{ label: 'Email', width: '45%' }
-				]}
-				rows={rowsWithRenderHandler(accountsRows, selectCell)}
-				pageSize={10}
-			/>
-
-			<Validation
-				validateLabel={`Assign ${selectedDevices.size} devices to account`}
-				validateDisabled={!selectedAccount}
-				onvalidate={() => {
-					if (selectedAccount) {
-						updateDevices(
-							Array.from(selectedDevices).map((it) => ({ ...it, accountId: selectedAccount?.id }))
-						);
-
-						selectedDevices = new Set();
-						selectedAccount = undefined;
-					}
-				}}
-			/>
-		</Section>
-	{/if}
-</Stack>
+</PageLayout>
