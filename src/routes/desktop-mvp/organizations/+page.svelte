@@ -18,6 +18,7 @@
 	import Grid from '../../../components/desktop/Grid.svelte';
 	import OrganizationCard from '../../../components/desktop/OrganizationCard.svelte';
 	import Pagination from '../../../components/layout/Pagination.svelte';
+	import PageLayout from '../../../components/desktop/PageLayout.svelte';
 
 	const { accounts, addAccount } = useAccounts();
 
@@ -46,6 +47,9 @@
 				: true
 		)
 	);
+
+	const showActionPanel = $derived(newAccount);
+	const actionPanelLabel = $derived(newAccount ? 'New Account' : undefined);
 </script>
 
 {#snippet title()}
@@ -90,7 +94,96 @@
 	</Button>
 {/snippet}
 
-<Stack direction="horizontal" style={{ width: '100%' }}>
+{#snippet actionPanel()}
+	{#if newAccount}
+		<TextInput
+			label="Organization Name"
+			onvalue={(value) => {
+				if (!newAccount) return;
+				newAccount.organizationName = value;
+			}}
+		/>
+		<TextInput
+			label="Email"
+			onvalue={(value) => {
+				if (!newAccount) return;
+				newAccount.email = value;
+			}}
+		/>
+		<TextInput
+			type="password"
+			label="Password"
+			onvalue={(value) => {
+				if (!newAccount) return;
+				newAccount.password = value;
+			}}
+		/>
+		<TextInput type="password" label="Repeat Password" />
+
+		<!-- <Stack gap="1rem">
+        <span>Select role</span>
+        <Dropdown
+          label={newAccount.role || 'Role'}
+          icon="navigate"
+          items={[
+            { label: 'Viv superadmin' },
+            { label: 'Distributer' },
+            { label: 'Farmer Admin' },
+            { label: 'Farmer' }
+          ]}
+          itemSnippet={roleSnippet}
+        />
+      </Stack> -->
+
+		<!-- <Spacer />
+      <div>
+        <p>Is Organisation</p>
+        <Spacer size="0.5rem" />
+        <Checkbox onChange={(checked) => (isOrganisation = checked)} />
+      </div>
+
+      {#if isOrganisation}
+        <TextInput
+          label="Organization Name"
+          onvalue={(value) => {
+            if (!newAccount) return;
+            newAccount.organizationName = value;
+          }}
+        />
+      {/if} -->
+
+		<Validation
+			validateDisabled={!newAccount.email || !newAccount.organizationName || !newAccount.password}
+			validateLabel="Create"
+			onvalidate={() => {
+				if (!newAccount) return;
+				addAccount(newAccount);
+				newAccount = undefined;
+			}}
+			oncancel={() => {
+				isOrganisation = false;
+				newAccount = undefined;
+			}}
+		/>
+	{:else if selectedOrganization}
+		{#key selectedOrganization.id}
+			<TextInput label="Organization Name" defaultValue={selectedOrganization.organizationName} />
+			<TextInput label="Email" defaultValue={selectedOrganization.email} />
+			<Validation
+				validateLabel="Save"
+				onvalidate={() => (selectedOrganization = undefined)}
+				cancelLabel="Cancel"
+				oncancel={() => (selectedOrganization = undefined)}
+			/>
+			<DangerZone
+				label="Delete Organization"
+				description="Permanently delete this organization and all of its data. This action cannot be undone."
+			/>
+		{/key}
+	{/if}
+{/snippet}
+
+<PageLayout actionPanel={showActionPanel ? actionPanel : undefined} label={actionPanelLabel}>
 	<Section>
 		<PageHeader {title} />
 		<SearchBar bind:value={searchQuery} />
@@ -109,95 +202,4 @@
 		/> -->
 		<Pagination pages={3} />
 	</Section>
-
-	{#if newAccount}
-		<Section label="New Organization" width="40%" backgroundColor="var(--light-grey)">
-			<TextInput
-				label="Organization Name"
-				onvalue={(value) => {
-					if (!newAccount) return;
-					newAccount.organizationName = value;
-				}}
-			/>
-			<TextInput
-				label="Email"
-				onvalue={(value) => {
-					if (!newAccount) return;
-					newAccount.email = value;
-				}}
-			/>
-			<TextInput
-				type="password"
-				label="Password"
-				onvalue={(value) => {
-					if (!newAccount) return;
-					newAccount.password = value;
-				}}
-			/>
-			<TextInput type="password" label="Repeat Password" />
-
-			<!-- <Stack gap="1rem">
-				<span>Select role</span>
-				<Dropdown
-					label={newAccount.role || 'Role'}
-					icon="navigate"
-					items={[
-						{ label: 'Viv superadmin' },
-						{ label: 'Distributer' },
-						{ label: 'Farmer Admin' },
-						{ label: 'Farmer' }
-					]}
-					itemSnippet={roleSnippet}
-				/>
-			</Stack> -->
-
-			<!-- <Spacer />
-			<div>
-				<p>Is Organisation</p>
-				<Spacer size="0.5rem" />
-				<Checkbox onChange={(checked) => (isOrganisation = checked)} />
-			</div>
-
-			{#if isOrganisation}
-				<TextInput
-					label="Organization Name"
-					onvalue={(value) => {
-						if (!newAccount) return;
-						newAccount.organizationName = value;
-					}}
-				/>
-			{/if} -->
-
-			<Validation
-				validateDisabled={!newAccount.email || !newAccount.organizationName || !newAccount.password}
-				validateLabel="Create"
-				onvalidate={() => {
-					if (!newAccount) return;
-					addAccount(newAccount);
-					newAccount = undefined;
-				}}
-				oncancel={() => {
-					isOrganisation = false;
-					newAccount = undefined;
-				}}
-			/>
-		</Section>
-	{:else if selectedOrganization}
-		{#key selectedOrganization.id}
-			<Section label="Edit organisation" width="40%" backgroundColor="var(--light-grey)">
-				<TextInput label="Organization Name" defaultValue={selectedOrganization.organizationName} />
-				<TextInput label="Email" defaultValue={selectedOrganization.email} />
-				<Validation
-					validateLabel="Save"
-					onvalidate={() => (selectedOrganization = undefined)}
-					cancelLabel="Cancel"
-					oncancel={() => (selectedOrganization = undefined)}
-				/>
-				<DangerZone
-					label="Delete Organization"
-					description="Permanently delete this organization and all of its data. This action cannot be undone."
-				/>
-			</Section>
-		{/key}
-	{/if}
-</Stack>
+</PageLayout>

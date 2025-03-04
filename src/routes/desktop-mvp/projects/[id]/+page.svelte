@@ -29,6 +29,7 @@
 	import DangerZone from '../../../../components/desktop/DangerZone.svelte';
 	import SearchBar from '../../../../components/desktop/SearchBar.svelte';
 	import EmptyItem from '../../../../components/layout/EmptyItem.svelte';
+	import PageLayout from '../../../../components/desktop/PageLayout.svelte';
 
 	const projectId = $page.params.id;
 	const { projects, updateProject } = useProjects();
@@ -70,7 +71,10 @@
 		};
 	});
 
-	const editing = $derived(editingProject || newTrial);
+	const showActionPanel = $derived(editingProject || newTrial);
+	const actionPanelLabel = $derived(
+		editingProject ? 'Edit Project' : newTrial ? 'New Trial' : undefined
+	);
 </script>
 
 {#if project}
@@ -86,14 +90,13 @@
 			style={{ width: '100%' }}
 		>
 			{project.name}
-			{#if !editing}
-				<Button
-					icon="edit"
-					padding
-					backgroundColor="var(--light-grey)"
-					onclick={() => (editingProject = !editingProject)}>Edit</Button
-				>
-			{/if}
+
+			<Button
+				icon="edit"
+				padding
+				backgroundColor="var(--light-grey)"
+				onclick={() => (editingProject = !editingProject)}>Edit</Button
+			>
 		</Stack>
 	{/snippet}
 
@@ -126,7 +129,82 @@
 		<SearchBar />
 	{/snippet}
 
-	<Stack direction="horizontal" style={{ width: '100%' }}>
+	{#snippet actionPanel()}
+		{#if editingProject}
+			<TextInput label="Name" defaultValue={project.name} bind:value={newProjectName} />
+			<TextareaInput label="Description" defaultValue={project.description} />
+
+			<!-- <Stack gap="0.5rem">
+          <span>Lora Settings</span>
+          <Dropdown
+            icon="navigate"
+            label={project.loraConfiguration?.name || 'Europe'}
+            items={loraConfigurations}
+            itemSnippet={dropdownItem}
+          />
+        </Stack> -->
+
+			<Validation
+				validateLabel="Save"
+				onvalidate={() => {
+					updateProject({ ...project, name: newProjectName });
+					editingProject = false;
+				}}
+				oncancel={() => {
+					editingProject = false;
+				}}
+			/>
+
+			<DangerZone
+				label="Delete project"
+				description="Permanently delete this project and all of its data. This action cannot be undone."
+			/>
+		{:else if newTrial}
+			<TextInput
+				label="Name"
+				onvalue={(value) => {
+					if (!newTrial) return;
+					newTrial.name = value;
+				}}
+			/>
+			<TextareaInput
+				label="Description"
+				onvalue={(value) => {
+					if (!newTrial) return;
+					newTrial.description = value;
+				}}
+			/>
+			<Map
+				bind:this={map}
+				maxBounds={swissBounds}
+				zoom={11}
+				minZoom={3}
+				maxZoom={18}
+				center={newTrial.center}
+				showTarget
+				markers={[{ lngLat: newTrial.center }]}
+				geoJSONs={newTrial.layers}
+				onChange={() => {
+					// const delta = getLocationDelta(value, newTrial.center);
+					// if (delta > 0.000001) coords = value;
+				}}
+			/>
+			<Validation
+				validateLabel="Create"
+				onvalidate={() => {
+					if (!newTrial) return;
+					addTrial(newTrial);
+					newTrial = undefined;
+				}}
+				oncancel={() => {
+					selectedTrials.clear();
+					newTrial = undefined;
+				}}
+			/>
+		{/if}
+	{/snippet}
+
+	<PageLayout label={actionPanelLabel} actionPanel={showActionPanel ? actionPanel : undefined}>
 		<Stack style={{ width: '100%' }}>
 			<Section>
 				<Stack gap="0.5rem">
@@ -149,18 +227,16 @@
 
 			<Section
 				label="Trials"
-				actions={editing
-					? []
-					: [
-							{ label: searchTrial },
-							{
-								label: 'Create',
-								icon: 'add',
-								backgroundColor: 'var(--light-grey)',
-								padding: true,
-								onclick: () => createTrial()
-							}
-						]}
+				actions={[
+					{ label: searchTrial },
+					{
+						label: 'Create',
+						icon: 'add',
+						backgroundColor: 'var(--light-grey)',
+						padding: true,
+						onclick: () => createTrial()
+					}
+				]}
 			>
 				{#if projectTrials.length === 0}
 					<EmptyItem label="There are currently no trials for this prioject" />
@@ -179,93 +255,5 @@
 				</Section>
 			{/if}
 		</Stack>
-
-		{#if editingProject}
-			<Section
-				label="Edit project"
-				backgroundColor="var(--light-grey)"
-				sticky="var(--content-offset-top)"
-				width="40%"
-			>
-				<TextInput label="Name" defaultValue={project.name} bind:value={newProjectName} />
-				<TextareaInput label="Description" defaultValue={project.description} />
-
-				<!-- <Stack gap="0.5rem">
-					<span>Lora Settings</span>
-					<Dropdown
-						icon="navigate"
-						label={project.loraConfiguration?.name || 'Europe'}
-						items={loraConfigurations}
-						itemSnippet={dropdownItem}
-					/>
-				</Stack> -->
-
-				<Validation
-					validateLabel="Save"
-					onvalidate={() => {
-						updateProject({ ...project, name: newProjectName });
-						editingProject = false;
-					}}
-					oncancel={() => {
-						editingProject = false;
-					}}
-				/>
-
-				<DangerZone
-					label="Delete project"
-					description="Permanently delete this project and all of its data. This action cannot be undone."
-				/>
-			</Section>
-		{:else if newTrial}
-			<Section
-				label="New Trial"
-				backgroundColor="var(--light-grey)"
-				width="40%"
-				sticky="var(--content-offset-top)"
-				stickyDirection="bottom"
-			>
-				<TextInput
-					label="Name"
-					onvalue={(value) => {
-						if (!newTrial) return;
-						newTrial.name = value;
-					}}
-				/>
-				<TextareaInput
-					label="Description"
-					onvalue={(value) => {
-						if (!newTrial) return;
-						newTrial.description = value;
-					}}
-				/>
-				<Map
-					bind:this={map}
-					maxBounds={swissBounds}
-					zoom={11}
-					minZoom={3}
-					maxZoom={18}
-					center={newTrial.center}
-					showTarget
-					markers={[{ lngLat: newTrial.center }]}
-					geoJSONs={newTrial.layers}
-					onChange={() => {
-						// const delta = getLocationDelta(value, newTrial.center);
-						// if (delta > 0.000001) coords = value;
-					}}
-				/>
-				<Validation
-					validateLabel="Create"
-					onvalidate={() => {
-						if (!newTrial) return;
-						addTrial(newTrial);
-						newTrial = undefined;
-					}}
-					oncancel={() => {
-						selectedTrials.clear();
-						newTrial = undefined;
-					}}
-				/>
-			</Section>
-		{/if}
-	</Stack>
+	</PageLayout>
 {/if}

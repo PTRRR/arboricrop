@@ -2,6 +2,7 @@
 	import { page } from '$app/state';
 	import DangerZone from '../../../../components/desktop/DangerZone.svelte';
 	import Dropdown from '../../../../components/desktop/Dropdown.svelte';
+	import PageLayout from '../../../../components/desktop/PageLayout.svelte';
 	import SearchBar from '../../../../components/desktop/SearchBar.svelte';
 	import Section from '../../../../components/desktop/Section.svelte';
 	import Stack from '../../../../components/desktop/Stack.svelte';
@@ -25,6 +26,16 @@
 
 	let invitedUsers = $state<Map<string, Account>>(new Map());
 	let selectedUser = $state<Account | undefined>(undefined);
+	const showActionPanel = $derived(editOrganization || selectedUser || invitedUsers.size > 0);
+	const actionPanelLabel = $derived(
+		editOrganization
+			? 'Edit Organization'
+			: selectedUser
+				? 'Edit User'
+				: invitedUsers.size > 0
+					? 'Invite Users'
+					: undefined
+	);
 </script>
 
 {#if organization}
@@ -36,16 +47,14 @@
 			justifyContent="space-between"
 		>
 			{organization.username || organization.organizationName}
-			{#if !editOrganization && invitedUsers.size === 0 && !selectedUser}
-				<Button
-					icon="edit"
-					padding
-					backgroundColor="var(--light-grey)"
-					onclick={() => (editOrganization = true)}
-				>
-					Edit
-				</Button>
-			{/if}
+			<Button
+				icon="edit"
+				padding
+				backgroundColor="var(--light-grey)"
+				onclick={() => (editOrganization = true)}
+			>
+				Edit
+			</Button>
 		</Stack>
 	{/snippet}
 
@@ -85,7 +94,84 @@
 		<Button padding backgroundColor="var(--white)">{role}</Button>
 	{/snippet}
 
-	<Stack direction="horizontal" style={{ width: '100%' }}>
+	{#snippet actionPanel()}
+		{#if editOrganization}
+			<TextInput label="organization name" defaultValue={organization.organizationName} />
+			<TextInput label="email" defaultValue={organization.email} />
+			<Validation
+				validateLabel="save"
+				onvalidate={() => (editOrganization = false)}
+				oncancel={() => (editOrganization = false)}
+			/>
+			<DangerZone
+				label="Delete organization"
+				description="Permanently delete this organization and all of its data. This action cannot be undone."
+			/>
+		{:else if invitedUsers.size > 0}
+			<TextInput label="email" />
+			<div>
+				<Button icon="add" padding backgroundColor="var(--white)">Add to list</Button>
+			</div>
+			<Table
+				headers={[
+					{ label: 'email', width: '40%' },
+					{ label: 'role', width: '30%' },
+					{ label: 'scope', width: '30%' }
+				]}
+				rows={Array.from(invitedUsers.values()).map((it, index) => {
+					return {
+						cells: [
+							{ label: it.email },
+							{ label: it.id, renderHandler: roleDropdown },
+							{ label: `project${index.toString().padStart(2, '0')}` }
+						]
+					};
+				})}
+			/>
+			<Validation
+				validateLabel="send invitations"
+				onvalidate={() => {
+					invitedUsers
+						.values()
+						.forEach((account) => updateAccount({ ...account, parentId: organization.id }));
+					editOrganization = false;
+					invitedUsers = new Map();
+				}}
+				oncancel={() => (invitedUsers = new Map())}
+			/>
+		{:else if selectedUser}
+			<TextInput label="email" readonly defaultValue={selectedUser.email} />
+
+			<Stack gap="0.5rem" alignItems="flex-start">
+				<p>Role</p>
+				<Dropdown
+					icon="down"
+					iconOrder="inverted"
+					label={selectedUser.role || 'Select Role'}
+					items={roles.map((it) => ({ role: it, accountId: selectedUser?.id || '' }))}
+					itemSnippet={roleDropdownEdit}
+				/>
+			</Stack>
+
+			<Validation
+				validateLabel="Save"
+				onvalidate={() => (selectedUser = undefined)}
+				oncancel={() => (selectedUser = undefined)}
+			/>
+
+			<DangerZone
+				label="Remove user"
+				description="Permanently remove this user from the organization. This action cannot be undone."
+				onclick={() => {
+					if (!selectedUser) return;
+					updateAccount({ ...selectedUser, parentId: undefined });
+					selectedUser = undefined;
+				}}
+			/>
+		{/if}
+	{/snippet}
+
+	<PageLayout actionPanel={showActionPanel ? actionPanel : undefined} label={actionPanelLabel}>
 		<Stack style={{ width: '100%' }}>
 			<Section>
 				<PageHeader
@@ -97,23 +183,21 @@
 			</Section>
 			<Section
 				label="Users"
-				actions={editOrganization || invitedUsers.size > 0 || selectedUser
-					? []
-					: [
-							{
-								label: 'Invite',
-								icon: 'add',
-								padding: true,
-								backgroundColor: 'var(--light-grey)',
-								onclick: () => {
-									shuffle($accounts)
-										.slice(0, 4)
-										.forEach((it) => invitedUsers.set(it.id, { ...it, role: 'Farmer Admin' }));
+				actions={[
+					{
+						label: 'Invite',
+						icon: 'add',
+						padding: true,
+						backgroundColor: 'var(--light-grey)',
+						onclick: () => {
+							shuffle($accounts)
+								.slice(0, 4)
+								.forEach((it) => invitedUsers.set(it.id, { ...it, role: 'Farmer Admin' }));
 
-									invitedUsers = new Map(invitedUsers);
-								}
-							}
-						]}
+							invitedUsers = new Map(invitedUsers);
+						}
+					}
+				]}
 			>
 				{#if invitedAccounts.length === 0}
 					<EmptyItem label="There are no users yet" />
@@ -144,86 +228,5 @@
 				{/if}
 			</Section>
 		</Stack>
-
-		{#if editOrganization}
-			<Section label="edit organization" backgroundColor="var(--light-grey)" width="40%">
-				<TextInput label="organization name" defaultValue={organization.organizationName} />
-				<TextInput label="email" defaultValue={organization.email} />
-				<Validation
-					validateLabel="save"
-					onvalidate={() => (editOrganization = false)}
-					oncancel={() => (editOrganization = false)}
-				/>
-				<DangerZone
-					label="Delete organization"
-					description="Permanently delete this organization and all of its data. This action cannot be undone."
-				/>
-			</Section>
-		{:else if invitedUsers.size > 0}
-			<Section label="invite users" backgroundColor="var(--light-grey)" width="40%">
-				<TextInput label="email" />
-				<div>
-					<Button icon="add" padding backgroundColor="var(--white)">Add to list</Button>
-				</div>
-				<Table
-					headers={[
-						{ label: 'email', width: '40%' },
-						{ label: 'role', width: '30%' },
-						{ label: 'scope', width: '30%' }
-					]}
-					rows={Array.from(invitedUsers.values()).map((it, index) => {
-						return {
-							cells: [
-								{ label: it.email },
-								{ label: it.id, renderHandler: roleDropdown },
-								{ label: `project${index.toString().padStart(2, '0')}` }
-							]
-						};
-					})}
-				/>
-				<Validation
-					validateLabel="send invitations"
-					onvalidate={() => {
-						invitedUsers
-							.values()
-							.forEach((account) => updateAccount({ ...account, parentId: organization.id }));
-						editOrganization = false;
-						invitedUsers = new Map();
-					}}
-					oncancel={() => (invitedUsers = new Map())}
-				/>
-			</Section>
-		{:else if selectedUser}
-			<Section label="Edit user" width="40%" backgroundColor="var(--light-grey)">
-				<TextInput label="email" readonly defaultValue={selectedUser.email} />
-
-				<Stack gap="0.5rem" alignItems="flex-start">
-					<p>Role</p>
-					<Dropdown
-						icon="down"
-						iconOrder="inverted"
-						label={selectedUser.role || 'Select Role'}
-						items={roles.map((it) => ({ role: it, accountId: selectedUser?.id || '' }))}
-						itemSnippet={roleDropdownEdit}
-					/>
-				</Stack>
-
-				<Validation
-					validateLabel="Save"
-					onvalidate={() => (selectedUser = undefined)}
-					oncancel={() => (selectedUser = undefined)}
-				/>
-
-				<DangerZone
-					label="Remove user"
-					description="Permanently remove this user from the organization. This action cannot be undone."
-					onclick={() => {
-						if (!selectedUser) return;
-						updateAccount({ ...selectedUser, parentId: undefined });
-						selectedUser = undefined;
-					}}
-				/>
-			</Section>
-		{/if}
-	</Stack>
+	</PageLayout>
 {/if}

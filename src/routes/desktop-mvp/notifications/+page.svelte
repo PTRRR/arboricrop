@@ -4,6 +4,7 @@
 	import Dropdown from '../../../components/desktop/Dropdown.svelte';
 	import Grid from '../../../components/desktop/Grid.svelte';
 	import NotificationCard from '../../../components/desktop/NotificationCard.svelte';
+	import PageLayout from '../../../components/desktop/PageLayout.svelte';
 	import SearchBar from '../../../components/desktop/SearchBar.svelte';
 	import Section from '../../../components/desktop/Section.svelte';
 	import Stack from '../../../components/desktop/Stack.svelte';
@@ -156,7 +157,27 @@
 	</Stack>
 {/snippet}
 
-<Stack style={{ width: '100%' }} direction="horizontal">
+{#snippet actionPanel()}
+	<Table rows={infoRows} />
+	<div>
+		<Button icon="forward" iconOrder="inverted">See device</Button>
+	</div>
+	<Validation
+		validateLabel="Acknowlodge"
+		onvalidate={() => {
+			goto('/desktop-mvp/notifications');
+		}}
+		cancelLabel="Dismiss"
+		oncancel={() => {
+			goto('/desktop-mvp/notifications');
+		}}
+	/>
+{/snippet}
+
+<PageLayout
+	label={selectedNotification ? selectedNotification.title : undefined}
+	actionPanel={selectedNotification ? actionPanel : undefined}
+>
 	<Stack style={{ width: '100%' }}>
 		<!-- <Section> -->
 
@@ -238,29 +259,4 @@
 			<Pagination pages={3} />
 		</Section> -->
 	</Stack>
-
-	{#if selectedNotification}
-		<Section
-			label={selectedNotification.title}
-			description={selectedNotification.type}
-			sticky="var(--content-offset-top)"
-			backgroundColor="var(--light-grey)"
-			width="40%"
-		>
-			<Table rows={infoRows} />
-			<div>
-				<Button icon="forward" iconOrder="inverted">See device</Button>
-			</div>
-			<Validation
-				validateLabel="Acknowlodge"
-				onvalidate={() => {
-					goto('/desktop-mvp/notifications');
-				}}
-				cancelLabel="Dismiss"
-				oncancel={() => {
-					goto('/desktop-mvp/notifications');
-				}}
-			/>
-		</Section>
-	{/if}
-</Stack>
+</PageLayout>

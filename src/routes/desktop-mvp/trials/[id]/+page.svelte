@@ -26,6 +26,7 @@
 	import { goto } from '$app/navigation';
 	import SearchBar from '../../../../components/desktop/SearchBar.svelte';
 	import EmptyItem from '../../../../components/layout/EmptyItem.svelte';
+	import PageLayout from '../../../../components/desktop/PageLayout.svelte';
 
 	const trialId = $page.params.id;
 	const { trials, deleteTrial } = useTrials();
@@ -93,6 +94,11 @@
 			label: device.name
 		}))
 	);
+
+	const showActionPanel = $derived(addDevices || newGroup || editTrial || selectedGroup);
+	const actionPanelLabel = $derived(
+		newGroup ? 'New Group' : editTrial ? 'Edit Trial' : selectedGroup ? 'Edit Group' : undefined
+	);
 </script>
 
 {#if trial}
@@ -125,7 +131,115 @@
 		<SearchBar />
 	{/snippet}
 
-	<Stack style={{ width: '100%' }} direction="horizontal">
+	{#snippet actionPanel()}
+		{#if addDevices}
+			<DevicesList
+				devices={accountDevices.slice(0, 15)}
+				onselect={(devices) => {
+					selectedNewDevices = new Set(devices);
+				}}
+			/>
+			<Pagination pages={3} />
+			<Validation
+				validateLabel="Add"
+				validateDisabled={selectedNewDevices.size === 0}
+				onvalidate={() => {
+					updateDevices(
+						Array.from(selectedNewDevices).map((it) => ({ ...it, parentId: trial.id }))
+					);
+				}}
+				oncancel={() => {
+					selectedNewDevices = new Set();
+					selectedDevices = new Set();
+					addDevices = false;
+				}}
+			/>
+		{:else if editTrial}
+			<TextInput label="Name" defaultValue={trial.name} />
+			<TextareaInput label="Description" defaultValue={trial.description} />
+			<Map
+				bind:this={map}
+				maxBounds={swissBounds}
+				zoom={11}
+				minZoom={3}
+				maxZoom={18}
+				center={trial.center}
+				showTarget
+				markers={[{ lngLat: trial.center }]}
+				geoJSONs={trial.layers}
+				onChange={() => {
+					// const delta = getLocationDelta(value, newTrial.center);
+					// if (delta > 0.000001) coords = value;
+				}}
+			/>
+			<Validation
+				validateLabel="Save"
+				onvalidate={() => {
+					editTrial = false;
+				}}
+				oncancel={() => {
+					editTrial = false;
+				}}
+			/>
+			<DangerZone
+				label="Delete trial"
+				description="Permanently delete this trial and all of its data. This action cannot be undone."
+				onclick={() => {
+					const parentId = trial.parentId;
+					deleteTrial(trial);
+					goto(`/desktop-mvp/projects/${parentId}`);
+				}}
+			/>
+		{:else if selectedGroup}
+			<TextInput label="Name" defaultValue={selectedGroup.name} />
+			<TextareaInput label="Description" defaultValue={selectedGroup.description} />
+			<Validation
+				validateLabel="Save"
+				onvalidate={() => {
+					selectedGroup = undefined;
+				}}
+				oncancel={() => {
+					selectedGroup = undefined;
+				}}
+			/>
+			<DangerZone
+				label="Delete group"
+				description="Permanently delete this group and all of its data. This action cannot be undone."
+			/>
+		{:else if newGroup}
+			<TextInput
+				label="Name"
+				onvalue={(value) => {
+					if (!newGroup) return;
+					newGroup.name = value;
+				}}
+			/>
+			<TextareaInput
+				label="Description"
+				onvalue={(value) => {
+					if (!newGroup) return;
+					newGroup.description = value;
+				}}
+			/>
+			<Validation
+				validateLabel="Create"
+				validateDisabled={!newGroup.name}
+				onvalidate={() => {
+					if (!newGroup) return;
+					addGroup(newGroup);
+					newGroup = undefined;
+				}}
+				oncancel={() => {
+					selectedNewDevices = new Set();
+					selectedDevices = new Set();
+					addDevices = false;
+					newGroup = undefined;
+				}}
+			/>
+		{/if}
+	{/snippet}
+
+	<PageLayout actionPanel={showActionPanel ? actionPanel : undefined} label={actionPanelLabel}>
 		<Stack style={{ width: '100%' }}>
 			<Section>
 				<PageHeader {preTitle} {title} subTitle={`${trialDevices.length} Devices`} />
@@ -183,134 +297,5 @@
 				{/if}
 			</Section>
 		</Stack>
-
-		{#if addDevices}
-			<Section label="Available devices" backgroundColor="var(--light-grey)" width="40%">
-				<DevicesList
-					devices={accountDevices.slice(0, 15)}
-					onselect={(devices) => {
-						selectedNewDevices = new Set(devices);
-					}}
-				/>
-				<Pagination pages={3} />
-				<Validation
-					validateLabel="Add"
-					validateDisabled={selectedNewDevices.size === 0}
-					onvalidate={() => {
-						updateDevices(
-							Array.from(selectedNewDevices).map((it) => ({ ...it, parentId: trial.id }))
-						);
-					}}
-					oncancel={() => {
-						selectedNewDevices = new Set();
-						selectedDevices = new Set();
-						addDevices = false;
-					}}
-				/>
-			</Section>
-		{:else if editTrial}
-			<Section
-				label="Edit Trial"
-				backgroundColor="var(--light-grey)"
-				width="40%"
-				sticky="var(--content-offset-top)"
-			>
-				<TextInput label="Name" defaultValue={trial.name} />
-				<TextareaInput label="Description" defaultValue={trial.description} />
-				<Map
-					bind:this={map}
-					maxBounds={swissBounds}
-					zoom={11}
-					minZoom={3}
-					maxZoom={18}
-					center={trial.center}
-					showTarget
-					markers={[{ lngLat: trial.center }]}
-					geoJSONs={trial.layers}
-					onChange={() => {
-						// const delta = getLocationDelta(value, newTrial.center);
-						// if (delta > 0.000001) coords = value;
-					}}
-				/>
-				<Validation
-					validateLabel="Save"
-					onvalidate={() => {
-						editTrial = false;
-					}}
-					oncancel={() => {
-						editTrial = false;
-					}}
-				/>
-				<DangerZone
-					label="Delete trial"
-					description="Permanently delete this trial and all of its data. This action cannot be undone."
-					onclick={() => {
-						const parentId = trial.parentId;
-						deleteTrial(trial);
-						goto(`/desktop-mvp/projects/${parentId}`);
-					}}
-				/>
-			</Section>
-		{:else if selectedGroup}
-			<Section
-				label="Edit group"
-				backgroundColor="var(--light-grey)"
-				width="40%"
-				sticky="var(--content-offset-top)"
-			>
-				<TextInput label="Name" defaultValue={selectedGroup.name} />
-				<TextareaInput label="Description" defaultValue={selectedGroup.description} />
-				<Validation
-					validateLabel="Save"
-					onvalidate={() => {
-						selectedGroup = undefined;
-					}}
-					oncancel={() => {
-						selectedGroup = undefined;
-					}}
-				/>
-				<DangerZone
-					label="Delete group"
-					description="Permanently delete this group and all of its data. This action cannot be undone."
-				/>
-			</Section>
-		{:else if newGroup}
-			<Section
-				label="New Group"
-				backgroundColor="var(--light-grey)"
-				width="40%"
-				sticky="var(--content-offset-top)"
-			>
-				<TextInput
-					label="Name"
-					onvalue={(value) => {
-						if (!newGroup) return;
-						newGroup.name = value;
-					}}
-				/>
-				<TextareaInput
-					label="Description"
-					onvalue={(value) => {
-						if (!newGroup) return;
-						newGroup.description = value;
-					}}
-				/>
-				<Validation
-					validateLabel="Create"
-					validateDisabled={!newGroup.name}
-					onvalidate={() => {
-						if (!newGroup) return;
-						addGroup(newGroup);
-						newGroup = undefined;
-					}}
-					oncancel={() => {
-						selectedNewDevices = new Set();
-						selectedDevices = new Set();
-						addDevices = false;
-						newGroup = undefined;
-					}}
-				/>
-			</Section>
-		{/if}
-	</Stack>
+	</PageLayout>
 {/if}
