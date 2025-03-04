@@ -39,6 +39,10 @@
 </script>
 
 {#if organization}
+	{#snippet preTitle()}
+		<Button icon="back" iconSize="small" href="/desktop-mvp/organizations">Organizations</Button>
+	{/snippet}
+
 	{#snippet title()}
 		<Stack
 			direction="horizontal"
@@ -174,12 +178,7 @@
 	<PageLayout actionPanel={showActionPanel ? actionPanel : undefined} label={actionPanelLabel}>
 		<Stack style={{ width: '100%' }}>
 			<Section>
-				<PageHeader
-					preTitle="< Organisation"
-					preTitleHref="/desktop-mvp/organizations"
-					{title}
-					subTitle={organization.email}
-				/>
+				<PageHeader {preTitle} {title} subTitle={organization.email} />
 			</Section>
 			<Section
 				label="Users"

@@ -17,6 +17,7 @@
 	import Validation from '../../../components/desktop/Validation.svelte';
 	import Dropdown from '../../../components/desktop/Dropdown.svelte';
 	import Icon from '../../../components/mobile-layout/Icon.svelte';
+	import PageLayout from '../../../components/desktop/PageLayout.svelte';
 
 	const { projects, addProject } = useProjects();
 	const { currentAccount } = useCurrentAccount();
@@ -88,7 +89,47 @@
 	</Button>
 {/snippet}
 
-<Stack direction="horizontal" style={{ width: '100%' }} alignItems="flex-start">
+{#snippet actionPanel()}
+	{#if newProject}
+		<TextInput
+			label="Name"
+			onvalue={(value) => {
+				if (!newProject) return;
+				newProject.name = value;
+			}}
+		/>
+		<TextareaInput
+			label="description"
+			onvalue={(value) => {
+				if (!newProject) return;
+				newProject.description = value;
+			}}
+		/>
+
+		<!-- <Stack gap="0.5rem">
+    <span>Lora Settings</span>
+    <Dropdown
+    icon="navigate"
+    label={newProject.loraConfiguration?.name || 'Europe'}
+    items={loraConfigurations}
+    itemSnippet={dropdownItem}
+    />
+    </Stack> -->
+
+		<Validation
+			validateDisabled={!newProject.name}
+			onvalidate={() => {
+				newProject && addProject(newProject);
+				newProject = undefined;
+			}}
+			oncancel={() => {
+				newProject = undefined;
+			}}
+		/>
+	{/if}
+{/snippet}
+
+<PageLayout actionPanel={newProject ? actionPanel : undefined} label="New Project">
 	<Section>
 		<PageHeader {title} subTitle={`${accountProjects.length} Projects`} />
 		<Grid>
@@ -97,49 +138,4 @@
 			{/each}
 		</Grid>
 	</Section>
-
-	{#if newProject}
-		<Section
-			label="New Project"
-			backgroundColor="var(--light-grey)"
-			sticky="var(--content-offset-top)"
-			width="40%"
-		>
-			<TextInput
-				label="Name"
-				onvalue={(value) => {
-					if (!newProject) return;
-					newProject.name = value;
-				}}
-			/>
-			<TextareaInput
-				label="description"
-				onvalue={(value) => {
-					if (!newProject) return;
-					newProject.description = value;
-				}}
-			/>
-
-			<!-- <Stack gap="0.5rem">
-				<span>Lora Settings</span>
-				<Dropdown
-					icon="navigate"
-					label={newProject.loraConfiguration?.name || 'Europe'}
-					items={loraConfigurations}
-					itemSnippet={dropdownItem}
-				/>
-			</Stack> -->
-
-			<Validation
-				validateDisabled={!newProject.name}
-				onvalidate={() => {
-					newProject && addProject(newProject);
-					newProject = undefined;
-				}}
-				oncancel={() => {
-					newProject = undefined;
-				}}
-			/>
-		</Section>
-	{/if}
-</Stack>
+</PageLayout>

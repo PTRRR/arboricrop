@@ -60,7 +60,8 @@
 		style={{ width: '100%' }}
 	>
 		Organizations
-		{#if !newAccount && !selectedOrganization}
+		<Stack direction="horizontal" alignItems="center" gap="0.5rem">
+			<SearchBar bind:value={searchQuery} />
 			<Button
 				icon="add"
 				padding
@@ -76,7 +77,7 @@
 			>
 				Create
 			</Button>
-		{/if}
+		</Stack>
 	</Stack>
 {/snippet}
 
@@ -186,7 +187,6 @@
 <PageLayout actionPanel={showActionPanel ? actionPanel : undefined} label={actionPanelLabel}>
 	<Section>
 		<PageHeader {title} />
-		<SearchBar bind:value={searchQuery} />
 		<Grid>
 			{#each filteredOrganizations as organization}
 				<OrganizationCard {organization} />
