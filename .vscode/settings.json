@@ -1,3 +1,7 @@
 {
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "workbench.editor.customLabels.patterns": {
+    "**/app/**/page.tsx": "${dirname}/page.tsx",
+    "**/+page.svelte": "${dirname}/+page.svelte"
+  },
 }
