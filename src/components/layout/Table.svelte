@@ -142,9 +142,12 @@
 				}
 			}
 
-			&#{$root}--selected {
+			&#{$root}--selected,
+			#{$root}--selected + & {
 				&::before {
-					border-top: solid 1px var(--white);
+					border-top: solid 1px var(--light-grey) !important;
+					width: calc(100% - 5px) !important;
+					left: 2.5px !important;
 				}
 			}
 		}
