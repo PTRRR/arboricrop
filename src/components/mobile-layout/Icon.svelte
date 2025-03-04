@@ -33,6 +33,7 @@
 		| 'link'
 		| 'checkbox-blank'
 		| 'checkbox'
+		| 'sort'
 		| 'notification';
 
 	export type IconSize = 'normal' | 'large' | 'small';
@@ -297,6 +298,13 @@
 			><path
 				fill={color}
 				d="M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h14q.825 0 1.413.588T21 5v14q0 .825-.587 1.413T19 21zm0-2h14V5H5z"
+			/></svg
+		>
+	{:else if icon === 'sort'}
+		<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"
+			><path
+				fill={color}
+				d="M4 18q-.425 0-.712-.288T3 17t.288-.712T4 16h4q.425 0 .713.288T9 17t-.288.713T8 18zm0-5q-.425 0-.712-.288T3 12t.288-.712T4 11h10q.425 0 .713.288T15 12t-.288.713T14 13zm0-5q-.425 0-.712-.288T3 7t.288-.712T4 6h16q.425 0 .713.288T21 7t-.288.713T20 8z"
 			/></svg
 		>
 	{:else}

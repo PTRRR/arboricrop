@@ -21,6 +21,7 @@
 	import { getCss } from '../../utils/css';
 	import Pagination from './Pagination.svelte';
 	import Spacer from '../Spacer.svelte';
+	import Icon from '../mobile-layout/Icon.svelte';
 
 	interface Props {
 		headers?: HeaderCell[];
@@ -75,6 +76,10 @@
 					class:table--sortable={header.sortable}
 					style={getCss({ width: header.width })}
 				>
+					{#if header.sortable}
+						<Icon icon="sort" color="var(--dark-grey)" />
+					{/if}
+
 					<span>{header.label}</span>
 				</div>
 			{/each}
@@ -191,12 +196,8 @@
 			}
 
 			&#{$root}--sortable {
-				// display: none;
-
-				&::before {
-					content: '<>';
-					transform: rotate(90deg) translate(0, 2px);
-				}
+				gap: 0.5rem;
+				cursor: pointer;
 			}
 
 			span {

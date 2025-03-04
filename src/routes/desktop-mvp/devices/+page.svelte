@@ -14,6 +14,7 @@
 	import NotificationCard from '../../../components/desktop/NotificationCard.svelte';
 	import Grid from '../../../components/desktop/Grid.svelte';
 	import StepSeparation from '../../../components/layout/StepSeparation.svelte';
+	import PageLayout from '../../../components/desktop/PageLayout.svelte';
 
 	const { devices, updateDevice } = useDevices();
 	const { currentAccount } = useCurrentAccount();
@@ -32,10 +33,62 @@
 	);
 </script>
 
-<Stack direction="horizontal" style={{ width: '100%' }} alignItems="flex-start">
-	<Section fill>
-		<PageHeader title="Devices" subTitle={`${accountDevices.length} Available Devices`} />
+{#snippet deviceLabel()}
+	{#if selectedDevice}
+		<Stack direction="horizontal" gap="0.5rem" alignItems="center">
+			<StatusDot status={selectedDevice?.status === 'active' ? 'success' : 'neutral'} />
+			{selectedDevice?.name}
+		</Stack>
+	{/if}
+{/snippet}
+
+{#snippet actionPanel()}
+	{#if selectedDevice}
+		<TextInput label="ID" value={selectedDevice.id} readonly />
+		<TextInput label="Version" value={selectedDevice.firmwareVersion} readonly />
+		<TextInput label="Name" bind:value={deviceName} />
+		<TextareaInput label="Note" bind:value={deviceNote} />
+
+		<StepSeparation label="Historical data" />
+		<Stack gap="0.5rem">
+			{#each shuffle($notifications).slice(0, 4) as notification}
+				<NotificationCard
+					selected
+					mode="minimal"
+					notification={{ ...notification, status: 'acknowledged', type: 'notification' }}
+				/>
+			{/each}
+		</Stack>
+
+		<Validation
+			validateLabel="Save"
+			validateDisabled={!selectedDeviceHasChanges}
+			onvalidate={() => {
+				if (!selectedDevice) return;
+
+				updateDevice({
+					...selectedDevice,
+					name: deviceName,
+					note: deviceNote
+				});
+
+				selectedDevice = accountDevices.find((it) => it.id === selectedDevice?.id);
+			}}
+			oncancel={() => (selectedDevice = undefined)}
+		/>
+	{/if}
+{/snippet}
+
+{#snippet title()}
+	<Stack direction="horizontal" justifyContent="space-between" style={{ width: '100%' }}>
+		<span>Devices</span>
 		<SearchBar />
+	</Stack>
+{/snippet}
+
+<PageLayout actionPanel={selectedDevice ? actionPanel : undefined} label={deviceLabel}>
+	<Section fill>
+		<PageHeader {title} subTitle={`${accountDevices.length} Available Devices`} />
 		<DevicesList
 			devices={accountDevices}
 			multi={false}
@@ -47,52 +100,5 @@
 		/>
 	</Section>
 
-	{#if selectedDevice}
-		{#snippet deviceLabel()}
-			<Stack direction="horizontal" gap="0.5rem" alignItems="center">
-				<StatusDot status={selectedDevice?.status === 'active' ? 'success' : 'neutral'} />
-				{selectedDevice?.name}
-			</Stack>
-		{/snippet}
-
-		<Section
-			label={deviceLabel}
-			description={selectedDevice.status}
-			backgroundColor="var(--light-grey)"
-			width="40%"
-			sticky="var(--content-offset-top)"
-		>
-			<TextInput label="ID" value={selectedDevice.id} readonly />
-			<TextInput label="Version" value={selectedDevice.firmwareVersion} readonly />
-			<TextInput label="Name" bind:value={deviceName} />
-			<TextareaInput label="Note" bind:value={deviceNote} />
-
-			<StepSeparation label="Historical data" />
-			<Grid minmax="15rem">
-				{#each shuffle($notifications).slice(0, 4) as notification}
-					<NotificationCard
-						selected
-						notification={{ ...notification, status: 'acknowledged', type: 'notification' }}
-					/>
-				{/each}
-			</Grid>
-
-			<Validation
-				validateLabel="Save"
-				validateDisabled={!selectedDeviceHasChanges}
-				onvalidate={() => {
-					if (!selectedDevice) return;
-
-					updateDevice({
-						...selectedDevice,
-						name: deviceName,
-						note: deviceNote
-					});
-
-					selectedDevice = accountDevices.find((it) => it.id === selectedDevice?.id);
-				}}
-				oncancel={() => (selectedDevice = undefined)}
-			/>
-		</Section>
-	{/if}
-</Stack>
+	{#if selectedDevice}{/if}
+</PageLayout>
