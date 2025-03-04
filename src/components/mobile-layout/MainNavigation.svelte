@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onNavigate } from '$app/navigation';
 	import { LAYOUT_PORTAL } from '../../routes/mobile-mvp/+layout.svelte';
-	import { useApp } from '../../stores';
+	import { useApp, useCurrentAccount } from '../../stores';
 	import { portal } from '../../utils/portal';
 	import Stack from '../desktop/Stack.svelte';
 	import Button from '../layout/Button.svelte';
@@ -15,8 +15,11 @@
 
 	const { baseUrl }: Props = $props();
 	const { isBlurred, showSplashscreen, showAppMenu, actionMenuSnippets } = useApp();
+	const { currentAccount } = useCurrentAccount();
 	const show = $derived(!$showSplashscreen && $showAppMenu);
-	const hideButton = $derived($showSplashscreen || $actionMenuSnippets.length > 0);
+	const hideButton = $derived(
+		$showSplashscreen || $actionMenuSnippets.length > 0 || !$currentAccount
+	);
 
 	$effect(() => {
 		$isBlurred = $showAppMenu;

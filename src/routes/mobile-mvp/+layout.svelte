@@ -9,7 +9,7 @@
 	import { iphone } from '../../utils/phones';
 	import { goto, onNavigate } from '$app/navigation';
 	import { createPortal } from '../../utils/portal';
-	import { useApp, useNotifications, useReturnButton } from '../../stores';
+	import { useApp, useCurrentAccount, useNotifications, useReturnButton } from '../../stores';
 	import Button from '../../components/layout/Button.svelte';
 	import { addEllipsis } from '../../utils/strings';
 	import { getCss } from '../../utils/css';
@@ -23,6 +23,7 @@
 	const notifications = useNotifications();
 	const pendingNotifications = $derived($notifications.filter((it) => it.status === 'pending'));
 	const returnButton = useReturnButton();
+	useCurrentAccount();
 	const {
 		showAppMenu,
 		hideContent,
