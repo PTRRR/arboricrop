@@ -1,14 +1,15 @@
 <script lang="ts">
 	import Button from '../layout/Button.svelte';
+	import type { IconName } from '../mobile-layout/Icon.svelte';
 	import Stack from './Stack.svelte';
 
 	interface Props {
 		onvalidate?: () => void;
 		oncancel?: () => void;
 		validateDisabled?: boolean;
-		validateLabel?: string;
+		validateLabel?: string | null;
 		cancelDisabled?: boolean;
-		cancelLabel?: string;
+		cancelLabel?: string | null;
 	}
 
 	const {
@@ -21,27 +22,54 @@
 	}: Props = $props();
 </script>
 
-<Stack direction="horizontal" gap="1rem" style={{ marginTop: '3rem' }}>
-	{#if onvalidate}
-		<Button
-			icon="check"
-			padding
-			backgroundColor="var(--light-green)"
-			iconColor="var(--light-green)"
-			disabled={validateDisabled}
-			onclick={onvalidate}>{validateLabel}</Button
+{#snippet button({
+	label,
+	disabled,
+	onclick,
+	icon,
+	backgroundColor,
+	iconColor,
+	iconBackgroundColor
+}: {
+	label?: string | null;
+	disabled?: boolean;
+	onclick?: () => void;
+	iconColor?: string;
+	backgroundColor?: string;
+	icon?: IconName;
+	iconBackgroundColor?: string;
+})}
+	{#if label}
+		<Button {icon} padding {backgroundColor} {iconColor} {iconBackgroundColor} {disabled} {onclick}
+			>{label}</Button
 		>
+	{:else}
+		<Button {icon} padding {backgroundColor} {iconColor} {iconBackgroundColor} {disabled} {onclick}
+		></Button>
+	{/if}
+{/snippet}
+
+<Stack direction="horizontal" gap="0.5rem">
+	{#if onvalidate}
+		{@render button({
+			label: validateLabel,
+			onclick: onvalidate,
+			disabled: validateDisabled,
+			iconColor: 'var(--light-green)',
+			backgroundColor: 'var(--light-green)',
+			icon: 'check'
+		})}
 	{/if}
 
 	{#if oncancel}
-		<Button
-			icon="cross"
-			padding
-			backgroundColor="var(--light-grey)"
-			iconBackgroundColor="var(--dark-grey)"
-			iconColor="var(--black)"
-			disabled={cancelDisabled}
-			onclick={oncancel}>{cancelLabel}</Button
-		>
+		{@render button({
+			label: cancelLabel,
+			onclick: oncancel,
+			disabled: cancelDisabled,
+			iconColor: 'var(--black)',
+			backgroundColor: 'var(--grey)',
+			iconBackgroundColor: 'var(--dark-grey)',
+			icon: 'cross'
+		})}
 	{/if}
 </Stack>

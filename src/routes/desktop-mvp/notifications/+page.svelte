@@ -7,6 +7,7 @@
 	import PageLayout from '../../../components/desktop/PageLayout.svelte';
 	import SearchBar from '../../../components/desktop/SearchBar.svelte';
 	import Section from '../../../components/desktop/Section.svelte';
+	import SectionLabel from '../../../components/desktop/SectionLabel.svelte';
 	import Stack from '../../../components/desktop/Stack.svelte';
 	import Validation from '../../../components/desktop/Validation.svelte';
 	import Button from '../../../components/layout/Button.svelte';
@@ -159,27 +160,29 @@
 
 {#snippet actionPanel()}
 	<Table rows={infoRows} />
-	<Validation
-		validateLabel="Acknowlodge"
-		onvalidate={() => {
-			goto('/desktop-mvp/notifications');
-		}}
-		cancelLabel="Dismiss"
-		oncancel={() => {
-			goto('/desktop-mvp/notifications');
-		}}
-	/>
+	<Button icon="forward" iconOrder="inverted">See Device</Button>
 {/snippet}
 
 {#snippet actionLabel()}
 	{#if selectedNotification}
-		<Stack direction="horizontal" style={{ width: '100%' }} justifyContent="space-between">
+		<SectionLabel label={selectedNotification.title}>
+			<Validation
+				validateLabel="Acknowlodge"
+				onvalidate={() => {
+					goto('/desktop-mvp/notifications');
+				}}
+				cancelLabel="Dismiss"
+				oncancel={() => {
+					goto('/desktop-mvp/notifications');
+				}}
+			/>
+		</SectionLabel>
+		<!-- <Stack direction="horizontal" style={{ width: '100%' }} justifyContent="space-between">
 			<span>{selectedNotification.title}</span>
 			<Stack direction="horizontal" gap="0.5rem">
 				<Button icon="forward" iconOrder="inverted">See Device</Button>
-				<!-- <Button icon="cross"></Button> -->
 			</Stack>
-		</Stack>
+		</Stack> -->
 	{/if}
 {/snippet}
 

@@ -18,6 +18,7 @@
 	import Dropdown from '../../../components/desktop/Dropdown.svelte';
 	import Icon from '../../../components/mobile-layout/Icon.svelte';
 	import PageLayout from '../../../components/desktop/PageLayout.svelte';
+	import SectionLabel from '../../../components/desktop/SectionLabel.svelte';
 
 	const { projects, addProject } = useProjects();
 	const { currentAccount } = useCurrentAccount();
@@ -89,6 +90,23 @@
 	</Button>
 {/snippet}
 
+{#snippet actionPanelLabel()}
+	<SectionLabel label="New Project">
+		{#if newProject}
+			<Validation
+				validateDisabled={!newProject.name}
+				onvalidate={() => {
+					newProject && addProject(newProject);
+					newProject = undefined;
+				}}
+				oncancel={() => {
+					newProject = undefined;
+				}}
+			/>
+		{/if}
+	</SectionLabel>
+{/snippet}
+
 {#snippet actionPanel()}
 	{#if newProject}
 		<TextInput
@@ -115,21 +133,10 @@
     itemSnippet={dropdownItem}
     />
     </Stack> -->
-
-		<Validation
-			validateDisabled={!newProject.name}
-			onvalidate={() => {
-				newProject && addProject(newProject);
-				newProject = undefined;
-			}}
-			oncancel={() => {
-				newProject = undefined;
-			}}
-		/>
 	{/if}
 {/snippet}
 
-<PageLayout actionPanel={newProject ? actionPanel : undefined} label="New Project">
+<PageLayout actionPanel={newProject ? actionPanel : undefined} label={actionPanelLabel}>
 	<Section>
 		<PageHeader {title} subTitle={`${accountProjects.length} Projects`} />
 		<Grid>

@@ -12,6 +12,7 @@
 	import Validation from '../../../components/desktop/Validation.svelte';
 	import PageLayout from '../../../components/desktop/PageLayout.svelte';
 	import Button from '../../../components/layout/Button.svelte';
+	import SectionLabel from '../../../components/desktop/SectionLabel.svelte';
 
 	const { devices, updateDevices } = useDevices();
 	let selectedDevices = $state(new Set<Device>());
@@ -112,32 +113,30 @@
 		rows={rowsWithRenderHandler(accountsRows, selectCell)}
 		pageSize={10}
 	/>
-
-	<Validation
-		validateLabel={`Assign ${selectedDevices.size} devices`}
-		validateDisabled={!selectedAccount}
-		onvalidate={() => {
-			if (selectedAccount) {
-				updateDevices(
-					Array.from(selectedDevices).map((it) => ({ ...it, accountId: selectedAccount?.id }))
-				);
-
-				selectedDevices = new Set();
-				selectedAccount = undefined;
-				assignDevices = false;
-			}
-		}}
-		oncancel={() => {
-			assignDevices = false;
-		}}
-	/>
 {/snippet}
 
 {#snippet actionPanelLabel()}
-	<Stack direction="horizontal" justifyContent="space-between" style={{ width: '100%' }}>
-		<span>Assign devices</span>
+	<SectionLabel label="Assign devices">
 		<SearchBar />
-	</Stack>
+		<Validation
+			validateLabel="Assign"
+			validateDisabled={!selectedAccount}
+			onvalidate={() => {
+				if (selectedAccount) {
+					updateDevices(
+						Array.from(selectedDevices).map((it) => ({ ...it, accountId: selectedAccount?.id }))
+					);
+
+					selectedDevices = new Set();
+					selectedAccount = undefined;
+					assignDevices = false;
+				}
+			}}
+			oncancel={() => {
+				assignDevices = false;
+			}}
+		/>
+	</SectionLabel>
 {/snippet}
 
 <PageLayout

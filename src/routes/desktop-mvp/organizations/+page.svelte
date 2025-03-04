@@ -19,6 +19,7 @@
 	import OrganizationCard from '../../../components/desktop/OrganizationCard.svelte';
 	import Pagination from '../../../components/layout/Pagination.svelte';
 	import PageLayout from '../../../components/desktop/PageLayout.svelte';
+	import SectionLabel from '../../../components/desktop/SectionLabel.svelte';
 
 	const { accounts, addAccount } = useAccounts();
 
@@ -49,8 +50,27 @@
 	);
 
 	const showActionPanel = $derived(newAccount);
-	const actionPanelLabel = $derived(newAccount ? 'New Account' : undefined);
 </script>
+
+{#snippet actionPanelLabel()}
+	<SectionLabel label="New Account">
+		<Validation
+			validateDisabled={!newAccount?.email ||
+				!newAccount?.organizationName ||
+				!newAccount?.password}
+			validateLabel="Create"
+			onvalidate={() => {
+				if (!newAccount) return;
+				addAccount(newAccount);
+				newAccount = undefined;
+			}}
+			oncancel={() => {
+				isOrganisation = false;
+				newAccount = undefined;
+			}}
+		/>
+	</SectionLabel>
+{/snippet}
 
 {#snippet title()}
 	<Stack
@@ -152,20 +172,6 @@
           }}
         />
       {/if} -->
-
-		<Validation
-			validateDisabled={!newAccount.email || !newAccount.organizationName || !newAccount.password}
-			validateLabel="Create"
-			onvalidate={() => {
-				if (!newAccount) return;
-				addAccount(newAccount);
-				newAccount = undefined;
-			}}
-			oncancel={() => {
-				isOrganisation = false;
-				newAccount = undefined;
-			}}
-		/>
 	{:else if selectedOrganization}
 		{#key selectedOrganization.id}
 			<TextInput label="Organization Name" defaultValue={selectedOrganization.organizationName} />

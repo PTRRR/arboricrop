@@ -5,16 +5,19 @@
 
 	interface Props {
 		value?: string;
+		mode?: 'minimal' | 'normal';
 	}
 
-	let { value = $bindable() }: Props = $props();
+	let { value = $bindable(), mode = 'normal' }: Props = $props();
 </script>
 
 <Stack gap="0.5rem" style={{ maxWidth: '13rem' }} direction="horizontal" alignItems="flex-end">
-	{#if typeof value !== 'undefined'}
-		<TextInput placeholder="Search" style={{ width: '50%', flex: '1 1 auto' }} bind:value />
-	{:else}
-		<TextInput placeholder="Search" style={{ width: '50%', flex: '1 1 auto' }} />
+	{#if mode === 'normal'}
+		{#if typeof value !== 'undefined'}
+			<TextInput placeholder="Search" style={{ width: '50%', flex: '1 1 auto' }} bind:value />
+		{:else}
+			<TextInput placeholder="Search" style={{ width: '50%', flex: '1 1 auto' }} />
+		{/if}
 	{/if}
 	<Button icon="search" size="normal"></Button>
 </Stack>

@@ -27,6 +27,7 @@
 	import SearchBar from '../../../../components/desktop/SearchBar.svelte';
 	import EmptyItem from '../../../../components/layout/EmptyItem.svelte';
 	import PageLayout from '../../../../components/desktop/PageLayout.svelte';
+	import SectionLabel from '../../../../components/desktop/SectionLabel.svelte';
 
 	const trialId = $page.params.id;
 	const { trials, deleteTrial } = useTrials();
@@ -102,10 +103,56 @@
 </script>
 
 {#if trial}
+	{#snippet actionPanelLabel()}
+		{#if newGroup}
+			<SectionLabel label="New Group">
+				<Validation
+					validateLabel="Create"
+					validateDisabled={!newGroup.name}
+					onvalidate={() => {
+						if (!newGroup) return;
+						addGroup(newGroup);
+						newGroup = undefined;
+					}}
+					oncancel={() => {
+						selectedNewDevices = new Set();
+						selectedDevices = new Set();
+						addDevices = false;
+						newGroup = undefined;
+					}}
+				/>
+			</SectionLabel>
+		{:else if editTrial}
+			<SectionLabel label="Edit Trial">
+				<Validation
+					validateLabel="Save"
+					onvalidate={() => {
+						editTrial = false;
+					}}
+					oncancel={() => {
+						editTrial = false;
+					}}
+				/>
+			</SectionLabel>
+		{:else if selectedGroup}
+			<SectionLabel label="Edit Trial">
+				<Validation
+					validateLabel="Save"
+					onvalidate={() => {
+						selectedGroup = undefined;
+					}}
+					oncancel={() => {
+						selectedGroup = undefined;
+					}}
+				/>
+			</SectionLabel>
+		{/if}
+	{/snippet}
+
 	{#snippet preTitle()}
-		<Button icon="back" iconSize="small" href={`/desktop-mvp/projects/${project?.id}`}
-			>Projects/Trial</Button
-		>
+		<Button icon="back" iconSize="small" href={`/desktop-mvp/projects/${project?.id}`}>
+			Projects/Trial
+		</Button>
 	{/snippet}
 
 	{#snippet title()}
@@ -172,15 +219,7 @@
 					// if (delta > 0.000001) coords = value;
 				}}
 			/>
-			<Validation
-				validateLabel="Save"
-				onvalidate={() => {
-					editTrial = false;
-				}}
-				oncancel={() => {
-					editTrial = false;
-				}}
-			/>
+
 			<DangerZone
 				label="Delete trial"
 				description="Permanently delete this trial and all of its data. This action cannot be undone."
@@ -193,15 +232,6 @@
 		{:else if selectedGroup}
 			<TextInput label="Name" defaultValue={selectedGroup.name} />
 			<TextareaInput label="Description" defaultValue={selectedGroup.description} />
-			<Validation
-				validateLabel="Save"
-				onvalidate={() => {
-					selectedGroup = undefined;
-				}}
-				oncancel={() => {
-					selectedGroup = undefined;
-				}}
-			/>
 			<DangerZone
 				label="Delete group"
 				description="Permanently delete this group and all of its data. This action cannot be undone."
@@ -219,21 +249,6 @@
 				onvalue={(value) => {
 					if (!newGroup) return;
 					newGroup.description = value;
-				}}
-			/>
-			<Validation
-				validateLabel="Create"
-				validateDisabled={!newGroup.name}
-				onvalidate={() => {
-					if (!newGroup) return;
-					addGroup(newGroup);
-					newGroup = undefined;
-				}}
-				oncancel={() => {
-					selectedNewDevices = new Set();
-					selectedDevices = new Set();
-					addDevices = false;
-					newGroup = undefined;
 				}}
 			/>
 		{/if}

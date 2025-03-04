@@ -5,6 +5,7 @@
 	import PageLayout from '../../../../components/desktop/PageLayout.svelte';
 	import SearchBar from '../../../../components/desktop/SearchBar.svelte';
 	import Section from '../../../../components/desktop/Section.svelte';
+	import SectionLabel from '../../../../components/desktop/SectionLabel.svelte';
 	import Stack from '../../../../components/desktop/Stack.svelte';
 	import Validation from '../../../../components/desktop/Validation.svelte';
 	import Button from '../../../../components/layout/Button.svelte';
@@ -98,15 +99,45 @@
 		<Button padding backgroundColor="var(--white)">{role}</Button>
 	{/snippet}
 
+	{#snippet actionPanelLabel()}
+		{#if editOrganization}
+			<SectionLabel label="Edit Organization">
+				<Validation
+					validateLabel="save"
+					onvalidate={() => (editOrganization = false)}
+					oncancel={() => (editOrganization = false)}
+				/>
+			</SectionLabel>
+		{:else if invitedUsers.size > 0}
+			<SectionLabel label="Invite Users">
+				<Validation
+					validateLabel="send invitations"
+					onvalidate={() => {
+						invitedUsers
+							.values()
+							.forEach((account) => updateAccount({ ...account, parentId: organization.id }));
+						editOrganization = false;
+						invitedUsers = new Map();
+					}}
+					oncancel={() => (invitedUsers = new Map())}
+				/>
+			</SectionLabel>
+		{:else if selectedUser}
+			<SectionLabel label="Edit User">
+				<Validation
+					validateLabel="Save"
+					onvalidate={() => (selectedUser = undefined)}
+					oncancel={() => (selectedUser = undefined)}
+				/>
+			</SectionLabel>
+		{/if}
+	{/snippet}
+
 	{#snippet actionPanel()}
 		{#if editOrganization}
 			<TextInput label="organization name" defaultValue={organization.organizationName} />
 			<TextInput label="email" defaultValue={organization.email} />
-			<Validation
-				validateLabel="save"
-				onvalidate={() => (editOrganization = false)}
-				oncancel={() => (editOrganization = false)}
-			/>
+
 			<DangerZone
 				label="Delete organization"
 				description="Permanently delete this organization and all of its data. This action cannot be undone."
@@ -132,36 +163,19 @@
 					};
 				})}
 			/>
-			<Validation
-				validateLabel="send invitations"
-				onvalidate={() => {
-					invitedUsers
-						.values()
-						.forEach((account) => updateAccount({ ...account, parentId: organization.id }));
-					editOrganization = false;
-					invitedUsers = new Map();
-				}}
-				oncancel={() => (invitedUsers = new Map())}
-			/>
 		{:else if selectedUser}
 			<TextInput label="email" readonly defaultValue={selectedUser.email} />
 
 			<Stack gap="0.5rem" alignItems="flex-start">
 				<p>Role</p>
 				<Dropdown
-					icon="down"
+					icon="arrow-down"
 					iconOrder="inverted"
 					label={selectedUser.role || 'Select Role'}
 					items={roles.map((it) => ({ role: it, accountId: selectedUser?.id || '' }))}
 					itemSnippet={roleDropdownEdit}
 				/>
 			</Stack>
-
-			<Validation
-				validateLabel="Save"
-				onvalidate={() => (selectedUser = undefined)}
-				oncancel={() => (selectedUser = undefined)}
-			/>
 
 			<DangerZone
 				label="Remove user"
@@ -175,33 +189,32 @@
 		{/if}
 	{/snippet}
 
+	{#snippet usersSectionLabel()}
+		<SectionLabel label="Users">
+			<SearchBar />
+			<Button
+				icon="add"
+				padding
+				backgroundColor="var(--light-grey)"
+				onclick={() => {
+					shuffle($accounts)
+						.slice(0, 4)
+						.forEach((it) => invitedUsers.set(it.id, { ...it, role: 'Farmer Admin' }));
+					invitedUsers = new Map(invitedUsers);
+				}}>Invite</Button
+			>
+		</SectionLabel>
+	{/snippet}
+
 	<PageLayout actionPanel={showActionPanel ? actionPanel : undefined} label={actionPanelLabel}>
 		<Stack style={{ width: '100%' }}>
 			<Section>
 				<PageHeader {preTitle} {title} subTitle={organization.email} />
 			</Section>
-			<Section
-				label="Users"
-				actions={[
-					{
-						label: 'Invite',
-						icon: 'add',
-						padding: true,
-						backgroundColor: 'var(--light-grey)',
-						onclick: () => {
-							shuffle($accounts)
-								.slice(0, 4)
-								.forEach((it) => invitedUsers.set(it.id, { ...it, role: 'Farmer Admin' }));
-
-							invitedUsers = new Map(invitedUsers);
-						}
-					}
-				]}
-			>
+			<Section label={usersSectionLabel}>
 				{#if invitedAccounts.length === 0}
 					<EmptyItem label="There are no users yet" />
 				{:else}
-					<SearchBar />
 					<Table
 						headers={[
 							{ label: 'email', width: '30%', sortable: true },

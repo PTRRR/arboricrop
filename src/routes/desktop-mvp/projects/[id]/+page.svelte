@@ -30,6 +30,7 @@
 	import SearchBar from '../../../../components/desktop/SearchBar.svelte';
 	import EmptyItem from '../../../../components/layout/EmptyItem.svelte';
 	import PageLayout from '../../../../components/desktop/PageLayout.svelte';
+	import SectionLabel from '../../../../components/desktop/SectionLabel.svelte';
 
 	const projectId = $page.params.id;
 	const { projects, updateProject } = useProjects();
@@ -72,14 +73,43 @@
 	});
 
 	const showActionPanel = $derived(editingProject || newTrial);
-	const actionPanelLabel = $derived(
-		editingProject ? 'Edit Project' : newTrial ? 'New Trial' : undefined
-	);
 </script>
 
 {#if project}
 	{#snippet preTitle()}
 		<Button icon="back" iconSize="small" href="/desktop-mvp/projects">Projects</Button>
+	{/snippet}
+
+	{#snippet actionPanelLabel()}
+		{#if editingProject}
+			<SectionLabel label="New Project">
+				<Validation
+					validateLabel="Save"
+					onvalidate={() => {
+						updateProject({ ...project, name: newProjectName });
+						editingProject = false;
+					}}
+					oncancel={() => {
+						editingProject = false;
+					}}
+				/>
+			</SectionLabel>
+		{:else if newTrial}
+			<SectionLabel label="New Trial">
+				<Validation
+					validateLabel="Create"
+					onvalidate={() => {
+						if (!newTrial) return;
+						addTrial(newTrial);
+						newTrial = undefined;
+					}}
+					oncancel={() => {
+						selectedTrials.clear();
+						newTrial = undefined;
+					}}
+				/>
+			</SectionLabel>
+		{/if}
 	{/snippet}
 
 	{#snippet title()}
@@ -144,17 +174,6 @@
           />
         </Stack> -->
 
-			<Validation
-				validateLabel="Save"
-				onvalidate={() => {
-					updateProject({ ...project, name: newProjectName });
-					editingProject = false;
-				}}
-				oncancel={() => {
-					editingProject = false;
-				}}
-			/>
-
 			<DangerZone
 				label="Delete project"
 				description="Permanently delete this project and all of its data. This action cannot be undone."
@@ -187,18 +206,6 @@
 				onChange={() => {
 					// const delta = getLocationDelta(value, newTrial.center);
 					// if (delta > 0.000001) coords = value;
-				}}
-			/>
-			<Validation
-				validateLabel="Create"
-				onvalidate={() => {
-					if (!newTrial) return;
-					addTrial(newTrial);
-					newTrial = undefined;
-				}}
-				oncancel={() => {
-					selectedTrials.clear();
-					newTrial = undefined;
 				}}
 			/>
 		{/if}
