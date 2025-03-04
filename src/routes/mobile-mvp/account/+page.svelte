@@ -18,24 +18,31 @@
 
 	const returnButton = useReturnButton();
 
+	let firstName = $state('');
+	let lastName = $state('');
+
 	returnButton.set({
 		label: ``,
 		backHref: data.baseUrl
 	});
 </script>
 
-<PageHeader title="Account" />
-
 <Section>
-	<TextInput label="First name" defaultValue="Jon" />
-	<TextInput label="Last name" defaultValue="Doe" />
+	<PageHeader title="Account" />
 </Section>
 
-<ActionMenu>
-	<ActionButton
-		icon="check"
-		backgroundColor="var(--light-green)"
-		iconColor="var(--light-green)"
-		href={data.baseUrl}>Save</ActionButton
-	>
-</ActionMenu>
+<Section>
+	<TextInput label="First name" defaultValue="Jon" bind:value={firstName} />
+	<TextInput label="Last name" defaultValue="Doe" bind:value={lastName} />
+</Section>
+
+{#if firstName !== 'Jon' || lastName !== 'Doe'}
+	<ActionMenu>
+		<ActionButton
+			icon="check"
+			backgroundColor="var(--light-green)"
+			iconColor="var(--light-green)"
+			href={data.baseUrl}>Save</ActionButton
+		>
+	</ActionMenu>
+{/if}
