@@ -30,7 +30,6 @@
 <div class="main-navigation" use:portal={LAYOUT_PORTAL}>
 	<Panel state={show ? 'mounting' : 'unmounting'}>
 		<Button
-			padding
 			style={{
 				position: 'absolute',
 				top: '0',
@@ -40,10 +39,10 @@
 				boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)'
 			}}
 			icon={show ? 'cross' : 'menu'}
-			iconSize="medium"
+			iconSize="large"
 			backgroundColor="var(--light-grey)"
-			onclick={() => ($showAppMenu = !$showAppMenu)}>Menu</Button
-		>
+			onclick={() => ($showAppMenu = !$showAppMenu)}
+		></Button>
 
 		<div class="main-navigation__links">
 			<a href={`${baseUrl}/`}>Trials</a>
