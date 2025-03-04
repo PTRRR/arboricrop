@@ -97,6 +97,7 @@
 			text-transform: lowercase;
 			color: var(--dark-grey);
 			font-size: var(--mid-font-size);
+			padding: 0.5rem 0;
 		}
 
 		&__description {

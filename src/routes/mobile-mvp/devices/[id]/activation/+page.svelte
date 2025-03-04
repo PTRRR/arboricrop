@@ -402,12 +402,12 @@
 					<ActionButton icon="back" iconOrder="normal" href={previousHref}>Back</ActionButton>
 					<ActionButton
 						icon="check"
-						color="var(--white)"
-						backgroundColor="var(--green)"
-						iconBackgroundColor="var(--green)"
+						color="var(--black)"
+						backgroundColor="var(--light-green)"
+						iconColor="var(--light-green)"
 						href={`${data.baseUrl}/groups/${device.parentId}`}
 					>
-						Done
+						Activate
 					</ActionButton>
 				</ActionMenu>
 			{/if}

@@ -44,7 +44,7 @@
 		idlTimeout = setTimeout(() => {
 			$panelOverlaysSnippets = $panelOverlaysSnippets.filter((it) => !unmountIds.includes(it.id));
 			unmountIds = [];
-		}, 2000);
+		}, 500);
 	};
 
 	onMount(() => {

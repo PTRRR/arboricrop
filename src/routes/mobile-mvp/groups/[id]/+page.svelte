@@ -69,22 +69,18 @@
 
 	<Section
 		label="Devices"
-		actions={groupDevices.length > 0
-			? [
-					{
-						icon: 'add',
-						label: 'Add',
-						iconOrder: 'inverted',
-						onclick: () => goto(`${data.baseUrl}/devices/pairing?group=${group.id}`)
-					}
-				]
-			: []}
+		actions={[
+			{
+				icon: 'add',
+				label: 'Add',
+				padding: true,
+				backgroundColor: 'var(--light-grey)',
+				onclick: () => goto(`${data.baseUrl}/devices/pairing?group=${group.id}`)
+			}
+		]}
 	>
 		{#if groupDevices.length === 0}
 			<EmptyItem label="No devices found" />
-			<Button href={`${data.baseUrl}/devices/pairing?group=${group.id}`} icon="add">
-				Add device
-			</Button>
 		{:else}
 			<Table
 				headers={devicesHeaders}
@@ -100,22 +96,24 @@
 		{/if}
 	</Section>
 
-	<Section label="Location">
-		<Map
-			bind:this={map}
-			maxBounds={swissBounds}
-			zoom={16}
-			minZoom={3}
-			maxZoom={18}
-			center={trial?.center}
-			geoJSONs={trial?.layers}
-			markers={deviceMarkers}
-			onChange={(value) => {
-				// const delta = getLocationDelta(value, trial.center);
-				// if (delta > 0.000001) coords = value;
-			}}
-		/>
-	</Section>
+	{#if groupDevices.length > 0}
+		<Section label="Location">
+			<Map
+				bind:this={map}
+				maxBounds={swissBounds}
+				zoom={16}
+				minZoom={3}
+				maxZoom={18}
+				center={trial?.center}
+				geoJSONs={trial?.layers}
+				markers={deviceMarkers}
+				onChange={(value) => {
+					// const delta = getLocationDelta(value, trial.center);
+					// if (delta > 0.000001) coords = value;
+				}}
+			/>
+		</Section>
+	{/if}
 
 	{#if groupDevices.length > 0}
 		<ActionMenu>

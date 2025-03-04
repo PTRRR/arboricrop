@@ -221,8 +221,9 @@
 				? [
 						{
 							label: 'Edit',
-							icon: 'navigate',
-							iconOrder: 'inverted',
+							icon: 'edit',
+							backgroundColor: 'var(--light-grey)',
+							padding: true,
 							onclick: () => (editLocation = !editLocation)
 						}
 					]
@@ -327,7 +328,13 @@
 
 	{#if editLocation}
 		<ActionMenu>
-			<ActionButton onclick={() => (editLocation = false)}>Save</ActionButton>
+			<ActionButton icon="cross" onclick={() => (editLocation = false)}>Cancel</ActionButton>
+			<ActionButton
+				icon="check"
+				onclick={() => (editLocation = false)}
+				backgroundColor="var(--light-green)"
+				iconColor="var(--light-green)">Save</ActionButton
+			>
 		</ActionMenu>
 	{/if}
 
