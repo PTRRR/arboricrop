@@ -3,7 +3,7 @@
 	import Stack from './Stack.svelte';
 
 	interface Props {
-		label?: string;
+		label?: string | Snippet;
 		children?: Snippet;
 	}
 
@@ -18,7 +18,11 @@
 	gap="1rem"
 >
 	{#if label}
-		<span>{label}</span>
+		{#if typeof label === 'string'}
+			<span>{label}</span>
+		{:else}
+			{@render label()}
+		{/if}
 	{/if}
 
 	{#if children}

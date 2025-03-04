@@ -15,6 +15,7 @@
 	import Grid from '../../../components/desktop/Grid.svelte';
 	import StepSeparation from '../../../components/layout/StepSeparation.svelte';
 	import PageLayout from '../../../components/desktop/PageLayout.svelte';
+	import SectionLabel from '../../../components/desktop/SectionLabel.svelte';
 
 	const { devices, updateDevice } = useDevices();
 	const { currentAccount } = useCurrentAccount();
@@ -42,6 +43,27 @@
 	{/if}
 {/snippet}
 
+{#snippet actionPanelLabel()}
+	<SectionLabel label={deviceLabel}>
+		<Validation
+			validateLabel="Save"
+			validateDisabled={!selectedDeviceHasChanges}
+			onvalidate={() => {
+				if (!selectedDevice) return;
+
+				updateDevice({
+					...selectedDevice,
+					name: deviceName,
+					note: deviceNote
+				});
+
+				selectedDevice = accountDevices.find((it) => it.id === selectedDevice?.id);
+			}}
+			oncancel={() => (selectedDevice = undefined)}
+		/>
+	</SectionLabel>
+{/snippet}
+
 {#snippet actionPanel()}
 	{#if selectedDevice}
 		<TextInput label="ID" value={selectedDevice.id} readonly />
@@ -59,23 +81,6 @@
 				/>
 			{/each}
 		</Stack>
-
-		<Validation
-			validateLabel="Save"
-			validateDisabled={!selectedDeviceHasChanges}
-			onvalidate={() => {
-				if (!selectedDevice) return;
-
-				updateDevice({
-					...selectedDevice,
-					name: deviceName,
-					note: deviceNote
-				});
-
-				selectedDevice = accountDevices.find((it) => it.id === selectedDevice?.id);
-			}}
-			oncancel={() => (selectedDevice = undefined)}
-		/>
 	{/if}
 {/snippet}
 
@@ -86,7 +91,7 @@
 	</Stack>
 {/snippet}
 
-<PageLayout actionPanel={selectedDevice ? actionPanel : undefined} label={deviceLabel}>
+<PageLayout actionPanel={selectedDevice ? actionPanel : undefined} label={actionPanelLabel}>
 	<Section fill>
 		<PageHeader {title} subTitle={`${accountDevices.length} Available Devices`} />
 		<DevicesList
