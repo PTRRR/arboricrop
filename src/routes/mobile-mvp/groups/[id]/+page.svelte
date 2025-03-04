@@ -15,6 +15,7 @@
 	import ActionButton from '../../../../components/mobile-layout/ActionButton.svelte';
 	import Stack from '../../../../components/desktop/Stack.svelte';
 	import type { Marker } from '../../../../utils/types';
+	import EmptyItem from '../../../../components/layout/EmptyItem.svelte';
 
 	interface Prop {
 		data: PageData;
@@ -48,7 +49,7 @@
 
 	$effect(() => {
 		returnButton.set({
-			label: 'Trial',
+			label: 'Group',
 			backHref: `${data.baseUrl}/trials/${trial?.id}`
 		});
 	});
@@ -63,7 +64,7 @@
 	{/snippet}
 
 	<Section>
-		<PageHeader preTitle="Group" title={group.name} subTitle={trial?.name} />
+		<PageHeader title={group.name} subTitle={trial?.name} />
 	</Section>
 
 	<Section
@@ -80,6 +81,7 @@
 			: []}
 	>
 		{#if groupDevices.length === 0}
+			<EmptyItem label="No devices found" />
 			<Button href={`${data.baseUrl}/devices/pairing?group=${group.id}`} icon="add">
 				Add device
 			</Button>

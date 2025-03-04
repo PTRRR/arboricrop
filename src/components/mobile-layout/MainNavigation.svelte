@@ -48,9 +48,10 @@
 		></Button>
 
 		<div class="main-navigation__links">
+			<a href={`${baseUrl}/`}>Hub</a>
 			<a href={`${baseUrl}/`}>Trials</a>
 			<a href={`${baseUrl}/notifications`}>Notifications</a>
-			<a href={`${baseUrl}/settings`}>Settings</a>
+			<!-- <a href={`${baseUrl}/settings`}>Settings</a> -->
 			<a href={`${baseUrl}/account`}>Account</a>
 		</div>
 	</Panel>
@@ -65,7 +66,7 @@
 			flex-direction: column;
 			justify-content: center;
 			align-items: center;
-			gap: 1rem;
+			gap: 0.5rem;
 
 			a {
 				color: black;

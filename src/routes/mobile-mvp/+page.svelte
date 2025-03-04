@@ -31,6 +31,7 @@
 	import type { Account, Marker, Trial } from '../../utils/types';
 	import { changinCenter, swissBounds } from '../../utils/dummyData';
 	import type { LngLatLike } from 'svelte-maplibre';
+	import EmptyItem from '../../components/layout/EmptyItem.svelte';
 
 	const { devices } = useDevices();
 	const { trials } = useTrials();
@@ -215,22 +216,27 @@
 
 	<Section>
 		<PageHeader title={fieldsHeader} />
-		<TextInput />
-		<Button icon="search">Search</Button>
-		<Spacer size="1rem" />
-		{#each accountTrials as trial}
-			<Card
-				href={`${data.baseUrl}/trials/${trial.id}`}
-				imageUrl="/images/map.png"
-				background={false}
-			>
-				<div class="home__info">
-					<h3>{trial.name}</h3>
-					<p>{getTrialProject(trial)?.name}</p>
-					<p>{`${getTrialDeviceCount(trial.id)} Devices`}</p>
-				</div>
-			</Card>
-		{/each}
+
+		{#if accountTrials.length > 0}
+			<TextInput />
+			<Button icon="search">Search</Button>
+			<Spacer size="1rem" />
+			{#each accountTrials as trial}
+				<Card
+					href={`${data.baseUrl}/trials/${trial.id}`}
+					imageUrl="/images/map.png"
+					background={false}
+				>
+					<div class="home__info">
+						<h3>{trial.name}</h3>
+						<p>{getTrialProject(trial)?.name}</p>
+						<p>{`${getTrialDeviceCount(trial.id)} Devices`}</p>
+					</div>
+				</Card>
+			{/each}
+		{:else}
+			<EmptyItem label="No trials found" />
+		{/if}
 	</Section>
 {/if}
 

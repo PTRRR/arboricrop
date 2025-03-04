@@ -60,7 +60,7 @@
 	$effect(() => {
 		if (notification) {
 			returnButton.set({
-				label: $page.data.acknowledge ? 'Notification' : 'Notifications',
+				label: $page.data.acknowledge ? 'Notification' : 'Notification',
 				backHref: $page.data.acknowledge
 					? `${data.baseUrl}/notifications/${notification.id}`
 					: `${data.baseUrl}/notifications`
@@ -85,7 +85,7 @@
 {/snippet}
 
 <Section>
-	<PageHeader preTitle="Notification" title={pageTitle} subTitle={pageSubtitle} />
+	<PageHeader title={pageTitle} subTitle={pageSubtitle} />
 	<Table rows={infoRows} />
 </Section>
 

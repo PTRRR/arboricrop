@@ -21,5 +21,6 @@
 		align-items: center;
 		color: var(--dark-grey);
 		max-height: 10rem;
+		text-transform: lowercase;
 	}
 </style>

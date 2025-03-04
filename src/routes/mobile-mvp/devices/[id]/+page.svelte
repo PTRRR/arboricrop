@@ -98,7 +98,7 @@
 
 	$effect(() => {
 		returnButton.set({
-			label: 'Group',
+			label: 'Device',
 			backHref: `${data.baseUrl}/groups/${device?.parentId}`
 		});
 	});
@@ -199,7 +199,7 @@
 	{/snippet}
 
 	<Section>
-		<PageHeader preTitle="Device" title={deviceName} subTitle={deviceStatus} />
+		<PageHeader title={deviceName} subTitle={deviceStatus} />
 
 		<TextInput label="Id:" defaultValue={device.id} readonly />
 		<TextInput

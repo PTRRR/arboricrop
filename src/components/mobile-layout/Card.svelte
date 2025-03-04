@@ -46,14 +46,14 @@
 		font-size: var(--main-font-size);
 
 		&:hover {
-			background-color: var(--grey);
+			background-color: var(--light-grey);
 		}
 
 		&--background {
-			background-color: var(--grey);
+			background-color: var(--light-grey);
 
 			&:hover {
-				background-color: var(--dark-grey);
+				background-color: var(--grey);
 			}
 		}
 

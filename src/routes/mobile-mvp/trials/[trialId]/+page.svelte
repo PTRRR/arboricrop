@@ -27,6 +27,7 @@
 	import type { PageData } from './$types';
 	import ActionMenu from '../../../../components/mobile-layout/ActionMenu.svelte';
 	import ActionButton from '../../../../components/mobile-layout/ActionButton.svelte';
+	import EmptyItem from '../../../../components/layout/EmptyItem.svelte';
 
 	interface Prop {
 		data: PageData;
@@ -44,7 +45,7 @@
 	const features = useGeoJSONFeatures();
 
 	returnButton.set({
-		label: '',
+		label: 'Trial',
 		backHref: data.baseUrl
 	});
 
@@ -136,7 +137,6 @@
 	{#if trial}
 		<Section>
 			<PageHeader
-				preTitle="Trial"
 				title={trial.name}
 				subTitle={project ? `${project.name}` : `Devices: ${$devices.length}`}
 			/>
@@ -163,7 +163,11 @@
 		</Section> -->
 
 		<Section label="Groups">
-			<Table headers={groupHeaders} rows={groupRows} />
+			{#if groupRows.length > 0}
+				<Table headers={groupHeaders} rows={groupRows} />
+			{:else}
+				<EmptyItem label="No groups found" />
+			{/if}
 		</Section>
 
 		<!-- {#snippet statusCell(cell: Cell)}
