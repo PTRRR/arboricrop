@@ -159,9 +159,6 @@
 
 {#snippet actionPanel()}
 	<Table rows={infoRows} />
-	<div>
-		<Button icon="forward" iconOrder="inverted">See device</Button>
-	</div>
 	<Validation
 		validateLabel="Acknowlodge"
 		onvalidate={() => {
@@ -174,10 +171,19 @@
 	/>
 {/snippet}
 
-<PageLayout
-	label={selectedNotification ? selectedNotification.title : undefined}
-	actionPanel={selectedNotification ? actionPanel : undefined}
->
+{#snippet actionLabel()}
+	{#if selectedNotification}
+		<Stack direction="horizontal" style={{ width: '100%' }} justifyContent="space-between">
+			<span>{selectedNotification.title}</span>
+			<Stack direction="horizontal" gap="0.5rem">
+				<Button icon="forward" iconOrder="inverted">See Device</Button>
+				<!-- <Button icon="cross"></Button> -->
+			</Stack>
+		</Stack>
+	{/if}
+{/snippet}
+
+<PageLayout label={actionLabel} actionPanel={selectedNotification ? actionPanel : undefined}>
 	<Stack style={{ width: '100%' }}>
 		<!-- <Section> -->
 
