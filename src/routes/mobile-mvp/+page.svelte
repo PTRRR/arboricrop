@@ -32,6 +32,7 @@
 	import { changinCenter, swissBounds } from '../../utils/dummyData';
 	import type { LngLatLike } from 'svelte-maplibre';
 	import EmptyItem from '../../components/layout/EmptyItem.svelte';
+	import Stack from '../../components/desktop/Stack.svelte';
 
 	const { devices } = useDevices();
 	const { trials } = useTrials();
@@ -193,10 +194,17 @@
 
 	{#if !$isOffline}
 		{#snippet notificationsTitle()}
-			<span>Notifications</span>
-			<Button href={`${data.baseUrl}/notifications`} icon="forward" iconOrder="inverted" padding>
-				All
-			</Button>
+			<Stack
+				direction="horizontal"
+				alignItems="center"
+				style={{ width: '100%' }}
+				justifyContent="space-between"
+			>
+				<span>Notifications</span>
+				<Button href={`${data.baseUrl}/notifications`} icon="forward" iconOrder="inverted">
+					All
+				</Button>
+			</Stack>
 		{/snippet}
 
 		{#snippet notificationsSubTitle()}
@@ -217,9 +225,16 @@
 	{/if}
 
 	{#snippet fieldsHeader()}
-		<span>Trials</span>
-		<Button href={`${data.baseUrl}/trials`} icon="forward" iconOrder="inverted" padding>All</Button>
-		<!-- <Button href={`${data.baseUrl}/trials/new`} icon="add" padding /> -->
+		<Stack
+			direction="horizontal"
+			alignItems="center"
+			style={{ width: '100%' }}
+			justifyContent="space-between"
+		>
+			<span>Trials</span>
+			<Button href={`${data.baseUrl}/trials`} icon="forward" iconOrder="inverted">All</Button>
+			<!-- <Button href={`${data.baseUrl}/trials/new`} icon="add" padding /> -->
+		</Stack>
 	{/snippet}
 
 	<Section>

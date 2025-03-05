@@ -67,7 +67,6 @@
 		display: flex;
 		flex-direction: column;
 		text-transform: lowercase;
-		gap: 0.2rem;
 
 		&__pre-title,
 		&__title,
@@ -77,7 +76,8 @@
 			align-items: flex-start;
 			justify-content: space-between;
 			gap: 1rem;
-			// line-height: 1;
+			margin: 0;
+			line-height: 1;
 
 			* {
 				font-size: inherit;
@@ -93,7 +93,7 @@
 
 		&__title {
 			font-size: var(--big-font-size);
-			line-height: 1.1;
+			line-height: 1;
 		}
 
 		&__subtitle {

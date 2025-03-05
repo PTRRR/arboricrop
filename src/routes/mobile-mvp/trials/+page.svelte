@@ -1,6 +1,9 @@
 <script lang="ts">
+	import Stack from '../../../components/desktop/Stack.svelte';
+	import Button from '../../../components/layout/Button.svelte';
 	import EmptyItem from '../../../components/layout/EmptyItem.svelte';
 	import PageHeader from '../../../components/layout/PageHeader.svelte';
+	import TextInput from '../../../components/layout/TextInput.svelte';
 	import Card from '../../../components/mobile-layout/Card.svelte';
 	import Section from '../../../components/mobile-layout/Section.svelte';
 	import { useCurrentAccount, useProjects, useReturnButton, useTrials } from '../../../stores';
@@ -31,6 +34,10 @@
 
 <Section>
 	<PageHeader title="Trials" subTitle={`${accountTrials.length} Trials`} />
+	<Stack gap="0.5rem">
+		<TextInput />
+		<Button icon="search">Search</Button>
+	</Stack>
 </Section>
 
 <Section>
