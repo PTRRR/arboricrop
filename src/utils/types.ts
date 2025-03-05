@@ -45,7 +45,7 @@ export type Account = {
 	password?: string;
 	organizationName?: string;
 	invitedAccounts?: string[];
-  parentId?: string;
+	parentId?: string;
 	role?: RoleName;
 };
 
@@ -136,3 +136,19 @@ export type Group = {
 	parentId?: string;
 	deviceIds: string[];
 };
+
+export interface TrialNote {
+	id: string;
+	title: string;
+	description: string;
+	date: string;
+	category:
+		| 'planting'
+		| 'irrigation'
+		| 'fertilization'
+		| 'pest_control'
+		| 'harvesting'
+		| 'observation'
+		| 'maintenance';
+	createdBy: string;
+}

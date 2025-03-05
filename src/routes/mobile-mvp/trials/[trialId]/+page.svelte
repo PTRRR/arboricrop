@@ -4,6 +4,7 @@
 	import Section from '../../../../components/mobile-layout/Section.svelte';
 	import Map from '../../../../components/layout/Map.svelte';
 	import {
+		useApp,
 		useDevices,
 		useFields,
 		useGeoJSONFeatures,
@@ -12,7 +13,7 @@
 		useReturnButton,
 		useTrials
 	} from '../../../../stores';
-	import { swissBounds } from '../../../../utils/dummyData';
+	import { swissBounds, trialNotes } from '../../../../utils/dummyData';
 	import TextInput from '../../../../components/layout/TextInput.svelte';
 	import Table, { type Cell, type Row } from '../../../../components/layout/Table.svelte';
 	import { goto } from '$app/navigation';
@@ -28,6 +29,12 @@
 	import ActionMenu from '../../../../components/mobile-layout/ActionMenu.svelte';
 	import ActionButton from '../../../../components/mobile-layout/ActionButton.svelte';
 	import EmptyItem from '../../../../components/layout/EmptyItem.svelte';
+	import { shuffle } from '../../../../utils/arrays';
+	import Card from '../../../../components/mobile-layout/Card.svelte';
+	import Stack from '../../../../components/desktop/Stack.svelte';
+	import StepSeparation from '../../../../components/layout/StepSeparation.svelte';
+	import PanelOverlay from '../../../../components/mobile-layout/PanelOverlay.svelte';
+	import TextareaInput from '../../../../components/layout/TextareaInput.svelte';
 
 	interface Prop {
 		data: PageData;
@@ -43,6 +50,7 @@
 	const { trials } = useTrials();
 	const returnButton = useReturnButton();
 	const features = useGeoJSONFeatures();
+	const { isBlurred } = useApp();
 
 	returnButton.set({
 		label: 'Trial',
@@ -68,6 +76,8 @@
 		const devices = trialDevices.filter((device) => device.parentId === group.id);
 		return devices;
 	});
+
+	let addNote = $state(false);
 
 	const devicesHeaders: Cell[] = [
 		{ label: 'Name', width: '50%' },
@@ -131,6 +141,8 @@
 			battery: device.battery
 		}))
 	);
+
+	const notes = $state(shuffle(trialNotes).slice(0, 3));
 </script>
 
 <div class="field">
@@ -228,6 +240,36 @@
 			/>
 		</Section>
 
+		<Section
+			label="Historical data"
+			actions={[
+				{
+					label: 'Add',
+					icon: 'add',
+					backgroundColor: 'var(--light-grey)',
+					padding: true,
+					onclick: () => {
+						addNote = true;
+						$isBlurred = true;
+					}
+				}
+			]}
+		>
+			{#each notes as note}
+				<Card>
+					<Stack gap="1rem">
+						<Stack>
+							<span class="field__historical-data-createdby">{note.createdBy}</span>
+							<h4 class="field__historical-data-title">{note.title}</h4>
+							<span class="field__historical-data-date">{note.date}</span>
+						</Stack>
+
+						<p class="field__historical-data-description">{note.description}</p>
+					</Stack>
+				</Card>
+			{/each}
+		</Section>
+
 		<!-- {#snippet addLayer()}
 			<SubPage icon="add">
 				<PageHeader title="Available Layers" />
@@ -268,6 +310,32 @@
 			</Button>
 		</Section> -->
 
+		{#if addNote}
+			<PanelOverlay>
+				<Section>
+					<PageHeader title="New Note" />
+					<TextInput label="Date" />
+					<TextareaInput label="Note" />
+				</Section>
+			</PanelOverlay>
+
+			<ActionMenu>
+				<ActionButton
+					icon="cross"
+					onclick={() => {
+						addNote = false;
+						$isBlurred = false;
+					}}>Cancel</ActionButton
+				>
+				<ActionButton
+					onclick={() => {
+						addNote = false;
+						$isBlurred = false;
+					}}>Save</ActionButton
+				>
+			</ActionMenu>
+		{/if}
+
 		{#if hasChanged}
 			<SaveMenu
 				oncancel={() => {
@@ -303,6 +371,21 @@
 		&__status-dot {
 			display: block;
 			transform: translate(0, 10%);
+		}
+
+		&__historical-data {
+			&-title {
+				font-size: var(--mid-font-size);
+			}
+
+			&-date,
+			&-description {
+				font-weight: 100;
+			}
+
+			&-createdby {
+				color: var(--dark-grey);
+			}
 		}
 	}
 </style>

@@ -89,6 +89,7 @@
 				icon={breadcrumbIcon}
 				iconBackgroundColor="var(--white)"
 				iconColor="var(--green)"
+				style={{ opacity: $isBlurred ? '0' : '1', transition: 'opacity 0.3s ease-in-out' }}
 			>
 				<div class="mobile-layout__breadcrumb-inner">
 					{breadcrumbContent}

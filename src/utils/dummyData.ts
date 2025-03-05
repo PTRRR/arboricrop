@@ -1,5 +1,13 @@
 import { createId } from '@paralleldrive/cuid2';
-import type { Account, Device, Field, LoRaConfiguration, Notification, RoleName } from './types';
+import type {
+	Account,
+	Device,
+	Field,
+	LoRaConfiguration,
+	Notification,
+	RoleName,
+	TrialNote
+} from './types';
 import type { GeoJSON as GeoJSONType } from 'geojson';
 import { shuffle } from './arrays';
 import { formatDateToDDMMYYYY, getRandomDateRange } from './dates';
@@ -1002,5 +1010,188 @@ export const loraConfigurations: LoRaConfiguration[] = [
 	},
 	{
 		name: 'Asia'
+	}
+];
+
+export const trialNotes: TrialNote[] = [
+	{
+		id: 'note001',
+		title: 'Initial Planting',
+		description:
+			'Planted 500 seedlings of variety XYZ-123 with 2m spacing between rows. Soil was pre-treated with organic compost at 5kg per square meter.',
+		date: '2025-01-15',
+		category: 'planting',
+		createdBy: 'john.smith'
+	},
+	{
+		id: 'note002',
+		title: 'Irrigation System Setup',
+		description:
+			'Installed drip irrigation system with pressure regulators. Set watering schedule for 30 minutes every morning at 6:00 AM with flow rate of 2L/hour/plant.',
+		date: '2025-01-16',
+		category: 'irrigation',
+		createdBy: 'emma.johnson'
+	},
+	{
+		id: 'note003',
+		title: 'First Fertilizer Application',
+		description:
+			'Applied NPK 15-15-15 fertilizer at rate of 50g per plant. Observed slight yellowing in north section leaves before application.',
+		date: '2025-01-30',
+		category: 'fertilization',
+		createdBy: 'john.smith'
+	},
+	{
+		id: 'note004',
+		title: 'Pest Detection - Aphids',
+		description:
+			'Detected aphid infestation in southeast corner of trial field. Approximately 15% of plants affected. Marked affected area for treatment.',
+		date: '2025-02-10',
+		category: 'observation',
+		createdBy: 'maria.garcia'
+	},
+	{
+		id: 'note005',
+		title: 'Organic Pest Control Application',
+		description:
+			'Applied neem oil solution (20ml/L) to affected plants. Used backpack sprayer ensuring complete coverage of leaf undersides where aphids were concentrated.',
+		date: '2025-02-11',
+		category: 'pest_control',
+		createdBy: 'maria.garcia'
+	},
+	{
+		id: 'note006',
+		title: 'Pruning and Training',
+		description:
+			'Conducted first pruning session, removing lower suckers and training main stems to trellis system. Removed approximately 20% of vegetative growth.',
+		date: '2025-02-20',
+		category: 'maintenance',
+		createdBy: 'thomas.wilson'
+	},
+	{
+		id: 'note007',
+		title: 'Irrigation Adjustment',
+		description:
+			'Increased irrigation frequency to twice daily (6:00 AM and 5:00 PM) due to unseasonably hot weather. Monitoring soil moisture levels daily.',
+		date: '2025-03-01',
+		category: 'irrigation',
+		createdBy: 'emma.johnson'
+	},
+	{
+		id: 'note008',
+		title: 'Foliar Spray Application',
+		description:
+			"Applied micronutrient foliar spray (Fe, Zn, Mg, B) at manufacturer's recommended rate to address minor deficiency symptoms observed on newer leaves.",
+		date: '2025-03-10',
+		category: 'fertilization',
+		createdBy: 'john.smith'
+	},
+	{
+		id: 'note009',
+		title: 'Beneficial Insects Release',
+		description:
+			'Released 1000 ladybugs as biocontrol agents for remaining aphid population. Distributed evenly across previously infested areas.',
+		date: '2025-03-15',
+		category: 'pest_control',
+		createdBy: 'maria.garcia'
+	},
+	{
+		id: 'note010',
+		title: 'Soil Testing',
+		description:
+			'Collected soil samples from 5 different points in trial field for laboratory analysis. Testing pH, organic matter content, and nutrient levels.',
+		date: '2025-03-20',
+		category: 'observation',
+		createdBy: 'emma.johnson'
+	},
+	{
+		id: 'note011',
+		title: 'Weed Management',
+		description:
+			'Performed manual weeding throughout the trial area. Noticed predominance of nutsedge in western section, marking for special attention in future weed control.',
+		date: '2025-03-25',
+		category: 'maintenance',
+		createdBy: 'thomas.wilson'
+	},
+	{
+		id: 'note012',
+		title: 'Growth Measurement',
+		description:
+			'Measured plant heights and stem diameters on 50 randomly selected plants. Average height: 45cm, average stem diameter: 1.2cm. Growth rate within expected parameters.',
+		date: '2025-04-01',
+		category: 'observation',
+		createdBy: 'john.smith'
+	},
+	{
+		id: 'note013',
+		title: 'pH Correction',
+		description:
+			'Applied agricultural lime at 500kg/ha to raise soil pH from 5.2 to target range of 6.0-6.5 based on soil test results.',
+		date: '2025-04-05',
+		category: 'fertilization',
+		createdBy: 'emma.johnson'
+	},
+	{
+		id: 'note014',
+		title: 'Flowering Onset',
+		description:
+			'First flowering observed in 60% of plants. Adjusting fertilizer regime to reduce nitrogen and increase phosphorus and potassium inputs.',
+		date: '2025-04-15',
+		category: 'observation',
+		createdBy: 'maria.garcia'
+	},
+	{
+		id: 'note015',
+		title: 'Pollination Support',
+		description:
+			'Installed two beehives at the north end of trial field to enhance pollination rates. Conducted during early morning to minimize bee stress.',
+		date: '2025-04-20',
+		category: 'maintenance',
+		createdBy: 'thomas.wilson'
+	},
+	{
+		id: 'note016',
+		title: 'Disease Detection - Powdery Mildew',
+		description:
+			'Identified early signs of powdery mildew on approximately 5% of plants, primarily in densely planted western section with less air circulation.',
+		date: '2025-05-01',
+		category: 'observation',
+		createdBy: 'john.smith'
+	},
+	{
+		id: 'note017',
+		title: 'Fungicide Application',
+		description:
+			'Applied sulfur-based fungicide as preventative treatment for powdery mildew. Used backpack sprayer at rate of 3g/L, focusing on affected areas and neighboring plants.',
+		date: '2025-05-02',
+		category: 'pest_control',
+		createdBy: 'maria.garcia'
+	},
+	{
+		id: 'note018',
+		title: 'Thinning and Crop Load Management',
+		description:
+			'Reduced fruit load by removing approximately 30% of developing fruits to promote larger fruit size and prevent branch breakage.',
+		date: '2025-05-10',
+		category: 'maintenance',
+		createdBy: 'thomas.wilson'
+	},
+	{
+		id: 'note019',
+		title: 'Irrigation System Maintenance',
+		description:
+			'Cleaned irrigation filters and replaced 5 damaged drippers. Checked system pressure and adjusted to optimal 1.5 bar.',
+		date: '2025-05-15',
+		category: 'maintenance',
+		createdBy: 'emma.johnson'
+	},
+	{
+		id: 'note020',
+		title: 'First Harvest',
+		description:
+			'Conducted first selective harvest, collecting 350kg of produce from early-maturing plants. Average fruit weight: 125g. Brix level: 12.5.',
+		date: '2025-06-01',
+		category: 'harvesting',
+		createdBy: 'john.smith'
 	}
 ];
