@@ -12,6 +12,9 @@
 	import PageHeader from '../../components/layout/PageHeader.svelte';
 	import { page } from '$app/stores';
 	import { getCss } from '../../utils/css';
+	import Dropdown from '../../components/desktop/Dropdown.svelte';
+	import type { Account } from '../../utils/types';
+	import SearchBar from '../../components/desktop/SearchBar.svelte';
 
 	interface Props {
 		children: Snippet;
@@ -34,9 +37,37 @@
 </script>
 
 <div class="desktop-mvp">
+	{#snippet switchAccountItemSnippet({ email, organizationName }: Account)}
+		<Button icon="forward" padding backgroundColor="var(--white)">
+			<Stack>
+				<span style={getCss({ fontWeight: '500', fontSize: 'var(--main-font-size)' })}
+					>{organizationName}</span
+				>
+				<span style={getCss({ fontWeight: '100', fontSize: 'var(--main-font-size)' })}>{email}</span
+				>
+			</Stack>
+		</Button>
+	{/snippet}
+
+	{#snippet switchAccountPrefix()}
+		<SearchBar maxWidth="100%" />
+		<Spacer />
+	{/snippet}
+
 	<Section sticky="0px" padding="1rem 1rem" backgroundColor="transparent">
 		<div class="desktop-mvp__main-menu">
 			<a class="desktop-mvp__home-button" href="/desktop-mvp">vita/dashboard</a>
+			<Dropdown
+				label="Switch Account"
+				icon="compare"
+				padding
+				backgroundColor="var(--light-green)"
+				items={$accounts.slice(0, 6)}
+				itemSnippet={switchAccountItemSnippet}
+				sameWidth={false}
+				gap="0.5rem"
+				prefixSnippet={switchAccountPrefix}
+			></Dropdown>
 		</div>
 	</Section>
 

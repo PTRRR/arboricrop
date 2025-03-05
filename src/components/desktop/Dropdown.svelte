@@ -18,9 +18,11 @@
 		iconOrder?: ButtonIconOrder;
 		items?: T[];
 		itemSnippet?: Snippet<[item: T]>;
+		prefixSnippet?: Snippet;
 		small?: boolean;
 		backgroundColor?: string;
 		padding?: string | boolean;
+		gap?: string;
 	}
 
 	const {
@@ -31,11 +33,13 @@
 		align = 'left',
 		items = [],
 		itemSnippet,
+		prefixSnippet,
 		icon,
 		iconOrder,
 		small,
 		backgroundColor,
-		padding
+		padding,
+		gap
 	}: Props = $props();
 </script>
 
@@ -62,23 +66,32 @@
 				builders={[builder]}
 				rootStyle={{ display: 'block' }}
 			>
-				<span style={getCss({ textDecoration: 'underline' })}>{@render labelSnippet()}</span>
+				<span>{@render labelSnippet()}</span>
 			</Button>
 		{:else}
-			<Button {icon} {iconOrder} builders={[builder]} {padding} {backgroundColor}
-				>{@render labelSnippet()}</Button
+			<Button
+				{icon}
+				{iconOrder}
+				builders={[builder]}
+				{padding}
+				{backgroundColor}
+				rootStyle={{ display: 'block' }}>{@render labelSnippet()}</Button
 			>
 		{/if}
 	</DropdownMenu.Trigger>
 
-	<DropdownMenu.Content {sideOffset} {side} {sameWidth}>
+	<DropdownMenu.Content {sideOffset} {side} {sameWidth} collisionPadding={14}>
 		<div
 			class="dropdown__content"
 			class:dropdown__content--align-left={align === 'left'}
 			class:dropdown__content--align-right={align === 'right'}
 			class:dropdown__content--align-center={align === 'center'}
 		>
-			<Stack>
+			<Stack {gap}>
+				{#if prefixSnippet}
+					{@render prefixSnippet()}
+				{/if}
+
 				{#each items as item}
 					<DropdownMenu.Item>
 						{#if itemSnippet}

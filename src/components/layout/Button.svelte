@@ -201,13 +201,13 @@
 		}
 
 		&--background-color#{&}--padding {
-			padding: 5px;
+			padding: 5px 8px 5px 5px;
 		}
 
 		&__icon {
 			background-color: var(--black);
 			border-radius: 5px;
-			padding: 5px;
+			padding: 5px 8px 5px 5px;
 			box-sizing: border-box;
 
 			#{$this}--background-color & {
