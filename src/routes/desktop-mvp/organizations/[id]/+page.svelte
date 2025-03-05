@@ -143,10 +143,10 @@
 				description="Permanently delete this organization and all of its data. This action cannot be undone."
 			/>
 		{:else if invitedUsers.size > 0}
-			<TextInput label="email" />
-			<div>
-				<Button icon="add" padding backgroundColor="var(--white)">Add to list</Button>
-			</div>
+			<Stack direction="vertical" alignItems="flex-start" gap="0.5rem">
+				<TextInput placeholder="email" style={{ width: '100%' }} />
+				<Button icon="add" padding>Add to list</Button>
+			</Stack>
 			<Table
 				headers={[
 					{ label: 'email', width: '40%' },

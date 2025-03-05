@@ -60,6 +60,7 @@
 				iconOrder={iconOrder || 'inverted'}
 				fontSize="var(--main-font-size)"
 				builders={[builder]}
+				rootStyle={{ display: 'block' }}
 			>
 				<span style={getCss({ textDecoration: 'underline' })}>{@render labelSnippet()}</span>
 			</Button>

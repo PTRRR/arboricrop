@@ -23,7 +23,7 @@
 	{#if actionPanel}
 		<Section
 			{label}
-			width="50%"
+			width="45%"
 			height="100%"
 			backgroundColor="var(--light-grey)"
 			style={{
