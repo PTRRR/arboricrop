@@ -17,6 +17,7 @@
 	import ActionButton from '../../../../components/mobile-layout/ActionButton.svelte';
 	import Stack from '../../../../components/desktop/Stack.svelte';
 	import PanelOverlay from '../../../../components/mobile-layout/PanelOverlay.svelte';
+	import { createUrlBuilder } from '../../../../utils/urls';
 
 	interface Props {
 		data: PageData;
@@ -30,6 +31,7 @@
 	const { devices } = useDevices();
 	const activeDevices = $derived($devices.filter((it) => it.status === 'active'));
 	const { isBlurred } = useApp();
+	const url = createUrlBuilder();
 
 	const infoRows: Row[] = $derived([
 		{
@@ -115,6 +117,13 @@
 
 	<ActionMenu>
 		<ActionButton
+			icon="cross"
+			onclick={() => {
+				$isBlurred = false;
+			}}
+			href={url.removeQuery({ name: 'acknowledge', value: true })}>Cancel</ActionButton
+		>
+		<ActionButton
 			icon="check"
 			href={`${data.baseUrl}/notifications`}
 			backgroundColor="var(--light-green)"
@@ -161,7 +170,7 @@
 		</ActionButton>
 		<ActionButton
 			icon="check"
-			href={`${window.location.pathname}?acknowledge=true`}
+			href={url.addQuery({ name: 'acknowledge', value: true })}
 			backgroundColor="var(--light-green)"
 			iconColor="var(--light-green)"
 			onclick={() => ($isBlurred = true)}

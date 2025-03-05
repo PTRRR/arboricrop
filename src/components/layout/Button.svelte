@@ -142,6 +142,7 @@
 		text-decoration: none;
 		font-family: inherit;
 		font-size: inherit;
+		display: contents;
 	}
 
 	.button {

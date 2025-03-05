@@ -31,27 +31,27 @@
 </script>
 
 <div class="main-navigation" use:portal={LAYOUT_PORTAL}>
-	<Panel state={show ? 'mounting' : 'unmounting'}>
-		<Button
-			style={{
-				position: 'absolute',
-				top: '0',
-				left: '50%',
-				transition: 'transform 0.5s cubic-bezier(0.83, 0, 0.17, 1)',
-				transform: hideButton ? 'translate(-50%, 0)' : 'translate(-50%, calc(-100% - 1.3rem))',
-				boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)'
-			}}
-			icon={show ? 'cross' : 'menu'}
-			iconSize="large"
-			backgroundColor="var(--light-grey)"
-			onclick={() => ($showAppMenu = !$showAppMenu)}
-		></Button>
+	<Button
+		style={{
+			position: 'absolute',
+			bottom: '1.3rem',
+			left: '50%',
+			transition: 'transform 0.5s cubic-bezier(0.83, 0, 0.17, 1)',
+			transform: hideButton ? 'translate(-50%, calc(100% + 1.3rem))' : 'translate(-50%, 0)',
+			boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+			zIndex: '100'
+		}}
+		icon={show ? 'cross' : 'menu'}
+		iconSize="large"
+		backgroundColor="var(--light-grey)"
+		onclick={() => ($showAppMenu = !$showAppMenu)}
+	></Button>
 
+	<Panel state={show ? 'mounting' : 'unmounting'}>
 		<div class="main-navigation__links">
 			<a href={`${baseUrl}/`}>Hub</a>
 			<a href={`${baseUrl}/`}>Trials</a>
 			<a href={`${baseUrl}/notifications`}>Notifications</a>
-			<!-- <a href={`${baseUrl}/settings`}>Settings</a> -->
 			<a href={`${baseUrl}/account`}>Account</a>
 		</div>
 	</Panel>

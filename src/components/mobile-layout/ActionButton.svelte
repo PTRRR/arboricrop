@@ -44,8 +44,7 @@
 	{onclick}
 	{iconSize}
 	{href}
-	rootStyle={{ width: '100%' }}
-	style={{ boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)' }}
+	style={{ width: '100%', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)' }}
 >
 	{@render children?.()}
 </Button>
