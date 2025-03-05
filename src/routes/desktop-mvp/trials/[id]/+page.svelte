@@ -10,7 +10,7 @@
 		useProjects,
 		useTrials
 	} from '../../../../stores';
-	import { swissBounds } from '../../../../utils/dummyData';
+	import { swissBounds, trialNotes } from '../../../../utils/dummyData';
 	import Stack from '../../../../components/desktop/Stack.svelte';
 	import Pagination from '../../../../components/layout/Pagination.svelte';
 	import type { Device, Group } from '../../../../utils/types';
@@ -28,6 +28,9 @@
 	import EmptyItem from '../../../../components/layout/EmptyItem.svelte';
 	import PageLayout from '../../../../components/desktop/PageLayout.svelte';
 	import SectionLabel from '../../../../components/desktop/SectionLabel.svelte';
+	import { shuffle } from '../../../../utils/arrays';
+	import NoteCard from '../../../../components/desktop/NoteCard.svelte';
+	import Grid from '../../../../components/desktop/Grid.svelte';
 
 	const trialId = $page.params.id;
 	const { trials, deleteTrial } = useTrials();
@@ -310,6 +313,19 @@
 				{:else}
 					<DevicesList devices={trialDevices} />
 				{/if}
+			</Section>
+
+			<Section
+				label="Historical Data"
+				actions={[
+					{ label: 'add', icon: 'add', backgroundColor: 'var(--light-grey)', padding: true }
+				]}
+			>
+				<Grid>
+					{#each shuffle(trialNotes).slice(0, 5) as note}
+						<NoteCard {note} />
+					{/each}
+				</Grid>
 			</Section>
 		</Stack>
 	</PageLayout>
