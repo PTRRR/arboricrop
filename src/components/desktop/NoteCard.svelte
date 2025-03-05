@@ -10,7 +10,7 @@
 </script>
 
 <div class="trial-note">
-	<Stack gap="1rem">
+	<Stack gap="2rem">
 		<Stack>
 			<span class="trial-note__createdby">{note.createdBy}</span>
 			<h4 class="trial-note__title">{note.title}</h4>
