@@ -293,9 +293,9 @@
 				{#if trialGroups.length > 0}
 					<Table
 						headers={[
-							{ label: 'Name', width: '30%' },
-							{ label: 'description', width: '30%' },
-							{ label: 'Devices count' }
+							{ label: 'Name', width: '30%', sortable: true },
+							{ label: 'description', width: '30%', sortable: true },
+							{ label: 'Devices count', sortable: true }
 						]}
 						rows={groupsRows}
 					/>

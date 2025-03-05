@@ -3,7 +3,7 @@
 	import Section from '../../components/desktop/Section.svelte';
 	import TextInput from '../../components/layout/TextInput.svelte';
 	import Button from '../../components/layout/Button.svelte';
-	import { useAccounts, useCurrentAccount, useUser } from '../../stores';
+	import { useAccounts, useCurrentAccount, useUser, useUserName } from '../../stores';
 	import Stack from '../../components/desktop/Stack.svelte';
 	import StepSeparation from '../../components/layout/StepSeparation.svelte';
 	import Spacer from '../../components/Spacer.svelte';
@@ -37,14 +37,13 @@
 </script>
 
 <div class="desktop-mvp">
-	{#snippet switchAccountItemSnippet({ email, organizationName }: Account)}
+	{#snippet switchAccountItemSnippet({ email, username, organizationName }: Account)}
 		<Button icon="forward" padding backgroundColor="var(--white)">
 			<Stack>
-				<span style={getCss({ fontWeight: '500', fontSize: 'var(--main-font-size)' })}
+				<!-- <span style={getCss({ fontWeight: '500', fontSize: 'var(--main-font-size)' })}
 					>{organizationName}</span
-				>
-				<span style={getCss({ fontWeight: '100', fontSize: 'var(--main-font-size)' })}>{email}</span
-				>
+				> -->
+				<span>{username || email || organizationName}</span>
 			</Stack>
 		</Button>
 	{/snippet}

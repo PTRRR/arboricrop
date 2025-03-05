@@ -149,9 +149,9 @@
 			style={getCss({ width: '100%' })}
 			headers={[
 				{ label: '', width: '5%' },
-				{ label: 'ID', width: '40%' },
-				{ label: 'Firmware Version', width: '20%' },
-				{ label: 'Creation Date' }
+				{ label: 'ID', width: '40%', sortable: true },
+				{ label: 'Firmware Version', width: '20%', sortable: true },
+				{ label: 'Creation Date', sortable: true }
 			]}
 			rows={rowsWithRenderHandler(devicesRows, selectCell)}
 			pageSize={20}
