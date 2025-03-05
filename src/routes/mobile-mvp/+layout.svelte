@@ -40,7 +40,11 @@
 	});
 
 	const breadcrumbIcon = $derived(
-		!showBreadcrumb ? undefined : $returnButton?.backHref ? 'back' : undefined
+		!showBreadcrumb
+			? undefined
+			: $returnButton?.backHref && $returnButton.backHref !== data.baseUrl
+				? 'back'
+				: undefined
 	);
 
 	const breadcrumbContent = $derived(

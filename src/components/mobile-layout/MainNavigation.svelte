@@ -50,7 +50,7 @@
 	<Panel state={show ? 'mounting' : 'unmounting'}>
 		<div class="main-navigation__links">
 			<a href={`${baseUrl}/`}>Hub</a>
-			<a href={`${baseUrl}/`}>Trials</a>
+			<a href={`${baseUrl}/trials`}>Trials</a>
 			<a href={`${baseUrl}/notifications`}>Notifications</a>
 			<a href={`${baseUrl}/account`}>Account</a>
 		</div>

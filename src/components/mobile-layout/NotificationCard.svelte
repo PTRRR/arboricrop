@@ -10,7 +10,7 @@
 {#if notification}
 	<Card href={`${baseUrl || '/mobile-layout'}/notifications/${notification.id}`}>
 		<div class="home__info">
-			<p>{notification.title}</p>
+			<p style={getCss({ fontSize: 'var(--mid-font-size)' })}>{notification.title}</p>
 			<p
 				style={getCss({
 					fontWeight: 'normal',

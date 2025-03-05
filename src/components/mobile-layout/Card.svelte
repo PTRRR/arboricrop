@@ -40,13 +40,14 @@
 		display: block;
 		text-decoration: none;
 		color: var(--black);
-		padding: 0.5rem;
+		padding: 0.4rem;
 		border-radius: 5px;
 		overflow: hidden;
 		font-size: var(--main-font-size);
+		text-transform: lowercase;
 
 		&:hover {
-			background-color: var(--light-grey);
+			background-color: var(--grey);
 		}
 
 		&--background {
@@ -60,13 +61,13 @@
 		&__inner {
 			display: flex;
 			align-items: center;
-			gap: 1rem;
+			gap: 0.5rem;
 		}
 
 		&__image {
 			margin: -0.5rem 0 -0.5rem -0.5rem;
-			width: 6rem;
-			height: 6rem;
+
+			height: 4.5rem;
 			border-radius: 5px;
 			overflow: hidden;
 
@@ -74,6 +75,7 @@
 				width: 100%;
 				height: 100%;
 				object-fit: cover;
+				display: flex;
 			}
 		}
 	}

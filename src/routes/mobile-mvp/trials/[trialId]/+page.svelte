@@ -46,7 +46,7 @@
 
 	returnButton.set({
 		label: 'Trial',
-		backHref: data.baseUrl
+		backHref: `${data.baseUrl}/trials`
 	});
 
 	const trial = $derived($trials.find((it) => it.id === trialId));

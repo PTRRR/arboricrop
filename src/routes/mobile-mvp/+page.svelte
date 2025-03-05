@@ -218,6 +218,7 @@
 
 	{#snippet fieldsHeader()}
 		<span>Trials</span>
+		<Button href={`${data.baseUrl}/trials`} icon="forward" iconOrder="inverted" padding>All</Button>
 		<!-- <Button href={`${data.baseUrl}/trials/new`} icon="add" padding /> -->
 	{/snippet}
 
@@ -225,19 +226,16 @@
 		<PageHeader title={fieldsHeader} />
 
 		{#if accountTrials.length > 0}
-			<TextInput />
-			<Button icon="search">Search</Button>
-			<Spacer size="1rem" />
-			{#each accountTrials as trial}
+			{#each accountTrials.slice(0, 5) as trial}
 				<Card
 					href={`${data.baseUrl}/trials/${trial.id}`}
 					imageUrl="/images/map.png"
-					background={false}
+					background={true}
 				>
-					<div class="home__info">
+					<div class="home__info" style={getCss({ textTransform: 'lowercase' })}>
 						<h3>{trial.name}</h3>
 						<p>{getTrialProject(trial)?.name}</p>
-						<p>{`${getTrialDeviceCount(trial.id)} Devices`}</p>
+						<!-- <p>{`${getTrialDeviceCount(trial.id)} Devices`}</p> -->
 					</div>
 				</Card>
 			{/each}
@@ -259,7 +257,7 @@
 
 			p {
 				font-weight: normal;
-				color: var(--dark-grey);
+				// color: var(--dark-grey);
 			}
 		}
 
