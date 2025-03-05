@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { TrialNote } from '../../utils/types';
-	import Stack from './Stack.svelte';
+	import Stack from '../desktop/Stack.svelte';
 
 	interface Props {
 		note: TrialNote;
@@ -36,7 +36,7 @@
 		}
 
 		&__description {
-			// font-weight: 400;
+			font-weight: 400;
 		}
 	}
 </style>

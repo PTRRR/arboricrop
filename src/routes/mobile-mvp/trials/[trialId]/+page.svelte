@@ -35,6 +35,7 @@
 	import StepSeparation from '../../../../components/layout/StepSeparation.svelte';
 	import PanelOverlay from '../../../../components/mobile-layout/PanelOverlay.svelte';
 	import TextareaInput from '../../../../components/layout/TextareaInput.svelte';
+	import NoteCard from '../../../../components/layout/NoteCard.svelte';
 
 	interface Prop {
 		data: PageData;
@@ -256,17 +257,7 @@
 			]}
 		>
 			{#each notes as note}
-				<Card>
-					<Stack gap="1rem">
-						<Stack>
-							<span class="field__historical-data-createdby">{note.createdBy}</span>
-							<h4 class="field__historical-data-title">{note.title}</h4>
-							<span class="field__historical-data-date">{note.date}</span>
-						</Stack>
-
-						<p class="field__historical-data-description">{note.description}</p>
-					</Stack>
-				</Card>
+				<NoteCard {note} />
 			{/each}
 		</Section>
 

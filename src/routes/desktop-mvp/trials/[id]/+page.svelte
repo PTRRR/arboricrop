@@ -29,7 +29,7 @@
 	import PageLayout from '../../../../components/desktop/PageLayout.svelte';
 	import SectionLabel from '../../../../components/desktop/SectionLabel.svelte';
 	import { shuffle } from '../../../../utils/arrays';
-	import NoteCard from '../../../../components/desktop/NoteCard.svelte';
+	import NoteCard from '../../../../components/layout/NoteCard.svelte';
 	import Grid from '../../../../components/desktop/Grid.svelte';
 
 	const trialId = $page.params.id;
