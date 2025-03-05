@@ -98,7 +98,7 @@
 		--black: #000000;
 		--light-grey: #eaeaea;
 		--grey: #d8d8d8;
-		--dark-grey: #a5a5a5;
+		--dark-grey: #afafaf;
 		--white: white;
 	}
 </style>

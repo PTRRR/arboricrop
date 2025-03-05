@@ -16,6 +16,7 @@
 		iconOrder?: ButtonIconOrder;
 		iconSize?: IconSize;
 		href?: string;
+		disabled?: boolean;
 	}
 
 	const {
@@ -29,7 +30,8 @@
 		iconColor = 'var(--white)',
 		iconOrder,
 		iconSize = 'medium',
-		href
+		href,
+		disabled
 	}: Props = $props();
 </script>
 
@@ -44,6 +46,7 @@
 	{onclick}
 	{iconSize}
 	{href}
+	{disabled}
 	style={{ width: '100%', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)' }}
 >
 	{@render children?.()}

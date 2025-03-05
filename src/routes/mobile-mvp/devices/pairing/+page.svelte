@@ -11,6 +11,8 @@
 	import type { PageData } from './$types';
 	import CenteredWrapper from '../../../../components/mobile-layout/CenteredWrapper.svelte';
 	import PageHeader from '../../../../components/layout/PageHeader.svelte';
+	import ActionMenu from '../../../../components/mobile-layout/ActionMenu.svelte';
+	import ActionButton from '../../../../components/mobile-layout/ActionButton.svelte';
 
 	const { data }: { data: PageData } = $props();
 
@@ -66,8 +68,11 @@
 	<Section>
 		<PageHeader
 			title={`${currentPairingStrategy.label} pairing`}
-			description={currentPairingStrategy.description}
+			subTitle={currentPairingStrategy.description}
 		/>
+	</Section>
+
+	<Section>
 		<Image
 			ratio={1}
 			placeholder="Comprehensive schema or tutorial explaining how to proceed"
@@ -101,6 +106,34 @@
 			renderItem={dropdownButton}
 		/> -->
 	</Section>
+
+	<ActionMenu>
+		<ActionButton
+			icon="forward"
+			onclick={() => {
+				$preventNavigationHistory = true;
+				goto(url.addQuery({ name: 'success', value: true }));
+				setTimeout(() => {
+					if (data.deviceId) {
+						$preventNavigationHistory = true;
+						const url = createUrlBuilder(`${data.baseUrl}/devices/${data.deviceId}`);
+						goto(url.resetQueries([{ name: 'connected', value: true }]));
+					} else {
+						$preventNavigationHistory = true;
+						goto(
+							newDeviceUrl.resetQueries([
+								{ name: 'connected', value: true },
+								{
+									name: 'group',
+									value: data.group || undefined
+								}
+							])
+						);
+					}
+				}, 2000);
+			}}>Continue</ActionButton
+		>
+	</ActionMenu>
 {:else}
 	<CenteredWrapper>
 		<div class="pairing__success">
@@ -108,6 +141,9 @@
 			<span>Loading device metadata...</span>
 		</div>
 	</CenteredWrapper>
+	<ActionMenu>
+		<span></span>
+	</ActionMenu>
 {/if}
 
 <style>

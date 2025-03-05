@@ -51,25 +51,24 @@
 	});
 </script>
 
-{#if device.name}
-	<ActionMenu>
-		<ActionButton
-			icon="check"
-			backgroundColor="var(--light-green)"
-			iconColor="var(--light-green)"
-			href={`${data.baseUrl}/devices/${device.id}?connected=true`}
-			onclick={() => {
-				$preventNavigationHistory = true;
-				devices.set([...$devices, device]);
-			}}
-		>
-			Create
-		</ActionButton>
-	</ActionMenu>
-{/if}
-
 <Section>
 	<PageHeader title="New Device" />
 	<TextInput label="id" defaultValue={device.id} readonly />
 	<TextInput label="name" autoFocus onvalue={(value) => (device.name = value)} />
 </Section>
+
+<ActionMenu>
+	<ActionButton
+		disabled={!device.name}
+		icon="check"
+		backgroundColor={device.name ? 'var(--light-green)' : 'var(--grey)'}
+		iconColor="var(--light-green)"
+		href={`${data.baseUrl}/devices/${device.id}?connected=true`}
+		onclick={() => {
+			$preventNavigationHistory = true;
+			devices.set([...$devices, device]);
+		}}
+	>
+		Create
+	</ActionButton>
+</ActionMenu>

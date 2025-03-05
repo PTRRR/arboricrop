@@ -99,7 +99,7 @@
 		&__subtitle {
 			font-size: var(--mid-font-size);
 			font-weight: 500;
-			color: var(--grey);
+			color: var(--dark-grey);
 		}
 
 		&__description {
