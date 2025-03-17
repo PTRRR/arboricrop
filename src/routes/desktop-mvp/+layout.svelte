@@ -56,17 +56,20 @@
 	<Section sticky="0px" padding="1rem 1rem" backgroundColor="transparent">
 		<div class="desktop-mvp__main-menu">
 			<a class="desktop-mvp__home-button" href="/desktop-mvp">vita/dashboard</a>
-			<Dropdown
-				label="Switch Account"
-				icon="compare"
-				padding
-				backgroundColor="var(--light-green)"
-				items={$accounts.slice(0, 6)}
-				itemSnippet={switchAccountItemSnippet}
-				sameWidth={false}
-				gap="0.5rem"
-				prefixSnippet={switchAccountPrefix}
-			></Dropdown>
+
+			{#if $currentAccount?.email.includes('vivent')}
+				<Dropdown
+					label="Switch Account"
+					icon="compare"
+					padding
+					backgroundColor="var(--light-green)"
+					items={$accounts.slice(0, 6)}
+					itemSnippet={switchAccountItemSnippet}
+					sameWidth={false}
+					gap="0.5rem"
+					prefixSnippet={switchAccountPrefix}
+				></Dropdown>
+			{/if}
 		</div>
 	</Section>
 
@@ -135,7 +138,6 @@
 				<Section
 					width="20rem"
 					height="var(--content-min-height)"
-					sticky="var(--content-offset-top)"
 					backgroundColor="var(--light-grey)"
 					innerStyle={{ justifyContent: 'space-between' }}
 				>

@@ -13,7 +13,7 @@
 	import { swissBounds, trialNotes } from '../../../../utils/dummyData';
 	import Stack from '../../../../components/desktop/Stack.svelte';
 	import Pagination from '../../../../components/layout/Pagination.svelte';
-	import type { Device, Group } from '../../../../utils/types';
+	import type { Device, Group, Marker } from '../../../../utils/types';
 	import DevicesList from '../../../../components/desktop/DevicesList.svelte';
 	import Validation from '../../../../components/desktop/Validation.svelte';
 	import Table, { type Row } from '../../../../components/layout/Table.svelte';
@@ -92,10 +92,12 @@
 		}))
 	);
 
-	const deviceMarkers = $derived(
+	const deviceMarkers = $derived<Marker[]>(
 		trialDevices.map((device) => ({
 			lngLat: device.location as LngLatLike,
-			label: device.name
+			label: device.name,
+			status: device.status,
+			battery: device.battery
 		}))
 	);
 

@@ -418,7 +418,7 @@
 			cursor: pointer;
 			z-index: 1;
 			top: var(--layout-margin-top);
-			right: 5rem;
+			right: 1.5rem;
 			height: var(--big-font-size);
 			position: absolute;
 			display: flex;

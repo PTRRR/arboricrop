@@ -178,7 +178,7 @@
 		/>
 	</Section>
 {:else}
-	{#if accountDevices.length > 0}
+	<!-- {#if accountDevices.length > 0}
 		<Section>
 			<PageHeader title="All Devices" subTitle={`${accountDevices.length} Devices`} />
 			<Map
@@ -190,7 +190,7 @@
 				markers={devicesMarkers}
 			/>
 		</Section>
-	{/if}
+	{/if} -->
 
 	{#if !$isOffline}
 		{#snippet notificationsTitle()}

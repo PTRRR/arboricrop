@@ -45,7 +45,7 @@
 				<PageHeader {title} subTitle={$currentAccount.email} />
 			</Section>
 
-			<Section label="Settings" style={{ maxWidth: '40rem' }}>
+			<Section style={{ maxWidth: '40rem' }}>
 				<TextInput label="Username" defaultValue="Jon" />
 				<TextInput label="Email" defaultValue={$currentAccount.email} />
 

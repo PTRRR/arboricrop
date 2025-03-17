@@ -50,17 +50,6 @@
 {/snippet}
 
 <Stack direction="horizontal" gap="0.5rem">
-	{#if onvalidate}
-		{@render button({
-			label: validateLabel,
-			onclick: onvalidate,
-			disabled: validateDisabled,
-			iconColor: 'var(--light-green)',
-			backgroundColor: 'var(--light-green)',
-			icon: 'check'
-		})}
-	{/if}
-
 	{#if oncancel}
 		{@render button({
 			label: cancelLabel,
@@ -70,6 +59,17 @@
 			backgroundColor: 'var(--grey)',
 			iconBackgroundColor: 'var(--dark-grey)',
 			icon: 'cross'
+		})}
+	{/if}
+
+	{#if onvalidate}
+		{@render button({
+			label: validateLabel,
+			onclick: onvalidate,
+			disabled: validateDisabled,
+			iconColor: 'var(--light-green)',
+			backgroundColor: 'var(--light-green)',
+			icon: 'check'
 		})}
 	{/if}
 </Stack>

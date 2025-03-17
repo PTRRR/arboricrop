@@ -96,7 +96,9 @@
 	{/snippet}
 
 	{#snippet roleDropdownEdit({ role, accountId }: { role: string; accountId: string })}
-		<Button padding backgroundColor="var(--white)">{role}</Button>
+		<Button icon={role === 'farmer' ? 'admin' : 'user'} padding backgroundColor="var(--white)"
+			>{role}</Button
+		>
 	{/snippet}
 
 	{#snippet actionPanelLabel()}
@@ -171,6 +173,9 @@
 				<Dropdown
 					icon="arrow-down"
 					iconOrder="inverted"
+					sameWidth={false}
+					align="left"
+					gap="0.5rem"
 					label={selectedUser.role || 'Select Role'}
 					items={roles.map((it) => ({ role: it, accountId: selectedUser?.id || '' }))}
 					itemSnippet={roleDropdownEdit}

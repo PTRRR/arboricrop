@@ -92,7 +92,7 @@
 	{#if item.label === 'clear'}
 		<Button
 			padding="0.5rem 0.5rem 0.5rem 0.3rem"
-			backgroundColor={selectedSeverityFilter === item.label ? 'var(--white)' : undefined}
+			backgroundColor={selectedSeverityFilter === item.label ? 'var(--white)' : 'var(--white)'}
 			onclick={() => (selectedSeverityFilter = item.label === 'clear' ? '' : item.label)}
 			rootStyle={{ width: '100%' }}
 		>
@@ -104,7 +104,7 @@
 	{:else}
 		<Button
 			padding="0.5rem"
-			backgroundColor={selectedSeverityFilter === item.label ? 'var(--white)' : undefined}
+			backgroundColor={selectedSeverityFilter === item.label ? 'var(--white)' : 'var(--white)'}
 			onclick={() => (selectedSeverityFilter = item.label === 'clear' ? '' : item.label)}
 			rootStyle={{ width: '100%' }}
 		>
@@ -149,6 +149,7 @@
 				label={selectedSeverityFilter ? selectedFilterSnippet : 'Filters'}
 				backgroundColor="var(--light-grey)"
 				icon="filter"
+				gap="0.5rem"
 				items={severityFilters.map((it) => ({ label: it }))}
 				itemSnippet={filterSnippet}
 				padding
