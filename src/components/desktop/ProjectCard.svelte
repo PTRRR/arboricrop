@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { useDevices, useGroups, useTrials } from '../../stores';
+	import { useDevices, useGroups, useNotifications, useTrials } from '../../stores';
+	import { shuffle } from '../../utils/arrays';
 	import type { Project } from '../../utils/types';
 	import StatusDot from '../mobile-layout/StatusDot.svelte';
 	import Spacer from '../Spacer.svelte';
@@ -14,6 +15,7 @@
 	const { trials } = useTrials();
 	const { devices } = useDevices();
 	const { groups } = useGroups();
+	const notifications = useNotifications();
 	const projectTrials = $derived($trials.filter((it) => it.parentId === project.id));
 	const projectTrailsIds = $derived(projectTrials.map((it) => it.id));
 	const projectGroups = $derived(
@@ -22,6 +24,40 @@
 	const projectGroursIds = $derived(projectGroups.map((it) => it.id));
 	const projectActiveDevices = $derived(
 		$devices.filter((it) => it.parentId && projectGroursIds.includes(it.parentId))
+	);
+
+	const randomNotifications = $derived(
+		shuffle($notifications).slice(0, Math.floor(Math.random() * 5))
+	);
+
+	const projectStatusTypes = $derived(
+		randomNotifications
+			.map((it) => it.type)
+			.reduce<Record<string, number>>((acc, it) => {
+				if (!acc[it]) acc[it] = 0;
+				acc[it]++;
+				return acc;
+			}, {})
+	);
+
+	const projectStatusColor = $derived(
+		projectStatusTypes['alert'] && projectStatusTypes['alert'] > 0
+			? 'error'
+			: projectStatusTypes['warning'] && projectStatusTypes['warning'] > 0
+				? 'warning'
+				: projectStatusTypes['notification'] && projectStatusTypes['notification'] > 0
+					? 'normal'
+					: 'success'
+	);
+
+	const projectStatusLabel = $derived(
+		projectStatusTypes['alert'] && projectStatusTypes['alert'] > 0
+			? `${projectStatusTypes['alert']} alerts`
+			: projectStatusTypes['warning'] && projectStatusTypes['warning'] > 0
+				? `${projectStatusTypes['warning']} warnings`
+				: projectStatusTypes['notification'] && projectStatusTypes['notification'] > 0
+					? `${projectStatusTypes['notification']} notifications`
+					: 'No Issues'
 	);
 </script>
 
@@ -38,8 +74,8 @@
 			<Spacer size="1.5rem" />
 			<span class="project-card__devices">{`${projectActiveDevices.length} Devices`}</span>
 			<Stack direction="horizontal" alignItems="center" gap="0.5rem">
-				<StatusDot status="success" />
-				<span>No issues</span>
+				<StatusDot status={projectStatusColor} />
+				<span>{projectStatusLabel}</span>
 			</Stack>
 		{/if}
 	</Stack>
