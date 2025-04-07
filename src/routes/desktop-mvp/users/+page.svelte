@@ -19,6 +19,7 @@
 	const { accounts } = useAccounts();
 	const organisations = $derived($accounts.filter((it) => it.organizationName));
 
+	let inviteNewUser = $state(false);
 	let selectedAccount = $state<Account | undefined>(undefined);
 	const roles: RoleName[] = ['Distributer', 'Farmer', 'Farmer Admin'];
 
@@ -48,8 +49,13 @@
 		Users
 		<Stack direction="horizontal" gap="0.5rem" alignItems="center">
 			<SearchBar />
-			<Button icon="add" padding backgroundColor="var(--light-grey)" onclick={() => {}}>
-				Create
+			<Button
+				icon="add"
+				padding
+				backgroundColor="var(--light-grey)"
+				onclick={() => (inviteNewUser = true)}
+			>
+				Invite
 			</Button>
 		</Stack>
 	</Stack>
@@ -66,15 +72,65 @@
 {/snippet}
 
 {#snippet actionPanelLabel()}
-	{#if selectedAccount}
-		<SectionLabel label="Update User">
-			<Validation
-				validateLabel="Save"
-				onvalidate={() => {}}
-				oncancel={() => (selectedAccount = undefined)}
-			/>
-		</SectionLabel>
-	{/if}
+	<SectionLabel label={inviteNewUser ? 'Invite User' : 'Update User'}>
+		<Validation
+			validateLabel={inviteNewUser ? 'Invite' : 'Save'}
+			onvalidate={() => {
+				selectedAccount = undefined;
+				inviteNewUser = false;
+			}}
+			oncancel={() => {
+				selectedAccount = undefined;
+				inviteNewUser = false;
+			}}
+		/>
+	</SectionLabel>
+{/snippet}
+
+{#snippet invitePanel()}
+	<TextInput label="Email" />
+	<Dropdown
+		items={roles}
+		backgroundColor="var(--grey)"
+		icon="admin"
+		gap="0.5rem"
+		padding
+		sameWidth={true}
+	>
+		{#snippet label()}
+			Select Role
+		{/snippet}
+		{#snippet itemSnippet(role)}
+			<Button
+				padding="0.3rem"
+				icon={role === 'Farmer Admin' ? 'admin' : role === 'Distributer' ? 'user' : 'warehouse'}
+				onclick={() => {}}
+			>
+				{role}
+			</Button>
+		{/snippet}
+	</Dropdown>
+
+	<Dropdown
+		items={organisations.slice(0, 5)}
+		backgroundColor="var(--grey)"
+		icon="corporate"
+		gap="0.5rem"
+		padding
+		sameWidth={true}
+	>
+		{#snippet label()}
+			Select Organization
+		{/snippet}
+		{#snippet prefixSnippet()}
+			<SearchBar maxWidth="100%" />
+		{/snippet}
+		{#snippet itemSnippet(organisation)}
+			<Button padding="0.3rem" onclick={() => {}}>
+				{organisation.organizationName}
+			</Button>
+		{/snippet}
+	</Dropdown>
 {/snippet}
 
 {#snippet actionPanel()}
@@ -125,7 +181,10 @@
 	{/if}
 {/snippet}
 
-<PageLayout label={actionPanelLabel} actionPanel={selectedAccount && actionPanel}>
+<PageLayout
+	label={actionPanelLabel}
+	actionPanel={selectedAccount ? actionPanel : inviteNewUser ? invitePanel : undefined}
+>
 	<Section>
 		<PageHeader {title} />
 
