@@ -15,9 +15,16 @@
 <Stack gap="0.5rem" style={{ maxWidth }} direction="horizontal" alignItems="flex-end">
 	{#if mode === 'normal'}
 		{#if typeof value !== 'undefined'}
-			<TextInput placeholder="Search" style={{ width: '50%', flex: '1 1 auto' }} bind:value />
+			<TextInput
+				placeholder="Search"
+				style={{ width: '50%', flex: '1 1 auto', fontWeight: '500' }}
+				bind:value
+			/>
 		{:else}
-			<TextInput placeholder="Search" style={{ width: '50%', flex: '1 1 auto' }} />
+			<TextInput
+				placeholder="Search"
+				style={{ width: '50%', flex: '1 1 auto', fontWeight: '500' }}
+			/>
 		{/if}
 	{/if}
 	<Button icon="search" size="normal"></Button>

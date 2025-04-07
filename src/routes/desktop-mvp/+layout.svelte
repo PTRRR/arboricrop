@@ -175,6 +175,12 @@
 							>
 								Organizations
 							</Button>
+							<Button
+								href="/desktop-mvp/users"
+								underline={$page.route.id?.startsWith('/desktop-mvp/users')}
+							>
+								Users
+							</Button>
 						{/if}
 
 						<Spacer />

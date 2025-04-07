@@ -36,7 +36,9 @@
 		| 'sort'
 		| 'launch'
 		| 'compare'
-		| 'notification';
+		| 'notification'
+		| 'corporate'
+		| 'admin';
 
 	export type IconSize = 'normal' | 'large' | 'small' | 'medium';
 
@@ -322,6 +324,20 @@
 			><!-- Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path
 				fill={color}
 				d="M9.175 16H3q-.425 0-.712-.288T2 15t.288-.712T3 14h6.175L7.3 12.125q-.275-.275-.275-.687t.275-.713q.3-.3.713-.3t.712.3L12.3 14.3q.15.15.213.325t.062.375t-.062.375t-.213.325l-3.6 3.6q-.3.3-.7.288t-.7-.313q-.275-.3-.287-.7t.287-.7zm5.65-6l1.875 1.875q.275.275.275.688t-.275.712q-.3.3-.712.3t-.713-.3L11.7 9.7q-.15-.15-.212-.325T11.425 9t.063-.375t.212-.325l3.6-3.6q.3-.3.7-.287t.7.312q.275.3.288.7t-.288.7L14.825 8H21q.425 0 .713.288T22 9t-.288.713T21 10z"
+			/></svg
+		>
+	{:else if icon === 'corporate'}
+		<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"
+			><!-- Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path
+				fill={color}
+				d="M4 21q-.825 0-1.412-.587T2 19V5q0-.825.588-1.412T4 3h6q.825 0 1.413.588T12 5v2h8q.825 0 1.413.588T22 9v10q0 .825-.587 1.413T20 21zm0-2h6v-2H4zm0-4h6v-2H4zm0-4h6V9H4zm0-4h6V5H4zm8 12h8V9h-8zm3-6q-.425 0-.712-.288T14 12t.288-.712T15 11h2q.425 0 .713.288T18 12t-.288.713T17 13zm0 4q-.425 0-.712-.288T14 16t.288-.712T15 15h2q.425 0 .713.288T18 16t-.288.713T17 17z"
+			/></svg
+		>
+	{:else if icon === 'admin'}
+		<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"
+			><!-- Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path
+				fill={color}
+				d="M17 22q-2.075 0-3.537-1.463T12 17t1.463-3.537T17 12t3.538 1.463T22 17t-1.463 3.538T17 22M4 11.1V6.375q0-.625.363-1.125t.937-.725l6-2.25q.35-.125.7-.125t.7.125l6 2.25q.575.225.938.725T20 6.375v3.05q0 .425-.375.688t-.8.137q-.45-.125-.9-.187T17 10q-2.9 0-4.95 2.05T10 17q0 .8.188 1.563t.537 1.537q.225.475-.137.85t-.838.15q-1.05-.55-1.925-1.35T6.275 18Q5.2 16.525 4.6 14.762T4 11.1M17 17q.625 0 1.063-.437T18.5 15.5t-.437-1.062T17 14t-1.062.438T15.5 15.5t.438 1.063T17 17m0 3q.625 0 1.175-.238t.975-.687q.125-.15.1-.337t-.225-.288q-.475-.225-.987-.337T17 18t-1.037.113t-.988.337q-.2.1-.225.288t.1.337q.425.45.975.688T17 20"
 			/></svg
 		>
 	{:else}
