@@ -36,6 +36,7 @@
 	import PanelOverlay from '../../../../components/mobile-layout/PanelOverlay.svelte';
 	import TextareaInput from '../../../../components/layout/TextareaInput.svelte';
 	import NoteCard from '../../../../components/layout/NoteCard.svelte';
+	import DangerZone from '../../../../components/desktop/DangerZone.svelte';
 
 	interface Prop {
 		data: PageData;
@@ -152,6 +153,7 @@
 			<PageHeader
 				title={trial.name}
 				subTitle={project ? `${project.name}` : `Devices: ${$devices.length}`}
+				description="Started 05/04/25"
 			/>
 		</Section>
 		<!-- <Section>
@@ -259,6 +261,23 @@
 			{#each notes as note}
 				<NoteCard {note} />
 			{/each}
+		</Section>
+
+		<Section label="Permanent Actions">
+			<DangerZone
+				label="Delete trial"
+				description="Warning: Deleting your trial is permanent and cannot be undone."
+			>
+				<Button
+					icon="stop"
+					backgroundColor="var(--grey)"
+					iconBackgroundColor="var(--black)"
+					iconColor="var(--grey)"
+					padding
+				>
+					Deactivate
+				</Button>
+			</DangerZone>
 		</Section>
 
 		<!-- {#snippet addLayer()}

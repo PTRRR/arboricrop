@@ -31,6 +31,7 @@
 		| 'login'
 		| 'pending'
 		| 'link'
+		| 'stop'
 		| 'checkbox-blank'
 		| 'checkbox'
 		| 'sort'
@@ -331,6 +332,13 @@
 			><!-- Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path
 				fill={color}
 				d="M4 21q-.825 0-1.412-.587T2 19V5q0-.825.588-1.412T4 3h6q.825 0 1.413.588T12 5v2h8q.825 0 1.413.588T22 9v10q0 .825-.587 1.413T20 21zm0-2h6v-2H4zm0-4h6v-2H4zm0-4h6V9H4zm0-4h6V5H4zm8 12h8V9h-8zm3-6q-.425 0-.712-.288T14 12t.288-.712T15 11h2q.425 0 .713.288T18 12t-.288.713T17 13zm0 4q-.425 0-.712-.288T14 16t.288-.712T15 15h2q.425 0 .713.288T18 16t-.288.713T17 17z"
+			/></svg
+		>
+	{:else if icon === 'stop'}
+		<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"
+			><!-- Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path
+				fill={color}
+				d="M9 16h6q.425 0 .713-.288T16 15V9q0-.425-.288-.712T15 8H9q-.425 0-.712.288T8 9v6q0 .425.288.713T9 16m3 6q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22m0-2q3.35 0 5.675-2.325T20 12t-2.325-5.675T12 4T6.325 6.325T4 12t2.325 5.675T12 20m0-8"
 			/></svg
 		>
 	{:else if icon === 'admin'}

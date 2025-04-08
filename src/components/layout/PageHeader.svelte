@@ -100,12 +100,14 @@
 			font-size: var(--mid-font-size);
 			font-weight: 500;
 			color: var(--dark-grey);
+			margin-top: 0.5rem;
 		}
 
 		&__description {
 			font-size: var(--main-font-size);
 			font-weight: 500;
 			color: var(--grey);
+			margin-top: 0.5rem;
 		}
 	}
 </style>

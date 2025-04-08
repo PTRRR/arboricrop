@@ -1,16 +1,17 @@
 <script lang="ts">
+	import type { Snippet } from 'svelte';
 	import { getCss } from '../../utils/css';
 	import Button from '../layout/Button.svelte';
-	import StepSeparation from '../layout/StepSeparation.svelte';
 	import Stack from './Stack.svelte';
 
 	interface Props {
 		label: string;
 		description?: string;
 		onclick?: () => void;
+		children?: Snippet;
 	}
 
-	const { label, description, onclick }: Props = $props();
+	const { label, description, onclick, children }: Props = $props();
 </script>
 
 <Stack
@@ -23,14 +24,21 @@
 		<p style={getCss({ fontSize: 'var(--main-font-size)' })}>{description}</p>
 	</div>
 	<!-- <StepSeparation label="Danger Zone" {description} /> -->
-	<Button
-		icon="cross"
-		backgroundColor="var(--grey)"
-		iconBackgroundColor="var(--black)"
-		iconColor="var(--grey)"
-		padding
-		{onclick}
-	>
-		{label}
-	</Button>
+
+	<Stack direction="horizontal" gap="1rem">
+		{#if children}
+			{@render children()}
+		{/if}
+
+		<Button
+			icon="cross"
+			backgroundColor="var(--red)"
+			iconBackgroundColor="var(--black)"
+			iconColor="var(--red)"
+			padding
+			{onclick}
+		>
+			{label}
+		</Button>
+	</Stack>
 </Stack>

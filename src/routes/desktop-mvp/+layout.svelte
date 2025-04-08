@@ -139,6 +139,7 @@
 					width="20rem"
 					height="var(--content-min-height)"
 					backgroundColor="var(--light-grey)"
+					sticky="1rem"
 					innerStyle={{ justifyContent: 'space-between' }}
 				>
 					<Stack gap="0.5rem">

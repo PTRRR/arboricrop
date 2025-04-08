@@ -233,7 +233,17 @@
 					deleteTrial(trial);
 					goto(`/desktop-mvp/projects/${parentId}`);
 				}}
-			/>
+			>
+				<Button
+					icon="stop"
+					backgroundColor="var(--grey)"
+					iconBackgroundColor="var(--black)"
+					iconColor="var(--grey)"
+					padding
+				>
+					Deactivate
+				</Button>
+			</DangerZone>
 		{:else if selectedGroup}
 			<TextInput label="Name" defaultValue={selectedGroup.name} />
 			<TextareaInput label="Description" defaultValue={selectedGroup.description} />
@@ -262,7 +272,7 @@
 	<PageLayout actionPanel={showActionPanel ? actionPanel : undefined} label={actionPanelLabel}>
 		<Stack style={{ width: '100%' }}>
 			<Section>
-				<PageHeader {preTitle} {title} subTitle={`${trialDevices.length} Devices`} />
+				<PageHeader {preTitle} {title} subTitle={`Started 10/05/25`} />
 				<Map
 					ratio={addDevices ? 2 : 3}
 					bind:this={map}
