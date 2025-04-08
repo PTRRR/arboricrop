@@ -8,10 +8,12 @@
 	import Validation from '../../../components/desktop/Validation.svelte';
 	import Button from '../../../components/layout/Button.svelte';
 	import PageHeader from '../../../components/layout/PageHeader.svelte';
+	import StepSeparation from '../../../components/layout/StepSeparation.svelte';
 	import type { Cell, Row } from '../../../components/layout/Table.svelte';
 	import Table from '../../../components/layout/Table.svelte';
 	import TextInput from '../../../components/layout/TextInput.svelte';
 	import Checkbox from '../../../components/mobile-layout/Checkbox.svelte';
+	import Spacer from '../../../components/Spacer.svelte';
 	import { useAccounts } from '../../../stores';
 	import { getCss } from '../../../utils/css';
 	import type { Account, RoleName } from '../../../utils/types';
@@ -89,6 +91,11 @@
 
 {#snippet invitePanel()}
 	<TextInput label="Email" />
+	<TextInput type="password" label="Password" />
+	<TextInput type="password" label="Password Repeat" />
+
+	<Spacer />
+	<StepSeparation label="Role & organization" />
 	<Dropdown
 		items={roles}
 		backgroundColor="var(--grey)"
@@ -136,6 +143,9 @@
 {#snippet actionPanel()}
 	{#if selectedAccount}
 		<TextInput label="Email" value={selectedAccount.email} />
+
+		<Spacer />
+		<StepSeparation label="Role & organization" />
 		<Dropdown
 			items={roles}
 			backgroundColor="var(--grey)"
