@@ -3,12 +3,11 @@
 	import Section from '../../components/desktop/Section.svelte';
 	import TextInput from '../../components/layout/TextInput.svelte';
 	import Button from '../../components/layout/Button.svelte';
-	import { useAccounts, useCurrentAccount, useUser, useUserName } from '../../stores';
+	import { useAccounts, useCurrentAccount, useUser } from '../../stores';
 	import Stack from '../../components/desktop/Stack.svelte';
 	import StepSeparation from '../../components/layout/StepSeparation.svelte';
 	import Spacer from '../../components/Spacer.svelte';
 	import { createId } from '@paralleldrive/cuid2';
-	import { goto } from '$app/navigation';
 	import PageHeader from '../../components/layout/PageHeader.svelte';
 	import { page } from '$app/stores';
 	import { getCss } from '../../utils/css';
@@ -142,21 +141,48 @@
 					sticky="1rem"
 					innerStyle={{ justifyContent: 'space-between' }}
 				>
-					<Stack gap="0.5rem">
-						<Button href="/desktop-mvp" underline={$page.route.id === '/desktop-mvp'}>
+					<Stack gap="0rem">
+						<Button
+							href="/desktop-mvp"
+							icon="dashboard"
+							padding
+							style={{ margin: '-5px -5px 0 -5px' }}
+							backgroundColor={$page.route.id === '/desktop-mvp'
+								? 'var(--grey)'
+								: 'var(--light-grey)'}
+						>
 							Dashboard
 						</Button>
 						<Button
 							href="/desktop-mvp/projects"
-							underline={$page.route.id?.startsWith('/desktop-mvp/projects')}>Projects</Button
+							style={{ margin: '0 -5px' }}
+							backgroundColor={$page.route.id?.startsWith('/desktop-mvp/projects')
+								? 'var(--grey)'
+								: 'var(--light-grey)'}
+							icon="folder"
+							padding
 						>
+							Projects
+						</Button>
 						<Button
 							href="/desktop-mvp/devices"
-							underline={$page.route.id?.startsWith('/desktop-mvp/devices')}>Devices</Button
+							icon="device"
+							padding
+							style={{ margin: '0 -5px' }}
+							backgroundColor={$page.route.id?.startsWith('/desktop-mvp/devices')
+								? 'var(--grey)'
+								: 'var(--light-grey)'}
 						>
+							Devices
+						</Button>
 						<Button
 							href="/desktop-mvp/notifications"
-							underline={$page.route.id?.startsWith('/desktop-mvp/notifications')}
+							icon="notification"
+							padding
+							style={{ margin: '0 -5px' }}
+							backgroundColor={$page.route.id?.startsWith('/desktop-mvp/notifications')
+								? 'var(--grey)'
+								: 'var(--light-grey)'}
 						>
 							Notifications
 						</Button>
@@ -166,19 +192,34 @@
 							<StepSeparation label="Admin" />
 							<Button
 								href="/desktop-mvp/earmark-devices"
-								underline={$page.route.id?.startsWith('/desktop-mvp/earmark-devices')}
+								icon="link"
+								style={{ margin: '0 -5px' }}
+								backgroundColor={$page.route.id?.startsWith('/desktop-mvp/earmark-devices')
+									? 'var(--grey)'
+									: 'var(--light-grey)'}
+								padding
 							>
 								Earmark
 							</Button>
 							<Button
 								href="/desktop-mvp/organizations"
-								underline={$page.route.id?.startsWith('/desktop-mvp/organizations')}
+								icon="corporate"
+								padding
+								style={{ margin: '0 -5px' }}
+								backgroundColor={$page.route.id?.startsWith('/desktop-mvp/organizations')
+									? 'var(--grey)'
+									: 'var(--light-grey)'}
 							>
 								Organizations
 							</Button>
 							<Button
 								href="/desktop-mvp/users"
-								underline={$page.route.id?.startsWith('/desktop-mvp/users')}
+								icon="group"
+								padding
+								style={{ margin: '0 -5px' }}
+								backgroundColor={$page.route.id?.startsWith('/desktop-mvp/users')
+									? 'var(--grey)'
+									: 'var(--light-grey)'}
 							>
 								Users
 							</Button>
@@ -188,14 +229,27 @@
 						<StepSeparation label="Settings" />
 						<Button
 							href="/desktop-mvp/account"
-							underline={$page.route.id?.startsWith('/desktop-mvp/account')}>Account</Button
+							icon="manage-account"
+							style={{ margin: '0 -5px' }}
+							padding
+							backgroundColor={$page.route.id?.startsWith('/desktop-mvp/account')
+								? 'var(--grey)'
+								: 'var(--light-grey)'}
 						>
+							Account
+						</Button>
 						<Button
 							onclick={() => {
 								$email = '';
 								$currentAccount = null;
-							}}>Logout</Button
+							}}
+							icon="logout"
+							style={{ margin: '0 -5px' }}
+							padding
+							backgroundColor="var(--light-grey)"
 						>
+							Logout
+						</Button>
 					</Stack>
 
 					<a href="https://vivent-biosignals.com/">
@@ -253,6 +307,7 @@
 		align-items: center;
 
 		&__inner {
+			position: relative;
 			// width: calc(100% + 2 * var(--section-padding));
 			width: 100%;
 			/* max-width: 100rem; */
